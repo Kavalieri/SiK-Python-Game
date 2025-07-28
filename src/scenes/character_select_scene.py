@@ -69,31 +69,35 @@ class CharacterSelectScene(Scene):
 	
 	def _create_buttons(self):
 		"""Crea los botones de la interfaz."""
-		# Botón Volver
+		# Botón Volver - Asegurar que esté dentro de la pantalla
 		self.buttons['back'] = {
-			'rect': pygame.Rect(50, self.screen_height - 80, 120, 40),
+			'rect': pygame.Rect(20, self.screen_height - 60, 100, 40),
 			'text': 'Volver',
 			'action': 'back'
 		}
 		
-		# Botón Comenzar Juego
+		# Botón Comenzar Juego - Asegurar que esté dentro de la pantalla
 		self.buttons['start'] = {
-			'rect': pygame.Rect(self.screen_width - 200, self.screen_height - 80, 150, 40),
+			'rect': pygame.Rect(self.screen_width - 140, self.screen_height - 60, 120, 40),
 			'text': 'Comenzar Juego',
 			'action': 'start'
 		}
 		
-		# Botones de personajes - Centrados horizontalmente
+		# Botones de personajes - Ajustar tamaño y posición
 		character_keys = list(CHARACTER_DATA.keys())
-		total_width = len(character_keys) * 250 + (len(character_keys) - 1) * 30  # 30px de separación
+		card_width = min(220, (self.screen_width - 100) // len(character_keys))  # Ancho adaptativo
+		card_height = 320  # Altura reducida
+		spacing = 20  # Espaciado reducido
+		
+		total_width = len(character_keys) * card_width + (len(character_keys) - 1) * spacing
 		start_x = (self.screen_width - total_width) // 2
-		y = 200
+		y = 150  # Mover más arriba
 		
 		for i, char_key in enumerate(character_keys):
-			x = start_x + i * (250 + 30)  # 250px de ancho + 30px de separación
+			x = start_x + i * (card_width + spacing)
 			
 			self.buttons[f'char_{char_key}'] = {
-				'rect': pygame.Rect(x, y, 250, 350),  # Reducir altura de 400 a 350
+				'rect': pygame.Rect(x, y, card_width, card_height),
 				'character': char_key,
 				'action': 'select_character'
 			}
@@ -156,12 +160,16 @@ class CharacterSelectScene(Scene):
 		"""Renderiza los personajes disponibles."""
 		character_keys = list(CHARACTER_DATA.keys())
 		# Usar las mismas posiciones que en _create_buttons
-		total_width = len(character_keys) * 250 + (len(character_keys) - 1) * 30
+		card_width = min(220, (self.screen_width - 100) // len(character_keys))
+		card_height = 320
+		spacing = 20
+		
+		total_width = len(character_keys) * card_width + (len(character_keys) - 1) * spacing
 		start_x = (self.screen_width - total_width) // 2
-		y = 200
+		y = 150
 		
 		for i, char_key in enumerate(character_keys):
-			x = start_x + i * (250 + 30)
+			x = start_x + i * (card_width + spacing)
 			
 			# Determinar si está seleccionado
 			is_selected = (char_key == self.selected_key)
@@ -171,7 +179,7 @@ class CharacterSelectScene(Scene):
 			border_color = self.colors['text_highlight'] if is_selected else self.colors['panel_border']
 			
 			# Panel del personaje
-			char_rect = pygame.Rect(x, y, 250, 350)  # Reducir altura de 400 a 350
+			char_rect = pygame.Rect(x, y, card_width, card_height)
 			pygame.draw.rect(self.screen, panel_color, char_rect)
 			pygame.draw.rect(self.screen, border_color, char_rect, 3)
 			
@@ -180,45 +188,46 @@ class CharacterSelectScene(Scene):
 			
 			# Nombre
 			name_text = self.fonts['subtitle'].render(char_data['nombre'], True, self.colors['text_highlight'])
-			name_rect = name_text.get_rect(center=(x + 125, y + 30))
+			name_rect = name_text.get_rect(center=(x + card_width//2, y + 25))
 			self.screen.blit(name_text, name_rect)
 			
 			# Tipo
 			type_text = self.fonts['normal'].render(char_data['tipo'], True, self.colors['text_secondary'])
-			type_rect = type_text.get_rect(center=(x + 125, y + 55))
+			type_rect = type_text.get_rect(center=(x + card_width//2, y + 50))
 			self.screen.blit(type_text, type_rect)
 			
 			# Imagen
-			self._render_character_image(char_key, x + 65, y + 80)
+			image_size = min(80, card_width - 20)
+			self._render_character_image(char_key, x + (card_width - image_size)//2, y + 70, image_size)
 			
 			# Estadísticas
-			self._render_character_stats(char_data, x + 10, y + 220)
+			self._render_character_stats(char_data, x + 10, y + 170)
 			
 			# Habilidades
-			self._render_character_skills(char_data, x + 10, y + 320)
+			self._render_character_skills(char_data, x + 10, y + 250)
 			
 			# Indicador de selección
 			if is_selected:
 				select_text = self.fonts['normal'].render("✓ SELECCIONADO", True, self.colors['text_highlight'])
-				select_rect = select_text.get_rect(center=(x + 125, y + 330))  # Ajustar posición
+				select_rect = select_text.get_rect(center=(x + card_width//2, y + card_height - 20))
 				self.screen.blit(select_text, select_rect)
 	
-	def _render_character_image(self, character_key: str, x: int, y: int):
+	def _render_character_image(self, character_key: str, x: int, y: int, size: int = 120):
 		"""Renderiza la imagen del personaje."""
 		image = self._get_character_image(character_key)
 		if image:
 			# Escalar imagen
-			scaled_image = pygame.transform.scale(image, (120, 120))
-			image_rect = scaled_image.get_rect(center=(x + 60, y + 60))
+			scaled_image = pygame.transform.scale(image, (size, size))
+			image_rect = scaled_image.get_rect(center=(x + size//2, y + size//2))
 			self.screen.blit(scaled_image, image_rect)
 		else:
 			# Placeholder
-			placeholder_rect = pygame.Rect(x, y, 120, 120)
+			placeholder_rect = pygame.Rect(x, y, size, size)
 			pygame.draw.rect(self.screen, (100, 100, 100), placeholder_rect)
 			pygame.draw.rect(self.screen, (150, 150, 150), placeholder_rect, 2)
 			
 			placeholder_text = self.fonts['normal'].render("?", True, self.colors['text'])
-			placeholder_text_rect = placeholder_text.get_rect(center=(x + 60, y + 60))
+			placeholder_text_rect = placeholder_text.get_rect(center=(x + size//2, y + size//2))
 			self.screen.blit(placeholder_text, placeholder_text_rect)
 	
 	def _render_character_stats(self, char_data: dict, x: int, y: int):
@@ -278,16 +287,17 @@ class CharacterSelectScene(Scene):
 		if self.selected_key in CHARACTER_DATA:
 			char_data = CHARACTER_DATA[self.selected_key]
 			
-			# Panel de información - Mover más abajo para evitar colisión
-			info_rect = pygame.Rect(50, self.screen_height - 120, self.screen_width - 100, 60)
+			# Panel de información - Posicionar entre las tarjetas y los botones
+			info_rect = pygame.Rect(20, self.screen_height - 100, self.screen_width - 40, 40)
 			pygame.draw.rect(self.screen, self.colors['panel'], info_rect)
 			pygame.draw.rect(self.screen, self.colors['panel_border'], info_rect, 2)
 			
 			# Descripción
 			desc_text = char_data['descripcion']
-			# Truncar descripción si es muy larga
-			if len(desc_text) > 80:
-				desc_text = desc_text[:77] + "..."
+			# Truncar descripción si es muy larga para el ancho disponible
+			max_chars = (self.screen_width - 80) // 8  # Aproximadamente 8 píxeles por carácter
+			if len(desc_text) > max_chars:
+				desc_text = desc_text[:max_chars-3] + "..."
 			
 			desc_surface = self.fonts['small'].render(desc_text, True, self.colors['text'])
 			desc_rect = desc_surface.get_rect(midleft=(info_rect.x + 10, info_rect.centery))
