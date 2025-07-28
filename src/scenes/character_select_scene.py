@@ -21,7 +21,15 @@ class CharacterSelectScene(Scene):
 	
 	def __init__(self, screen, config, game_state, save_manager):
 		"""Inicializa la escena de selección de personajes."""
-		super().__init__(screen, config, game_state, save_manager)
+		super().__init__(screen, config)
+		
+		# Guardar referencias adicionales
+		self.game_state = game_state
+		self.save_manager = save_manager
+		
+		# Asset Manager
+		from ..utils.asset_manager import AssetManager
+		self.asset_manager = AssetManager()
 		
 		# Configuración de la pantalla
 		self.screen_width = screen.get_width()
@@ -92,42 +100,21 @@ class CharacterSelectScene(Scene):
 			'panel': (40, 40, 80),
 			'panel_border': (80, 80, 120),
 			'text': (255, 255, 255),
-			'text_highlight': (255, 255, 0),
 			'text_secondary': (200, 200, 200),
-			'button': (60, 60, 80),
-			'button_hover': (80, 80, 100),
-			'button_selected': (100, 150, 100),
+			'text_highlight': (255, 255, 0),
+			'button': (60, 60, 100),
+			'button_hover': (80, 80, 120),
 			'button_text': (255, 255, 255),
-			'card_selected': (40, 40, 80),
-			'card_border_selected': (80, 80, 120)
+			'card_selected': (100, 100, 150),
+			'card_border_selected': (255, 255, 0)
 		}
 		
-		# Botones
-		self.buttons = {
-			'back': {
-				'text': 'Volver',
-				'action': 'back',
-				'rect': pygame.Rect(20, self.screen_height - 60, 100, 40)
-			},
-			'start': {
-				'text': 'Comenzar',
-				'action': 'start',
-				'rect': pygame.Rect(self.screen_width - 120, self.screen_height - 60, 100, 40)
-			},
-			'arrow_left': {
-				'text': '←',
-				'action': 'previous_character',
-				'rect': pygame.Rect(50, self.screen_height // 2 - 30, 60, 60)
-			},
-			'arrow_right': {
-				'text': '→',
-				'action': 'next_character',
-				'rect': pygame.Rect(self.screen_width - 110, self.screen_height // 2 - 30, 60, 60)
-			}
-		}
+		# Inicializar botones
+		self._init_buttons()
 		
-		self.logger.info("Escena de selección de personajes inicializada")
-	
+		# Logger
+		self.logger = logging.getLogger(__name__)
+		
 	def _load_animation_frames(self):
 		"""Carga los frames de animación para todos los personajes."""
 		for char_key in self.character_keys:
@@ -140,7 +127,14 @@ class CharacterSelectScene(Scene):
 		# Actualizar animación
 		current_time = pygame.time.get_ticks()
 		if current_time - self.frame_timer > self.frame_delay:
-			self.current_frame = (self.current_frame + 1) % max(len(self.animation_frames.get(self.selected_key, [1])), 1)
+			# Obtener frames del personaje actual
+			frames = self.animation_frames.get(self.selected_key, [])
+			if frames:
+				# Si hay frames, avanzar al siguiente
+				self.current_frame = (self.current_frame + 1) % len(frames)
+			else:
+				# Si no hay frames, mantener en 0
+				self.current_frame = 0
 			self.frame_timer = current_time
 	
 	def render(self):
@@ -316,7 +310,7 @@ class CharacterSelectScene(Scene):
 				else:
 					button_state = "n"  # normal
 				
-				# Obtener sprite del botón (usando nombres más específicos)
+				# Obtener sprite del botón (usando nombres correctos)
 				if button_id == "arrow_left":
 					button_name = "arrow_l_l"  # arrow left left
 				else:
@@ -331,8 +325,8 @@ class CharacterSelectScene(Scene):
 				else:
 					# Fallback: intentar con nombres alternativos
 					fallback_names = {
-						"arrow_left": ["bleft", "arrow_l", "left"],
-						"arrow_right": ["bright", "arrow_r", "right"]
+						"arrow_left": ["bleft", "arrow_l", "left", "arrow_l_n"],
+						"arrow_right": ["bright", "arrow_r", "right", "arrow_r_n"]
 					}
 					
 					fallback_list = fallback_names.get(button_id, [])
@@ -375,7 +369,7 @@ class CharacterSelectScene(Scene):
 			pygame.draw.rect(self.screen, self.colors['panel_border'], info_rect, 2)
 			
 			# Descripción
-			desc_text = char_data['descripcion']
+			desc_text = char_data.get('descripcion', 'Sin descripción disponible')
 			# Truncar descripción si es muy larga para el ancho disponible
 			max_chars = (self.screen_width - 80) // 8  # Aproximadamente 8 píxeles por carácter
 			if len(desc_text) > max_chars:
@@ -468,6 +462,8 @@ class CharacterSelectScene(Scene):
 		self.selected_key = character_key
 		self.game_state.selected_character = character_key
 		self.logger.info(f"Personaje seleccionado: {character_key}")
+		# Avanzar al juego después de seleccionar
+		self._on_start_clicked()
 	
 	def _on_back_clicked(self):
 		"""Maneja el clic en el botón volver."""
@@ -481,4 +477,64 @@ class CharacterSelectScene(Scene):
 		if hasattr(self, 'scene_manager') and self.scene_manager:
 			self.scene_manager.change_scene('game')
 		else:
-			self.logger.warning("Scene manager no disponible para comenzar juego") 
+			self.logger.warning("Scene manager no disponible para comenzar juego")
+	
+	def handle_event(self, event: pygame.event.Event):
+		"""Procesa eventos de Pygame."""
+		if event.type == pygame.MOUSEMOTION:
+			self.mouse_pos = event.pos
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			if event.button == 1:  # Clic izquierdo
+				self._handle_click(event.pos)
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_LEFT:
+				self._previous_character()
+			elif event.key == pygame.K_RIGHT:
+				self._next_character()
+			elif event.key == pygame.K_RETURN:
+				self._on_start_clicked()
+			elif event.key == pygame.K_ESCAPE:
+				self._on_back_clicked()
+	
+	def _handle_click(self, pos):
+		"""Maneja los clics del mouse."""
+		# Verificar clics en botones usando el diccionario self.buttons
+		for button_id, button in self.buttons.items():
+			if button['rect'].collidepoint(pos):
+				if button_id == 'arrow_left':
+					self._previous_character()
+					return
+				elif button_id == 'arrow_right':
+					self._next_character()
+					return
+				elif button_id == 'start':
+					self._on_start_clicked()
+					return
+				elif button_id == 'back':
+					self._on_back_clicked()
+					return
+	
+	def _init_buttons(self):
+		"""Inicializa los botones de la interfaz."""
+		button_width = 60
+		button_height = 60
+		button_y = self.screen_height - 100
+		
+		self.buttons = {
+			'arrow_left': {
+				'rect': pygame.Rect(50, button_y, button_width, button_height),
+				'text': '←'
+			},
+			'arrow_right': {
+				'rect': pygame.Rect(self.screen_width - 110, button_y, button_width, button_height),
+				'text': '→'
+			},
+			'start': {
+				'rect': pygame.Rect(self.screen_width // 2 - 100, button_y, 200, 60),
+				'text': 'COMENZAR JUEGO'
+			},
+			'back': {
+				'rect': pygame.Rect(20, 20, 100, 40),
+				'text': 'VOLVER'
+			}
+		} 

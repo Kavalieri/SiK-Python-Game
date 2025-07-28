@@ -4,7 +4,7 @@ Simple Desert Background - Fondo Simple de Desierto
 
 Autor: SiK Team
 Fecha: 2024
-Descripción: Fondo simple de desierto con colores planos.
+Descripción: Fondo simple de desierto completamente plano.
 """
 
 import pygame
@@ -14,7 +14,7 @@ from typing import Tuple
 
 class SimpleDesertBackground:
 	"""
-	Fondo simple de desierto con colores planos.
+	Fondo simple de desierto completamente plano.
 	"""
 	
 	def __init__(self, screen_width: int, screen_height: int):
@@ -29,15 +29,19 @@ class SimpleDesertBackground:
 		self.screen_height = screen_height
 		self.logger = logging.getLogger(__name__)
 		
-		# Colores del desierto
-		self.sky_color = (135, 206, 235)  # Azul cielo
-		self.sand_color = (238, 203, 173)  # Color arena
-		self.horizon_color = (210, 180, 140)  # Color horizonte
+		# Color principal del desierto (arena)
+		self.desert_color = (238, 203, 173)  # Color arena cálido
 		
-		# Posición del horizonte (línea que separa cielo y arena)
-		self.horizon_y = screen_height * 0.6
+		# Variaciones de color para dar textura sutil
+		self.desert_variations = [
+			(238, 203, 173),  # Arena clara
+			(216, 191, 161),  # Arena media
+			(194, 178, 128),  # Arena oscura
+			(210, 180, 140),  # Arena cálida
+			(222, 184, 135)   # Arena dorada
+		]
 		
-		self.logger.info("Fondo simple de desierto inicializado")
+		self.logger.info("Fondo plano de desierto inicializado")
 	
 	def update(self, delta_time: float):
 		"""
@@ -50,32 +54,45 @@ class SimpleDesertBackground:
 	
 	def render(self, screen: pygame.Surface, camera_x: float = 0, camera_y: float = 0):
 		"""
-		Renderiza el fondo simple de desierto.
+		Renderiza el fondo plano de desierto.
 		
 		Args:
 			screen: Superficie donde renderizar
 			camera_x: Posición X de la cámara (no usado en esta versión)
 			camera_y: Posición Y de la cámara (no usado en esta versión)
 		"""
-		# Rellenar todo el fondo con el color del cielo
-		screen.fill(self.sky_color)
+		# Rellenar todo el fondo con el color principal del desierto
+		screen.fill(self.desert_color)
 		
-		# Dibujar la arena (parte inferior)
-		sand_rect = pygame.Rect(0, self.horizon_y, self.screen_width, self.screen_height - self.horizon_y)
-		pygame.draw.rect(screen, self.sand_color, sand_rect)
+		# Añadir textura sutil con variaciones de color
+		self._add_desert_texture(screen)
+	
+	def _add_desert_texture(self, screen: pygame.Surface):
+		"""
+		Añade textura sutil al fondo del desierto.
 		
-		# Dibujar línea del horizonte
-		pygame.draw.line(screen, self.horizon_color, 
-						(0, self.horizon_y), 
-						(self.screen_width, self.horizon_y), 3)
-		
-		# Añadir algunas líneas de arena para dar textura
-		for i in range(0, self.screen_width, 100):
-			y_offset = (i % 200) * 0.1
-			start_y = self.horizon_y + 20 + y_offset
-			end_y = self.screen_height - 20
+		Args:
+			screen: Superficie donde renderizar
+		"""
+		# Crear líneas horizontales sutiles para simular ondulaciones de arena
+		for y in range(0, self.screen_height, 20):
+			# Seleccionar color de variación
+			variation_color = self.desert_variations[y // 20 % len(self.desert_variations)]
 			
-			if start_y < end_y:
-				pygame.draw.line(screen, self.horizon_color, 
-								(i, start_y), 
-								(i, end_y), 1) 
+			# Dibujar línea horizontal sutil
+			pygame.draw.line(screen, variation_color, 
+							(0, y), 
+							(self.screen_width, y), 1)
+		
+		# Añadir algunas líneas verticales muy sutiles para simular textura de arena
+		for x in range(0, self.screen_width, 50):
+			# Color ligeramente más oscuro para las líneas verticales
+			line_color = (
+				max(0, self.desert_color[0] - 10),
+				max(0, self.desert_color[1] - 10),
+				max(0, self.desert_color[2] - 10)
+			)
+			
+			pygame.draw.line(screen, line_color, 
+							(x, 0), 
+							(x, self.screen_height), 1) 

@@ -4,6 +4,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 
 ## [Unreleased]
 
+### Sistema de Animaciones Completado
+- **Análisis completo:** 5 personajes, 32 animaciones, 295 frames
+- **Reorganización:** Archivos del guerrero unificados con el resto de personajes
+- **Sistema inteligente:** FPS automático basado en frames disponibles
+- **Detección de placeholders:** Filtrado automático de sprites placeholder
+- **Test visual completo:** Interfaz para probar todas las animaciones
+- **Configuración centralizada:** Todas las animaciones documentadas en AssetManager
+- **Optimización:** Caché inteligente y gestión de memoria mejorada
+
 ### Added
 - Sistema unificado de pruebas (`tests/test_unified_system.py`)
 - Script de limpieza y organización de tests (`scripts/cleanup_tests.py`)

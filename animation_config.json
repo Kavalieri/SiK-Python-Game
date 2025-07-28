@@ -1,0 +1,527 @@
+{
+  "characters": {
+    "adventureguirl": {
+      "animations": {
+        "Dead": {
+          "frame_count": 10,
+          "frames": [
+            "Dead_1_.png",
+            "Dead_2_.png",
+            "Dead_3_.png",
+            "Dead_4_.png",
+            "Dead_5_.png",
+            "Dead_6_.png",
+            "Dead_7_.png",
+            "Dead_8_.png",
+            "Dead_9_.png",
+            "Dead_10_.png"
+          ],
+          "fps": 10
+        },
+        "Idle": {
+          "frame_count": 10,
+          "frames": [
+            "Idle_1_.png",
+            "Idle_2_.png",
+            "Idle_3_.png",
+            "Idle_4_.png",
+            "Idle_5_.png",
+            "Idle_6_.png",
+            "Idle_7_.png",
+            "Idle_8_.png",
+            "Idle_9_.png",
+            "Idle_10_.png"
+          ],
+          "fps": 12
+        },
+        "Jump": {
+          "frame_count": 10,
+          "frames": [
+            "Jump_1_.png",
+            "Jump_2_.png",
+            "Jump_3_.png",
+            "Jump_4_.png",
+            "Jump_5_.png",
+            "Jump_6_.png",
+            "Jump_7_.png",
+            "Jump_8_.png",
+            "Jump_9_.png",
+            "Jump_10_.png"
+          ],
+          "fps": 14
+        },
+        "Melee": {
+          "frame_count": 7,
+          "frames": [
+            "Melee_1_.png",
+            "Melee_2_.png",
+            "Melee_3_.png",
+            "Melee_4_.png",
+            "Melee_5_.png",
+            "Melee_6_.png",
+            "Melee_7_.png"
+          ],
+          "fps": 14
+        },
+        "Run": {
+          "frame_count": 8,
+          "frames": [
+            "Run_1_.png",
+            "Run_2_.png",
+            "Run_3_.png",
+            "Run_4_.png",
+            "Run_5_.png",
+            "Run_6_.png",
+            "Run_7_.png",
+            "Run_8_.png"
+          ],
+          "fps": 14
+        },
+        "Shoot": {
+          "frame_count": 3,
+          "frames": [
+            "Shoot_1_.png",
+            "Shoot_2_.png",
+            "Shoot_3_.png"
+          ],
+          "fps": 8
+        },
+        "Slide": {
+          "frame_count": 5,
+          "frames": [
+            "Slide_1_.png",
+            "Slide_2_.png",
+            "Slide_3_.png",
+            "Slide_4_.png",
+            "Slide_5_.png"
+          ],
+          "fps": 12
+        }
+      },
+      "total_frames": 53,
+      "animation_count": 7
+    },
+    "guerrero": {
+      "animations": {
+        "Attack": {
+          "frame_count": 10,
+          "frames": [
+            "Attack_1_.png",
+            "Attack_2_.png",
+            "Attack_3_.png",
+            "Attack_4_.png",
+            "Attack_5_.png",
+            "Attack_6_.png",
+            "Attack_7_.png",
+            "Attack_8_.png",
+            "Attack_9_.png",
+            "Attack_10_.png"
+          ],
+          "fps": 20
+        },
+        "Dead": {
+          "frame_count": 10,
+          "frames": [
+            "Dead_1_.png",
+            "Dead_2_.png",
+            "Dead_3_.png",
+            "Dead_4_.png",
+            "Dead_5_.png",
+            "Dead_6_.png",
+            "Dead_7_.png",
+            "Dead_8_.png",
+            "Dead_9_.png",
+            "Dead_10_.png"
+          ],
+          "fps": 10
+        },
+        "Idle": {
+          "frame_count": 10,
+          "frames": [
+            "Idle_1_.png",
+            "Idle_2_.png",
+            "Idle_3_.png",
+            "Idle_4_.png",
+            "Idle_5_.png",
+            "Idle_6_.png",
+            "Idle_7_.png",
+            "Idle_8_.png",
+            "Idle_9_.png",
+            "Idle_10_.png"
+          ],
+          "fps": 12
+        },
+        "JumpAttack": {
+          "frame_count": 10,
+          "frames": [
+            "JumpAttack_1_.png",
+            "JumpAttack_2_.png",
+            "JumpAttack_3_.png",
+            "JumpAttack_4_.png",
+            "JumpAttack_5_.png",
+            "JumpAttack_6_.png",
+            "JumpAttack_7_.png",
+            "JumpAttack_8_.png",
+            "JumpAttack_9_.png",
+            "JumpAttack_10_.png"
+          ],
+          "fps": 15
+        },
+        "Jump": {
+          "frame_count": 10,
+          "frames": [
+            "Jump_1_.png",
+            "Jump_2_.png",
+            "Jump_3_.png",
+            "Jump_4_.png",
+            "Jump_5_.png",
+            "Jump_6_.png",
+            "Jump_7_.png",
+            "Jump_8_.png",
+            "Jump_9_.png",
+            "Jump_10_.png"
+          ],
+          "fps": 14
+        },
+        "Run": {
+          "frame_count": 10,
+          "frames": [
+            "Run_1_.png",
+            "Run_2_.png",
+            "Run_3_.png",
+            "Run_4_.png",
+            "Run_5_.png",
+            "Run_6_.png",
+            "Run_7_.png",
+            "Run_8_.png",
+            "Run_9_.png",
+            "Run_10_.png"
+          ],
+          "fps": 18
+        },
+        "Walk": {
+          "frame_count": 10,
+          "frames": [
+            "Walk_1_.png",
+            "Walk_2_.png",
+            "Walk_3_.png",
+            "Walk_4_.png",
+            "Walk_5_.png",
+            "Walk_6_.png",
+            "Walk_7_.png",
+            "Walk_8_.png",
+            "Walk_9_.png",
+            "Walk_10_.png"
+          ],
+          "fps": 15
+        }
+      },
+      "total_frames": 70,
+      "animation_count": 7
+    },
+    "robot": {
+      "animations": {
+        "Dead": {
+          "frame_count": 10,
+          "frames": [
+            "Dead_1_.png",
+            "Dead_2_.png",
+            "Dead_3_.png",
+            "Dead_4_.png",
+            "Dead_5_.png",
+            "Dead_6_.png",
+            "Dead_7_.png",
+            "Dead_8_.png",
+            "Dead_9_.png",
+            "Dead_10_.png"
+          ],
+          "fps": 10
+        },
+        "Idle": {
+          "frame_count": 10,
+          "frames": [
+            "Idle_1_.png",
+            "Idle_2_.png",
+            "Idle_3_.png",
+            "Idle_4_.png",
+            "Idle_5_.png",
+            "Idle_6_.png",
+            "Idle_7_.png",
+            "Idle_8_.png",
+            "Idle_9_.png",
+            "Idle_10_.png"
+          ],
+          "fps": 12
+        },
+        "JumpMelee": {
+          "frame_count": 8,
+          "frames": [
+            "JumpMelee_1_.png",
+            "JumpMelee_2_.png",
+            "JumpMelee_3_.png",
+            "JumpMelee_4_.png",
+            "JumpMelee_5_.png",
+            "JumpMelee_6_.png",
+            "JumpMelee_7_.png",
+            "JumpMelee_8_.png"
+          ],
+          "fps": 12
+        },
+        "JumpShoot": {
+          "frame_count": 5,
+          "frames": [
+            "JumpShoot_1_.png",
+            "JumpShoot_2_.png",
+            "JumpShoot_3_.png",
+            "JumpShoot_4_.png",
+            "JumpShoot_5_.png"
+          ],
+          "fps": 12
+        },
+        "Jump": {
+          "frame_count": 10,
+          "frames": [
+            "Jump_1_.png",
+            "Jump_2_.png",
+            "Jump_3_.png",
+            "Jump_4_.png",
+            "Jump_5_.png",
+            "Jump_6_.png",
+            "Jump_7_.png",
+            "Jump_8_.png",
+            "Jump_9_.png",
+            "Jump_10_.png"
+          ],
+          "fps": 14
+        },
+        "Melee": {
+          "frame_count": 8,
+          "frames": [
+            "Melee_1_.png",
+            "Melee_2_.png",
+            "Melee_3_.png",
+            "Melee_4_.png",
+            "Melee_5_.png",
+            "Melee_6_.png",
+            "Melee_7_.png",
+            "Melee_8_.png"
+          ],
+          "fps": 14
+        },
+        "RunShoot": {
+          "frame_count": 9,
+          "frames": [
+            "RunShoot_1_.png",
+            "RunShoot_2_.png",
+            "RunShoot_3_.png",
+            "RunShoot_4_.png",
+            "RunShoot_5_.png",
+            "RunShoot_6_.png",
+            "RunShoot_7_.png",
+            "RunShoot_8_.png",
+            "RunShoot_9_.png"
+          ],
+          "fps": 18
+        },
+        "Run": {
+          "frame_count": 8,
+          "frames": [
+            "Run_1_.png",
+            "Run_2_.png",
+            "Run_3_.png",
+            "Run_4_.png",
+            "Run_5_.png",
+            "Run_6_.png",
+            "Run_7_.png",
+            "Run_8_.png"
+          ],
+          "fps": 14
+        },
+        "Shoot": {
+          "frame_count": 4,
+          "frames": [
+            "Shoot_1_.png",
+            "Shoot_2_.png",
+            "Shoot_3_.png",
+            "Shoot_4_.png"
+          ],
+          "fps": 8
+        },
+        "Slide": {
+          "frame_count": 10,
+          "frames": [
+            "Slide_1_.png",
+            "Slide_2_.png",
+            "Slide_3_.png",
+            "Slide_4_.png",
+            "Slide_5_.png",
+            "Slide_6_.png",
+            "Slide_7_.png",
+            "Slide_8_.png",
+            "Slide_9_.png",
+            "Slide_10_.png"
+          ],
+          "fps": 16
+        }
+      },
+      "total_frames": 82,
+      "animation_count": 10
+    },
+    "zombieguirl": {
+      "animations": {
+        "Attack": {
+          "frame_count": 8,
+          "frames": [
+            "Attack_1_.png",
+            "Attack_2_.png",
+            "Attack_3_.png",
+            "Attack_4_.png",
+            "Attack_5_.png",
+            "Attack_6_.png",
+            "Attack_7_.png",
+            "Attack_8_.png"
+          ],
+          "fps": 16
+        },
+        "Dead": {
+          "frame_count": 12,
+          "frames": [
+            "Dead_1_.png",
+            "Dead_2_.png",
+            "Dead_3_.png",
+            "Dead_4_.png",
+            "Dead_5_.png",
+            "Dead_6_.png",
+            "Dead_7_.png",
+            "Dead_8_.png",
+            "Dead_9_.png",
+            "Dead_10_.png",
+            "Dead_11_.png",
+            "Dead_12_.png"
+          ],
+          "fps": 10
+        },
+        "Idle": {
+          "frame_count": 15,
+          "frames": [
+            "Idle_1_.png",
+            "Idle_2_.png",
+            "Idle_3_.png",
+            "Idle_4_.png",
+            "Idle_5_.png",
+            "Idle_6_.png",
+            "Idle_7_.png",
+            "Idle_8_.png",
+            "Idle_9_.png",
+            "Idle_10_.png",
+            "Idle_11_.png",
+            "Idle_12_.png",
+            "Idle_13_.png",
+            "Idle_14_.png",
+            "Idle_15_.png"
+          ],
+          "fps": 14
+        },
+        "Walk": {
+          "frame_count": 10,
+          "frames": [
+            "Walk_1_.png",
+            "Walk_2_.png",
+            "Walk_3_.png",
+            "Walk_4_.png",
+            "Walk_5_.png",
+            "Walk_6_.png",
+            "Walk_7_.png",
+            "Walk_8_.png",
+            "Walk_9_.png",
+            "Walk_10_.png"
+          ],
+          "fps": 15
+        }
+      },
+      "total_frames": 45,
+      "animation_count": 4
+    },
+    "zombiemale": {
+      "animations": {
+        "Attack": {
+          "frame_count": 8,
+          "frames": [
+            "Attack_1_.png",
+            "Attack_2_.png",
+            "Attack_3_.png",
+            "Attack_4_.png",
+            "Attack_5_.png",
+            "Attack_6_.png",
+            "Attack_7_.png",
+            "Attack_8_.png"
+          ],
+          "fps": 16
+        },
+        "Dead": {
+          "frame_count": 12,
+          "frames": [
+            "Dead_1_.png",
+            "Dead_2_.png",
+            "Dead_3_.png",
+            "Dead_4_.png",
+            "Dead_5_.png",
+            "Dead_6_.png",
+            "Dead_7_.png",
+            "Dead_8_.png",
+            "Dead_9_.png",
+            "Dead_10_.png",
+            "Dead_11_.png",
+            "Dead_12_.png"
+          ],
+          "fps": 10
+        },
+        "Idle": {
+          "frame_count": 15,
+          "frames": [
+            "Idle_1_.png",
+            "Idle_2_.png",
+            "Idle_3_.png",
+            "Idle_4_.png",
+            "Idle_5_.png",
+            "Idle_6_.png",
+            "Idle_7_.png",
+            "Idle_8_.png",
+            "Idle_9_.png",
+            "Idle_10_.png",
+            "Idle_11_.png",
+            "Idle_12_.png",
+            "Idle_13_.png",
+            "Idle_14_.png",
+            "Idle_15_.png"
+          ],
+          "fps": 14
+        },
+        "Walk": {
+          "frame_count": 10,
+          "frames": [
+            "Walk_1_.png",
+            "Walk_2_.png",
+            "Walk_3_.png",
+            "Walk_4_.png",
+            "Walk_5_.png",
+            "Walk_6_.png",
+            "Walk_7_.png",
+            "Walk_8_.png",
+            "Walk_9_.png",
+            "Walk_10_.png"
+          ],
+          "fps": 15
+        }
+      },
+      "total_frames": 45,
+      "animation_count": 4
+    }
+  },
+  "animation_types": {},
+  "summary": {
+    "total_characters": 5,
+    "total_animations": 32,
+    "total_frames": 295
+  }
+}

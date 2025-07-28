@@ -331,16 +331,31 @@ class GameScene(Scene):
 		if (self.enemies_spawned_this_wave >= self.enemies_per_wave and 
 			len(self.enemies) == 0 and 
 			not self.wave_completed):
-			
 			self.wave_completed = True
 			self.wave_number += 1
 			self.enemies_spawned_this_wave = 0
 			self.enemies_per_wave = min(10 + self.wave_number * 2, 50)  # Máximo 50 enemigos por oleada
-			
-			self.logger.info(f"¡Oleada {self.wave_number - 1} completada! Iniciando oleada {self.wave_number}")
-			
-			# Dar tiempo entre oleadas
+			self.logger.info(f"¡Oleada {self.wave_number - 1} completada! Mostrando menú de mejoras")
+			# Mostrar menú de mejoras
+			if hasattr(self, 'hud') and hasattr(self.hud, 'menu_manager'):
+				self.hud.menu_manager.show_menu('upgrade')
+				self.hud.menu_manager.update_upgrade_menu(self.player.stats.upgrade_points)
+				self.hud.menu_manager.add_callback('continue_after_upgrade', self._on_continue_after_upgrade)
+				self.hud.menu_manager.add_callback('upgrade_speed', lambda: self.player.upgrade_stat('speed', 10))
+				self.hud.menu_manager.add_callback('upgrade_damage', lambda: self.player.upgrade_stat('damage', 15))
+				self.hud.menu_manager.add_callback('upgrade_health', lambda: self.player.upgrade_stat('health', 20))
+				self.hud.menu_manager.add_callback('upgrade_shield', lambda: self.player.upgrade_stat('shield', 25))
+				self.logger.info("Menú de mejoras mostrado")
+			# Pausar el juego mientras está el menú de mejoras
+			self.paused_for_upgrade = True
 			self.enemy_spawn_timer = pygame.time.get_ticks() + 3000  # 3 segundos de pausa
+
+	def _on_continue_after_upgrade(self):
+		"""Callback para continuar el juego tras el menú de mejoras."""
+		self.logger.info("Continuando juego tras mejoras")
+		self.wave_completed = False
+		self.paused_for_upgrade = False
+		self.enemy_spawn_timer = pygame.time.get_ticks() + 1000  # Pequeña pausa antes de la siguiente oleada
 	
 	def _spawn_powerup(self):
 		"""Genera un powerup aleatorio."""
