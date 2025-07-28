@@ -1,0 +1,31 @@
+# SiK Python Game - Dependencias
+# =============================
+
+# Motor del juego
+pygame-ce>=2.4.0
+
+# Interfaz de usuario
+pygame-menu>=4.4.0
+pygame-gui>=0.6.9
+
+# Herramientas y utilidades
+pygame-tools>=0.1.0
+pygame-extra>=0.1.0
+
+# Físicas del juego
+pymunk>=6.6.0
+
+# Utilidades adicionales
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Desarrollo y testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Empaquetado
+pyinstaller>=5.13.0
+cx-freeze>=6.15.0
