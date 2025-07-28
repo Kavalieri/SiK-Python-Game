@@ -66,3 +66,68 @@ del usuario y estabiliza el rendimiento del juego.
 
 Fixes #2 - Menú de pausa faltante
 Fixes #3 - Fondo complejo y generación inestable
+
+feat: Corregir layout del menú de selección de personajes
+
+🎮 Mejoras en la interfaz de selección de personajes
+
+## 🔧 Problemas Corregidos:
+
+### 📱 Layout Responsivo:
+- **Botones fuera de pantalla**: Reposicionados "Volver" y "Comenzar Juego"
+- **Tarjetas adaptativas**: Ancho calculado dinámicamente según pantalla
+- **Espaciado optimizado**: Reducido de 30px a 20px entre tarjetas
+- **Posicionamiento mejorado**: Elementos centrados correctamente
+
+### 🎨 Elementos Visuales:
+- **Texto superpuesto**: "SELECCIONADO" reposicionado para evitar colisiones
+- **Descripción truncada**: Cálculo dinámico del ancho máximo de texto
+- **Imágenes escalables**: Tamaño adaptativo según ancho de tarjeta
+- **Panel de información**: Reposicionado para evitar conflictos
+
+### 📐 Dimensiones Optimizadas:
+- **Tarjetas**: Ancho adaptativo (máximo 220px), altura 320px
+- **Imágenes**: Tamaño proporcional al ancho de tarjeta
+- **Botones**: Posiciones fijas dentro de la pantalla
+- **Espaciado**: 20px entre elementos
+
+## ✅ Resultados:
+
+### 🎯 Antes:
+- Botones parcialmente fuera de pantalla
+- Texto cortado y superpuesto
+- Layout no responsivo
+- Elementos mal posicionados
+
+### 🎯 Después:
+- Todos los elementos visibles en pantalla
+- Texto legible y bien posicionado
+- Layout adaptativo a diferentes resoluciones
+- Interfaz profesional y funcional
+
+## 🔍 Detalles Técnicos:
+
+### 📏 Cálculos de Layout:
+```python
+card_width = min(220, (screen_width - 100) // num_characters)
+spacing = 20
+total_width = characters * card_width + (characters - 1) * spacing
+```
+
+### 🎨 Posicionamiento:
+- **Tarjetas**: Centradas horizontalmente con espaciado uniforme
+- **Botones**: Posiciones fijas (20px desde bordes)
+- **Texto**: Centrado dentro de cada tarjeta
+- **Imágenes**: Centradas con tamaño proporcional
+
+### 📱 Responsividad:
+- **Ancho adaptativo**: Se ajusta al número de personajes
+- **Altura fija**: 320px para consistencia
+- **Márgenes**: 20px desde bordes de pantalla
+- **Escalado**: Elementos proporcionales al tamaño disponible
+
+Esta corrección mejora significativamente la experiencia
+del usuario en la selección de personajes, proporcionando
+una interfaz clara, funcional y visualmente atractiva.
+
+Fixes #4 - Layout del menú de selección de personajes
