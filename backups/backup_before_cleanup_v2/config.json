@@ -1,0 +1,30 @@
+{
+    "game": {
+        "title": "SiK Python Game",
+        "version": "0.1.0",
+        "debug": false
+    },
+    "display": {
+        "width": 1280,
+        "height": 720,
+        "fps": 60,
+        "fullscreen": false,
+        "vsync": true
+    },
+    "audio": {
+        "master_volume": 1.0,
+        "music_volume": 0.7,
+        "sfx_volume": 0.8,
+        "enabled": true
+    },
+    "input": {
+        "keyboard_enabled": true,
+        "gamepad_enabled": true,
+        "mouse_enabled": true
+    },
+    "paths": {
+        "assets": "assets",
+        "saves": "saves",
+        "logs": "logs"
+    }
+}

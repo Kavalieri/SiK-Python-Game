@@ -1,0 +1,34 @@
+{
+  "niveles": {
+    "duración_ronda": 120,
+    "tiempo_entre_rondas": 30,
+    "puntos_por_enemigo": {
+      "normal": 10,
+      "raro": 25,
+      "élite": 50,
+      "legendario": 100
+    },
+    "dificultad_escalado": {
+      "enemigos_por_minuto": 5,
+      "incremento_por_nivel": 2,
+      "máximo_enemigos": 50
+    }
+  },
+  "combate": {
+    "daño_colisión_enemigo": 20,
+    "tiempo_invulnerabilidad": 1.5,
+    "combo_tiempo_ventana": 3.0,
+    "combo_máximo": 10,
+    "puntos_por_combo": 5
+  },
+  "powerups": {
+    "duración_estándar": 10.0,
+    "probabilidad_spawn": 0.1,
+    "tiempo_entre_spawns": 15.0
+  },
+  "puntuación": {
+    "multiplicador_combo": 1.5,
+    "bonus_supervivencia": 100,
+    "bonus_sin_daño": 200
+  }
+} 

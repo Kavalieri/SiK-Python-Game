@@ -1,0 +1,102 @@
+{
+  "characters": {
+    "guerrero": {
+      "nombre": "Kava",
+      "tipo": "Melee",
+      "descripcion": "Guerrero experto en combate cuerpo a cuerpo con espada y escudo.",
+      "stats": {
+        "vida": 200,
+        "velocidad": 180,
+        "daño": 50,
+        "escudo": 20,
+        "rango_ataque": 80,
+        "velocidad_disparo": 1.0,
+        "tamaño_proyectil": 1.0
+      },
+      "habilidades": [
+        "Ataque de espada",
+        "Escudo protector",
+        "Mayor resistencia",
+        "Combo de ataques"
+      ],
+      "color_placeholder": [139, 69, 19],
+      "símbolo": "⚔️"
+    },
+    "adventureguirl": {
+      "nombre": "Sara",
+      "tipo": "Ranged",
+      "descripcion": "Arquera ágil especializada en ataques a distancia con arco y flechas.",
+      "stats": {
+        "vida": 120,
+        "velocidad": 220,
+        "daño": 25,
+        "escudo": 5,
+        "rango_ataque": 300,
+        "velocidad_disparo": 1.5,
+        "tamaño_proyectil": 0.8
+      },
+      "habilidades": [
+        "Flechas mágicas",
+        "Disparo rápido",
+        "Alta movilidad",
+        "Evasión mejorada"
+      ],
+      "color_placeholder": [255, 182, 193],
+      "símbolo": "👧"
+    },
+    "robot": {
+      "nombre": "Guiral",
+      "tipo": "Tech",
+      "descripcion": "Robot avanzado con armamento tecnológico y proyectiles de energía.",
+      "stats": {
+        "vida": 150,
+        "velocidad": 160,
+        "daño": 35,
+        "escudo": 15,
+        "rango_ataque": 250,
+        "velocidad_disparo": 1.2,
+        "tamaño_proyectil": 1.2
+      },
+      "habilidades": [
+        "Proyectiles de energía",
+        "Misiles explosivos",
+        "Daño en área",
+        "Blindaje mejorado"
+      ],
+      "color_placeholder": [128, 128, 128],
+      "símbolo": "🤖"
+    }
+  },
+  "upgrades": {
+    "vida": {
+      "costo_base": 100,
+      "incremento": 20,
+      "máximo": 5
+    },
+    "velocidad": {
+      "costo_base": 80,
+      "incremento": 15,
+      "máximo": 5
+    },
+    "daño": {
+      "costo_base": 120,
+      "incremento": 10,
+      "máximo": 5
+    },
+    "escudo": {
+      "costo_base": 90,
+      "incremento": 5,
+      "máximo": 5
+    },
+    "velocidad_disparo": {
+      "costo_base": 150,
+      "incremento": 0.1,
+      "máximo": 5
+    },
+    "tamaño_proyectil": {
+      "costo_base": 110,
+      "incremento": 0.1,
+      "máximo": 5
+    }
+  }
+} 

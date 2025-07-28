@@ -1,0 +1,106 @@
+{
+  "tipos_powerups": {
+    "velocidad": {
+      "nombre": "Velocidad",
+      "descripción": "Aumenta la velocidad de movimiento",
+      "duración": 10.0,
+      "efecto": {
+        "tipo": "multiplicador",
+        "valor": 1.5,
+        "atributo": "velocidad"
+      },
+      "color": [0, 255, 0],
+      "símbolo": "⚡"
+    },
+    "velocidad_disparo": {
+      "nombre": "Disparo Rápido",
+      "descripción": "Aumenta la velocidad de disparo",
+      "duración": 8.0,
+      "efecto": {
+        "tipo": "multiplicador",
+        "valor": 2.0,
+        "atributo": "velocidad_disparo"
+      },
+      "color": [255, 255, 0],
+      "símbolo": "🎯"
+    },
+    "daño": {
+      "nombre": "Daño Mejorado",
+      "descripción": "Aumenta el daño de los proyectiles",
+      "duración": 12.0,
+      "efecto": {
+        "tipo": "multiplicador",
+        "valor": 1.8,
+        "atributo": "daño"
+      },
+      "color": [255, 0, 0],
+      "símbolo": "💥"
+    },
+    "escudo": {
+      "nombre": "Escudo",
+      "descripción": "Protege contra el daño",
+      "duración": 15.0,
+      "efecto": {
+        "tipo": "escudo",
+        "valor": 50,
+        "atributo": "escudo"
+      },
+      "color": [0, 0, 255],
+      "símbolo": "🛡️"
+    },
+    "doble_disparo": {
+      "nombre": "Doble Disparo",
+      "descripción": "Dispara dos proyectiles a la vez",
+      "duración": 6.0,
+      "efecto": {
+        "tipo": "doble_disparo",
+        "valor": 2,
+        "atributo": "proyectiles"
+      },
+      "color": [255, 0, 255],
+      "símbolo": "🔫"
+    },
+    "dispersión": {
+      "nombre": "Dispersión",
+      "descripción": "Dispara múltiples proyectiles en abanico",
+      "duración": 7.0,
+      "efecto": {
+        "tipo": "dispersión",
+        "valor": 5,
+        "atributo": "proyectiles"
+      },
+      "color": [255, 165, 0],
+      "símbolo": "🌪️"
+    },
+    "explosión": {
+      "nombre": "Explosión",
+      "descripción": "Los proyectiles explotan al impactar",
+      "duración": 9.0,
+      "efecto": {
+        "tipo": "explosión",
+        "valor": 100,
+        "atributo": "radio_explosión"
+      },
+      "color": [128, 0, 128],
+      "símbolo": "💣"
+    },
+    "metralla": {
+      "nombre": "Metralla",
+      "descripción": "Dispara múltiples proyectiles pequeños",
+      "duración": 5.0,
+      "efecto": {
+        "tipo": "metralla",
+        "valor": 8,
+        "atributo": "proyectiles"
+      },
+      "color": [165, 42, 42],
+      "símbolo": "🔱"
+    }
+  },
+  "spawning": {
+    "probabilidad_base": 0.1,
+    "tiempo_mínimo_entre_spawns": 10.0,
+    "tiempo_máximo_entre_spawns": 30.0,
+    "máximo_powerups_pantalla": 3
+  }
+} 

@@ -1,0 +1,32 @@
+{
+  "volúmenes": {
+    "música_fondo": 0.7,
+    "efectos_sonido": 0.8,
+    "voces": 0.9,
+    "interfaz": 0.6
+  },
+  "archivos_audio": {
+    "música": {
+      "menú_principal": "assets/sounds/background_music.mp3",
+      "juego": "assets/sounds/game_music.mp3",
+      "victoria": "assets/sounds/victory_music.mp3",
+      "derrota": "assets/sounds/defeat_music.mp3"
+    },
+    "efectos": {
+      "disparo": "assets/sounds/shoot.wav",
+      "explosión": "assets/sounds/explosion.wav",
+      "powerup": "assets/sounds/powerup.wav",
+      "daño": "assets/sounds/damage.wav",
+      "muerte_enemigo": "assets/sounds/enemy_death.wav",
+      "click_botón": "assets/sounds/button_click.wav",
+      "hover_botón": "assets/sounds/button_hover.wav"
+    }
+  },
+  "configuración": {
+    "reproducir_música": true,
+    "reproducir_efectos": true,
+    "música_en_bucle": true,
+    "fade_in_duración": 2.0,
+    "fade_out_duración": 1.0
+  }
+} 

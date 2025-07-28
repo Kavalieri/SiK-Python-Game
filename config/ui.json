@@ -1,0 +1,50 @@
+{
+  "colores": {
+    "fondo": [20, 20, 40],
+    "panel": [40, 40, 80],
+    "panel_borde": [80, 80, 120],
+    "texto": [255, 255, 255],
+    "texto_secundario": [200, 200, 200],
+    "texto_destacado": [255, 255, 0],
+    "botón": [60, 60, 100],
+    "botón_hover": [80, 80, 120],
+    "botón_texto": [255, 255, 255],
+    "tarjeta_seleccionada": [100, 100, 150],
+    "tarjeta_borde_seleccionada": [255, 255, 0],
+    "vida": [0, 255, 0],
+    "vida_baja": [255, 0, 0],
+    "escudo": [0, 0, 255],
+    "puntos": [255, 255, 0],
+    "combo": [255, 0, 255]
+  },
+  "fuentes": {
+    "título": 48,
+    "subtítulo": 32,
+    "normal": 24,
+    "pequeña": 18,
+    "muy_pequeña": 14
+  },
+  "dimensiones": {
+    "botón_ancho": 120,
+    "botón_alto": 40,
+    "margen": 20,
+    "tarjeta_ancho": 200,
+    "tarjeta_alto": 280,
+    "barra_vida_ancho": 200,
+    "barra_vida_alto": 20
+  },
+  "animaciones": {
+    "velocidad_transición": 0.3,
+    "tiempo_fade": 0.5,
+    "escala_hover": 1.1
+  },
+  "hud": {
+    "posición_vida": [20, 20],
+    "posición_escudo": [20, 50],
+    "posición_puntos": [20, 80],
+    "posición_combo": [20, 110],
+    "posición_tiempo": [20, 140],
+    "mostrar_fps": true,
+    "mostrar_debug": false
+  }
+} 

@@ -1,0 +1,73 @@
+{
+  "tipos_enemigos": {
+    "zombie_male": {
+      "nombre": "Zombie Masculino",
+      "stats": {
+        "vida": 50,
+        "velocidad": 80,
+        "daño": 15,
+        "rango_detección": 200,
+        "rango_ataque": 40
+      },
+      "comportamiento": "perseguir",
+      "animaciones": {
+        "idle": "zombiemale/idle",
+        "walk": "zombiemale/walk",
+        "attack": "zombiemale/attack",
+        "dead": "zombiemale/dead"
+      }
+    },
+    "zombie_female": {
+      "nombre": "Zombie Femenino",
+      "stats": {
+        "vida": 40,
+        "velocidad": 90,
+        "daño": 12,
+        "rango_detección": 180,
+        "rango_ataque": 35
+      },
+      "comportamiento": "perseguir",
+      "animaciones": {
+        "idle": "zombieguirl/idle",
+        "walk": "zombieguirl/walk",
+        "attack": "zombieguirl/attack",
+        "dead": "zombieguirl/dead"
+      }
+    }
+  },
+  "variantes": {
+    "normal": {
+      "multiplicador_vida": 1.0,
+      "multiplicador_velocidad": 1.0,
+      "multiplicador_daño": 1.0,
+      "color_tinte": [255, 255, 255]
+    },
+    "raro": {
+      "multiplicador_vida": 1.5,
+      "multiplicador_velocidad": 1.2,
+      "multiplicador_daño": 1.3,
+      "color_tinte": [0, 255, 0],
+      "probabilidad_spawn": 0.2
+    },
+    "élite": {
+      "multiplicador_vida": 2.0,
+      "multiplicador_velocidad": 1.4,
+      "multiplicador_daño": 1.8,
+      "color_tinte": [255, 255, 0],
+      "probabilidad_spawn": 0.1
+    },
+    "legendario": {
+      "multiplicador_vida": 3.0,
+      "multiplicador_velocidad": 1.6,
+      "multiplicador_daño": 2.5,
+      "color_tinte": [255, 0, 255],
+      "probabilidad_spawn": 0.05
+    }
+  },
+  "spawning": {
+    "tiempo_entre_spawns": 2.0,
+    "máximo_enemigos_pantalla": 20,
+    "distancia_mínima_jugador": 300,
+    "distancia_máxima_jugador": 800
+  }
+} 
