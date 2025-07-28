@@ -111,12 +111,12 @@ class AssetManager:
 			f"objects/elementos/{image_name}_2.png",
 			f"objects/elementos/{image_name}_3.png",
 			# Personajes
-			f"characters/{image_name}/idle/Idle (1).png",
-			f"characters/{image_name}/run/Run (1).png",
-			f"characters/{image_name}/attack/Attack (1).png",
-			f"characters/{image_name}/walk/Walk (1).png",
-			f"characters/{image_name}/jump/Jump (1).png",
-			f"characters/{image_name}/dead/Dead (1).png",
+			f"characters/{image_name}/idle/Idle_1_.png",
+			f"characters/{image_name}/run/Run_1_.png",
+			f"characters/{image_name}/attack/Attack_1_.png",
+			f"characters/{image_name}/walk/Walk_1_.png",
+			f"characters/{image_name}/jump/Jump_1_.png",
+			f"characters/{image_name}/dead/Dead_1_.png",
 		]
 		
 		for path in possible_paths:

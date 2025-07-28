@@ -11,7 +11,7 @@ CHARACTER_DATA = {
 	"guerrero": {
 		"nombre": "Kava",
 		"descripcion": "Guerrero cuerpo a cuerpo especializado en combate cercano. Utiliza ataques de espada y escudo para derrotar enemigos. Su estilo de juego requiere acercarse a los enemigos para causar daño máximo.",
-		"imagen": "assets/characters/guerrero/idle/Idle (1).png",
+		"imagen": "assets/characters/guerrero/idle/Idle_1_.png",
 		"tipo": "Melee",
 		"stats": {
 			"vida": 200,
@@ -31,7 +31,7 @@ CHARACTER_DATA = {
 	"adventureguirl": {
 		"nombre": "Sara",
 		"descripcion": "Aventurera ágil especializada en combate a distancia. Dispara flechas mágicas con precisión y velocidad. Su estilo de juego se basa en mantener distancia y usar la movilidad para evadir enemigos.",
-		"imagen": "assets/characters/adventureguirl/Idle (1).png",
+		"imagen": "assets/characters/adventureguirl/Idle_1_.png",
 		"tipo": "Ranged",
 		"stats": {
 			"vida": 120,
@@ -51,7 +51,7 @@ CHARACTER_DATA = {
 	"robot": {
 		"nombre": "Guiral",
 		"descripcion": "Robot de combate con tecnología avanzada. Lanza proyectiles de energía y misiles explosivos. Su estilo de juego combina potencia de fuego con proyectiles especiales que causan daño en área.",
-		"imagen": "assets/characters/robot/Idle (1).png",
+		"imagen": "assets/characters/robot/Idle_1_.png",
 		"tipo": "Tech",
 		"stats": {
 			"vida": 150,

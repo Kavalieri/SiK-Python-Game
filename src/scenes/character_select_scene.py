@@ -24,7 +24,9 @@ class CharacterSelectScene(Scene):
 		self.game_state = game_state
 		self.save_manager = save_manager
 		self.logger = logging.getLogger(__name__)
-		self.selected_key = list(CHARACTER_DATA.keys())[0]
+		self.character_keys = list(CHARACTER_DATA.keys())
+		self.current_character_index = 0
+		self.selected_key = self.character_keys[0]
 		
 		# Inicializar asset manager
 		from ..utils.asset_manager import AssetManager
@@ -83,24 +85,21 @@ class CharacterSelectScene(Scene):
 			'action': 'start'
 		}
 		
-		# Botones de personajes - Ajustar tamaño y posición
-		character_keys = list(CHARACTER_DATA.keys())
-		card_width = min(220, (self.screen_width - 100) // len(character_keys))  # Ancho adaptativo
-		card_height = 320  # Altura reducida
-		spacing = 20  # Espaciado reducido
+		# Botones de navegación - Flechas izquierda y derecha
+		arrow_size = 60
+		arrow_y = self.screen_height // 2 - arrow_size // 2
 		
-		total_width = len(character_keys) * card_width + (len(character_keys) - 1) * spacing
-		start_x = (self.screen_width - total_width) // 2
-		y = 150  # Mover más arriba
+		self.buttons['arrow_left'] = {
+			'rect': pygame.Rect(50, arrow_y, arrow_size, arrow_size),
+			'text': '←',
+			'action': 'previous_character'
+		}
 		
-		for i, char_key in enumerate(character_keys):
-			x = start_x + i * (card_width + spacing)
-			
-			self.buttons[f'char_{char_key}'] = {
-				'rect': pygame.Rect(x, y, card_width, card_height),
-				'character': char_key,
-				'action': 'select_character'
-			}
+		self.buttons['arrow_right'] = {
+			'rect': pygame.Rect(self.screen_width - 110, arrow_y, arrow_size, arrow_size),
+			'text': '→',
+			'action': 'next_character'
+		}
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Maneja eventos de la escena."""
@@ -111,6 +110,16 @@ class CharacterSelectScene(Scene):
 			if event.button == 1:  # Clic izquierdo
 				self.mouse_clicked = True
 				self._handle_click(event.pos)
+		
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+				self._previous_character()
+			elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+				self._next_character()
+			elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+				self._on_start_clicked()
+			elif event.key == pygame.K_ESCAPE:
+				self._on_back_clicked()
 	
 	def _handle_click(self, pos):
 		"""Maneja los clics del mouse."""
@@ -120,8 +129,10 @@ class CharacterSelectScene(Scene):
 					self._on_back_clicked()
 				elif button['action'] == 'start':
 					self._on_start_clicked()
-				elif button['action'] == 'select_character':
-					self._on_character_selected(button['character'])
+				elif button['action'] == 'previous_character':
+					self._previous_character()
+				elif button['action'] == 'next_character':
+					self._next_character()
 				break
 	
 	def update(self):
@@ -157,60 +168,68 @@ class CharacterSelectScene(Scene):
 		self.screen.blit(subtitle_text, subtitle_rect)
 	
 	def _render_characters(self):
-		"""Renderiza los personajes disponibles."""
-		character_keys = list(CHARACTER_DATA.keys())
-		# Usar las mismas posiciones que en _create_buttons
-		card_width = min(220, (self.screen_width - 100) // len(character_keys))
-		card_height = 320
-		spacing = 20
+		"""Renderiza la tarjeta del personaje actual."""
+		char_key = self.selected_key
 		
-		total_width = len(character_keys) * card_width + (len(character_keys) - 1) * spacing
-		start_x = (self.screen_width - total_width) // 2
-		y = 150
+		# Calcular dimensiones de la tarjeta central
+		card_width = 400
+		card_height = 500
+		x = (self.screen_width - card_width) // 2
+		y = 120
 		
-		for i, char_key in enumerate(character_keys):
-			x = start_x + i * (card_width + spacing)
-			
-			# Determinar si está seleccionado
-			is_selected = (char_key == self.selected_key)
-			
-			# Color del panel
-			panel_color = self.colors['button_selected'] if is_selected else self.colors['panel']
-			border_color = self.colors['text_highlight'] if is_selected else self.colors['panel_border']
-			
-			# Panel del personaje
-			char_rect = pygame.Rect(x, y, card_width, card_height)
-			pygame.draw.rect(self.screen, panel_color, char_rect)
-			pygame.draw.rect(self.screen, border_color, char_rect, 3)
-			
-			# Datos del personaje
-			char_data = CHARACTER_DATA[char_key]
-			
-			# Nombre
-			name_text = self.fonts['subtitle'].render(char_data['nombre'], True, self.colors['text_highlight'])
-			name_rect = name_text.get_rect(center=(x + card_width//2, y + 25))
-			self.screen.blit(name_text, name_rect)
-			
-			# Tipo
-			type_text = self.fonts['normal'].render(char_data['tipo'], True, self.colors['text_secondary'])
-			type_rect = type_text.get_rect(center=(x + card_width//2, y + 50))
-			self.screen.blit(type_text, type_rect)
-			
-			# Imagen
-			image_size = min(80, card_width - 20)
-			self._render_character_image(char_key, x + (card_width - image_size)//2, y + 70, image_size)
-			
-			# Estadísticas
-			self._render_character_stats(char_data, x + 10, y + 170)
-			
-			# Habilidades
-			self._render_character_skills(char_data, x + 10, y + 250)
-			
-			# Indicador de selección
-			if is_selected:
-				select_text = self.fonts['normal'].render("✓ SELECCIONADO", True, self.colors['text_highlight'])
-				select_rect = select_text.get_rect(center=(x + card_width//2, y + card_height - 20))
-				self.screen.blit(select_text, select_rect)
+		# Color de fondo de la tarjeta
+		card_color = self.colors['card_selected']
+		border_color = self.colors['card_border_selected']
+		
+		# Dibujar tarjeta
+		card_rect = pygame.Rect(x, y, card_width, card_height)
+		pygame.draw.rect(self.screen, card_color, card_rect)
+		pygame.draw.rect(self.screen, border_color, card_rect, 3)
+		
+		# Datos del personaje
+		char_data = CHARACTER_DATA[char_key]
+		
+		# Nombre
+		name_text = self.fonts['title'].render(char_data['nombre'], True, self.colors['text_highlight'])
+		name_rect = name_text.get_rect(center=(x + card_width//2, y + 30))
+		self.screen.blit(name_text, name_rect)
+		
+		# Tipo
+		type_text = self.fonts['subtitle'].render(char_data['tipo'], True, self.colors['text_secondary'])
+		type_rect = type_text.get_rect(center=(x + card_width//2, y + 60))
+		self.screen.blit(type_text, type_rect)
+		
+		# Imagen del personaje (más grande)
+		image_size = 200
+		self._render_character_image(char_key, x + (card_width - image_size)//2, y + 90, image_size)
+		
+		# Estadísticas
+		self._render_character_stats(char_data, x + 20, y + 320)
+		
+		# Habilidades
+		self._render_character_skills(char_data, x + 20, y + 420)
+		
+		# Indicador de selección
+		select_text = self.fonts['normal'].render("✓ PERSONAJE SELECCIONADO", True, self.colors['text_highlight'])
+		select_rect = select_text.get_rect(center=(x + card_width//2, y + card_height - 20))
+		self.screen.blit(select_text, select_rect)
+		
+		# Mostrar indicador de navegación
+		self._render_navigation_indicator()
+	
+	def _render_navigation_indicator(self):
+		"""Renderiza el indicador de navegación entre personajes."""
+		# Mostrar información de navegación
+		nav_text = f"Personaje {self.current_character_index + 1} de {len(self.character_keys)}"
+		nav_surface = self.fonts['small'].render(nav_text, True, self.colors['text_secondary'])
+		nav_rect = nav_surface.get_rect(center=(self.screen_width // 2, self.screen_height - 80))
+		self.screen.blit(nav_surface, nav_rect)
+		
+		# Instrucciones de navegación
+		instructions = "Usa ← → o A D para navegar • ENTER para seleccionar • ESC para volver"
+		inst_surface = self.fonts['small'].render(instructions, True, self.colors['text_secondary'])
+		inst_rect = inst_surface.get_rect(center=(self.screen_width // 2, self.screen_height - 60))
+		self.screen.blit(inst_surface, inst_rect)
 	
 	def _render_character_image(self, character_key: str, x: int, y: int, size: int = 120):
 		"""Renderiza la imagen del personaje."""
@@ -266,8 +285,8 @@ class CharacterSelectScene(Scene):
 	def _render_buttons(self):
 		"""Renderiza los botones de navegación."""
 		for button_id, button in self.buttons.items():
+			# Determinar color del botón
 			if button_id in ['back', 'start']:
-				# Determinar color del botón
 				if button['rect'].collidepoint(self.mouse_pos):
 					button_color = self.colors['button_hover']
 				else:
@@ -279,6 +298,22 @@ class CharacterSelectScene(Scene):
 				
 				# Texto del botón
 				button_text = self.fonts['normal'].render(button['text'], True, self.colors['button_text'])
+				button_text_rect = button_text.get_rect(center=button['rect'].center)
+				self.screen.blit(button_text, button_text_rect)
+			
+			elif button_id in ['arrow_left', 'arrow_right']:
+				# Botones de flecha
+				if button['rect'].collidepoint(self.mouse_pos):
+					button_color = self.colors['button_hover']
+				else:
+					button_color = self.colors['button']
+				
+				# Dibujar botón de flecha
+				pygame.draw.rect(self.screen, button_color, button['rect'])
+				pygame.draw.rect(self.screen, self.colors['panel_border'], button['rect'], 2)
+				
+				# Texto de la flecha (más grande)
+				button_text = self.fonts['title'].render(button['text'], True, self.colors['text_highlight'])
 				button_text_rect = button_text.get_rect(center=button['rect'].center)
 				self.screen.blit(button_text, button_text_rect)
 	
@@ -357,6 +392,20 @@ class CharacterSelectScene(Scene):
 			pass
 		
 		return surface
+	
+	def _previous_character(self):
+		"""Navega al personaje anterior."""
+		self.current_character_index = (self.current_character_index - 1) % len(self.character_keys)
+		self.selected_key = self.character_keys[self.current_character_index]
+		self.game_state.selected_character = self.selected_key
+		self.logger.info(f"Personaje anterior seleccionado: {self.selected_key}")
+	
+	def _next_character(self):
+		"""Navega al siguiente personaje."""
+		self.current_character_index = (self.current_character_index + 1) % len(self.character_keys)
+		self.selected_key = self.character_keys[self.current_character_index]
+		self.game_state.selected_character = self.selected_key
+		self.logger.info(f"Siguiente personaje seleccionado: {self.selected_key}")
 	
 	def _on_character_selected(self, character_key: str):
 		"""Maneja la selección de un personaje."""
