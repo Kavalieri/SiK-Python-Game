@@ -131,3 +131,92 @@ del usuario en la selección de personajes, proporcionando
 una interfaz clara, funcional y visualmente atractiva.
 
 Fixes #4 - Layout del menú de selección de personajes
+
+feat: Corregir tamaño y centrado del jugador
+
+🎮 Mejoras en la visualización del jugador
+
+## 🔧 Problemas Corregidos:
+
+### 📏 Tamaño del Jugador:
+- **Tamaño reducido**: De 64x64 a 32x32 píxeles
+- **Proporción adecuada**: Tamaño apropiado para la pantalla
+- **Visibilidad mejorada**: Jugador no ocupa demasiado espacio
+
+### 🎯 Centrado del Jugador:
+- **Sprite centrado**: El sprite se renderiza centrado en su posición
+- **Coordenadas corregidas**: Cálculo correcto de la posición de renderizado
+- **Cámara mejorada**: El jugador aparece centrado en la cámara
+
+### 🖼️ Sistema de Renderizado:
+- **Método render mejorado**: Centrado automático de sprites
+- **Coordenadas de pantalla**: Conversión correcta de mundo a pantalla
+- **Efectos visuales**: Mantenidos con el nuevo sistema de centrado
+
+## ✅ Resultados:
+
+### 🎯 Antes:
+- Jugador demasiado grande (64x64)
+- Sprite no centrado en su posición
+- Apariencia desproporcionada
+
+### 🎯 Después:
+- Jugador con tamaño apropiado (32x32)
+- Sprite perfectamente centrado
+- Apariencia profesional y equilibrada
+
+## 🔍 Detalles Técnicos:
+
+### 📐 Cálculos de Centrado:
+```python
+# Centrar el sprite en las coordenadas proporcionadas
+sprite_width = current_sprite.get_width()
+sprite_height = current_sprite.get_height()
+centered_x = render_x - sprite_width // 2
+centered_y = render_y - sprite_height // 2
+```
+
+### 🎨 Renderizado:
+- **Sprite actual**: Se obtiene el sprite actual de la animación
+- **Centrado automático**: Todos los sprites se centran automáticamente
+- **Efectos mantenidos**: Efectos visuales se aplican en la posición centrada
+- **Debug mejorado**: Rectángulos de debug también centrados
+
+### 📱 Tamaño Optimizado:
+- **32x32 píxeles**: Tamaño ideal para la resolución del juego
+- **Proporción correcta**: No domina la pantalla
+- **Visibilidad clara**: Fácil de identificar y controlar
+
+## 🧪 Testing:
+
+### ✅ Test Implementado:
+- **test_simple_player_size.py**: Verifica tamaño y centrado
+- **Líneas de referencia**: Muestra el centro de la pantalla
+- **Información de debug**: Muestra posición y estado del jugador
+- **Movimiento fluido**: Confirma que el centrado no afecta el movimiento
+
+### 📊 Verificaciones:
+- Tamaño del jugador: 32x32 ✓
+- Centrado en pantalla ✓
+- Movimiento suave ✓
+- Líneas de referencia visibles ✓
+
+## 🎯 Impacto en la Experiencia:
+
+### 🎮 Mejoras de Usabilidad:
+- **Jugador más visible**: Tamaño apropiado para la pantalla
+- **Centrado perfecto**: Aparece exactamente donde debe estar
+- **Movimiento intuitivo**: El jugador se mueve desde su centro
+- **Apariencia profesional**: Visualmente equilibrado
+
+### 🎨 Calidad Visual:
+- **Proporciones correctas**: Jugador no domina la pantalla
+- **Centrado consistente**: Todos los elementos bien alineados
+- **Efectos visuales**: Mantenidos con el nuevo sistema
+- **Debug mejorado**: Información visual más precisa
+
+Esta corrección mejora significativamente la experiencia
+visual del juego, proporcionando un jugador con tamaño
+apropiado y perfectamente centrado en la pantalla.
+
+Fixes #5 - Jugador demasiado grande y no centrado
