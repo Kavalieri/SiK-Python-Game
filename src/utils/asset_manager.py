@@ -111,16 +111,16 @@ class AssetManager:
 			f"objects/elementos/{image_name}_2.png",
 			f"objects/elementos/{image_name}_3.png",
 			# Personajes
-			f"characters/{image_name}/idle/Idle_1_.png",
-			f"characters/{image_name}/run/Run_1_.png",
-			f"characters/{image_name}/attack/Attack_1_.png",
-			f"characters/{image_name}/walk/Walk_1_.png",
-			f"characters/{image_name}/jump/Jump_1_.png",
-			f"characters/{image_name}/dead/Dead_1_.png",
+			f"characters/{image_name}/Idle_1_.png",
+			f"characters/{image_name}/Run_1_.png",
+			f"characters/{image_name}/Attack_1_.png",
+			f"characters/{image_name}/Walk_1_.png",
+			f"characters/{image_name}/Jump_1_.png",
+			f"characters/{image_name}/Dead_1_.png",
 		]
 		
 		for path in possible_paths:
-			image = self.load_image(path)
+			image = self.load_image_direct(path)
 			if image:
 				self.image_cache[image_name] = image
 				return image
@@ -199,19 +199,67 @@ class AssetManager:
 		if cache_key in self.image_cache:
 			return self.image_cache[cache_key]
 		
-		# Intentar cargar el sprite
-		path = f"assets/characters/{character_name}/{animation}/{animation.capitalize()} ({frame}).png"
-		sprite = self.load_image(path)
+		# Intentar cargar el sprite con el formato correcto
+		# Los archivos pueden estar en subdirectorios o directamente en el directorio del personaje
+		# Formato: Idle_1_.png, Run_1_.png, etc.
+		animation_capitalized = animation.capitalize()
 		
-		if sprite:
-			self.image_cache[cache_key] = sprite
-			return sprite
+		# Intentar diferentes rutas posibles (nueva estructura organizada)
+		possible_paths = [
+			# Nueva estructura organizada
+			f"characters/used/{character_name}/{animation}/{animation_capitalized}_{frame}_.png",  # Con subdirectorio
+			f"characters/used/{character_name}/{animation_capitalized}_{frame}_.png",  # Sin subdirectorio
+			f"characters/used/{character_name}/{animation}/{animation_capitalized}_{frame}.png",  # Sin guión bajo
+			f"characters/used/{character_name}/{animation_capitalized}_{frame}.png",  # Sin subdirectorio ni guión bajo
+			# Estructura original (fallback)
+			f"characters/{character_name}/{animation}/{animation_capitalized}_{frame}_.png",  # Con subdirectorio
+			f"characters/{character_name}/{animation_capitalized}_{frame}_.png",  # Sin subdirectorio
+			f"characters/{character_name}/{animation}/{animation_capitalized}_{frame}.png",  # Sin guión bajo
+			f"characters/{character_name}/{animation_capitalized}_{frame}.png"  # Sin subdirectorio ni guión bajo
+		]
+		
+		# Intentar cargar desde las diferentes rutas
+		for path in possible_paths:
+			sprite = self.load_image(cache_key, path, 1.0)
+			if sprite:
+				self.image_cache[cache_key] = sprite
+				return sprite
 		
 		# Si no se encuentra, crear un placeholder de personaje
-		self.logger.warning(f"Sprite no encontrado: {path}, creando placeholder")
+		self.logger.warning(f"Sprite no encontrado: {character_name}/{animation}/{frame}, creando placeholder")
 		placeholder = self._create_character_placeholder(character_name, animation)
 		self.image_cache[cache_key] = placeholder
 		return placeholder
+	
+	def get_character_animation_frames(self, character_name: str, animation: str = "idle") -> List[pygame.Surface]:
+		"""
+		Obtiene todos los frames de una animación de personaje.
+		
+		Args:
+			character_name: Nombre del personaje
+			animation: Tipo de animación
+			
+		Returns:
+			Lista de superficies con los frames de la animación
+		"""
+		frames = []
+		frame = 1
+		
+		# Intentar cargar frames hasta que no se encuentre más
+		while True:
+			sprite = self.get_character_sprite(character_name, animation, frame)
+			if sprite:
+				frames.append(sprite)
+				frame += 1
+			else:
+				break
+		
+		# Si no se encontraron frames, crear al menos uno
+		if not frames:
+			placeholder = self._create_character_placeholder(character_name, animation)
+			frames.append(placeholder)
+		
+		return frames
 	
 	def _create_character_placeholder(self, character_name: str, animation: str) -> pygame.Surface:
 		"""
@@ -255,6 +303,174 @@ class AssetManager:
 			font = pygame.font.Font(None, 32)
 			text = font.render(symbol, True, (255, 255, 255))
 			text_rect = text.get_rect(center=(32, 32))
+			surface.blit(text, text_rect)
+		except:
+			pass
+		
+		return surface
+	
+	def get_ui_button(self, button_name: str, state: str = "n") -> Optional[pygame.Surface]:
+		"""
+		Obtiene un botón UI del directorio de botones.
+		
+		Args:
+			button_name: Nombre del botón (ej: "bleft", "bright", "arrow_r_l", "arrow_l_l")
+			state: Estado del botón ("n"=normal, "h"=hover, "p"=pressed, "l"=locked)
+			
+		Returns:
+			Superficie del botón o None si no se encuentra
+		"""
+		# Crear clave de caché
+		cache_key = f"ui_button_{button_name}_{state}"
+		
+		# Buscar en caché
+		if cache_key in self.image_cache:
+			return self.image_cache[cache_key]
+		
+		# Intentar cargar el botón
+		path = f"ui/Buttons/botonescuadrados/slategrey/{button_name}_{state}.png"
+		button = self.load_image(cache_key, path, 1.0)
+		
+		if button:
+			self.image_cache[cache_key] = button
+			return button
+		
+		# Si no se encuentra, crear un placeholder
+		self.logger.warning(f"Botón UI no encontrado: {path}, creando placeholder")
+		placeholder = self._create_button_placeholder(button_name, state)
+		self.image_cache[cache_key] = placeholder
+		return placeholder
+	
+	def _create_button_placeholder(self, button_name: str, state: str) -> pygame.Surface:
+		"""
+		Crea un placeholder para botones UI.
+		
+		Args:
+			button_name: Nombre del botón
+			state: Estado del botón
+			
+		Returns:
+			Superficie placeholder
+		"""
+		surface = pygame.Surface((60, 60))
+		
+		# Color basado en el estado
+		state_colors = {
+			"n": (100, 100, 100),  # Normal - Gris
+			"h": (150, 150, 150),  # Hover - Gris claro
+			"p": (80, 80, 80),     # Pressed - Gris oscuro
+			"l": (60, 60, 60)      # Locked - Gris muy oscuro
+		}
+		
+		color = state_colors.get(state, (100, 100, 100))
+		surface.fill(color)
+		
+		# Añadir borde
+		pygame.draw.rect(surface, (200, 200, 200), (0, 0, 60, 60), 2)
+		
+		# Añadir símbolo según el botón
+		symbols = {
+			"bleft": "←",
+			"bright": "→",
+			"blank": "□",
+			"circle": "○",
+			"star": "★",
+			"heart": "♥"
+		}
+		
+		symbol = symbols.get(button_name, "?")
+		try:
+			font = pygame.font.Font(None, 32)
+			text = font.render(symbol, True, (255, 255, 255))
+			text_rect = text.get_rect(center=(30, 30))
+			surface.blit(text, text_rect)
+		except:
+			pass
+		
+		return surface
+	
+	def get_powerup_sprite(self, powerup_name: str) -> Optional[pygame.Surface]:
+		"""
+		Obtiene un sprite de powerup.
+		
+		Args:
+			powerup_name: Nombre del powerup
+			
+		Returns:
+			Superficie del powerup o None si no se encuentra
+		"""
+		# Crear clave de caché
+		cache_key = f"powerup_{powerup_name}"
+		
+		# Buscar en caché
+		if cache_key in self.image_cache:
+			return self.image_cache[cache_key]
+		
+		# Intentar cargar el powerup
+		path = f"objects/varios/{powerup_name}.png"
+		powerup = self.load_image(cache_key, path, 1.0)
+		
+		if powerup:
+			self.image_cache[cache_key] = powerup
+			return powerup
+		
+		# Si no se encuentra, crear un placeholder
+		self.logger.warning(f"Powerup no encontrado: {path}, creando placeholder")
+		placeholder = self._create_powerup_placeholder(powerup_name)
+		self.image_cache[cache_key] = placeholder
+		return placeholder
+	
+	def _create_powerup_placeholder(self, powerup_name: str) -> pygame.Surface:
+		"""
+		Crea un placeholder para powerups.
+		
+		Args:
+			powerup_name: Nombre del powerup
+			
+		Returns:
+			Superficie placeholder
+		"""
+		surface = pygame.Surface((32, 32))
+		
+		# Color basado en el tipo de powerup
+		powerup_colors = {
+			"potion": (255, 0, 255),      # Magenta
+			"shield": (0, 255, 255),      # Cyan
+			"sword": (255, 255, 0),       # Amarillo
+			"coin": (255, 215, 0),        # Dorado
+			"heart": (255, 0, 0),         # Rojo
+			"star": (255, 255, 255),      # Blanco
+			"crystal": (0, 255, 0),       # Verde
+			"ring": (255, 165, 0),        # Naranja
+			"scroll": (139, 69, 19),      # Marrón
+			"key": (255, 255, 255)        # Blanco
+		}
+		
+		color = powerup_colors.get(powerup_name.lower(), (128, 128, 128))
+		surface.fill(color)
+		
+		# Añadir borde
+		pygame.draw.rect(surface, (255, 255, 255), (0, 0, 32, 32), 2)
+		
+		# Añadir símbolo según el powerup
+		symbols = {
+			"potion": "⚗",
+			"shield": "🛡",
+			"sword": "⚔",
+			"coin": "💰",
+			"heart": "♥",
+			"star": "★",
+			"crystal": "💎",
+			"ring": "💍",
+			"scroll": "📜",
+			"key": "🔑"
+		}
+		
+		symbol = symbols.get(powerup_name.lower(), "?")
+		try:
+			font = pygame.font.Font(None, 20)
+			text = font.render(symbol, True, (255, 255, 255))
+			text_rect = text.get_rect(center=(16, 16))
 			surface.blit(text, text_rect)
 		except:
 			pass
@@ -426,7 +642,7 @@ class AssetManager:
 			self.logger.error(f"Error al buscar archivos con patrón {pattern} en {base_path}: {e}")
 			return []
 	
-	def load_image(self, path: str) -> Optional[pygame.Surface]:
+	def load_image_direct(self, path: str) -> Optional[pygame.Surface]:
 		"""
 		Carga una imagen directamente desde una ruta.
 		

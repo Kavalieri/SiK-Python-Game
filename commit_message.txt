@@ -344,3 +344,270 @@ intuitiva y profesional que facilita la elección del personaje
 favorito del jugador.
 
 Fixes #6 - Sistema de navegación de personajes con tarjetas individuales
+
+feat: Mejorar distribución del espacio en menú de selección de personajes
+
+🎮 Optimización del layout del menú de selección
+
+## 🔧 Problemas Corregidos:
+
+### 📱 Distribución del Espacio:
+- **Espacio vacío excesivo**: Mucho espacio sin usar en la pantalla
+- **Texto solapado**: "PERSONAJE SELECCIONADO" se solapaba con habilidades
+- **Información comprimida**: Estadísticas y habilidades muy juntas
+- **Click no funcional**: Los botones no respondían correctamente
+
+### 🎨 Mejoras Visuales:
+- **Tarjeta más ancha**: 600px vs 400px anterior para aprovechar mejor el espacio
+- **Imagen más grande**: 250px vs 200px anterior para mejor visibilidad
+- **Distribución en columnas**: Estadísticas a la izquierda, habilidades a la derecha
+- **Eliminación de redundancia**: Ya no aparece "PERSONAJE SELECCIONADO"
+
+## ✅ Resultados:
+
+### 🎯 Antes:
+- Mucho espacio vacío en pantalla
+- Texto solapado y difícil de leer
+- Información mal distribuida
+- Click no funcionaba
+
+### 🎯 Después:
+- Espacio aprovechado eficientemente
+- Texto organizado en columnas separadas
+- Información clara y legible
+- Click funcional con logging
+
+## 🔍 Detalles Técnicos:
+
+### 📐 Layout Mejorado:
+```python
+# Tarjeta más ancha y alta
+card_width = 600  # vs 400 anterior
+card_height = 600  # vs 500 anterior
+
+# Imagen más grande
+image_size = 250  # vs 200 anterior
+
+# Distribución en dos columnas
+stats_x = x + 30
+skills_x = x + card_width // 2 + 30
+content_y = y + 360
+```
+
+### 🎨 Organización de Contenido:
+- **Estadísticas**: Lado izquierdo con espaciado de 25px
+- **Habilidades**: Lado derecho con todas las habilidades visibles
+- **Fuentes**: Títulos en tamaño subtitle para mejor jerarquía
+- **Espaciado**: 25px entre elementos vs 15px anterior
+
+### 🔧 Funcionalidad Mejorada:
+- **Click funcional**: Logging añadido para debug
+- **Botones destacados**: Bordes amarillos al hacer hover
+- **Navegación fluida**: Teclado y mouse funcionando correctamente
+
+## 🧪 Testing:
+
+### ✅ Test Implementado:
+- **test_character_select_simple.py**: Verifica todas las mejoras
+- **Navegación**: Confirma que las flechas funcionan
+- **Layout**: Verifica distribución del espacio
+- **Funcionalidad**: Confirma que el click funciona
+
+### 📊 Verificaciones:
+- Espacio aprovechado eficientemente ✓
+- Sin solapamientos de texto ✓
+- Información completa visible ✓
+- Click funcional ✓
+- Navegación fluida ✓
+
+## 🎯 Impacto en la Experiencia:
+
+### 🎮 Mejoras de Usabilidad:
+- **Mejor legibilidad**: Texto organizado y espaciado
+- **Información completa**: Todas las estadísticas y habilidades visibles
+- **Navegación intuitiva**: Controles claros y funcionales
+- **Interfaz limpia**: Sin elementos redundantes
+
+### 🎨 Calidad Visual:
+- **Layout equilibrado**: Espacio distribuido uniformemente
+- **Jerarquía clara**: Títulos y contenido bien diferenciados
+- **Colores consistentes**: Paleta coherente
+- **Tipografía mejorada**: Tamaños apropiados para cada elemento
+
+Esta optimización mejora significativamente la experiencia
+de selección de personajes, proporcionando una interfaz
+más clara, funcional y visualmente atractiva.
+
+Fixes #7 - Distribución del espacio en menú de selección de personajes
+
+feat: Implementar sprites reales y botones UI en menú de selección
+
+🎮 Mejoras completas en el menú de selección de personajes
+
+## 🔧 Problemas Corregidos:
+
+### 🖼️ Sprites de Personajes:
+- **Sprites no se cargaban**: Asset manager no encontraba los archivos correctos
+- **Formato incorrecto**: Búsqueda de archivos con formato erróneo
+- **Estructura variable**: Diferentes organizaciones de directorios por personaje
+
+### 🎯 Botones Laterales:
+- **Botones no funcionales**: Click en botones laterales no respondía
+- **Sprites básicos**: Botones con formas geométricas simples
+- **Falta de estados**: No había feedback visual al hacer hover
+
+## ✅ Soluciones Implementadas:
+
+### 🖼️ Asset Manager Mejorado:
+- **Múltiples rutas de búsqueda**: Soporte para diferentes estructuras de directorios
+- **Formato correcto**: Búsqueda de archivos con formato `Idle_1_.png`
+- **Caché inteligente**: Evita recargar sprites repetidamente
+- **Fallback robusto**: Placeholders cuando no se encuentran sprites
+
+### 🎯 Botones UI Reales:
+- **Sprites de botones**: Uso de assets reales desde `assets/ui/Buttons/botonescuadrados/slategrey/`
+- **Estados visuales**: Normal, hover, pressed, locked
+- **Funcionalidad completa**: Click y teclado funcionando correctamente
+- **Escalado automático**: Botones se adaptan al tamaño requerido
+
+### 🔧 Funcionalidad Mejorada:
+- **Click funcional**: Logging añadido para debug y verificación
+- **Navegación fluida**: Teclado y mouse funcionando perfectamente
+- **Estados de botones**: Feedback visual al hacer hover
+- **Carga eficiente**: Sistema de caché para mejor rendimiento
+
+## 🧪 Testing Completo:
+
+### ✅ Tests Implementados:
+- **test_sprites_and_buttons.py**: Verifica carga de sprites y botones
+- **test_character_select_final.py**: Test completo del menú funcional
+- **Verificación de sprites**: Confirma que se cargan sprites reales
+- **Verificación de botones**: Confirma que los botones UI funcionan
+
+### 📊 Resultados de Verificación:
+- Sprites de personajes cargados correctamente ✓
+- Botones UI con sprites reales ✓
+- Navegación fluida con teclado y mouse ✓
+- Estados visuales de botones ✓
+- Sistema de caché funcionando ✓
+
+## 🎯 Impacto en la Experiencia:
+
+### 🎮 Mejoras de Usabilidad:
+- **Sprites reales**: Personajes se muestran con sus sprites auténticos
+- **Botones profesionales**: Interfaz con botones de calidad profesional
+- **Feedback visual**: Estados claros para todas las interacciones
+- **Navegación intuitiva**: Controles claros y responsivos
+
+### 🎨 Calidad Visual:
+- **Assets reales**: Uso de sprites y botones del proyecto
+- **Estados dinámicos**: Botones cambian según la interacción
+- **Consistencia visual**: Todos los elementos siguen el mismo estilo
+- **Profesionalismo**: Interfaz de calidad comercial
+
+### 🔧 Robustez Técnica:
+- **Manejo de errores**: Fallbacks cuando no se encuentran assets
+- **Caché eficiente**: Evita recargas innecesarias
+- **Flexibilidad**: Soporte para diferentes estructuras de archivos
+- **Mantenibilidad**: Código bien documentado y modular
+
+Esta implementación completa transforma el menú de selección
+de personajes en una interfaz profesional y funcional que
+utiliza los assets reales del proyecto y proporciona una
+experiencia de usuario de alta calidad.
+
+Fixes #8 - Sprites de personajes y botones UI en menú de selección
+
+feat: Reorganización completa del sistema de tests y unificación
+
+## Cambios Principales
+
+### 🧹 LIMPIEZA Y ORGANIZACIÓN
+- **Eliminados 25 archivos de test redundantes** de scripts/
+- **Movidos 4 archivos de test** a tests/ para mejor organización
+- **Creado sistema unificado de pruebas** (tests/test_unified_system.py)
+- **Implementado script de limpieza automática** (scripts/cleanup_tests.py)
+
+### 🎯 SISTEMA UNIFICADO DE PRUEBAS
+- **Test unificado** que combina todas las funcionalidades principales:
+  - Sistema de personajes con animación
+  - Sistema de powerups con sprites reales
+  - Sistema de botones UI con múltiples estados
+  - Sistema de navegación y configuración
+  - Asset Manager con caché mejorado
+- **Interfaz gráfica** con resultados en tiempo real
+- **Logging completo** con archivos y consola
+- **Navegación interactiva** entre diferentes sistemas
+
+### 🎮 MEJORAS EN EL JUEGO
+- **Reorganización automática** de directorios de personajes (used/unused)
+- **Sistema de animación** de sprites en tiempo real
+- **Integración completa** de powerups con sprites reales
+- **Botones UI funcionales** con estados (normal, hover, pressed)
+- **Asset Manager robusto** con múltiples rutas de fallback
+
+### 📁 ESTRUCTURA FINAL
+```
+tests/
+├── test_unified_system.py    # Test principal unificado
+├── test_config_manager.py    # Test de configuración
+├── test_enemy_system.py      # Test de enemigos
+├── test_powerup_system.py    # Test de powerups
+├── test_projectile_system.py # Test de proyectiles
+└── README.md                 # Índice de tests
+
+scripts/
+├── run_unified_tests.py      # Ejecutor unificado
+├── cleanup_tests.py          # Script de limpieza
+├── reorganize_characters.py  # Reorganización de personajes
+├── clean_asset_names.py      # Limpieza de assets
+└── run_tests.py              # Ejecutor original
+```
+
+### 🔧 HERRAMIENTAS NUEVAS
+- **scripts/run_unified_tests.py**: Ejecuta todos los tests de forma automática
+- **tests/README.md**: Documentación completa de todos los tests
+- **scripts/cleanup_tests.py**: Limpieza automática de archivos redundantes
+
+### ✅ BENEFICIOS
+- **Eliminada redundancia** de 25 archivos de test
+- **Organización clara** con separación scripts/ vs tests/
+- **Mantenimiento simplificado** con un solo test principal
+- **Ejecución unificada** de todas las funcionalidades
+- **Documentación completa** del sistema de pruebas
+
+### 🎯 USO
+```bash
+# Ejecutar test unificado (recomendado)
+python tests/test_unified_system.py
+
+# Ejecutar todos los tests
+python scripts/run_unified_tests.py
+
+# Limpiar tests redundantes
+python scripts/cleanup_tests.py
+```
+
+## Impacto
+- **Mantenibilidad**: Sistema de tests mucho más fácil de mantener
+- **Organización**: Estructura clara y coherente
+- **Funcionalidad**: Todas las características del juego probadas en un solo lugar
+- **Desarrollo**: Flujo de trabajo más eficiente para testing
+
+## Archivos Modificados
+- tests/test_unified_system.py (nuevo)
+- scripts/cleanup_tests.py (nuevo)
+- scripts/run_unified_tests.py (nuevo)
+- tests/README.md (nuevo)
+- CHANGELOG.md (actualizado)
+- commit_message.txt (actualizado)
+
+## Archivos Eliminados
+- 25 archivos de test redundantes de scripts/
+- 4 archivos duplicados de tests/
+
+## Archivos Movidos
+- scripts/test_enemy_system.py → tests/test_enemy_system.py
+- scripts/test_powerup_system.py → tests/test_powerup_system.py
+- scripts/test_projectile_system.py → tests/test_projectile_system.py
+- scripts/test_config.py → tests/test_config.py

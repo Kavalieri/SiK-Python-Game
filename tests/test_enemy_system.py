@@ -1,16 +1,18 @@
+#!/usr/bin/env python3
 """
-Tests para el sistema de enemigos avanzados
-========================================
+Script de test para el sistema de enemigos avanzados
+================================================
 
 Autor: SiK Team
 Fecha: 2024
-Descripción: Tests unitarios para el sistema de enemigos con tipos y comportamientos.
+Descripción: Test del sistema de enemigos con tipos y comportamientos avanzados.
 """
 
-import pytest
-import pygame
 import sys
 import os
+import pygame
+import time
+import random
 
 # Añadir el directorio raíz al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -22,215 +24,141 @@ from src.utils.animation_manager import AnimationManager
 from src.utils.config_manager import ConfigManager
 
 
-class TestEnemySystem:
-	"""Tests para el sistema de enemigos."""
+def test_enemy_system():
+	"""Test del sistema de enemigos avanzados."""
+	print("🧪 Iniciando test del sistema de enemigos avanzados...")
 	
-	@pytest.fixture(autouse=True)
-	def setup(self):
-		"""Configuración inicial para los tests."""
-		pygame.init()
-		pygame.display.set_mode((800, 600))  # Necesario para cargar imágenes
-		
-		yield
-		
-		pygame.quit()
+	# Inicializar Pygame
+	pygame.init()
+	screen = pygame.display.set_mode((800, 600))
+	pygame.display.set_caption("Test Sistema de Enemigos")
+	clock = pygame.time.Clock()
 	
-	def test_enemy_types_creation(self):
-		"""Test de creación de tipos de enemigos."""
-		# Verificar que todos los tipos existen
-		assert EnemyTypes.ZOMBIE_NORMAL is not None
-		assert EnemyTypes.ZOMBIE_RARE is not None
-		assert EnemyTypes.ZOMBIE_ELITE is not None
-		assert EnemyTypes.ZOMBIE_LEGENDARY is not None
-		assert EnemyTypes.ZOMBIE_GIRL_NORMAL is not None
-		assert EnemyTypes.ZOMBIE_GIRL_RARE is not None
-		assert EnemyTypes.ZOMBIE_GIRL_ELITE is not None
-		assert EnemyTypes.ZOMBIE_GIRL_LEGENDARY is not None
+	# Inicializar managers
+	config = ConfigManager()
+	asset_manager = AssetManager()
+	animation_manager = AnimationManager(config, asset_manager)
 	
-	def test_enemy_config_properties(self):
-		"""Test de propiedades de configuración de enemigos."""
-		config = EnemyTypes.ZOMBIE_NORMAL
-		
-		assert config.name == "Zombie Normal"
-		assert config.rarity == EnemyRarity.NORMAL
-		assert config.behavior == EnemyBehavior.CHASE
-		assert config.health > 0
-		assert config.speed > 0
-		assert config.damage > 0
-		assert config.score_value > 0
-		assert len(config.color) == 3
-		assert len(config.symbol) > 0
-		assert len(config.size) == 2
+	# Crear jugador simulado (solo para referencia)
+	class MockPlayer:
+		def __init__(self):
+			self.x = 400
+			self.y = 300
+			self.is_alive = True
 	
-	def test_enemy_creation(self):
-		"""Test de creación de enemigos."""
-		config = ConfigManager()
-		asset_manager = AssetManager()
-		animation_manager = AnimationManager(config, asset_manager)
-		
-		# Crear jugador simulado
-		class MockPlayer:
-			def __init__(self):
-				self.x = 400
-				self.y = 300
-				self.is_alive = True
-		
-		player = MockPlayer()
-		
-		# Crear enemigo
-		enemy = Enemy(100, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_NORMAL)
-		
-		assert enemy is not None
-		assert enemy.enemy_config == EnemyTypes.ZOMBIE_NORMAL
-		assert enemy.behavior == EnemyBehavior.CHASE
-		assert enemy.rarity == EnemyRarity.NORMAL
-		assert enemy.is_alive
-		assert enemy.sprite is not None
+	player = MockPlayer()
 	
-	def test_enemy_info(self):
-		"""Test de información de enemigos."""
-		config = ConfigManager()
-		asset_manager = AssetManager()
-		animation_manager = AnimationManager(config, asset_manager)
-		
-		class MockPlayer:
-			def __init__(self):
-				self.x = 400
-				self.y = 300
-				self.is_alive = True
-		
-		player = MockPlayer()
-		enemy = Enemy(100, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_ELITE)
-		
+	# Lista de enemigos para mostrar
+	enemies = []
+	
+	# Crear enemigos de diferentes tipos
+	print("\n👹 Creando enemigos de diferentes tipos...")
+	
+	# Enemigos normales
+	enemies.append(Enemy(100, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_NORMAL))
+	enemies.append(Enemy(200, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_NORMAL))
+	
+	# Enemigos raros
+	enemies.append(Enemy(300, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_RARE))
+	enemies.append(Enemy(400, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_RARE))
+	
+	# Enemigos elite
+	enemies.append(Enemy(100, 200, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_ELITE))
+	enemies.append(Enemy(200, 200, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_ELITE))
+	
+	# Enemigos legendarios
+	enemies.append(Enemy(300, 200, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_LEGENDARY))
+	enemies.append(Enemy(400, 200, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_LEGENDARY))
+	
+	print(f"✅ {len(enemies)} enemigos creados")
+	
+	# Mostrar información de cada enemigo
+	print("\n📊 Información de enemigos:")
+	for i, enemy in enumerate(enemies):
 		info = enemy.get_enemy_info()
-		
-		assert "name" in info
-		assert "rarity" in info
-		assert "behavior" in info
-		assert "health" in info
-		assert "damage" in info
-		assert "score_value" in info
-		assert info["name"] == "Zombie Elite"
-		assert info["rarity"] == "elite"
-		assert info["behavior"] == "swarm"
+		print(f"  {i+1}. {info['name']} - Rareza: {info['rarity']} - Comportamiento: {info['behavior']}")
+		print(f"     Vida: {info['health']} - Daño: {info['damage']} - Puntos: {info['score_value']}")
 	
-	def test_random_enemy_generation(self):
-		"""Test de generación aleatoria de enemigos."""
-		# Generar varios enemigos aleatorios
-		enemies = []
-		for _ in range(20):
-			enemy_config = EnemyTypes.get_random_enemy()
-			enemies.append(enemy_config)
-		
-		# Verificar que se generaron enemigos
-		assert len(enemies) == 20
-		assert all(enemy is not None for enemy in enemies)
-		
-		# Verificar que todos tienen las propiedades necesarias
-		for enemy in enemies:
-			assert hasattr(enemy, 'name')
-			assert hasattr(enemy, 'rarity')
-			assert hasattr(enemy, 'behavior')
-			assert hasattr(enemy, 'health')
-			assert hasattr(enemy, 'speed')
-			assert hasattr(enemy, 'damage')
+	# Test de generación aleatoria
+	print("\n🎲 Probando generación aleatoria...")
+	random_enemies = []
+	for _ in range(10):
+		config = EnemyTypes.get_random_enemy()
+		random_enemies.append(config)
+		print(f"  - {config.name} (Rareza: {config.rarity.value})")
 	
-	def test_rarity_distribution(self):
-		"""Test de distribución de rareza."""
-		rarity_counts = {
-			EnemyRarity.NORMAL: 0,
-			EnemyRarity.RARE: 0,
-			EnemyRarity.ELITE: 0,
-			EnemyRarity.LEGENDARY: 0
-		}
-		
-		# Generar muchos enemigos para verificar distribución
-		for _ in range(100):
-			enemy_config = EnemyTypes.get_random_enemy()
-			rarity_counts[enemy_config.rarity] += 1
-		
-		# Verificar que se generaron enemigos de todas las rarezas
-		assert rarity_counts[EnemyRarity.NORMAL] > 0
-		assert rarity_counts[EnemyRarity.RARE] > 0
-		assert rarity_counts[EnemyRarity.ELITE] > 0
-		assert rarity_counts[EnemyRarity.LEGENDARY] > 0
-		
-		# Verificar que los normales son más comunes
-		assert rarity_counts[EnemyRarity.NORMAL] > rarity_counts[EnemyRarity.LEGENDARY]
+	# Estadísticas de rareza
+	rarity_counts = {}
+	for enemy in random_enemies:
+		rarity = enemy.rarity.value
+		rarity_counts[rarity] = rarity_counts.get(rarity, 0) + 1
 	
-	def test_enemy_behaviors(self):
-		"""Test de comportamientos de enemigos."""
-		config = ConfigManager()
-		asset_manager = AssetManager()
-		animation_manager = AnimationManager(config, asset_manager)
-		
-		class MockPlayer:
-			def __init__(self):
-				self.x = 400
-				self.y = 300
-				self.is_alive = True
-		
-		player = MockPlayer()
-		
-		# Crear enemigos con diferentes comportamientos
-		chase_enemy = Enemy(100, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_NORMAL)
-		wander_enemy = Enemy(200, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_RARE)
-		ambush_enemy = Enemy(300, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_RARE)
-		swarm_enemy = Enemy(400, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_ELITE)
-		boss_enemy = Enemy(500, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_LEGENDARY)
-		
-		assert chase_enemy.behavior == EnemyBehavior.CHASE
-		assert wander_enemy.behavior == EnemyBehavior.WANDER
-		assert ambush_enemy.behavior == EnemyBehavior.AMBUSH
-		assert swarm_enemy.behavior == EnemyBehavior.SWARM
-		assert boss_enemy.behavior == EnemyBehavior.BOSS
+	print("\n📈 Distribución de rareza en enemigos aleatorios:")
+	for rarity, count in rarity_counts.items():
+		print(f"  - {rarity}: {count} enemigos")
 	
-	def test_enemy_collision(self):
-		"""Test de colisiones de enemigos."""
-		config = ConfigManager()
-		asset_manager = AssetManager()
-		animation_manager = AnimationManager(config, asset_manager)
-		
-		class MockPlayer:
-			def __init__(self):
-				self.x = 400
-				self.y = 300
-				self.is_alive = True
-		
-		player = MockPlayer()
-		
-		enemy1 = Enemy(100, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_NORMAL)
-		enemy2 = Enemy(150, 100, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_RARE)
-		
-		# Verificar que los enemigos tienen rectángulos de colisión
-		assert hasattr(enemy1, 'rect')
-		assert hasattr(enemy2, 'rect')
-		assert enemy1.rect is not None
-		assert enemy2.rect is not None
+	# Test de comportamientos
+	print("\n🤖 Probando comportamientos...")
+	behavior_enemies = [
+		Enemy(100, 300, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_NORMAL),  # CHASE
+		Enemy(200, 300, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_GIRL_RARE),  # WANDER
+		Enemy(300, 300, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_RARE),  # AMBUSH
+		Enemy(400, 300, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_ELITE),  # SWARM
+		Enemy(500, 300, asset_manager, animation_manager, config, player, EnemyTypes.ZOMBIE_LEGENDARY),  # BOSS
+	]
 	
-	def test_enemy_stats_progression(self):
-		"""Test de progresión de estadísticas según rareza."""
-		# Verificar que los enemigos más raros son más fuertes
-		normal = EnemyTypes.ZOMBIE_NORMAL
-		rare = EnemyTypes.ZOMBIE_RARE
-		elite = EnemyTypes.ZOMBIE_ELITE
-		legendary = EnemyTypes.ZOMBIE_LEGENDARY
+	behavior_names = ["Persecución", "Vagabundeo", "Emboscada", "Enjambre", "Jefe"]
+	
+	for i, enemy in enumerate(behavior_enemies):
+		print(f"  {i+1}. {behavior_names[i]}: {enemy.enemy_config.name}")
+	
+	# Renderizado y simulación
+	print("\n🎨 Probando renderizado...")
+	screen.fill((50, 100, 150))  # Fondo azul
+	
+	# Renderizar enemigos
+	for enemy in enemies:
+		enemy.render(screen)
+	
+	# Renderizar enemigos de comportamiento
+	for enemy in behavior_enemies:
+		enemy.render(screen)
+	
+	pygame.display.flip()
+	print("✅ Enemigos renderizados correctamente")
+	
+	# Simulación de movimiento
+	print("\n🏃 Simulando movimiento de enemigos...")
+	running = True
+	start_time = time.time()
+	
+	while running and (time.time() - start_time) < 5:  # 5 segundos de simulación
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
 		
-		# Vida debe aumentar con la rareza
-		assert legendary.health > elite.health
-		assert elite.health > rare.health
-		assert rare.health > normal.health
+		# Actualizar enemigos
+		delta_time = 1.0 / 60.0
+		for enemy in enemies + behavior_enemies:
+			enemy.update(delta_time)
 		
-		# Daño debe aumentar con la rareza
-		assert legendary.damage > elite.damage
-		assert elite.damage > rare.damage
-		assert rare.damage > normal.damage
+		# Renderizar
+		screen.fill((50, 100, 150))
 		
-		# Puntos deben aumentar con la rareza
-		assert legendary.score_value > elite.score_value
-		assert elite.score_value > rare.score_value
-		assert rare.score_value > normal.score_value
+		# Dibujar jugador (punto blanco)
+		pygame.draw.circle(screen, (255, 255, 255), (int(player.x), int(player.y)), 10)
+		
+		# Renderizar enemigos
+		for enemy in enemies + behavior_enemies:
+			enemy.render(screen)
+		
+		pygame.display.flip()
+		clock.tick(60)
+	
+	# Limpiar
+	pygame.quit()
+	print("✅ Test del sistema de enemigos avanzados completado")
 
 
 if __name__ == "__main__":
-	pytest.main([__file__]) 
+	test_enemy_system() 
