@@ -61,8 +61,8 @@ class Player(Entity):
 			entity_type=EntityType.PLAYER,
 			x=x,
 			y=y,
-			width=64,  # Tamaño base del sprite
-			height=64,
+			width=32,  # Tamaño reducido del sprite
+			height=32,
 			stats=stats
 		)
 		

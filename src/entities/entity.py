@@ -323,6 +323,11 @@ class Entity(ABC):
 		if not self.is_alive:
 			return
 		
+		# Obtener el sprite actual
+		current_sprite = self._get_current_sprite()
+		if not current_sprite:
+			return
+		
 		# Usar coordenadas de pantalla si se proporcionan, sino usar posición del mundo
 		if camera_offset != (0, 0):
 			render_x = camera_offset[0]
@@ -331,18 +336,24 @@ class Entity(ABC):
 			render_x = self.x
 			render_y = self.y
 		
-		# Renderizar sprite
-		screen.blit(self.sprite, (render_x, render_y))
+		# Centrar el sprite en las coordenadas proporcionadas
+		sprite_width = current_sprite.get_width()
+		sprite_height = current_sprite.get_height()
+		centered_x = render_x - sprite_width // 2
+		centered_y = render_y - sprite_height // 2
+		
+		# Renderizar sprite centrado
+		screen.blit(current_sprite, (centered_x, centered_y))
 		
 		# Renderizar efectos
-		self._render_effects(screen, render_x, render_y)
+		self._render_effects(screen, centered_x, centered_y)
 		
 		# Debug: mostrar rectángulo de colisión
 		if hasattr(self, 'config') and hasattr(self.config, 'get'):
 			try:
 				debug_enabled = self.config.get('game', 'debug', False)
 				if debug_enabled:
-					debug_rect = pygame.Rect(render_x, render_y, self.width, self.height)
+					debug_rect = pygame.Rect(centered_x, centered_y, sprite_width, sprite_height)
 					pygame.draw.rect(screen, (255, 0, 0), debug_rect, 2)
 			except:
 				pass  # Ignorar errores de debug
