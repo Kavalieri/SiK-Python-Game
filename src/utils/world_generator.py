@@ -37,10 +37,10 @@ class WorldGenerator:
 		self.screen_height = screen_height
 		self.logger = logging.getLogger(__name__)
 		
-		# Configuración de generación con baja densidad
-		self.element_density = 0.0001  # Muy baja densidad
-		self.min_distance = 200        # Distancia mínima entre elementos
-		self.safe_zone_radius = 400    # Zona segura alrededor del centro
+		# Configuración de generación simplificada
+		self.element_density = 0.00005  # Densidad muy baja
+		self.min_distance = 300        # Distancia mínima entre elementos
+		self.safe_zone_radius = 500    # Zona segura alrededor del centro
 		
 		# Cargar sprites disponibles
 		self.available_sprites = self._load_available_sprites()

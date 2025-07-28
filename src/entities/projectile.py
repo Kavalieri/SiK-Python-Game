@@ -70,6 +70,9 @@ class Projectile(Entity):
 		self.velocity_x = dx * speed
 		self.velocity_y = dy * speed
 		
+		# Estado del proyectil
+		self.alive = True
+		
 		# Configurar sprite
 		self._setup_sprite()
 		

@@ -148,7 +148,8 @@ class GameEngine:
 		
 		# Callbacks para la escena del juego
 		game_scene = self.scene_manager.scenes['game']
-		# Los callbacks del juego se manejarán internamente
+		# Conectar scene_manager al game_scene para permitir pausa
+		game_scene.scene_manager = self.scene_manager
 		
 		# Callbacks para la escena de pausa
 		pause_scene = self.scene_manager.scenes['pause']

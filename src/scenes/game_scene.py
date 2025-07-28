@@ -97,29 +97,20 @@ class GameScene(Scene):
 		self.logger.info("Escena del juego inicializada")
 	
 	def _load_background(self):
-		"""Carga el fondo dinámico de desierto."""
+		"""Carga el fondo simple de desierto."""
 		try:
-			# Crear fondo dinámico de desierto
-			self.background = DesertBackground(
+			# Crear fondo simple de desierto
+			from ..utils.simple_desert_background import SimpleDesertBackground
+			self.background = SimpleDesertBackground(
 				screen_width=self.screen.get_width(),
 				screen_height=self.screen.get_height()
 			)
-			self.logger.info("Fondo de desierto cargado correctamente")
+			self.logger.info("Fondo simple de desierto cargado correctamente")
 		except Exception as e:
-			self.logger.error(f"Error al cargar fondo de desierto: {e}")
-			self.background = None
-			# Cargar fondo desde assets
-			background_path = "assets/fondos/game_background_1/game_background_1.png"
-			self.background = self.asset_manager.load_image(background_path)
-			if self.background:
-				# Escalar al tamaño de la pantalla
-				self.background = pygame.transform.scale(self.background, (self.screen.get_width(), self.screen.get_height()))
-			self.logger.info("Fondo del juego cargado")
-		except Exception as e:
-			self.logger.error(f"Error al cargar fondo: {e}")
+			self.logger.error(f"Error al cargar fondo simple: {e}")
 			# Crear fondo por defecto
 			self.background = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
-			self.background.fill((50, 100, 150))
+			self.background.fill((135, 206, 235))  # Azul cielo
 	
 	def _initialize_player(self):
 		"""Inicializa el jugador."""
@@ -136,10 +127,12 @@ class GameScene(Scene):
 	def handle_event(self, event: pygame.event.Event):
 		"""Procesa eventos de Pygame."""
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_ESCAPE:
+			if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
 				# Pausar juego
 				self.logger.info("Juego pausado")
-				# Aquí se cambiaría a la escena de pausa
+				# Cambiar a la escena de pausa
+				if hasattr(self, 'scene_manager') and self.scene_manager:
+					self.scene_manager.change_scene('pause')
 		
 		# Pasar eventos al jugador usando handle_input
 		if self.player:
@@ -230,14 +223,12 @@ class GameScene(Scene):
 	
 	def render(self):
 		"""Renderiza la escena del juego."""
-		# Renderizar fondo de desierto
+		# Renderizar fondo simple de desierto
 		if self.background:
-			# Obtener offset de cámara para parallax
-			camera_x = self.camera.x if self.camera else 0
-			camera_y = self.camera.y if self.camera else 0
-			self.background.render(self.screen, (camera_x, camera_y))
+			# Para el fondo simple, no necesitamos offset de cámara
+			self.background.render(self.screen)
 		else:
-			self.screen.fill((50, 100, 150))
+			self.screen.fill((135, 206, 235))  # Azul cielo
 		
 		# Renderizar entidades usando coordenadas de pantalla
 		for enemy in self.enemies:
