@@ -24,9 +24,10 @@ def show_menu():
 	print("1. Test Simple de Movimiento del Jugador")
 	print("2. Test del Fondo de Desierto")
 	print("3. Test de Elementos del Mundo")
-	print("4. Test del Sistema Completo")
-	print("5. Test de Generación de Mundo")
-	print("6. Ejecutar Todos los Tests")
+	print("4. Test de Generación de Mundo")
+	print("5. Test del Sistema Completo")
+	print("6. Test del Layout del Menú de Personajes")
+	print("7. Ejecutar Todos los Tests")
 	print("0. Salir")
 	print("="*50)
 
@@ -59,7 +60,8 @@ def run_all_tests():
 		("Test del Fondo de Desierto", "test_desert_background.py"),
 		("Test de Elementos del Mundo", "test_world_elements.py"),
 		("Test de Generación de Mundo", "test_world_generation.py"),
-		("Test del Sistema Completo", "test_complete_system.py")
+		("Test del Sistema Completo", "test_complete_system.py"),
+		("Test del Layout del Menú de Personajes", "test_simple_character_menu.py")
 	]
 	
 	print("\n🚀 Ejecutando todos los tests...")
@@ -96,7 +98,7 @@ def main():
 		show_menu()
 		
 		try:
-			choice = input("\nSelecciona una opción (0-6): ").strip()
+			choice = input("\nSelecciona una opción (0-7): ").strip()
 			
 			if choice == "0":
 				print("👋 ¡Hasta luego!")
@@ -108,13 +110,15 @@ def main():
 			elif choice == "3":
 				run_test("Test de Elementos del Mundo", "test_world_elements.py")
 			elif choice == "4":
-				run_test("Test del Sistema Completo", "test_complete_system.py")
-			elif choice == "5":
 				run_test("Test de Generación de Mundo", "test_world_generation.py")
+			elif choice == "5":
+				run_test("Test del Sistema Completo", "test_complete_system.py")
 			elif choice == "6":
+				run_test("Test del Layout del Menú de Personajes", "test_simple_character_menu.py")
+			elif choice == "7":
 				run_all_tests()
 			else:
-				print("❌ Opción no válida. Por favor, selecciona 0-6.")
+				print("❌ Opción no válida. Por favor, selecciona 0-7.")
 				
 		except KeyboardInterrupt:
 			print("\n\n👋 ¡Hasta luego!")
