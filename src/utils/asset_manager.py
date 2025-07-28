@@ -31,7 +31,7 @@ class AssetManager:
         self.animation_config = {
             'characters': {
                 'adventureguirl': {
-                    'animations': ['Dead', 'Idle', 'Jump', 'Melee', 'Run', 'Shoot', 'Slide'],
+                    'animations': ['Dead', 'Idle', 'Jump', 'Run', 'Shoot'],
                     'total_frames': 53
                 },
                 'guerrero': {
@@ -39,7 +39,7 @@ class AssetManager:
                     'total_frames': 70
                 },
                 'robot': {
-                    'animations': ['Dead', 'Idle', 'Jump', 'JumpMelee', 'JumpShoot', 'Melee', 'RunShoot', 'Run', 'Shoot', 'Slide'],
+                    'animations': ['Dead', 'Idle', 'Jump', 'Run', 'Shoot'],
                     'total_frames': 82
                 },
                 'zombieguirl': {

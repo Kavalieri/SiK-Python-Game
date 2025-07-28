@@ -101,8 +101,14 @@ class SceneManager:
 			self.logger.error(f"Escena no encontrada: {scene_name}")
 			return
 		
-		self.next_scene = scene_name
-		self.logger.info(f"Solicitado cambio a escena: {scene_name}")
+		# Cambio inmediato de escena
+		if self.current_scene:
+			self.current_scene.exit()
+		
+		self.current_scene = self.scenes[scene_name]
+		self.current_scene.enter()
+		
+		self.logger.info(f"Cambiado a escena: {scene_name}")
 	
 	def _switch_scene(self):
 		"""Realiza el cambio de escena."""
@@ -123,7 +129,10 @@ class SceneManager:
 	def handle_event(self, event: pygame.event.Event):
 		"""Procesa eventos de Pygame."""
 		if self.current_scene:
+			self.logger.debug(f"Enviando evento {event.type} a escena: {self.current_scene.__class__.__name__}")
 			self.current_scene.handle_event(event)
+		else:
+			self.logger.warning(f"Evento {event.type} recibido pero no hay escena actual")
 	
 	def update(self):
 		"""Actualiza la lógica del gestor de escenas."""
@@ -131,6 +140,8 @@ class SceneManager:
 		
 		if self.current_scene:
 			self.current_scene.update()
+		else:
+			self.logger.warning("No hay escena actual para actualizar")
 	
 	def render(self):
 		"""Renderiza la escena actual."""
@@ -138,6 +149,7 @@ class SceneManager:
 			self.current_scene.render()
 		else:
 			# Pantalla de carga o error
+			self.logger.warning("No hay escena actual para renderizar - mostrando pantalla de carga")
 			self.screen.fill((0, 0, 0))
 			font = pygame.font.Font(None, 36)
 			text = font.render("Cargando...", True, (255, 255, 255))

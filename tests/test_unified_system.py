@@ -280,7 +280,7 @@ class UnifiedTestSystem:
             config = ConfigManager()
             
             # Verificar configuración básica
-            if config.get("screen_width"):
+            if config.get("display", "width"):
                 self.logger.info("✓ Configuración cargada correctamente")
             else:
                 results["warnings"].append("Configuración incompleta")
@@ -301,7 +301,7 @@ class UnifiedTestSystem:
                 self.logger.info("✓ Asset Manager inicializado")
                 
                 # Probar caché
-                cache_size = len(self.asset_manager.image_cache)
+                cache_size = len(self.asset_manager.cache)
                 self.logger.info(f"✓ Caché de imágenes: {cache_size} elementos")
                 
             else:
@@ -426,7 +426,7 @@ class UnifiedTestSystem:
         
         powerup_x = 20
         for powerup in self.powerups[:8]:  # Mostrar solo los primeros 8
-            sprite = self.asset_manager.get_powerup_sprite(powerup)
+            sprite = self.asset_manager.load_image(f"objects/varios/{powerup}.png")
             if sprite:
                 sprite_rect = sprite.get_rect(topleft=(powerup_x, powerup_y + 40))
                 self.screen.blit(sprite, sprite_rect)

@@ -8,7 +8,7 @@ Descripción: Módulo que contiene todos los datos de personajes jugables.
 """
 
 from typing import Dict, Any, List
-from ..utils.config_manager_v2 import ConfigManagerV2
+from ..utils.config_manager import ConfigManager
 
 
 class CharacterData:
@@ -16,34 +16,45 @@ class CharacterData:
     Gestiona todos los datos de personajes jugables.
     """
     
-    def __init__(self):
-        """Inicializa el gestor de datos de personajes."""
-        self.config_manager = ConfigManagerV2()
-    
-    @classmethod
-    def get_character_data(cls, character_key: str) -> Dict[str, Any]:
-        """
-        Obtiene los datos de un personaje específico.
-        
-        Args:
-            character_key: Clave del personaje
-            
-        Returns:
-            Datos del personaje o diccionario vacío si no existe
-        """
-        config_manager = ConfigManagerV2()
-        return config_manager.get_character_data(character_key)
-    
-    @classmethod
-    def get_all_characters(cls) -> List[str]:
-        """
-        Obtiene la lista de todos los personajes disponibles.
-        
-        Returns:
-            Lista de claves de personajes
-        """
-        config_manager = ConfigManagerV2()
-        return config_manager.get_all_characters()
+    # Datos de personajes disponibles
+    CHARACTER_DATA = {
+        "guerrero": {
+            "nombre": "Guerrero",
+            "tipo": "Jugable",
+            "descripcion": "Un valiente guerrero con habilidades de combate cuerpo a cuerpo.",
+            "stats": {
+                "vida": 100,
+                "velocidad": 5,
+                "daño": 25,
+                "defensa": 15
+            },
+            "habilidades": ["Ataque Melee", "Defensa", "Carga"]
+        },
+        "adventureguirl": {
+            "nombre": "Aventurera",
+            "tipo": "Jugable",
+            "descripcion": "Una aventurera ágil con habilidades de combate a distancia.",
+            "stats": {
+                "vida": 80,
+                "velocidad": 7,
+                "daño": 20,
+                "defensa": 10
+            },
+            "habilidades": ["Tiro con Arco", "Esquiva", "Sigilo"]
+        },
+        "robot": {
+            "nombre": "Robot",
+            "tipo": "Jugable",
+            "descripcion": "Un robot avanzado con tecnología futurista.",
+            "stats": {
+                "vida": 120,
+                "velocidad": 4,
+                "daño": 30,
+                "defensa": 20
+            },
+            "habilidades": ["Láser", "Escudo", "Reparación"]
+        }
+    }
     
     @classmethod
     def get_character_data(cls, character_key: str) -> Dict[str, Any]:

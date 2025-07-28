@@ -1,0 +1,38 @@
+{
+  "resolución": {
+    "ancho": 1280,
+    "alto": 720,
+    "fps": 60,
+    "pantalla_completa": false,
+    "vsync": true,
+    "escala_ui": 1.0
+  },
+  "resoluciones_disponibles": [
+    {"ancho": 800, "alto": 600, "nombre": "800x600"},
+    {"ancho": 1024, "alto": 768, "nombre": "1024x768"},
+    {"ancho": 1280, "alto": 720, "nombre": "1280x720"},
+    {"ancho": 1366, "alto": 768, "nombre": "1366x768"},
+    {"ancho": 1920, "alto": 1080, "nombre": "1920x1080"},
+    {"ancho": 2560, "alto": 1440, "nombre": "2560x1440"}
+  ],
+  "calidad_gráfica": {
+    "antialiasing": true,
+    "filtrado_texturas": true,
+    "sombras": true,
+    "partículas": true,
+    "efectos_post_procesado": true
+  },
+  "rendimiento": {
+    "límite_fps": 60,
+    "vsync_adaptativo": true,
+    "optimización_memoria": true,
+    "caché_texturas": true
+  },
+  "cámara": {
+    "suavizado": true,
+    "velocidad_seguimiento": 0.1,
+    "zoom_mínimo": 0.5,
+    "zoom_máximo": 2.0,
+    "zoom_por_defecto": 1.0
+  }
+} 

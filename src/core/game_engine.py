@@ -54,15 +54,14 @@ class GameEngine:
 			pygame.mixer.init()
 			
 			# Configurar pantalla
-			screen_width = self.config.get('display', 'width', 1280)
-			screen_height = self.config.get('display', 'height', 720)
+			screen_width, screen_height = self.config.get_resolution()
 			title = self.config.get('game', 'title', 'SiK Python Game')
 			
 			self.screen = pygame.display.set_mode((screen_width, screen_height))
 			pygame.display.set_caption(title)
 			
 			# Configurar reloj
-			fps = self.config.get('display', 'fps', 60)
+			fps = self.config.get_fps()
 			self.clock = pygame.time.Clock()
 			
 			self.logger.info(f"Pygame inicializado - Resolución: {screen_width}x{screen_height}, FPS: {fps}")
@@ -85,6 +84,9 @@ class GameEngine:
 			
 			# Inicializar gestor de escenas
 			self.scene_manager = SceneManager(self.screen, self.config)
+			
+			# Configurar referencias entre componentes
+			self.game_state.scene_manager = self.scene_manager
 			
 			# Configurar escenas iniciales
 			self._setup_scenes()
@@ -125,8 +127,8 @@ class GameEngine:
 			# Configurar callbacks para transiciones entre escenas
 			self._setup_scene_transitions()
 			
-			# Establecer escena de carga como inicial
-			self.scene_manager.change_scene('loading')
+			# Establecer escena de bienvenida como inicial (temporalmente)
+			self.scene_manager.change_scene('welcome')
 			
 			self.logger.info("Escenas configuradas correctamente")
 			
@@ -136,31 +138,44 @@ class GameEngine:
 	
 	def _setup_scene_transitions(self):
 		"""Configura las transiciones entre escenas."""
-		# Callbacks para la escena de bienvenida
-		welcome_scene = self.scene_manager.scenes['welcome']
-		welcome_scene.menu_manager.add_callback('main', lambda: self.scene_manager.change_scene('main_menu'))
-		
-		# Callbacks para la escena del menú principal
-		main_menu_scene = self.scene_manager.scenes['main_menu']
-		main_menu_scene.menu_manager.add_callback('new_game', lambda: self.scene_manager.change_scene('character_select'))
-		main_menu_scene.menu_manager.add_callback('continue_game', lambda: self.scene_manager.change_scene('game'))
-		main_menu_scene.menu_manager.add_callback('back_to_previous', lambda: self.scene_manager.change_scene('welcome'))
-		
-		# Callbacks para la escena del juego
-		game_scene = self.scene_manager.scenes['game']
-		# Conectar scene_manager al game_scene para permitir pausa
-		game_scene.scene_manager = self.scene_manager
-		
-		# Callbacks para la escena de pausa
-		pause_scene = self.scene_manager.scenes['pause']
-		pause_scene.menu_manager.add_callback('resume_game', lambda: self.scene_manager.change_scene('game'))
-		pause_scene.menu_manager.add_callback('main_menu', lambda: self.scene_manager.change_scene('main_menu'))
-		
-		# Callbacks para la escena de selección de personaje
-		character_select_scene = self.scene_manager.scenes['character_select']
-		character_select_scene.scene_manager = self.scene_manager
-		
-		self.logger.info("Transiciones entre escenas configuradas")
+		try:
+			# Callbacks para la escena de bienvenida
+			welcome_scene = self.scene_manager.scenes['welcome']
+			welcome_scene.scene_manager = self.scene_manager
+			welcome_scene.menu_manager.callbacks.on_welcome_start = lambda: self.scene_manager.change_scene('main_menu')
+			
+			# Callbacks para la escena del menú principal
+			main_menu_scene = self.scene_manager.scenes['main_menu']
+			main_menu_scene.menu_manager.callbacks.on_new_game = lambda: self.scene_manager.change_scene('character_select')
+			main_menu_scene.menu_manager.callbacks.on_continue_game = lambda: self.scene_manager.change_scene('game')
+			main_menu_scene.menu_manager.callbacks.on_load_game = lambda: self.scene_manager.change_scene('save_menu')
+			main_menu_scene.menu_manager.callbacks.on_options = lambda: self.scene_manager.change_scene('options')
+			main_menu_scene.menu_manager.callbacks.on_exit = lambda: self._quit_game()
+			
+			# Callbacks para la escena del juego
+			game_scene = self.scene_manager.scenes['game']
+			game_scene.scene_manager = self.scene_manager
+			
+			# Callbacks para la escena de pausa
+			pause_scene = self.scene_manager.scenes['pause']
+			pause_scene.menu_manager.callbacks.on_resume_game = lambda: self.scene_manager.change_scene('game')
+			pause_scene.menu_manager.callbacks.on_save_game = lambda: self.save_manager.save_game()
+			pause_scene.menu_manager.callbacks.on_main_menu = lambda: self.scene_manager.change_scene('main_menu')
+			pause_scene.menu_manager.callbacks.on_exit = lambda: self._quit_game()
+			
+			# Callbacks para la escena de selección de personaje
+			character_select_scene = self.scene_manager.scenes['character_select']
+			character_select_scene.scene_manager = self.scene_manager
+			
+			self.logger.info("Transiciones entre escenas configuradas")
+			
+		except Exception as e:
+			self.logger.error(f"Error configurando transiciones: {e}")
+	
+	def _quit_game(self):
+		"""Método para salir del juego."""
+		self.logger.info("Saliendo del juego...")
+		self.running = False
 	
 	def _on_loading_complete(self):
 		"""Callback cuando termina la carga."""
@@ -177,7 +192,7 @@ class GameEngine:
 				self._handle_events()
 				self._update()
 				self._render()
-				self.clock.tick(self.config.get('display', 'fps', 60))
+				self.clock.tick(self.config.get_fps())
 				
 		except Exception as e:
 			self.logger.error(f"Error en el bucle principal: {e}")
@@ -188,10 +203,36 @@ class GameEngine:
 	def _handle_events(self):
 		"""Procesa todos los eventos de Pygame."""
 		for event in pygame.event.get():
+			# Logging detallado de eventos
+			self._log_event(event)
+			
 			if event.type == pygame.QUIT:
+				self.logger.info("Evento QUIT detectado - Cerrando juego")
 				self.running = False
 			else:
 				self.scene_manager.handle_event(event)
+	
+	def _log_event(self, event: pygame.event.Event):
+		"""Registra eventos de Pygame para debug."""
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			self.logger.debug(f"MOUSE CLICK: {event.button} en ({event.pos[0]}, {event.pos[1]})")
+		elif event.type == pygame.MOUSEBUTTONUP:
+			self.logger.debug(f"MOUSE RELEASE: {event.button} en ({event.pos[0]}, {event.pos[1]})")
+		elif event.type == pygame.MOUSEMOTION:
+			# Solo loggear movimiento cada 10 frames para no saturar
+			if hasattr(self, '_mouse_log_counter'):
+				self._mouse_log_counter += 1
+			else:
+				self._mouse_log_counter = 0
+			
+			if self._mouse_log_counter % 10 == 0:
+				self.logger.debug(f"MOUSE MOTION: ({event.pos[0]}, {event.pos[1]})")
+		elif event.type == pygame.KEYDOWN:
+			self.logger.debug(f"KEY DOWN: {pygame.key.name(event.key)} (scancode: {event.scancode})")
+		elif event.type == pygame.KEYUP:
+			self.logger.debug(f"KEY UP: {pygame.key.name(event.key)} (scancode: {event.scancode})")
+		elif event.type == pygame.MOUSEWHEEL:
+			self.logger.debug(f"MOUSE WHEEL: {event.y} en ({event.x}, {event.y})")
 	
 	def _update(self):
 		"""Actualiza la lógica del juego."""

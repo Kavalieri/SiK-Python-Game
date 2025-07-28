@@ -93,12 +93,18 @@ class MenuManager:
             events: Lista de eventos de Pygame
         """
         if self.current_menu:
+            self.logger.debug(f"MenuManager: Actualizando menú {self.current_menu.get_title()}")
             self.current_menu.update(events)
+        else:
+            self.logger.warning("MenuManager: No hay menú actual para actualizar")
     
     def render(self):
         """Renderiza el menú actual."""
         if self.current_menu:
+            self.logger.debug(f"MenuManager: Renderizando menú {self.current_menu.get_title()}")
             self.current_menu.draw(self.screen)
+        else:
+            self.logger.warning("MenuManager: No hay menú actual para renderizar")
     
     def add_callback(self, callback_name: str, callback: Callable):
         """
@@ -108,11 +114,8 @@ class MenuManager:
             callback_name: Nombre del callback
             callback: Función callback
         """
-        if hasattr(self.callbacks, callback_name):
-            setattr(self.callbacks, callback_name, callback)
-            self.logger.debug(f"Callback personalizado añadido: {callback_name}")
-        else:
-            self.logger.warning(f"Callback no encontrado: {callback_name}")
+        setattr(self.callbacks, callback_name, callback)
+        self.logger.debug(f"Callback personalizado añadido: {callback_name}")
     
     def update_save_menu(self):
         """Actualiza el menú de guardado con información actual."""

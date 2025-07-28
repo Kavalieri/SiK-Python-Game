@@ -33,6 +33,7 @@ class MenuCallbacks:
     # Callbacks de navegación principal
     def on_welcome_start(self):
         """Callback para iniciar desde la pantalla de bienvenida."""
+        self.logger.info("🎯 CALLBACK EJECUTADO: on_welcome_start")
         self.logger.info("Iniciando desde pantalla de bienvenida")
         self.game_state.set_scene("main_menu")
     

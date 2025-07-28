@@ -37,6 +37,7 @@ class GameState:
 		self.player_name = "Player"
 		self.selected_character = None
 		self.current_player = None  # Referencia al jugador actual para el HUD
+		self.scene_manager = None  # Se establecerá desde el GameEngine
 		
 		# Configuración del juego
 		self.settings = {
@@ -105,8 +106,22 @@ class GameState:
 			'level': self.level,
 			'high_score': self.high_score,
 			'player_name': self.player_name,
-			'settings': self.settings.copy()
+			'selected_character': self.selected_character,
+			'settings': self.settings
 		}
+	
+	def set_scene(self, scene_name: str):
+		"""
+		Establece la escena actual del juego.
+		
+		Args:
+			scene_name: Nombre de la escena
+		"""
+		self.logger.info(f"Cambiando a escena: {scene_name}")
+		if self.scene_manager:
+			self.scene_manager.change_scene(scene_name)
+		else:
+			self.logger.warning(f"No se puede cambiar a escena {scene_name}: scene_manager no disponible")
 	
 	def load_state(self, state_dict: Dict[str, Any]):
 		"""

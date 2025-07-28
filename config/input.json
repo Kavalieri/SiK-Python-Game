@@ -1,0 +1,47 @@
+{
+  "teclado": {
+    "movimiento": {
+      "arriba": "w",
+      "abajo": "s", 
+      "izquierda": "a",
+      "derecha": "d"
+    },
+    "acciones": {
+      "disparar": "space",
+      "pausa": "escape",
+      "inventario": "i",
+      "mapa": "m",
+      "interactuar": "e"
+    },
+    "ataques": {
+      "ataque_primario": "mouse1",
+      "ataque_secundario": "mouse2",
+      "habilidad_1": "1",
+      "habilidad_2": "2",
+      "habilidad_3": "3"
+    }
+  },
+  "gamepad": {
+    "habilitado": true,
+    "deadzone": 0.1,
+    "vibración": true,
+    "mapping": {
+      "movimiento": "left_stick",
+      "disparar": "right_trigger",
+      "pausa": "start",
+      "inventario": "select"
+    }
+  },
+  "ratón": {
+    "habilitado": true,
+    "sensibilidad": 1.0,
+    "invertir_y": false,
+    "cursor_visible": true
+  },
+  "configuración": {
+    "teclado_habilitado": true,
+    "gamepad_habilitado": true,
+    "ratón_habilitado": true,
+    "auto_detección_gamepad": true
+  }
+} 

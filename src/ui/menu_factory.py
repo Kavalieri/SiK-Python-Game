@@ -193,10 +193,13 @@ class MenuFactory:
         
         # Volumen de música
         menu.add.label("Volumen de Música:", font_size=20)
+        audio_config = self.config.get_audio_config()
+        music_volume = audio_config.get('volúmenes', {}).get('música_fondo', 0.7)
         menu.add.range_slider(
             'Música',
-            0, 100,
-            default=self.config.get_music_volume() * 100,
+            range_values=(0, 100),
+            default=int(music_volume * 100),
+            increment=1,
             onchange=lambda value: self.callbacks.on_music_volume_change(value / 100),
             font_size=18
         )
@@ -204,10 +207,12 @@ class MenuFactory:
         
         # Volumen de SFX
         menu.add.label("Volumen de Efectos:", font_size=20)
+        sfx_volume = audio_config.get('volúmenes', {}).get('efectos_sonido', 0.8)
         menu.add.range_slider(
             'SFX',
-            0, 100,
-            default=self.config.get_sfx_volume() * 100,
+            range_values=(0, 100),
+            default=int(sfx_volume * 100),
+            increment=1,
             onchange=lambda value: self.callbacks.on_sfx_volume_change(value / 100),
             font_size=18
         )
