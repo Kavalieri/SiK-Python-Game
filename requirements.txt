@@ -10,7 +10,6 @@ pygame-gui>=0.6.9
 
 # Herramientas y utilidades
 pygame-tools>=0.1.0
-pygame-extra>=0.1.0
 
 # Físicas del juego
 pymunk>=6.6.0

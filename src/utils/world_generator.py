@@ -174,7 +174,7 @@ class WorldGenerator:
 			element.sprite_name = sprite_filename
 			
 			# Configurar colisión según el tipo
-			element.has_collision = tile_type in [TileType.ROCK, TileType.TREE, TileType.CRYSTAL]
+			# Los elementos se crean con el tipo correcto, la colisión se maneja en el método has_collision()
 			
 			return element
 			
