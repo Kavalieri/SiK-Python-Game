@@ -1,0 +1,12 @@
+---
+description: Estandares de calidad para el codigo fuente del proyecto.
+globs:
+- src/**/*.py
+alwaysApply: true
+---
+- Mantener archivos por debajo de 150 lineas.
+- Aplicar arquitectura modular y extensible.
+- Documentar el 100% de las funciones publicas.
+- Ejecutar testing continuo y refactorizacion cuando sea necesario.
+
+@ObjetivosTecnicos.md

@@ -26,6 +26,9 @@ class PowerupType(Enum):
 	RAPID_FIRE = "rapid_fire"
 	DOUBLE_SHOT = "double_shot"
 	HEALTH = "health"
+	SPREAD = "spread"
+	EXPLOSIVE = "explosive"
+	SHRAPNEL = "shrapnel"
 
 
 @dataclass

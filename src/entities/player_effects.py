@@ -143,7 +143,7 @@ class PlayerEffects:
         """
         descriptions = {
             PowerupType.SPEED: "Velocidad aumentada",
-            PowerupType.FIRE_RATE: "Velocidad de disparo aumentada",
+            PowerupType.RAPID_FIRE: "Velocidad de disparo aumentada",
             PowerupType.DAMAGE: "Daño aumentado",
             PowerupType.SHIELD: "Escudo temporal",
             PowerupType.DOUBLE_SHOT: "Disparo doble",

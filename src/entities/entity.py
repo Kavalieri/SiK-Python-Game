@@ -166,17 +166,24 @@ class Entity(ABC):
 	
 	def _update_effects(self, delta_time: float):
 		"""Actualiza los efectos aplicados a la entidad."""
-		effects_to_remove = []
-		
-		for effect_name, effect_data in self.effects.items():
-			effect_data['duration'] -= delta_time
+		# Si self.effects es un diccionario (comportamiento por defecto)
+		if isinstance(self.effects, dict):
+			effects_to_remove = []
 			
-			if effect_data['duration'] <= 0:
-				effects_to_remove.append(effect_name)
-				self._remove_effect(effect_name)
-		
-		for effect_name in effects_to_remove:
-			del self.effects[effect_name]
+			for effect_name, effect_data in self.effects.items():
+				effect_data['duration'] -= delta_time
+				
+				if effect_data['duration'] <= 0:
+					effects_to_remove.append(effect_name)
+					self._remove_effect(effect_name)
+			
+			for effect_name in effects_to_remove:
+				del self.effects[effect_name]
+		# Si self.effects es un objeto con método update_effects (como PlayerEffects)
+		elif hasattr(self.effects, 'update_effects'):
+			import time
+			current_time = time.time()
+			self.effects.update_effects(current_time)
 	
 	def _update_invulnerability(self, delta_time: float):
 		"""Actualiza el estado de invulnerabilidad."""

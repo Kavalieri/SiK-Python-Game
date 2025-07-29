@@ -247,9 +247,11 @@ class ConfigManager:
 	
 	# Métodos específicos para valores comunes
 	def get_character_data(self, character_name: str) -> Dict[str, Any]:
-		"""Obtiene los datos de un personaje específico."""
-		characters = self.get_characters_config()
-		return characters.get("characters", {}).get(character_name, {})
+		"""
+		Devuelve la configuración completa de un personaje, incluyendo ataques.
+		"""
+		characters = self.get_characters_config().get("characters", {})
+		return characters.get(character_name, {})
 	
 	def get_enemy_data(self, enemy_type: str) -> Dict[str, Any]:
 		"""Obtiene los datos de un enemigo específico."""

@@ -1,0 +1,13 @@
+---
+description: Gestion de partidas y datos de usuario con 3 slots y cifrado.
+globs:
+- src/utils/save*.py
+- saves/**/*
+alwaysApply: false
+---
+- El sistema debe guardar automaticamente el progreso.
+- Usar cifrado en produccion y JSON visible en desarrollo.
+- Gestionar 3 slots y permitir eliminar y continuar partidas.
+- Ser compatible con versiones empaquetadas en .exe.
+
+@SistemaDeGuardado.md

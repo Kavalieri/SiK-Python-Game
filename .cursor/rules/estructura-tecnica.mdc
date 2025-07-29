@@ -1,0 +1,12 @@
+---
+description: Organizacion modular del codigo fuente en src/.
+globs:
+- src/**/*
+alwaysApply: true
+---
+- Separar logicamente core, entidades, escenas, UI y utilidades.
+- Respetar nombres y propositos de carpetas establecidas.
+- Evitar archivos con mas de una responsabilidad.
+- main.py debe actuar como punto de entrada al juego.
+
+@EstructuraTecnica.md

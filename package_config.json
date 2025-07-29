@@ -1,0 +1,48 @@
+{
+    "entry_point": "src/main.py",
+    "project_name": "SiK-Python-Game",
+    "version_file": "VERSION.txt",
+    "assets_dir": "assets",
+    "config_dir": "config",
+    "exclude_dirs": [
+        "__pycache__",
+        ".git",
+        ".pytest_cache",
+        "tests",
+        "scripts",
+        "docs",
+        "logs",
+        "saves",
+        "backups",
+        "tools"
+    ],
+    "exclude_files": [
+        ".gitignore",
+        "README.md",
+        "CHANGELOG.md",
+        "requirements.txt",
+        "pyproject.toml",
+        "commit_message.txt",
+        "LICENSE"
+    ],
+    "additional_data": [
+        {
+            "source": "config.json",
+            "dest": "."
+        }
+    ],
+    "hidden_imports": [
+        "pygame",
+        "pygame_menu",
+        "pygame_gui",
+        "pymunk",
+        "numpy",
+        "PIL",
+        "logging",
+        "json",
+        "pathlib"
+    ],
+    "console": false,
+    "onefile": true,
+    "icon": null
+} 

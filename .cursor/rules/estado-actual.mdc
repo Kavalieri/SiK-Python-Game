@@ -1,0 +1,14 @@
+---
+description: Estado funcional validado de los sistemas implementados.
+globs:
+- src/**/*
+- config/**/*
+- assets/**/*
+alwaysApply: false
+---
+- Verificar el flujo de juego completo sin errores.
+- Validar animaciones, seleccion, enemigos y guardado en ejecucion real.
+- Todo sistema funcional debe estar documentado.
+- Conservar trazabilidad entre codigo y documentacion de funcionalidades.
+
+@EstadoActual.md

@@ -64,43 +64,26 @@ class IntelligentAnimationManager:
     
     def load_character_animations(self, character_name: str) -> Dict[str, Dict]:
         """
-        Carga todas las animaciones disponibles para un personaje.
-        
-        Args:
-            character_name: Nombre del personaje
-            
-        Returns:
-            Diccionario con las animaciones cargadas
+        Carga todas las animaciones disponibles para un personaje usando la configuración centralizada.
         """
         animations = {}
-        
-        # Tipos de animación a verificar (usar mayúsculas para coincidir con AssetManager)
-        animation_types = [
-            'Idle', 'Run', 'Walk', 'Attack', 'Dead', 'Shoot', 
-            'Jump', 'Melee', 'Slide', 'JumpMelee', 'JumpShoot', 'RunShoot'
-        ]
-        
+        # Obtener tipos de animación desde config
+        char_config = self.asset_manager.animation_config.get("characters", {}).get(character_name, {})
+        animation_types = char_config.get("animations", [])
         for anim_type in animation_types:
             frames = self.asset_manager.get_character_animation_frames(character_name, anim_type)
-            
-            # Solo cargar si hay frames reales (no solo placeholders)
             real_frames = [frame for frame in frames if not self._is_placeholder(frame)]
-            
             if real_frames:
-                # Calcular FPS óptimo basado en el número de frames
                 optimal_fps = self._calculate_optimal_fps(len(real_frames), anim_type)
-                
                 animations[anim_type] = {
                     'frames': real_frames,
                     'frame_count': len(real_frames),
                     'fps': optimal_fps,
-                    'frame_duration': 1000 / optimal_fps  # en milisegundos
+                    'frame_duration': 1000 / optimal_fps
                 }
-                
                 self.logger.info(f"Animación cargada: {character_name}/{anim_type} - {len(real_frames)} frames a {optimal_fps} FPS")
             else:
                 self.logger.debug(f"No se encontraron frames reales para {character_name}/{anim_type}")
-        
         self.logger.info(f"Cargadas {len(animations)} animaciones para {character_name}")
         return animations
     

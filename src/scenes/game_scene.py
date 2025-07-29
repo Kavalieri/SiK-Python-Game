@@ -141,11 +141,15 @@ class GameScene(Scene):
 			mouse_buttons = pygame.mouse.get_pressed()
 			self.player.handle_input(keys, mouse_pos, mouse_buttons)
 			
-			# Disparar con clic izquierdo
+			# Atacar con clic izquierdo
 			if mouse_buttons[0]:  # Clic izquierdo
-				projectile = self.player.shoot(mouse_pos)
-				if projectile:
-					self.projectiles.append(projectile)
+				# Obtener lista de enemigos en la escena
+				enemies = getattr(self, 'enemies', [])
+				results = self.player.attack(mouse_pos, enemies)
+				# Si el ataque genera proyectiles, añadirlos
+				for obj in results:
+					if hasattr(obj, 'entity_type') and obj.entity_type.name == 'PROJECTILE':
+						self.projectiles.append(obj)
 	
 	def update(self):
 		"""Actualiza la lógica del juego."""

@@ -10,19 +10,47 @@ Descripción: Módulo que maneja el sistema de combate del jugador (disparos, da
 import pygame
 import logging
 import math
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict, Any
 from .projectile import Projectile
 from .player_stats import PlayerStats
 from .player_effects import PlayerEffects
 from ..entities.powerup import PowerupType
 
 
+class AttackConfig:
+    """
+    Configuración de un ataque (melee, ranged, area, etc.)
+    """
+    def __init__(self, data: Dict[str, Any]):
+        self.nombre = data.get("nombre", "")
+        self.tipo = data.get("tipo", "melee")
+        self.daño = data.get("daño", 0)
+        self.alcance = data.get("alcance", 0)
+        self.cooldown = data.get("cooldown", 1.0)
+        self.animacion = data.get("animacion", "Attack")
+        self.sonido = data.get("sonido", None)
+        self.efectos = data.get("efectos", [])
+        self.hitbox = data.get("hitbox", None)
+        self.proyectil = data.get("proyectil", None)
+        self.area = data.get("area", None)
+
+class Attack:
+    """
+    Instancia de un ataque en ejecución.
+    """
+    def __init__(self, config: AttackConfig, owner, target_pos: Tuple[int, int]):
+        self.config = config
+        self.owner = owner
+        self.target_pos = target_pos
+        self.cooldown_timer = 0.0
+        self.active = True
+
 class PlayerCombat:
     """
     Gestiona el sistema de combate del jugador.
     """
     
-    def __init__(self, player_stats: PlayerStats, player_effects: PlayerEffects):
+    def __init__(self, player_stats: PlayerStats, player_effects: PlayerEffects, attack_configs: List[AttackConfig]):
         """
         Inicializa el sistema de combate.
         
@@ -37,6 +65,9 @@ class PlayerCombat:
         # Timers de combate
         self.shoot_timer = 0.0
         self.last_shoot_time = 0.0
+        self.attack_configs = attack_configs
+        self.current_attack_index = 0
+        self.last_attack_time = 0.0
         
     def can_shoot(self, current_time: float) -> bool:
         """
@@ -50,7 +81,7 @@ class PlayerCombat:
         """
         # Obtener velocidad de disparo modificada por efectos
         base_shoot_speed = self.stats.shoot_speed
-        fire_rate_boost = self.effects.get_effect_value(PowerupType.FIRE_RATE)
+        fire_rate_boost = self.effects.get_effect_value(PowerupType.RAPID_FIRE)
         modified_shoot_speed = max(0.05, base_shoot_speed - fire_rate_boost)
         
         return current_time - self.last_shoot_time >= modified_shoot_speed
@@ -177,6 +208,75 @@ class PlayerCombat:
             projectiles.append(projectile)
         
         return projectiles
+    
+    def can_attack(self, current_time: float) -> bool:
+        attack = self.attack_configs[self.current_attack_index]
+        return current_time - self.last_attack_time >= attack.cooldown
+
+    def attack(self, owner, target_pos: Tuple[int, int], current_time: float, enemies: List[Any]) -> List[Any]:
+        """
+        Ejecuta el ataque actual según el tipo (melee, ranged, area).
+        Devuelve lista de entidades afectadas o proyectiles creados.
+        """
+        attack_cfg = self.attack_configs[self.current_attack_index]
+        results = []
+        if not self.can_attack(current_time):
+            return results
+        if attack_cfg.tipo == "melee":
+            # Crear hitbox delante del jugador
+            hitbox = self._get_melee_hitbox(owner, attack_cfg)
+            for enemy in enemies:
+                if self._collides(hitbox, enemy):
+                    enemy.take_damage(attack_cfg.daño)
+                    results.append(enemy)
+            self.last_attack_time = current_time
+        elif attack_cfg.tipo == "ranged":
+            # Crear proyectil
+            from .projectile import Projectile
+            proj_cfg = attack_cfg.proyectil or {}
+            projectile = Projectile(
+                x=owner.x,
+                y=owner.y,
+                target_x=target_pos[0],
+                target_y=target_pos[1],
+                damage=attack_cfg.daño,
+                speed=proj_cfg.get("velocidad", self.stats.bullet_speed),
+                config=owner.config
+            )
+            results.append(projectile)
+            self.last_attack_time = current_time
+        elif attack_cfg.tipo == "area":
+            # Ataque de área (por radio)
+            area_cfg = attack_cfg.area or {"radio": attack_cfg.alcance}
+            for enemy in enemies:
+                if self._in_area(owner, enemy, area_cfg["radio"]):
+                    enemy.take_damage(attack_cfg.daño)
+                    results.append(enemy)
+            self.last_attack_time = current_time
+        # ... otros tipos futuros ...
+        return results
+
+    def _get_melee_hitbox(self, owner, attack_cfg: AttackConfig):
+        # Calcula la hitbox del ataque melee según orientación
+        offset_x = attack_cfg.hitbox.get("offset_x", 0) if attack_cfg.hitbox else 0
+        offset_y = attack_cfg.hitbox.get("offset_y", 0) if attack_cfg.hitbox else 0
+        ancho = attack_cfg.hitbox.get("ancho", 40) if attack_cfg.hitbox else 40
+        alto = attack_cfg.hitbox.get("alto", 40) if attack_cfg.hitbox else 40
+        x = owner.x + (offset_x if owner.facing_right else -offset_x - ancho)
+        y = owner.y + offset_y
+        return pygame.Rect(x, y, ancho, alto)
+
+    def _collides(self, rect: pygame.Rect, entity) -> bool:
+        # Comprueba colisión entre la hitbox y la entidad
+        if hasattr(entity, "rect"):
+            return rect.colliderect(entity.rect)
+        return False
+
+    def _in_area(self, owner, entity, radio: float) -> bool:
+        # Comprueba si la entidad está dentro del radio de área
+        dx = entity.x - owner.x
+        dy = entity.y - owner.y
+        return (dx*dx + dy*dy) <= radio*radio
     
     def take_damage(self, damage: float, source=None) -> bool:
         """

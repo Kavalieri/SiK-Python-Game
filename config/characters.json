@@ -13,6 +13,30 @@
         "velocidad_disparo": 1.0,
         "tamaño_proyectil": 1.0
       },
+      "ataques": [
+        {
+          "nombre": "Espadazo",
+          "tipo": "melee",
+          "daño": 50,
+          "alcance": 80,
+          "cooldown": 0.5,
+          "hitbox": {"ancho": 60, "alto": 40, "offset_x": 30, "offset_y": 0},
+          "animacion": "Attack",
+          "sonido": "sword_slash.wav",
+          "efectos": []
+        },
+        {
+          "nombre": "Combo de espada",
+          "tipo": "melee",
+          "daño": 30,
+          "alcance": 70,
+          "cooldown": 0.3,
+          "hitbox": {"ancho": 50, "alto": 40, "offset_x": 25, "offset_y": 0},
+          "animacion": "Attack",
+          "sonido": "sword_combo.wav",
+          "efectos": ["combo"]
+        }
+      ],
       "habilidades": [
         "Ataque de espada",
         "Escudo protector",
@@ -35,6 +59,38 @@
         "velocidad_disparo": 1.5,
         "tamaño_proyectil": 0.8
       },
+      "ataques": [
+        {
+          "nombre": "Flecha",
+          "tipo": "ranged",
+          "daño": 25,
+          "alcance": 300,
+          "cooldown": 0.4,
+          "proyectil": {
+            "velocidad": 600,
+            "tamaño": 0.8,
+            "sprite": "arrow.png"
+          },
+          "animacion": "Shoot",
+          "sonido": "arrow_shot.wav",
+          "efectos": []
+        },
+        {
+          "nombre": "Flecha mágica",
+          "tipo": "ranged",
+          "daño": 40,
+          "alcance": 320,
+          "cooldown": 1.2,
+          "proyectil": {
+            "velocidad": 700,
+            "tamaño": 1.0,
+            "sprite": "magic_arrow.png"
+          },
+          "animacion": "Shoot",
+          "sonido": "magic_arrow.wav",
+          "efectos": ["magic"]
+        }
+      ],
       "habilidades": [
         "Flechas mágicas",
         "Disparo rápido",
@@ -57,6 +113,34 @@
         "velocidad_disparo": 1.2,
         "tamaño_proyectil": 1.2
       },
+      "ataques": [
+        {
+          "nombre": "Disparo de energía",
+          "tipo": "ranged",
+          "daño": 35,
+          "alcance": 250,
+          "cooldown": 0.6,
+          "proyectil": {
+            "velocidad": 500,
+            "tamaño": 1.2,
+            "sprite": "energy_shot.png"
+          },
+          "animacion": "Shoot",
+          "sonido": "energy_shot.wav",
+          "efectos": []
+        },
+        {
+          "nombre": "Explosión de área",
+          "tipo": "area",
+          "daño": 60,
+          "alcance": 100,
+          "cooldown": 2.0,
+          "area": {"radio": 100},
+          "animacion": "Attack",
+          "sonido": "explosion.wav",
+          "efectos": ["explosion"]
+        }
+      ],
       "habilidades": [
         "Proyectiles de energía",
         "Misiles explosivos",

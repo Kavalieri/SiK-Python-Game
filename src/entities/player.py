@@ -9,13 +9,13 @@ Descripción: Clase principal del jugador que coordina todos los sistemas.
 
 import pygame
 import logging
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Any
 from enum import Enum
 
 from .entity import Entity, EntityType, EntityState
 from .player_stats import PlayerStats
 from .player_effects import PlayerEffects
-from .player_combat import PlayerCombat
+from .player_combat import PlayerCombat, AttackConfig
 from ..utils.animation_manager import IntelligentAnimationManager
 from ..utils.config_manager import ConfigManager
 from ..entities.character_data import CHARACTER_DATA
@@ -81,7 +81,11 @@ class Player(Entity):
         # Inicializar sistemas modulares
         self.stats = stats
         self.effects = PlayerEffects()
-        self.combat = PlayerCombat(stats, self.effects)
+        
+        # Cargar ataques desde config
+        char_data = config.get_character_data(character_name)
+        self.attack_configs = [AttackConfig(a) for a in char_data.get("ataques", [])]
+        self.combat = PlayerCombat(stats, self.effects, self.attack_configs)
         
         # Cargar animaciones del personaje
         self.animations = self.animation_manager.load_character_animations(character_name)
@@ -130,8 +134,8 @@ class Player(Entity):
             return AnimationState.DEAD
         elif self.state == EntityState.ATTACKING:
             return AnimationState.ATTACK
-        elif abs(self.velocity_x) > 0.1 or abs(self.velocity_y) > 0.1:
-            if abs(self.velocity_x) > 50 or abs(self.velocity_y) > 50:
+        elif abs(self.velocity.x) > 0.1 or abs(self.velocity.y) > 0.1:
+            if abs(self.velocity.x) > 50 or abs(self.velocity.y) > 50:
                 return AnimationState.RUN
             else:
                 return AnimationState.WALK
@@ -141,9 +145,15 @@ class Player(Entity):
     def _update_sprite(self):
         """Actualiza el sprite del jugador."""
         if self.animations and self.current_animation_state.value in self.animations:
-            animation = self.animations[self.current_animation_state.value]
-            if animation and animation.frames:
-                self.sprite = animation.get_current_frame()
+            animation_data = self.animations[self.current_animation_state.value]
+            if animation_data and 'frames' in animation_data and animation_data['frames']:
+                # Obtener el frame actual de la animación
+                frames = animation_data['frames']
+                if frames:
+                    # Por ahora, usar el primer frame. En el futuro se puede implementar animación
+                    self.sprite = frames[0]
+                else:
+                    self._create_fallback_sprite()
             else:
                 self._create_fallback_sprite()
         else:
@@ -183,26 +193,26 @@ class Player(Entity):
             mouse_buttons: Estado de los botones del ratón
         """
         # Reiniciar velocidad
-        self.velocity_x = 0
-        self.velocity_y = 0
+        self.velocity.x = 0
+        self.velocity.y = 0
         
         # Movimiento con WASD
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.velocity_y = -self.stats.speed
+            self.velocity.y = -self.stats.speed
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.velocity_y = self.stats.speed
+            self.velocity.y = self.stats.speed
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            self.velocity_x = -self.stats.speed
+            self.velocity.x = -self.stats.speed
             self.facing_right = False
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.velocity_x = self.stats.speed
+            self.velocity.x = self.stats.speed
             self.facing_right = True
         
         # Aplicar modificadores de velocidad por efectos
         speed_boost = self.effects.get_effect_value(PowerupType.SPEED)
         if speed_boost > 0:
-            self.velocity_x *= (1 + speed_boost)
-            self.velocity_y *= (1 + speed_boost)
+            self.velocity.x *= (1 + speed_boost)
+            self.velocity.y *= (1 + speed_boost)
         
         # Disparo con clic izquierdo
         if mouse_buttons[0]:  # Clic izquierdo
@@ -210,19 +220,28 @@ class Player(Entity):
         else:
             self.state = EntityState.IDLE
     
-    def shoot(self, target_pos: Tuple[int, int]) -> List:
+    def attack(self, target_pos: Tuple[int, int], enemies: List[Any]):
         """
-        Dispara hacia la posición objetivo.
-        
-        Args:
-            target_pos: Posición objetivo del ratón
-            
-        Returns:
-            Lista de proyectiles creados
+        Ejecuta el ataque actual según el tipo (melee, ranged, area).
+        Reproduce animación y sonido si están definidos en el ataque.
         """
         import time
         current_time = time.time()
-        return self.combat.shoot((self.x, self.y), target_pos, current_time)
+        # Obtener ataque activo
+        if not self.attack_configs:
+            return []
+        attack_cfg = self.attack_configs[self.combat.current_attack_index]
+        # Animación
+        if hasattr(self, 'current_animation_state') and attack_cfg.animacion:
+            self.current_animation_state = getattr(self, 'AnimationState', AnimationState).from_string(attack_cfg.animacion) if hasattr(AnimationState, 'from_string') else AnimationState.__members__.get(attack_cfg.animacion.upper(), AnimationState.ATTACK)
+        # Sonido
+        if attack_cfg.sonido:
+            try:
+                import pygame.mixer
+                pygame.mixer.Sound(f"assets/sounds/{attack_cfg.sonido}").play()
+            except Exception as e:
+                self.logger.warning(f"No se pudo reproducir el sonido de ataque: {attack_cfg.sonido} ({e})")
+        return self.combat.attack(self, target_pos, current_time, enemies)
     
     def take_damage(self, damage: float, source=None) -> bool:
         """
@@ -322,9 +341,9 @@ class Player(Entity):
     
     def update(self, delta_time: float):
         """Actualiza el jugador."""
-        # Actualizar posición
-        self.x += self.velocity_x * delta_time
-        self.y += self.velocity_y * delta_time
+        # Actualizar posición usando el vector velocity de la clase base
+        self.x += self.velocity.x * delta_time
+        self.y += self.velocity.y * delta_time
         
         # Mantener dentro de límites
         self._clamp_position()

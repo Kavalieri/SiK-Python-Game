@@ -12,6 +12,7 @@ import pygame
 import logging
 from pathlib import Path
 from typing import List, Optional, Dict, Any
+import json
 
 class AssetManager:
     """Gestor centralizado de assets del juego."""
@@ -26,34 +27,22 @@ class AssetManager:
         self.base_path = Path(base_path)
         self.cache = {}
         self.logger = logging.getLogger(__name__)
-        
-        # Configuración de animaciones basada en el análisis
-        self.animation_config = {
-            'characters': {
-                'adventureguirl': {
-                    'animations': ['Dead', 'Idle', 'Jump', 'Run', 'Shoot'],
-                    'total_frames': 53
-                },
-                'guerrero': {
-                    'animations': ['Attack', 'Dead', 'Idle', 'Jump', 'JumpAttack', 'Run', 'Walk'],
-                    'total_frames': 70
-                },
-                'robot': {
-                    'animations': ['Dead', 'Idle', 'Jump', 'Run', 'Shoot'],
-                    'total_frames': 82
-                },
-                'zombieguirl': {
-                    'animations': ['Attack', 'Dead', 'Idle', 'Walk'],
-                    'total_frames': 45
-                },
-                'zombiemale': {
-                    'animations': ['Attack', 'Dead', 'Idle', 'Walk'],
-                    'total_frames': 45
-                }
-            }
-        }
+        # Cargar configuración de animaciones desde config/animations.json
+        self.animation_config = self._load_animation_config()
         
         self.logger.info("AssetManager inicializado")
+    
+    def _load_animation_config(self):
+        config_path = Path("config/animations.json")
+        if config_path.exists():
+            try:
+                with open(config_path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                self.logger.error(f"Error cargando config/animations.json: {e}")
+        # Fallback: estructura vacía
+        self.logger.warning("No se pudo cargar config/animations.json, usando configuración vacía.")
+        return {"characters": {}, "sprite_paths": []}
     
     def load_image(self, path: str, scale: float = 1.0) -> Optional[pygame.Surface]:
         """
@@ -136,15 +125,17 @@ class AssetManager:
             self.logger.warning(f"Animación '{animation}' no disponible para {character_name}. Disponibles: {available_animations}")
             return self._create_placeholder(64, 64, scale)
         
-        # Intentar cargar el sprite con el formato correcto
-        # Los archivos están directamente en el directorio del personaje
-        # Formato: Idle_1_.png, Run_1_.png, Attack_1_.png, etc.
+        # Usar rutas desde config
+        sprite_paths = self.animation_config.get("sprite_paths", [
+            "characters/used/{character}/{animation}_{frame}_.png",
+            "characters/used/{character}/{animation}_{frame}.png",
+            "characters/{character}/{animation}_{frame}_.png",
+            "characters/{character}/{animation}_{frame}.png"
+        ])
         animation_capitalized = animation.capitalize()
         possible_paths = [
-            f"characters/used/{character_name}/{animation_capitalized}_{frame}_.png",
-            f"characters/used/{character_name}/{animation_capitalized}_{frame}.png",
-            f"characters/{character_name}/{animation_capitalized}_{frame}_.png",
-            f"characters/{character_name}/{animation_capitalized}_{frame}.png"
+            path.format(character=character_name, animation=animation_capitalized, frame=frame)
+            for path in sprite_paths
         ]
         
         for path in possible_paths:

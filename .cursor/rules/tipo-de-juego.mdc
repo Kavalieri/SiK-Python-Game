@@ -1,0 +1,14 @@
+---
+description: 'Configuracion general del tipo de juego: bullet hell 2D, progresion,
+  control y entorno.'
+globs:
+- '**/main.py'
+alwaysApply: true
+---
+- El juego debe ser de tipo bullet hell 2D.
+- El jugador se mueve libremente con camara fluida centrada en el.
+- El disparo se dirige hacia el cursor del raton.
+- Implementar IA de enemigos, generacion de powerups y mejoras entre rondas.
+- El desarrollo se realiza en entorno Windows 11 + Visual Studio Code.
+
+@TipoDeJuego.md

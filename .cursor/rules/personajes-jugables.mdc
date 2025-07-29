@@ -1,0 +1,15 @@
+---
+description: Definicion y configuracion de personajes seleccionables.
+globs:
+- src/entities/player*.py
+- config/characters.json
+alwaysApply: false
+---
+- Incluir al menos tres personajes unicos.
+- Inicialmente tendremos un guerrero cuerpo a cuerpo, y una arquera y un robot a distancia
+- Cada uno debe tener estadisticas, animaciones y mejoras propias.
+- Permitir seleccion previa al inicio de partida.
+- Guardar preferencias o progreso del jugador por personaje.
+- Debemos contemplar personajes cuerpo a cuerpo y a distancia.
+
+@PersonajesJugables.md
