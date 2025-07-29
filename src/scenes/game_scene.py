@@ -7,5 +7,6 @@ Fecha: 2024-12-19
 Descripción: Wrapper temporal para mantener compatibilidad mientras se migra a la versión modularizada.
 """
 
+
 # El resto de la lógica se encuentra ahora en los submódulos especializados.
 # Este archivo se mantendrá como punto de entrada para la escena principal hasta completar la migración y refactorización total.

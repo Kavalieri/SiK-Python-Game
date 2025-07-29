@@ -174,7 +174,7 @@ class AssetManager:
         return self._create_placeholder(64, 64, scale)
 
     def get_character_animation_frames(
-        self, character_name: str, animation: str, max_frames: int = None
+        self, character_name: str, animation: str, max_frames: Optional[int] = None
     ) -> List[pygame.Surface]:
         """
         Obtiene todos los frames de una animación específica.
@@ -214,15 +214,16 @@ class AssetManager:
             )
 
         # Cargar frames hasta encontrar uno que no exista o alcanzar el máximo
-        while frame <= max_frames:
-            sprite = self.get_character_sprite(character_name, animation, frame)
+        if max_frames is not None:
+            while frame <= max_frames:
+                sprite = self.get_character_sprite(character_name, animation, frame)
 
-            if sprite and not self._is_placeholder_sprite(sprite):
-                frames.append(sprite)
-                frame += 1
-            else:
-                # Si encontramos un placeholder, asumimos que no hay más frames
-                break
+                if sprite and not self._is_placeholder_sprite(sprite):
+                    frames.append(sprite)
+                    frame += 1
+                else:
+                    # Si encontramos un placeholder, asumimos que no hay más frames
+                    break
 
         self.logger.info(
             f"Cargados {len(frames)} frames para {character_name}/{animation}"

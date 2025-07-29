@@ -1,3 +1,4 @@
+````````instructions
 ```````instructions
 `````instructions
 # Instrucciones para GitHub Copilot - SiK Python Game
@@ -417,4 +418,30 @@ Este proyecto está diseñado y desarrollado como un proyecto 100% asistido por 
 
 - Antes de ejecutar cualquier banco de pruebas, reinicia el servidor del entorno virtual (venv) para evitar cargar elementos o memoria no deseados.
 - Esto asegura que las pruebas se ejecuten en un entorno limpio y controlado.
+
+## 🛠️ Configuración de Entorno y Ejecución
+
+### Limpieza de Caché
+- Antes de realizar cambios significativos en las dependencias, asegúrate de limpiar el caché de `pip` para evitar conflictos residuales:
+  ```bash
+  pip cache purge
+  ```
+
+### Ejecución Clásica del Proyecto
+- Para ejecutar el proyecto sin configurar manualmente el `PYTHONPATH`, utiliza el siguiente comando desde el directorio raíz del proyecto:
+  ```bash
+  python -m src.main
+  ```
+  Esto asegura que las rutas relativas funcionen correctamente sin necesidad de ajustes adicionales.
+
+### Uso de `pygame-ce`
+- El proyecto utiliza `pygame-ce` en lugar de `pygame` estándar. Asegúrate de que todas las referencias y métodos sean compatibles con esta versión.
+- Si encuentras errores como `AttributeError: module 'pygame' has no attribute 'Surface'`, verifica que `pygame-ce` esté instalado correctamente y que no haya conflictos con `pygame` estándar.
+- Para evitar conflictos, desinstala cualquier versión de `pygame` estándar:
+  ```bash
+  pip uninstall pygame -y
+  ```
+
+### Documentación Adicional
+- Si realizas cambios en las dependencias o en la configuración del entorno, actualiza esta sección para reflejar los nuevos requisitos.
 ``````
