@@ -281,6 +281,7 @@ src/
 - Control de versiones local y staging
 - Branching local: `git branch`, `git checkout`
 - Consultar logs y diferencias locales
+- **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
 
 ### Flujo Autónomo
 - **Continuar automáticamente** hasta puntos de prueba
