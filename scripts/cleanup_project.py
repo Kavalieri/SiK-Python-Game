@@ -11,10 +11,10 @@ Descripción: Script que realiza limpieza automática del proyecto eliminando ar
 Uso: python scripts/cleanup_project.py
 """
 
-import shutil
 import logging
-from pathlib import Path
+import shutil
 from datetime import datetime
+from pathlib import Path
 
 
 class ProjectCleaner:
@@ -244,120 +244,95 @@ class ProjectCleaner:
             except Exception as e:
                 self.logger.error(f"Error eliminando {pycache_dir}: {e}")
 
-    def generate_cleanup_report(self):
-        """Genera un reporte de la limpieza realizada."""
-        report_path = self.project_root / "CLEANUP_REPORT.md"
+    def validate_directories(self, directories: list[Path]) -> list[Path]:
+        """
+        Valida que los directorios existan antes de procesarlos.
 
+        Args:
+            directories: Lista de rutas de directorios a validar.
+
+        Returns:
+            Lista de directorios existentes.
+        """
+        return [d for d in directories if d.exists()]
+
+    def generate_report_content(self) -> str:
+        """
+        Genera el contenido del reporte de limpieza.
+
+        Returns:
+            Contenido del reporte como string.
+        """
         report_content = f"""# REPORTE DE LIMPIEZA DEL PROYECTO
 
-**Fecha**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+**Fecha**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 ## 📊 ESTADÍSTICAS
 
-- **Archivos eliminados**: {self.stats['files_deleted']}
-- **Archivos a refactorizar**: {self.stats['files_refactored']}
-- **Backup creado**: {'Sí' if self.stats['backup_created'] else 'No'}
-- **Errores encontrados**: {len(self.stats['errors'])}
+- **Archivos eliminados**: {self.stats["files_deleted"]}
+- **Archivos a refactorizar**: {self.stats["files_refactored"]}
+- **Backup creado**: {"Sí" if self.stats["backup_created"] else "No"}
+- **Errores encontrados**: {len(self.stats["errors"])}
 
 ## 🗑️ ARCHIVOS ELIMINADOS
 
-### Scripts de Test Redundantes
-- test_quick_gameplay.py
-- test_final_integration.py
-- test_simple_enemy_system.py
-- test_enemy_system.py
-- test_complete_animation_system.py
-- test_final_animations.py
-- test_optimal_animations.py
-- test_intelligent_animations.py
-- test_all_animations.py
-- test_desert_background.py
-- test_character_select_simple.py
-- test_character_select_fix.py
-- test_animation_fix.py
-
-### Scripts de Análisis Redundantes
-- analyze_all_animations.py
-- analyze_animation_frames.py
-- generate_animation_report.py
-
-### Archivos de Configuración Redundantes
-- animation_config.json
-- ANIMATION_REPORT.md
-
-## 🔧 ARCHIVOS A REFACTORIZAR
-
-### Archivos Críticos (>500 líneas)
-1. **src/entities/player.py** (599 líneas)
-   - Sugerencia: Dividir en player_combat.py, player_effects.py, player_stats.py
-
-2. **src/ui/menu_manager.py** (603 líneas)
-   - Sugerencia: Dividir en menu_factory.py, menu_callbacks.py
-
-3. **src/scenes/character_select_scene.py** (530 líneas)
-   - Sugerencia: Dividir en character_ui.py, character_data.py
-
-4. **src/scenes/game_scene.py** (509 líneas)
-   - Sugerencia: Dividir en game_logic.py, game_rendering.py
-
-### Archivos que Requieren Atención (>200 líneas)
-1. **src/utils/save_manager.py** (426 líneas)
-2. **src/utils/asset_manager.py** (362 líneas)
-3. **src/utils/desert_background.py** (408 líneas)
-
-## ⚠️ ERRORES ENCONTRADOS
-
 """
+        for file in self.files_to_delete:
+            report_content += f"- {file}\n"
 
+        report_content += "\n## ⚠️ ERRORES ENCONTRADOS\n\n"
         if self.stats["errors"]:
             for error in self.stats["errors"]:
                 report_content += f"- {error}\n"
         else:
             report_content += "- Ningún error encontrado\n"
 
-        report_content += f"""
-## 📋 PRÓXIMOS PASOS
+        return report_content
 
-1. **Revisar archivos refactorizados**: Verificar que la funcionalidad se mantiene
-2. **Ejecutar tests**: Asegurar que todo funciona correctamente
-3. **Actualizar documentación**: Reflejar los cambios en README.md y CHANGELOG.md
-4. **Optimizar imports**: Revisar y limpiar imports no utilizados
-
-## 🔄 BACKUP
-
-Copia de seguridad disponible en: `{self.backup_dir.relative_to(self.project_root)}`
-
----
-*Reporte generado automáticamente por cleanup_project.py*
-"""
-
+    def generate_cleanup_report(self):
+        """
+        Genera un reporte de la limpieza realizada.
+        """
+        report_path = self.project_root / "CLEANUP_REPORT.md"
+        report_content = self.generate_report_content()
         report_path.write_text(report_content, encoding="utf-8")
         self.logger.info(f"Reporte generado: {report_path}")
 
     def run_cleanup(self):
-        """Ejecuta todo el proceso de limpieza."""
+        """
+        Ejecuta todo el proceso de limpieza.
+        """
         self.logger.info("=== INICIANDO LIMPIEZA DEL PROYECTO ===")
 
         try:
             # 1. Crear backup
             self.create_backup()
 
-            # 2. Eliminar archivos redundantes
+            # 2. Validar directorios antes de eliminar
+            valid_dirs = self.validate_directories(
+                [self.project_root / d for d in ["src", "assets", "docs", "tests"]]
+            )
+            if not valid_dirs:
+                self.logger.warning(
+                    "No se encontraron directorios válidos para procesar."
+                )
+
+            # 3. Eliminar archivos redundantes
             self.delete_redundant_files()
 
-            # 3. Consolidar save managers
+            # 4. Consolidar save managers
             self.consolidate_save_managers()
 
-            # 4. Limpiar __pycache__
+            # 5. Limpiar __pycache__
             self.clean_pycache()
 
-            # 5. Analizar archivos a refactorizar
+            # 6. Analizar archivos a refactorizar
             self.refactor_large_files()
 
-            # 6. Generar reporte
+            # 7. Generar reporte
             self.generate_cleanup_report()
 
-            # 7. Mostrar resumen
+            # 8. Mostrar resumen
             self.show_summary()
 
         except Exception as e:

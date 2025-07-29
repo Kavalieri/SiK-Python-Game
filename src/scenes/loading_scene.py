@@ -7,14 +7,16 @@ Fecha: 2024
 Descripción: Escena de carga con progreso visual y carga en segundo plano.
 """
 
-import pygame
+import json
+import random
 import threading
 import time
 from typing import Callable
+
+import pygame
+
 from ..core.scene_manager import Scene
 from ..utils.config_manager import ConfigManager
-import random
-import json
 from ..utils.logger import get_logger
 
 
@@ -245,8 +247,12 @@ class LoadingScene(Scene):
             self.screen.blit(message_text, message_rect)
 
     def _render_loading_indicator(self):
-        """Renderiza un indicador de carga animado."""
-        # Puntos animados
+        """
+        Renderiza un indicador de carga animado.
+
+        Ejemplo:
+            >>> self._render_loading_indicator()
+        """
         dot_count = 3
         dot_spacing = 20
         animation_speed = 0.3
@@ -292,8 +298,29 @@ class LoadingScene(Scene):
             self.screen.blit(instruction_text, instruction_rect)
 
     def _load_loading_screen_config(self):
+        """
+        Carga la configuración de la pantalla de carga desde un archivo JSON.
+
+        Returns:
+            dict: Configuración de la pantalla de carga.
+
+        Ejemplo:
+            >>> config = self._load_loading_screen_config()
+            >>> print(config.get("title"))
+        """
         try:
             with open("config/loading_screen.json", "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            return {}
+                config = json.load(f)
+                self.logger.info(
+                    "Configuración de pantalla de carga cargada correctamente."
+                )
+                return config
+        except FileNotFoundError:
+            self.logger.warning(
+                "Archivo de configuración de pantalla de carga no encontrado. Usando valores por defecto."
+            )
+        except json.JSONDecodeError as e:
+            self.logger.error(f"Error al decodificar JSON: {e}")
+        except Exception as e:
+            self.logger.error(f"Error inesperado al cargar configuración: {e}")
+        return {}

@@ -1,447 +1,310 @@
-````````instructions
-```````instructions
-`````instructions
 # Instrucciones para GitHub Copilot - SiK Python Game
 
+## 🗄️ PRIORIDAD MÁXIMA: REFACTORIZACIÓN + MIGRACIÓN SQLITE
+
+### Estado Crítico del Proyecto
+- **23 archivos CRÍTICOS** exceden límite de 150 líneas
+- **11 archivos >300 líneas** requieren división URGENTE
+- **Migración SQLite INTEGRADA** con refactorización simultánea
+- **Sistema de documentación COHESIVO** con referencias cruzadas obligatorias
+
+### 🔗 Sistema de Documentación Integrado (CONSULTAR EN ORDEN)
+1. **`docs/refactorizacion_progreso.md`** - **DOCUMENTO CENTRAL** - Consultar PRIMERO siempre
+2. **`docs/PLAN_MIGRACION_SQLITE.md`** - Plan detallado y checklist de migración SQLite
+3. **`docs/FUNCIONES_DOCUMENTADAS.md`** - **ACTUALIZAR** con cada función nueva/modificada
+4. **`docs/INDICE_MIGRACION_SQLITE.md`** - Vista rápida del progreso de migración
+5. **Este archivo** - Reglas base del proyecto
+
+### Protocolo de Trabajo OBLIGATORIO
+1. **ANTES de cualquier cambio**: consultar [`docs/refactorizacion_progreso.md`](../docs/refactorizacion_progreso.md)
+2. **Si toca persistencia**: revisar [`docs/PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md)
+3. **DURANTE cualquier edición**: actualizar [`docs/FUNCIONES_DOCUMENTADAS.md`](../docs/FUNCIONES_DOCUMENTADAS.md)
+4. **DESPUÉS de cualquier cambio**: actualizar progreso en documentos correspondientes
+5. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede GitHub Copilot - SiK Python Game
+
+## � PRIORIDAD MÁXIMA: REFACTORIZACIÓN EN CURSO
+
+### Estado Crítico del Proyecto
+- **23 archivos CRÍTICOS** exceden límite de 150 líneas
+- **11 archivos >300 líneas** requieren división URGENTE
+- **Refactorización OBLIGATORIA** antes de nuevas features
+- **Documentación automática** de todas las funciones es MANDATORIA
+
+### Archivos de Seguimiento CRÍTICOS (revisar SIEMPRE)
+- `docs/refactorizacion_progreso.md` - **ESTADO ACTUAL** de división de archivos
+- `docs/FUNCIONES_DOCUMENTADAS.md` - **CATÁLOGO COMPLETO** de funciones
+- `CHANGELOG.md` - **REGISTRO** de cambios importantes
+- Este archivo - **BASE** de reglas del proyecto
+
+### Protocolo de Trabajo OBLIGATORIO
+1. **ANTES de cualquier cambio**: consultar `docs/refactorizacion_progreso.md`
+2. **DURANTE cualquier edición**: actualizar `docs/FUNCIONES_DOCUMENTADAS.md`
+3. **DESPUÉS de cualquier cambio**: actualizar ambos archivos de seguimiento
+4. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede
+
+## �📋 Automantenimiento y Documentación Crítica
+
+### Responsabilidades Primarias
+- **PRIORIDAD 1**: Consultar y actualizar `docs/refactorizacion_progreso.md` en CADA operación
+- **PRIORIDAD 2**: Actualizar `docs/FUNCIONES_DOCUMENTADAS.md` con TODAS las funciones nuevas/modificadas
+- **PRIORIDAD 3**: Dividir INMEDIATAMENTE cualquier archivo que exceda 150 líneas
+- **Mantener actualizado** este archivo con cualquier cambio significativo del proyecto
+- **Actualizar automáticamente** `CHANGELOG.md` con cambios importantes
+- **Actualizar automáticamente** `README.md` con cambios importantes
+- **Documentar decisiones** importantes en archivos correspondientes
+- **Reflejar cambios** de arquitectura, reglas o convenciones inmediatamente
+
+### Archivos de Seguimiento Obligatorio
+- **`docs/refactorizacion_progreso.md`** - **DOCUMENTO CENTRAL** - Estado de refactorización (23 archivos críticos)
+- **`docs/PLAN_MIGRACION_SQLITE.md`** - Plan detallado de migración base de datos con checklist
+- **`docs/FUNCIONES_DOCUMENTADAS.md`** - Catálogo completo de funciones por módulo (actualizar siempre)
+- **`docs/INDICE_MIGRACION_SQLITE.md`** - Vista rápida del progreso de migración SQLite
+- **`CHANGELOG.md`** - Registro de cambios significativos
+- **Este archivo** - Base de reglas del proyecto
+
+## 🗄️ Migración SQLite Integrada
+
+### Estrategia de Refactorización con Base de Datos
+- **Enfoque dual**: División de archivos + migración a SQLite simultánea
+- **Prioridad**: SaveManager (365 líneas) y ConfigManager (264 líneas) primero
+- **Objetivo**: Resolver duplicaciones config/src + límites de líneas
+- **Referencias**: [`PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md) para esquemas y checklist detallado
+
+### Archivos con Migración SQLite Prioritaria
+1. **SaveManager** (365 líneas) → 4 módulos + SQLite (partidas_guardadas)
+2. **ConfigManager** (264 líneas) → 3 módulos + SQLite (configuraciones, personajes, enemigos)
+3. **GameState** (151 líneas) → 3 módulos + SQLite (estadisticas_juego)
+
+## 📋 Regla Crítica: Límite de Líneas
+**NINGÚN archivo puede superar 150 líneas**. Dividir inmediatamente si se excede.
+
+## 🚨 Archivos Críticos que Requieren Refactorización URGENTE
+
+### Archivos Críticos (>300 líneas) - División INMEDIATA + Migración SQLite
+1. **src/entities/entity.py** (479 líneas) - **CRÍTICO** - Sin migración SQLite (objetos en memoria)
+2. **src/utils/asset_manager.py** (464 líneas) - **CRÍTICO** - Posible cache SQLite futuro
+3. **src/ui/hud.py** (397 líneas) - **CRÍTICO** - Sin migración SQLite
+4. **src/entities/player.py** (390 líneas) - **CRÍTICO** - Sin migración SQLite
+5. **src/entities/player_combat.py** (382 líneas) - **CRÍTICO** - Sin migración SQLite
+6. **src/utils/desert_background.py** (381 líneas) - **CRÍTICO** - Sin migración SQLite
+7. **src/entities/enemy.py** (373 líneas) - **CRÍTICO** - Sin migración SQLite (objetos en memoria)
+8. **🗄️ src/utils/save_manager.py** (365 líneas) - **CRÍTICO + MIGRACIÓN SQLITE** - pickle→SQLite
+9. **src/core/game_engine.py** (352 líneas) - **CRÍTICO** - Sin migración SQLite
+10. **src/scenes/character_ui.py** (350 líneas) - **CRÍTICO** - Sin migración SQLite
+11. **src/ui/menu_callbacks.py** (336 líneas) - **CRÍTICO** - Sin migración SQLite
+
+### Archivos Moderados con Migración SQLite Prioritaria
+- **🗄️ src/utils/config_manager.py** (264 líneas) - **MIGRACIÓN SQLITE** - JSON→SQLite
+- **🗄️ src/core/game_state.py** (151 líneas) - **MIGRACIÓN SQLITE** - Estadísticas→SQLite
+
+### ⚠️ IMPORTANTE: Antes de editar cualquier archivo
+1. **Consultar** `docs/refactorizacion_progreso.md` para ver estado actual
+2. **Si archivo >150 líneas**: DIVIDIR antes de cualquier cambio
+3. **Actualizar** ambos archivos de seguimiento después de cambios
+
+### 🔧 Proceso de División Seguro (OBLIGATORIO)
+1. **Backup** del archivo original en carpeta temporal
+2. **Tests** ejecutar para validar estado actual
+3. **Dividir** por responsabilidades claras y específicas
+4. **Validar** funcionalidad completa tras división
+5. **Commit** atómico por cada archivo dividido
+6. **Actualizar** documentación de funciones automáticamente
+
 ## 🎮 Contexto del Proyecto
-Este es un videojuego 2D de disparos desarrollado con Pygame-ce. El objetivo es destruir enemigos que caen desde la parte superior de la pantalla.
+Videojuego 2D bullet hell desarrollado con Pygame-ce. El jugador se mueve libremente con cámara fluida, dispara hacia el cursor del ratón y enfrenta oleadas de enemigos con IA avanzada. Desarrollo en **Windows 11 + VS Code** con asistencia 100% IA.
 
-## 🎮 Tipo de Juego
-
-- El juego debe ser de tipo **bullet hell 2D**.
-- El jugador se mueve libremente con cámara fluida centrada en él.
-- El disparo se dirige hacia el cursor del ratón.
-- Implementar IA de enemigos, generación de powerups y mejoras entre rondas.
-- El desarrollo se realiza en entorno **Windows 11 + Visual Studio Code**.
-
-## 🛠️ Stack Tecnológico 2025
+## 🛠️ Stack Tecnológico
 - **Python 3.11+** con type hints obligatorios
-- **Pygame-ce** para el motor del juego
-- **Poetry** para gestión de dependencias
-- **Ruff** para linting y formateo
+- **Pygame-ce** (NO pygame estándar)
+- **Poetry** para dependencias (NO pip/requirements.txt)
+- **Ruff** para linting/formateo
 - **Pre-commit** para hooks de calidad
-- **PyTest** para testing con cobertura mínima 80%
+- **PyTest** con cobertura mínima 80%
+- **GitHub CLI** para gestión avanzada del repositorio
 
 ## 📋 Convenciones de Código
 
 ### Idioma y Nomenclatura
-- **Idioma principal**: Español para código, comentarios y documentación
-- **Variables y funciones**: En español (`generacion_enemigos`, `jugador`, `velocidad_movimiento`)
-- **Clases**: PascalCase en español (`GestorEnemigos`, `PersonajeJugador`)
-- **Constantes**: SNAKE_CASE en español (`VELOCIDAD_MAXIMA`, `TIEMPO_RESPAWN`)
+- **Idioma**: Español para código, comentarios y documentación
+- **Variables/funciones**: `generacion_enemigos`, `jugador`, `velocidad_movimiento`
+- **Clases**: PascalCase español (`GestorEnemigos`, `PersonajeJugador`)
+- **Constantes**: SNAKE_CASE español (`VELOCIDAD_MAXIMA`, `TIEMPO_RESPAWN`)
 
-### Estructura de Archivos
-- **Máximo 150 líneas** por archivo
-- **Arquitectura modular** con separación clara de responsabilidades
-- **src/** como directorio principal de código
-- **main.py** como punto de entrada
+### Documentación Obligatoria
+- **Docstrings completas** en español para todas las funciones públicas
+- **Type hints obligatorios** en parámetros y retornos
+- **Comentarios contextuales** antes de lógica compleja
+- **Args, Returns, Raises** documentados
+- **Actualización automática** de `docs/FUNCIONES_DOCUMENTADAS.md`
 
-### Documentación
-```python
-def procesar_movimiento_jugador(
-    posicion_actual: tuple[int, int],
-    direccion: str,
-    velocidad: int = 5
-) -> tuple[int, int]:
-    """
-    Procesa el movimiento del jugador en la pantalla.
+## 🏗️ Arquitectura del Proyecto
 
-    Calcula la nueva posición basada en la dirección y velocidad,
-    aplicando las restricciones de los límites de pantalla.
-
-    Args:
-        posicion_actual: Coordenadas (x, y) actuales del jugador
-        direccion: Dirección de movimiento ("izquierda", "derecha", "arriba", "abajo")
-        velocidad: Píxeles por frame de movimiento
-
-    Returns:
-        Nueva posición (x, y) después del movimiento
-
-    Example:
-        >>> nueva_pos = procesar_movimiento_jugador((100, 200), "derecha", 5)
-        >>> print(nueva_pos)  # (105, 200)
-    """
+### Estructura de Directorios
 ```
+src/
+├── core/          # Motor del juego, scene manager
+├── entities/      # Jugador, enemigos, proyectiles
+├── scenes/        # Menús, gameplay, transiciones
+├── ui/            # HUD, menús, componentes UI
+├── utils/         # Assets, configuración, helpers
+└── main.py        # Punto de entrada único
+```
+
+### Separación de Responsabilidades
+- **Un archivo = una responsabilidad específica**
+- **Modularización extrema** para mantener límite de 150 líneas
+- **APIs claras** entre módulos
+- **Dependencias mínimas** entre componentes
 
 ## ⚙️ Configuración Modular
+- **Todas las configuraciones** en `config/` como archivos JSON
+- **NO valores hardcoded** en Python
+- **ConfigManager** centralizado con validación de esquemas
+- **Separación por áreas**: audio, enemies, display, gameplay, ui, input
 
-- Todas las configuraciones del juego deben residir en `config/`.
-- Dividir por áreas: audio, input, enemigos, personajes, display, gameplay, etc.
-- Evitar valores hardcoded en los scripts Python.
-- Actualizar los JSON conforme evolucionen las mecánicas.
-- `pyproject.toml` como configuración principal del proyecto (Poetry).
-- `.pre-commit-config.yaml` para configuración de calidad de código.
-- Usar `ConfigManager` centralizado para acceso a configuraciones.
-- Validación de esquemas JSON en carga de configuración.
-- Configuraciones de desarrollo vs. producción claramente separadas.
-- Documentar cambios de configuración en `CHANGELOG.md`.
+## 🧪 Calidad y Testing
 
-## 🏗️ Estructura Técnica
+### Métricas Obligatorias
+- **0 errores Ruff** siempre
+- **0 advertencias MyPy** siempre
+- **100% cobertura tests** mínimo
+- **Complejidad ciclomática < 10**
+- **100% documentación** en funciones públicas
 
-- **Máximo 150 líneas** por archivo (crítico para mantenibilidad).
-- Separar lógicamente `core`, `entidades`, `escenas`, `UI` y utilidades.
-- Respetar nombres y propósitos de carpetas establecidas.
-- Evitar archivos con más de una responsabilidad.
-- `main.py` debe actuar como punto de entrada al juego.
-- Usar Poetry para gestión de dependencias (NO pip/requirements.txt).
-- Pre-commit hooks deben pasar antes de cualquier commit.
-- Type hints obligatorios en funciones públicas.
-- Documentación obligatoria en cada función/clase.
-- Logging detallado para debug y trazabilidad.
-- Rutas absolutas para assets y configuración.
-- Modularización extrema: dividir archivos grandes en submódulos.
+### Comandos de Validación
+- `poetry run ruff check src/ tests/`
+- `poetry run ruff format src/ tests/`
+- `poetry run mypy src/`
+- `poetry run pytest --cov=src tests/`
+- `poetry run pre-commit run --all-files`
 
-## 🎯 Sistemas Específicos del Juego
+## 🎯 Sistemas del Juego
 
-### Sistema de Personajes
-```python
-class PersonajeJugador:
-    """Representa al personaje controlado por el jugador."""
+### Enemigos
+- **Tipos**: zombie masculino/femenino con variantes (normal, raro, élite, legendario)
+- **IA**: estados de patrulla, persecución y ataque
+- **Detección**: 300px como distancia estándar
+- **Comportamiento**: definido en `config/enemies.json`
 
-    def __init__(self, posicion_inicial: tuple[int, int]):
-        self.posicion = posicion_inicial
-        self.vida_actual = 100
-        self.vida_maxima = 100
-        self.velocidad = 5
-        self.animaciones = {}
-        self.estado_actual = "idle"
+### Assets y Recursos
+- **Estructura obligatoria**: `assets/characters/used/`, `assets/ui/`, `assets/sounds/`
+- **Cache centralizado** de imágenes y sonidos
+- **Rutas absolutas** siempre
+- **Gestión de memoria** eficiente
 
-    def mover(self, direccion: str) -> None:
-        """Mueve el personaje en la dirección especificada."""
+### HUD y Menús
+- **HUD permanente**: vida, mejoras, puntos, cronómetro
+- **Menús**: bienvenida, principal, pausa, opciones, mejoras, inventario, guardado
+- **Compatibilidad**: todas las resoluciones soportadas
+- **Separación**: lógica independiente de representación visual
 
-    def disparar(self) -> Optional['Proyectil']:
-        """Crea un proyectil desde la posición del jugador."""
+## 🛠️ Herramientas y Ejecución
 
-    def recibir_dano(self, cantidad: int) -> bool:
-        """Aplica daño al jugador. Retorna True si sigue vivo."""
-```
+### Comandos Principales con Poetry
+- **Ejecución del juego**: `poetry run python src/main.py`
+- **Instalación dependencias**: `poetry install`
+- **Agregar paquetes**: `poetry add package_name`
+- **Limpieza de caché**: `poetry cache clear pypi --all`
 
-### Sistema de Enemigos
-```python
-class GestorEnemigos:
-    """Gestiona la generación y comportamiento de enemigos."""
+### Configuración Pygame-ce
+- **USAR SOLO**: `poetry add pygame-ce` (NO pygame estándar)
+- **Si hay conflictos**: `poetry remove pygame` seguido de `poetry add pygame-ce`
+- **Verificar instalación**: confirmar compatibilidad de métodos pygame-ce
 
-    def __init__(self):
-        self.enemigos_activos: list[Enemigo] = []
-        self.tiempo_ultimo_spawn = 0
-        self.dificultad_actual = 1
+### GitHub CLI para Gestión Avanzada (PRIORITARIO)
+- **Documentación oficial**: https://cli.github.com/manual/
+- **Matriz de decisión completa**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md`
+- **Regla principal**: SIEMPRE preferir `gh` cuando esté disponible
 
-    def generar_oleada(self, cantidad: int) -> None:
-        """Genera una oleada de enemigos."""
+#### Comandos Esenciales GitHub CLI
+- **Repositorio**: `gh repo view`, `gh repo create`, `gh repo fork`, `gh repo clone`
+- **Issues**: `gh issue list`, `gh issue create`, `gh issue view --web`
+- **Pull Requests**: `gh pr create --fill`, `gh pr list`, `gh pr merge`
+- **Releases**: `gh release create`, `gh release upload`, `gh release list`
+- **Navegación**: `gh browse` (abrir en navegador), `gh status`
+- **Búsqueda**: `gh search repos`, `gh search code`, `gh search issues`
+- **Actions**: `gh workflow run`, `gh run list`, `gh workflow list`
 
-    def actualizar(self, delta_time: float) -> None:
-        """Actualiza todos los enemigos activos."""
-```
+#### Git Tradicional (SOLO Local)
+- **Staging/Commits**: `git add`, `git commit`, `git commit --amend`
+- **Branching local**: `git branch`, `git checkout`, `git switch`
+- **Estado local**: `git status`, `git log`, `git diff`
 
-### Sistema de Assets
-```python
-class GestorAssets:
-    """Gestiona la carga y cache de recursos del juego."""
+### Scripts Personalizados
+- `scripts/run_tests.py` - Testing interactivo
+- `scripts/cleanup_project.py` - Limpieza automática
+- `scripts/commit_profesional.ps1` - Commits profesionales automatizados
+- `tools/package_improved.py` - Build ejecutable
 
-    def __init__(self):
-        self._cache_imagenes: dict[str, pygame.Surface] = {}
-        self._cache_sonidos: dict[str, pygame.mixer.Sound] = {}
+## 🔄 Reglas de Trabajo
 
-    def cargar_imagen(self, ruta: str) -> pygame.Surface:
-        """Carga una imagen con cache automático."""
+### Comandos Terminal PowerShell
+- **NO usar `&&`** para encadenar comandos (usar `;` si necesario)
+- **Comandos separados** por línea para mayor claridad
+- **PowerShell** como shell predeterminado en Windows
+- **Filtrado de texto**: `Select-String` en lugar de `grep`
+- **Búsqueda en archivos**: `Get-Content archivo.txt | Select-String "patrón"`
 
-    def cargar_sonido(self, ruta: str) -> pygame.mixer.Sound:
-        """Carga un sonido con cache automático."""
-```
+### Commits y Push Profesionales
+- **Template obligatorio**: `.gitmessage` con Conventional Commits en español
+- **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
+- **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
+- **Formato**: `tipo(ámbito): descripción` (máx 50 caracteres)
+- **Script automatizado**: `scripts/commit_profesional.ps1` para workflow completo
+- **Pre-commit hooks**: validación automática de calidad antes de commit
+- **Documentación**: `docs/COMMITS_PROFESIONALES.md` con guía completa
 
-## 🎨 Sistema de Assets
+### Gestión de Archivos y Repositorio
+- **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
+- **Matriz de decisión**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md` (consultar SIEMPRE)
+- **Información del repositorio**: `gh repo view` (preferir sobre git status)
+- **Gestión de issues/PRs**: `gh issue create`, `gh pr create --fill`
+- **Releases y distribución**: `gh release create`, `gh release upload`
+- **Git tradicional**: solo para `git add`, `git commit`, operaciones locales
+- **Commits atómicos** por cada refactorización o cambio significativo
+- **Evitar** movimientos directos en explorador
 
-### Estructura Obligatoria
-```
-assets/
-├── characters/used/     # Personajes activos en el juego
-├── characters/unused/   # Personajes en desarrollo
-├── ui/                  # Elementos de interfaz (botones, barras, iconos)
-├── sounds/              # Audio y música
-├── fonts/               # Fuentes tipográficas
-├── objects/             # Objetos del juego (proyectiles, powerups)
-└── tiles/               # Elementos de escenario
-```
+### Priorización: GitHub CLI vs Git Tradicional
+**Usar GitHub CLI (`gh`) para:**
+- Obtener información del repositorio y estado general
+- Gestionar issues, pull requests y releases
+- Navegar rápidamente al repositorio en navegador
+- Clonar repositorios y gestionar forks
+- Buscar repositorios y contenido en GitHub
+- Ejecutar y monitorear GitHub Actions
 
-### Gestión de Rutas
-- Usar **SIEMPRE** rutas absolutas en el código.
-- `AssetManager` centralizado para carga de recursos.
-- Caché inteligente para optimizar memoria.
-- Validación de existencia de archivos antes de carga.
+**Usar Git tradicional solo para:**
+- Operaciones locales básicas: `git add`, `git commit`
+- Control de versiones local y staging
+- Branching local: `git branch`, `git checkout`
+- Consultar logs y diferencias locales
 
-### Organización
-- Separar assets activos de experimentales.
-- Nomenclatura consistente en español.
-- Formatos estándar: PNG para sprites, MP3 para audio, TTF para fuentes.
-- Reutilizar texturas o fuentes temporales como placeholders.
-- Evitar duplicación innecesaria de recursos.
+### Flujo Autónomo
+- **Continuar automáticamente** hasta puntos de prueba
+- **Resolver errores** de forma autónoma
+- **Documentar cambios** significativos inmediatamente
 
-### Exclusiones
-- Assets >50MB deben estar en `.gitignore`.
-- No subir archivos de trabajo (PSD, AI, etc.).
-- Comprimir imágenes antes de incluir en repositorio.
+### Estrategia para Problemas
+- **Comentar líneas** problemáticas temporalmente
+- **Probar sin conflictos** para identificar impacto real
+- **Documentar soluciones** implementadas
 
-## 🧪 Testing y Calidad
+## 🤖 Optimización para IA
 
-### Estrategia de Testing
-- Cobertura mínima: 80% en `src/`.
-- Tests unitarios para cada módulo.
-- Tests de integración para flujos críticos.
-- Tests de sistema para gameplay completo.
-- Mock para recursos externos (archivos, sonidos).
+### Patrones para GitHub Copilot
+- **Nombres autodescriptivos** en español
+- **Funciones pequeñas** (máximo 30 líneas)
+- **Comentarios contextuales** antes de lógica compleja
+- **Type hints completos** para mejor inferencia
+- **Consistencia** en nomenclatura y estructura
 
-### Métricas de Calidad
-- **0 errores de Ruff** obligatorio.
-- **0 advertencias** de type checking.
-- **Máximo 150 líneas** por archivo.
-- **Complejidad ciclomática < 10**.
-- **Documentación al 100%** en funciones públicas.
-
-### Herramientas de Calidad
-```powershell
-# Ejecutar todos los checks
-poetry run ruff check src/ tests/
-poetry run ruff format src/ tests/
-poetry run mypy src/
-poetry run pytest --cov=src tests/
-
-# Pre-commit automático
-poetry run pre-commit install
-poetry run pre-commit run --all-files
-```
-
-### Estructura de Tests
-```python
-import pytest
-import pygame
-from unittest.mock import Mock, patch
-from src.managers.asset_manager import AssetManager
-
-class TestAssetManager:
-    """Tests para el gestor de assets del juego."""
-
-    @pytest.fixture
-    def asset_manager(self):
-        """Fixture que proporciona una instancia de AssetManager."""
-        pygame.init()
-        return AssetManager()
-```
-
-## 🚀 Workflow de Desarrollo
-
-### Comandos Principales
-```bash
-# Ejecutar juego
-poetry run python src/main.py
-
-# Ejecutar tests
-poetry run pytest tests/
-
-# Análisis completo
-poetry run pre-commit run --all-files
-
-# Build ejecutable
-poetry run python tools/package_improved.py
-```
-
-### Pre-commit Hooks
-- Ruff linting y formateo automático
-- MyPy type checking
-- Tests automáticos
-- Validación de archivos de configuración
-
-## 🎯 Objetivos de Refactorización
-
-### Métricas Actuales (Julio 2025)
-- **32 errores Ruff** pendientes de corrección
-- **Varios archivos >150 líneas** necesitan división
-- **Type hints incompletos** en algunos módulos
-- **Cobertura tests <80%** en algunas áreas
-
-### Proceso de Mejora
-1. **Dividir archivos grandes** manteniendo funcionalidad
-2. **Corregir errores Ruff** uno por uno
-3. **Añadir type hints faltantes**
-4. **Aumentar cobertura de tests**
-5. **Documentar funciones sin docstrings**
-
-## 🔧 Refactorización Sistemática
-
-### Objetivo Crítico
-- Ningún archivo debe superar **150 líneas**.
-
-### Archivos Identificados para Refactorización
-- `src/entities/entity.py` (>300 líneas) - **Alta prioridad**
-- `src/ui/menu_factory.py` (>300 líneas) - **Alta prioridad**
-- `src/ui/menu_callbacks.py` (>300 líneas) - **Alta prioridad**
-- `src/utils/world_generator.py` (>300 líneas) - **Media prioridad**
-- `src/utils/animation_manager.py` (>280 líneas) - **Media prioridad**
-
-### Estrategia de División
-1. Identificar responsabilidades separadas dentro del archivo.
-2. Crear submódulos específicos por responsabilidad.
-3. Mantener API pública intacta para evitar breaking changes.
-4. Crear tests unitarios para cada submódulo.
-5. Verificar funcionalidad completa después de división.
-
-### Proceso Seguro
-1. Crear backup del archivo original.
-2. Ejecutar tests antes de refactorización.
-3. Dividir archivo manteniendo funcionalidad.
-4. Ejecutar tests después de cada división.
-5. Actualizar imports en archivos dependientes.
-6. Verificar ejecución completa del juego.
-7. Commit atómico por cada archivo refactorizado.
-
-### Reglas Críticas
-- **NO** cambiar comportamiento público de clases/funciones.
-- Mantener backward compatibility.
-- Tests deben pasar después de cada refactorización.
-- Documentar cambios en `CHANGELOG.md`.
-- Actualizar imports en archivos dependientes.
-
-## 🤖 Optimización para GitHub Copilot
-
-### Sugerencias Inteligentes
-- Docstrings detalladas en español para contexto.
-- Comentarios explicativos antes de lógica compleja.
-- Nomenclatura descriptiva en español.
-- Type hints completos para mejor inferencia.
-- Ejemplos de uso en docstrings.
-
-### Formato de Documentación
-```python
-def procesar_animacion_personaje(
-    nombre_personaje: str,
-    estado_animacion: str,
-    velocidad_fps: int = 30
-) -> Optional[AnimacionFrames]:
-    """
-    Procesa y carga los frames de animación para un personaje específico.
-
-    Este método busca los archivos de sprite correspondientes al personaje
-    y estado solicitado, los carga en memoria y configura la animación.
-
-    Args:
-        nombre_personaje: Nombre del personaje (ej: "guerrero", "mago")
-        estado_animacion: Estado de la animación (ej: "idle", "run", "attack")
-        velocidad_fps: Frames por segundo de la animación
-
-    Returns:
-        Objeto AnimacionFrames con los frames cargados, o None si hay error
-
-    Example:
-        >>> animacion = procesar_animacion_personaje("guerrero", "idle", 15)
-        >>> if animacion:
-        >>>     animacion.reproducir()
-    """
-```
-
-### Patrones para IA
-- Usar nombres de variables autodescriptivos.
-- Agrupar lógica relacionada en funciones pequeñas.
-- Comentarios de contexto antes de bloques complejos.
-- Manejo explícito de errores con logging.
-- Estructura predecible y consistente.
+### Proyecto 100% IA
+- **NUNCA eliminar** `.github/` ni este archivo
+- **PRIORIDAD ABSOLUTA**: Completar refactorización antes que cualquier feature
+- **Mantener actualizadas** todas las reglas constantemente
+- **Automatización máxima** de procesos repetitivos
+- **Documentación automática** de funciones y cambios
 
 ---
 
-Esta documentación debe mantenerse actualizada con cada cambio significativo en el proyecto.
-
-## 👾 Enemigos
-
-- Diseñar enemigos tipo zombie masculino y femenino.
-- Incluir variantes: normal, raro, élite, legendario.
-- La IA debe incluir patrulla, persecución y ataque.
-- Detectar al jugador a 300px como referencia estándar.
-
-## 🖥️ HUD y Menús
-
-- Mostrar HUD constantemente con vida, mejoras, puntos y cronómetro.
-- Diseñar menús: bienvenida, principal, selección, pausa, opciones, mejoras, inventario y guardado.
-- Asegurar compatibilidad visual en todas las resoluciones soportadas.
-- Separar lógica de menú de su representación visual.
-
-## 🤖 Proyecto 100% IA
-
-Este proyecto está diseñado y desarrollado como un proyecto 100% asistido por IA. Todas las reglas, configuraciones y estándares están optimizados para herramientas de inteligencia artificial como GitHub Copilot y Copilot Chat.
-
-### Preservación de Instrucciones
-- **Nunca eliminar** este archivo ni el directorio `.github`.
-- Mantener siempre actualizadas las instrucciones y reglas aquí documentadas.
-- Asegurar que cualquier cambio significativo en el proyecto se refleje en este archivo.
-
-## 🛠️ Herramientas y Configuración
-
-### Herramientas Principales
-- **Poetry**: Gestión de dependencias y entornos virtuales.
-- **Ruff**: Linting y formateo.
-- **Pre-commit**: Hooks automáticos de calidad.
-- **Pytest**: Testing con cobertura.
-- **Pyinstaller**: Empaquetado del juego.
-
-### Extensiones de VS Code
-- **GitHub Copilot**: Asistencia de IA avanzada.
-- **Configuración personalizada**: Archivos de prompts en `.github/` para modularidad y soporte avanzado.
-
-### Scripts Personalizados
-- **`run_tests.py`**: Script maestro para ejecutar todos los tests desde un menú interactivo.
-- **Tests Individuales**: Scripts en `scripts/` para pruebas específicas y limpieza.
-- **Limpieza y Organización**: Scripts como `cleanup_project.py` y `reorganize_characters.py` para mantener el proyecto ordenado.
-
-### Reglas para Movimientos de Ficheros
-- **Siempre usar Git** para mover o renombrar ficheros dentro del proyecto.
-- Esto asegura que los cambios se reflejen correctamente en el historial de Git y evita problemas de sincronización.
-- Ejemplo:
-  ```bash
-  git mv <archivo_origen> <archivo_destino>
-  ```
-
-## 🔄 Flujo de Trabajo Autónomo
-
-- Los flujos de trabajo deben continuar de la forma más autónoma posible hasta llegar a un punto donde se puedan realizar pruebas pertinentes.
-- Esto incluye la resolución de errores, ajustes en el código y validaciones preliminares.
-- Documentar cualquier cambio significativo realizado durante este proceso.
-
-## 🛠️ Reglas para Comandos de Terminal
-
-- Evitar el uso de `&&` para encadenar comandos en terminal.
-- Usar comandos separados por líneas para mayor claridad y robustez.
-- Ejemplo:
-  ```bash
-  git add .
-  git commit -m "Mensaje de commit"
-  git push
-  ```
-
-## 🔄 Reglas para Pruebas
-
-- Antes de ejecutar cualquier banco de pruebas, reinicia el servidor del entorno virtual (venv) para evitar cargar elementos o memoria no deseados.
-- Esto asegura que las pruebas se ejecuten en un entorno limpio y controlado.
-
-## 🛠️ Configuración de Entorno y Ejecución
-
-### Limpieza de Caché
-- Antes de realizar cambios significativos en las dependencias, asegúrate de limpiar el caché de `pip` para evitar conflictos residuales:
-  ```bash
-  pip cache purge
-  ```
-
-### Ejecución Clásica del Proyecto
-- Para ejecutar el proyecto sin configurar manualmente el `PYTHONPATH`, utiliza el siguiente comando desde el directorio raíz del proyecto:
-  ```bash
-  python -m src.main
-  ```
-  Esto asegura que las rutas relativas funcionen correctamente sin necesidad de ajustes adicionales.
-
-### Uso de `pygame-ce`
-- El proyecto utiliza `pygame-ce` en lugar de `pygame` estándar. Asegúrate de que todas las referencias y métodos sean compatibles con esta versión.
-- Si encuentras errores como `AttributeError: module 'pygame' has no attribute 'Surface'`, verifica que `pygame-ce` esté instalado correctamente y que no haya conflictos con `pygame` estándar.
-- Para evitar conflictos, desinstala cualquier versión de `pygame` estándar:
-  ```bash
-  pip uninstall pygame -y
-  ```
-
-### Documentación Adicional
-- Si realizas cambios en las dependencias o en la configuración del entorno, actualiza esta sección para reflejar los nuevos requisitos.
-``````
+**Base fundamental del proyecto. REFACTORIZACIÓN PRIORITARIA. Mantener actualizado siempre.**

@@ -8,9 +8,10 @@ Descripción: Escena para configurar opciones del juego.
 """
 
 import pygame
+
 from ..core.scene_manager import Scene
-from ..utils.config_manager import ConfigManager
 from ..ui.menu_manager import MenuManager
+from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
 
 
@@ -22,13 +23,33 @@ class OptionsScene(Scene):
     def __init__(
         self, screen: pygame.Surface, config: ConfigManager, game_state, save_manager
     ):
+        """
+        Inicializa la escena de opciones.
+
+        Args:
+            screen: Superficie de Pygame donde renderizar
+            config: Configuración del juego
+            game_state: Estado del juego
+            save_manager: Gestor de guardado
+        """
         super().__init__(screen, config)
         self.game_state = game_state
         self.save_manager = save_manager
         self.logger = get_logger("SiK_Game")
-        # Inicializar menú
-        self.menu_manager = MenuManager(screen, config, game_state, save_manager)
+        self._inicializar_menu()
         self.logger.info("[OptionsScene] Escena de opciones inicializada")
+
+    def _inicializar_menu(self):
+        """
+        Inicializa el menú de opciones.
+        """
+        try:
+            self.menu_manager = MenuManager(
+                self.screen, self.config, self.game_state, self.save_manager
+            )
+        except Exception as e:
+            self.logger.error("Error al inicializar el menú de opciones: %s", e)
+            raise
 
     def enter(self):
         super().enter()
@@ -41,11 +62,18 @@ class OptionsScene(Scene):
         self.logger.info("[OptionsScene] Saliendo de escena de opciones")
 
     def handle_event(self, event: pygame.event.Event) -> bool:
-        # Manejar eventos del menú
+        """
+        Maneja eventos de la escena de opciones.
+
+        Args:
+            event: Evento de Pygame a procesar.
+
+        Returns:
+            bool: True si el evento fue manejado, False en caso contrario.
+        """
         self.menu_manager.update([event])
-        # Manejar eventos específicos de la escena
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+        if event.type == pygame.constants.KEYDOWN:
+            if event.key == pygame.constants.K_ESCAPE:
                 self.logger.info(
                     "[OptionsScene] ESC presionado - volviendo al menú principal"
                 )
@@ -53,9 +81,15 @@ class OptionsScene(Scene):
                 return True
         return False
 
-    def update(self, dt: float = 0):
+    def update(self):
+        """
+        Actualiza la lógica de la escena de opciones.
+        """
         self.menu_manager.update([])
 
     def render(self):
+        """
+        Renderiza la escena de opciones.
+        """
         self.screen.fill((0, 0, 0))
         self.menu_manager.render()

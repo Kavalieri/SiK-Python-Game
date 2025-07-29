@@ -7,12 +7,16 @@ Fecha: 2024-12-19
 Descripción: Módulo que contiene todos los datos de personajes jugables.
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict
 
 
 class CharacterData:
     """
     Gestiona todos los datos de personajes jugables.
+
+    Ejemplo de uso:
+        >>> datos = CharacterData.get_character_data("guerrero")
+        >>> print(datos["nombre"])
     """
 
     # Datos de personajes disponibles
@@ -41,7 +45,7 @@ class CharacterData:
     }
 
     @classmethod
-    def get_character_data(cls, character_key: str) -> Dict[str, Any]:
+    def get_character_data(cls, character_key: str) -> Dict[str, Any] | None:
         """
         Obtiene los datos de un personaje específico.
 
@@ -49,104 +53,13 @@ class CharacterData:
             character_key: Clave del personaje
 
         Returns:
-            Datos del personaje o None si no existe
+            dict: Datos del personaje o None si no existe
+
+        Ejemplo:
+            >>> datos = CharacterData.get_character_data("guerrero")
+            >>> print(datos["nombre"])
         """
         return cls.CHARACTER_DATA.get(character_key)
-
-    @classmethod
-    def get_all_characters(cls) -> List[str]:
-        """
-        Obtiene la lista de todos los personajes disponibles.
-
-        Returns:
-            Lista de claves de personajes
-        """
-        return list(cls.CHARACTER_DATA.keys())
-
-    @classmethod
-    def get_character_name(cls, character_key: str) -> str:
-        """
-        Obtiene el nombre de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Nombre del personaje o "Desconocido" si no existe
-        """
-        char_data = cls.get_character_data(character_key)
-        return char_data.get("nombre", "Desconocido") if char_data else "Desconocido"
-
-    @classmethod
-    def get_character_type(cls, character_key: str) -> str:
-        """
-        Obtiene el tipo de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Tipo del personaje o "Desconocido" si no existe
-        """
-        char_data = cls.get_character_data(character_key)
-        return char_data.get("tipo", "Desconocido") if char_data else "Desconocido"
-
-    @classmethod
-    def get_character_description(cls, character_key: str) -> str:
-        """
-        Obtiene la descripción de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Descripción del personaje o cadena vacía si no existe
-        """
-        char_data = cls.get_character_data(character_key)
-        return char_data.get("descripcion", "") if char_data else ""
-
-    @classmethod
-    def get_character_stats(cls, character_key: str) -> Dict[str, int]:
-        """
-        Obtiene las estadísticas de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Estadísticas del personaje o diccionario vacío si no existe
-        """
-        char_data = cls.get_character_data(character_key)
-        return char_data.get("stats", {}) if char_data else {}
-
-    @classmethod
-    def get_character_skills(cls, character_key: str) -> List[str]:
-        """
-        Obtiene las habilidades de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Lista de habilidades del personaje o lista vacía si no existe
-        """
-        char_data = cls.get_character_data(character_key)
-        return char_data.get("habilidades", []) if char_data else []
-
-    @classmethod
-    def get_character_stat(cls, character_key: str, stat_name: str) -> int:
-        """
-        Obtiene una estadística específica de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-            stat_name: Nombre de la estadística
-
-        Returns:
-            Valor de la estadística o 0 si no existe
-        """
-        stats = cls.get_character_stats(character_key)
-        return stats.get(stat_name, 0)
 
     @classmethod
     def is_valid_character(cls, character_key: str) -> bool:
@@ -157,7 +70,11 @@ class CharacterData:
             character_key: Clave del personaje
 
         Returns:
-            True si el personaje existe, False en caso contrario
+            bool: True si el personaje existe, False en caso contrario
+
+        Ejemplo:
+            >>> valido = CharacterData.is_valid_character("guerrero")
+            >>> print(valido)
         """
         return character_key in cls.CHARACTER_DATA
 
@@ -170,16 +87,66 @@ class CharacterData:
             character_key: Clave del personaje
 
         Returns:
-            Resumen del personaje con todos sus datos
+            dict: Resumen del personaje con todos sus datos
+
+        Ejemplo:
+            >>> resumen = CharacterData.get_character_summary("guerrero")
+            >>> print(resumen["nombre"])
         """
         if not cls.is_valid_character(character_key):
             return {}
 
         return {
             "key": character_key,
-            "nombre": cls.get_character_name(character_key),
-            "tipo": cls.get_character_type(character_key),
-            "descripcion": cls.get_character_description(character_key),
-            "stats": cls.get_character_stats(character_key),
-            "habilidades": cls.get_character_skills(character_key),
+            "nombre": cls.get_character_attribute(
+                character_key, "nombre", "Desconocido"
+            ),
+            "tipo": cls.get_character_attribute(character_key, "tipo", "Desconocido"),
+            "descripcion": cls.get_character_attribute(
+                character_key, "descripcion", ""
+            ),
+            "stats": cls.get_character_attribute(character_key, "stats", {}),
+            "habilidades": cls.get_character_attribute(
+                character_key, "habilidades", []
+            ),
         }
+
+    @classmethod
+    def validate_character_data(cls):
+        """
+        Valida que los datos de los personajes cumplan con el esquema esperado.
+
+        Raises:
+            ValueError: Si algún personaje tiene datos inválidos
+
+        Ejemplo:
+            >>> CharacterData.validate_character_data()
+        """
+        required_keys = {"nombre", "tipo", "descripcion", "stats", "habilidades"}
+
+        for key, data in cls.CHARACTER_DATA.items():
+            if not required_keys.issubset(data.keys()):
+                raise ValueError(
+                    f"El personaje '{key}' tiene datos incompletos: {data}"
+                )
+
+    @classmethod
+    def get_character_attribute(
+        cls, character_key: str, attribute: str, default: Any
+    ) -> Any:
+        """
+        Obtiene un atributo específico de un personaje.
+
+        Args:
+            character_key: Clave del personaje
+            attribute: Nombre del atributo
+            default: Valor por defecto si el atributo no existe
+
+        Returns:
+            Valor del atributo o el valor por defecto
+
+        Ejemplo:
+            >>> vida = CharacterData.get_character_attribute("guerrero", "stats", {})
+        """
+        char_data = cls.get_character_data(character_key)
+        return char_data.get(attribute, default) if char_data else default

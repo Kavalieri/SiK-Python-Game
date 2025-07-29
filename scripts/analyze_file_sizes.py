@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """
-Script para analizar el tamaño de archivos Python en el proyecto
+Script para analizar el tamaño de archivos Python en el proyecto.
 """
 
 from pathlib import Path
+from typing import List, Tuple
 
 
-def analyze_files():
-    """Analiza todos los archivos Python en el proyecto."""
+def analyze_files() -> List[Tuple[str, int]]:
+    """
+    Analiza todos los archivos Python en el proyecto y devuelve los que superan 150 líneas.
+
+    Returns:
+        List[Tuple[str, int]]: Lista de archivos con más de 150 líneas y su conteo.
+    """
     project_root = Path(__file__).parent.parent
     src_dir = project_root / "src"
 
@@ -25,21 +31,34 @@ def analyze_files():
             if line_count > 150:
                 files_over_150.append((str(relative_path), line_count))
 
-        except Exception as e:
+        except (OSError, UnicodeDecodeError) as e:
             print(f"Error leyendo {py_file}: {e}")
 
     # Ordenar por número de líneas
     files_over_150.sort(key=lambda x: x[1], reverse=True)
     all_files.sort(key=lambda x: x[1], reverse=True)
 
+    _print_summary(files_over_150, all_files)
+
+    return files_over_150
+
+
+def _print_summary(
+    files_over_150: List[Tuple[str, int]], all_files: List[Tuple[str, int]]
+):
+    """
+    Imprime un resumen de los archivos analizados.
+
+    Args:
+        files_over_150: Archivos con más de 150 líneas.
+        all_files: Todos los archivos analizados.
+    """
     print("=== ARCHIVOS CON MÁS DE 150 LÍNEAS ===")
     for file_path, line_count in files_over_150:
         print(f"{file_path}: {line_count} líneas")
 
     print(f"\nTotal de archivos >150 líneas: {len(files_over_150)}")
     print(f"Total de archivos Python: {len(all_files)}")
-
-    return files_over_150
 
 
 if __name__ == "__main__":

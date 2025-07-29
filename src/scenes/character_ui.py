@@ -7,19 +7,32 @@ Fecha: 2024-12-19
 Descripción: Módulo que maneja la interfaz de usuario para la selección de personajes.
 """
 
-import pygame
 import logging
-from typing import Dict, Tuple, Optional
+from typing import Dict, Optional, Tuple
+
+import pygame
+
 from .character_data import CharacterData
 
 
 class CharacterUI:
     """
     Gestiona la interfaz de usuario para la selección de personajes.
+
+    Ejemplo de uso:
+        >>> ui = CharacterUI(screen_width, screen_height, config_manager)
+        >>> ui.render_title(screen)
     """
 
     def __init__(self, screen_width: int, screen_height: int, config_manager):
-        """Inicializa la interfaz de usuario de personajes."""
+        """
+        Inicializa la interfaz de usuario de personajes.
+
+        Args:
+            screen_width: Ancho de la pantalla.
+            screen_height: Alto de la pantalla.
+            config_manager: Gestor de configuración.
+        """
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.logger = logging.getLogger(__name__)
@@ -183,11 +196,14 @@ class CharacterUI:
         Renderiza la imagen de un personaje.
 
         Args:
-            screen: Superficie donde renderizar
-            character_key: Clave del personaje
-            x: Posición X
-            y: Posición Y
-            size: Tamaño de la imagen
+            screen: Superficie donde renderizar.
+            character_key: Clave del personaje.
+            x: Posición X.
+            y: Posición Y.
+            size: Tamaño de la imagen.
+
+        Ejemplo:
+            >>> ui._render_character_image(screen, "guerrero", 100, 100, 120)
         """
         try:
             # Obtener imagen del personaje (placeholder por ahora)
@@ -199,8 +215,14 @@ class CharacterUI:
 
             screen.blit(placeholder, (x, y))
 
+        except pygame.error as e:
+            self.logger.error(
+                "Error de Pygame al renderizar imagen de %s: %s", character_key, e
+            )
         except Exception as e:
-            self.logger.error(f"Error renderizando imagen de {character_key}: {e}")
+            self.logger.error(
+                "Error inesperado al renderizar imagen de %s: %s", character_key, e
+            )
 
     def _create_character_placeholder(
         self, character_key: str, size: int = 120
@@ -209,11 +231,14 @@ class CharacterUI:
         Crea un placeholder para un personaje.
 
         Args:
-            character_key: Clave del personaje
-            size: Tamaño del placeholder
+            character_key: Clave del personaje.
+            size: Tamaño del placeholder.
 
         Returns:
-            Superficie placeholder
+            pygame.Surface: Superficie placeholder.
+
+        Ejemplo:
+            >>> placeholder = ui._create_character_placeholder("guerrero", 120)
         """
         placeholder = pygame.Surface((size, size))
 

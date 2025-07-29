@@ -18,11 +18,18 @@ from src.utils.asset_manager import AssetManager
 class CharacterAnimations:
     """
     Gestiona las animaciones de personajes en la selección.
+
+    Ejemplo de uso:
+        >>> animaciones = CharacterAnimations()
+        >>> animaciones.update(delta_time=0.016)
+        >>> imagen = animaciones.get_character_image("guerrero")
     """
 
     def __init__(self):
-        """Inicializa el gestor de animaciones de personajes."""
-        self.asset_manager = AssetManager()  # Usar el import corregido
+        """
+        Inicializa el gestor de animaciones de personajes.
+        """
+        self.asset_manager = AssetManager()
         self.logger = logging.getLogger(__name__)
 
         # Animación de sprites
@@ -35,20 +42,18 @@ class CharacterAnimations:
         self._load_animation_frames()
 
     def _load_animation_frames(self):
-        """Carga los frames de animación para todos los personajes."""
-        try:
-            # Cargar animaciones para cada personaje
-            characters = ["guerrero", "adventureguirl", "robot"]
+        """
+        Carga los frames de animación para todos los personajes.
 
-            for character in characters:
-                self.animation_frames[character] = self._load_character_frames(
-                    character
-                )
+        Ejemplo:
+            >>> animaciones._load_animation_frames()
+        """
+        characters = ["guerrero", "adventureguirl", "robot"]
 
-            self.logger.info(f"Animaciones cargadas para {len(characters)} personajes")
+        for character in characters:
+            self.animation_frames[character] = self._load_character_frames(character)
 
-        except Exception as e:
-            self.logger.error(f"Error cargando animaciones: {e}")
+        self.logger.info(f"Animaciones cargadas para {len(characters)} personajes")
 
     def _load_character_frames(self, character_key: str) -> list:
         """
@@ -58,42 +63,48 @@ class CharacterAnimations:
             character_key: Clave del personaje
 
         Returns:
-            Lista de frames de animación
+            list: Lista de frames de animación
+
+        Ejemplo:
+            >>> frames = animaciones._load_character_frames("guerrero")
         """
-        try:
-            # Intentar cargar animación idle del personaje
-            frames = []
+        frames = []
+        possible_paths = self._get_possible_paths(character_key)
 
-            # Buscar frames en diferentes ubicaciones
-            possible_paths = [
-                f"characters/{character_key}/idle",
-                f"characters/{character_key}/Idle",
-                f"characters/used/{character_key}/idle",
-                f"characters/used/{character_key}/Idle",
-            ]
+        for path in possible_paths:
+            try:
+                frames = self.asset_manager.load_animation_frames(path)
+                if frames:
+                    self.logger.debug(
+                        f"Frames cargados para {character_key} desde {path}"
+                    )
+                    break
+            except FileNotFoundError:
+                self.logger.warning(f"Frames no encontrados en {path}")
+            except ValueError as e:
+                self.logger.error(f"Error cargando frames desde {path}: {e}")
 
-            for path in possible_paths:
-                try:
-                    frames = self.asset_manager.load_animation_frames(path)
-                    if frames:
-                        self.logger.debug(
-                            f"Frames cargados para {character_key} desde {path}"
-                        )
-                        break
-                except Exception as e:
-                    self.logger.warning(f"Error cargando frames desde {path}: {e}")
-                    continue
+        if not frames:
+            frames = [self._create_character_placeholder(character_key)]
+            self.logger.warning(f"Usando placeholder para {character_key}")
 
-            # Si no se encontraron frames, crear placeholder
-            if not frames:
-                frames = [self._create_character_placeholder(character_key)]
-                self.logger.warning(f"Usando placeholder para {character_key}")
+        return frames
 
-            return frames
+    def _get_possible_paths(self, character_key: str) -> list:
+        """
+        Genera las rutas posibles para buscar frames de un personaje.
 
-        except Exception as e:
-            self.logger.error(f"Error cargando frames para {character_key}: {e}")
-            return [self._create_character_placeholder(character_key)]
+        Args:
+            character_key: Clave del personaje
+
+        Returns:
+            list: Lista de rutas posibles
+        """
+        base_paths = ["characters", "characters/used"]
+        subfolders = ["idle", "Idle"]
+        return [
+            f"{base}/{character_key}/{sub}" for base in base_paths for sub in subfolders
+        ]
 
     def _create_character_placeholder(self, character_key: str) -> pygame.Surface:
         """
@@ -103,50 +114,62 @@ class CharacterAnimations:
             character_key: Clave del personaje
 
         Returns:
-            Superficie placeholder
+            pygame.Surface: Superficie placeholder
+
+        Ejemplo:
+            >>> placeholder = animaciones._create_character_placeholder("guerrero")
+        """
+        placeholder = pygame.Surface((120, 120))
+        char_data = self._get_character_data(character_key)
+
+        color = tuple(char_data.get("color_placeholder", [255, 0, 0]))
+        symbol = char_data.get("símbolo", "?")
+
+        placeholder.fill(color)
+        self._add_placeholder_border(placeholder)
+        self._add_placeholder_symbol(placeholder, symbol)
+
+        return placeholder
+
+    def _get_character_data(self, character_key: str) -> dict:
+        """
+        Obtiene los datos del personaje desde CharacterData.
+
+        Args:
+            character_key: Clave del personaje
+
+        Returns:
+            dict: Datos del personaje
+        """
+        from .character_data import CharacterData
+
+        return CharacterData.get_character_data(character_key) or {}
+
+    def _add_placeholder_border(self, surface: pygame.Surface):
+        """
+        Añade un borde al placeholder.
+
+        Args:
+            surface: Superficie del placeholder
+        """
+        pygame.draw.rect(surface, (255, 255, 255), (0, 0, 120, 120), 3)
+
+    def _add_placeholder_symbol(self, surface: pygame.Surface, symbol: str):
+        """
+        Añade un símbolo al placeholder.
+
+        Args:
+            surface: Superficie del placeholder
+            symbol: Símbolo a renderizar
         """
         try:
-            # Crear sprite de placeholder
-            placeholder = pygame.Surface((120, 120))
-
-            # Obtener datos del personaje desde CharacterData
-            from .character_data import CharacterData
-
-            char_data = CharacterData.get_character_data(character_key)
-
-            if char_data:
-                # Usar color y símbolo de la configuración
-                color_data = char_data.get("color_placeholder", [255, 0, 0])
-                color = tuple(color_data)
-                symbol = char_data.get("símbolo", "?")
-            else:
-                # Fallback si no se encuentra en configuración
-                color = (255, 0, 0)
-                symbol = "?"
-
-            placeholder.fill(color)
-
-            # Añadir borde
-            pygame.draw.rect(placeholder, (255, 255, 255), (0, 0, 120, 120), 3)
-
-            # Añadir símbolo
-            try:
-                font = pygame.font.Font(None, 48)
-                text = font.render(symbol, True, (255, 255, 255))
-                text_rect = text.get_rect(center=(60, 60))
-                placeholder.blit(text, text_rect)
-            except Exception as e:
-                self.logger.warning(f"Error al renderizar símbolo: {e}")
-                pass
-
-            return placeholder
-
+            font = pygame.font.Font(None, 48)
+            text = font.render(symbol, True, (255, 255, 255))
+            text_rect = text.get_rect(center=(60, 60))
+            surface.blit(text, text_rect)
         except Exception as e:
-            self.logger.error(f"Error creando placeholder para {character_key}: {e}")
-            # Crear placeholder mínimo
-            placeholder = pygame.Surface((120, 120))
-            placeholder.fill((255, 0, 0))
-            return placeholder
+            self.logger.warning(f"Error al renderizar símbolo: {e}")
+            pass
 
     def update(self, delta_time: float):
         """
@@ -241,12 +264,12 @@ class CharacterAnimations:
         self.current_frame = 0
         self.frame_timer = 0
 
-    def get_animation_info(self) -> Dict[str, any]:
+    def get_animation_info(self) -> Dict[str, object]:
         """
         Obtiene información sobre las animaciones.
 
         Returns:
-            Diccionario con información de animaciones
+            Dict[str, object]: Diccionario con información de animaciones
         """
         return {
             "current_frame": self.current_frame,

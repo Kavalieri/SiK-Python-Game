@@ -7,10 +7,12 @@ Fecha: 2024
 Descripción: Sistema de enemigos con animaciones y volteo.
 """
 
-import pygame
 import math
 import random
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
+
+import pygame
+
 from ..utils.animation_manager import AnimationPlayer
 
 
@@ -289,8 +291,12 @@ class EnemyManager:
             self.spawn_timer = 0
 
     def _spawn_enemy(self):
-        """Genera un enemigo en una posición aleatoria."""
-        # Posición aleatoria en los bordes del mundo (5000x5000)
+        """
+        Genera un enemigo en una posición aleatoria en los bordes del mundo.
+
+        Ejemplo:
+            >>> gestor_enemigos._spawn_enemy()
+        """
         world_width = 5000
         world_height = 5000
 
@@ -309,7 +315,6 @@ class EnemyManager:
             x = world_width + 50
             y = random.randint(0, world_height)
 
-        # Tipo aleatorio de enemigo
         enemy_type = random.choice(["zombiemale", "zombieguirl"])
 
         enemy = Enemy(x, y, enemy_type, self.animation_manager)
@@ -337,7 +342,20 @@ class EnemyManager:
     def get_enemies_in_range(
         self, pos: Tuple[float, float], range: float
     ) -> List[Enemy]:
-        """Obtiene enemigos en un rango específico."""
+        """
+        Obtiene enemigos en un rango específico.
+
+        Args:
+            pos: Posición central del rango (x, y).
+            range: Distancia máxima para incluir enemigos.
+
+        Returns:
+            List[Enemy]: Lista de enemigos dentro del rango especificado.
+
+        Ejemplo:
+            >>> enemigos_cercanos = gestor_enemigos.get_enemies_in_range((100, 200), 50)
+            >>> print(len(enemigos_cercanos))
+        """
         enemies_in_range = []
         for enemy in self.enemies:
             distance = math.sqrt((pos[0] - enemy.x) ** 2 + (pos[1] - enemy.y) ** 2)

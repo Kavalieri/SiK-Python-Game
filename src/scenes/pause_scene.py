@@ -8,10 +8,11 @@ Descripción: Escena de pausa del juego.
 """
 
 import pygame
+import pygame.constants as pg_constants
 
 from ..core.scene_manager import Scene
-from ..utils.config_manager import ConfigManager
 from ..ui.menu_manager import MenuManager
+from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
 
 
@@ -43,32 +44,50 @@ class PauseScene(Scene):
         self.menu_manager.show_menu("pause")
 
         # Configurar callbacks
+        self._configurar_callbacks()
+
+        self.logger.info("Escena de pausa inicializada")
+
+    def _configurar_callbacks(self):
+        """
+        Configura los callbacks del menú de pausa.
+        """
         self.menu_manager.add_callback("resume_game", self._on_resume_game)
         self.menu_manager.add_callback("save_game", self._on_save_game)
         self.menu_manager.add_callback("main_menu", self._on_main_menu)
         self.menu_manager.add_callback("exit", self._on_exit)
 
-        self.logger.info("Escena de pausa inicializada")
-
     def handle_event(self, event: pygame.event.Event):
-        """Procesa eventos de Pygame."""
-        self.logger.info(f"[PauseScene] Evento recibido: {event.type} - {event}")
-        if event.type == pygame.KEYDOWN:
-            self.logger.info(f"[PauseScene] Tecla pulsada: {event.key}")
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            self.logger.info(f"[PauseScene] Click ratón: {event.button} en {event.pos}")
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        """
+        Procesa eventos de Pygame.
+
+        Args:
+            event: Evento de Pygame a procesar.
+        """
+        self.logger.info("[PauseScene] Evento recibido: %s - %s", event.type, event)
+        if event.type == pg_constants.KEYDOWN:
+            self.logger.info("[PauseScene] Tecla pulsada: %s", event.key)
+        elif event.type == pg_constants.MOUSEBUTTONDOWN:
+            self.logger.info(
+                "[PauseScene] Click ratón: %s en %s", event.button, event.pos
+            )
+        if event.type == pg_constants.KEYDOWN and event.key == pg_constants.K_ESCAPE:
             # Reanudar juego con ESC
             self._on_resume_game()
         else:
             self.menu_manager.update([event])
 
     def update(self):
-        """Actualiza la lógica de la escena."""
-        pass
+        """
+        Actualiza la lógica de la escena de pausa.
+        """
+        # Método vacío, pero necesario para la estructura.
+        return
 
     def render(self):
-        """Renderiza la escena."""
+        """
+        Renderiza la escena de pausa.
+        """
         # Fondo semi-transparente
         overlay = pygame.Surface(self.screen.get_size())
         overlay.set_alpha(128)
@@ -98,9 +117,11 @@ class PauseScene(Scene):
         self.menu_manager.hide_current_menu()
 
     def _on_exit(self):
-        """Callback para salir."""
+        """
+        Callback para salir.
+        """
         self.logger.info("Saliendo del juego")
-        # Aquí se cerraría el juego
+        pygame.display.quit()
         pygame.quit()
         import sys
 

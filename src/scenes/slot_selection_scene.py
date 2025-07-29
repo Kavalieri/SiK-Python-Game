@@ -8,9 +8,11 @@ Descripción: Escena para seleccionar slots de guardado con gestión de slots ac
 """
 
 import pygame
+import pygame.constants as pg_constants
+
 from ..core.scene_manager import Scene
-from ..utils.config_manager import ConfigManager
 from ..ui.menu_manager import MenuManager
+from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
 
 
@@ -40,24 +42,34 @@ class SlotSelectionScene(Scene):
         )
 
     def handle_event(self, event: pygame.event.Event):
+        """
+        Maneja eventos de la escena de selección de slots.
+
+        Args:
+            event: Evento de Pygame a procesar.
+        """
         self.logger.debug(
-            f"[SlotSelectionScene] Evento recibido: {event.type} - {event}"
+            "[SlotSelectionScene] Evento recibido: %s - %s", event.type, event
         )
-        if event.type == pygame.KEYDOWN:
-            self.logger.info(f"[SlotSelectionScene] Tecla pulsada: {event.key}")
-            if event.key == pygame.K_ESCAPE:
+        if event.type == pg_constants.KEYDOWN:
+            self.logger.info("[SlotSelectionScene] Tecla pulsada: %s", event.key)
+            if event.key == pg_constants.K_ESCAPE:
                 self.logger.info(
                     "[SlotSelectionScene] ESC presionado - volviendo al menú principal"
                 )
                 self.game_state.scene_manager.change_scene("main_menu")
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pg_constants.MOUSEBUTTONDOWN:
             self.logger.info(
-                f"[SlotSelectionScene] Click ratón: {event.button} en {event.pos}"
+                "[SlotSelectionScene] Click ratón: %s en %s", event.button, event.pos
             )
         self.menu_manager.update([event])
 
     def update(self):
-        pass
+        """
+        Actualiza la lógica de la escena de selección de slots.
+        """
+        # Método vacío, pero necesario para la estructura.
+        return
 
     def render(self):
         self.screen.fill((20, 20, 60))
@@ -65,6 +77,9 @@ class SlotSelectionScene(Scene):
         self._render_additional_info()
 
     def _render_additional_info(self):
+        """
+        Renderiza información adicional en la escena.
+        """
         font = pygame.font.Font(None, 24)
         instructions = [
             "Selecciona un slot para continuar",

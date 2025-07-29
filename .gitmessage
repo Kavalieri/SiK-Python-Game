@@ -1,0 +1,40 @@
+# Template de Commits - SiK Python Game
+
+# Usar formato Conventional Commits en ESPAÑOL
+# Formato: <tipo>(<ámbito>): <descripción>
+#
+# <tipo> debe ser uno de:
+#   feat     - Nueva funcionalidad
+#   fix      - Corrección de bug
+#   docs     - Cambios en documentación
+#   style    - Cambios de formato (no afectan lógica)
+#   refactor - Refactorización de código
+#   test     - Añadir o modificar tests
+#   chore    - Tareas de mantenimiento
+#   perf     - Mejoras de rendimiento
+#   ci       - Cambios en CI/CD
+#   build    - Cambios en sistema de build
+#
+# <ámbito> (opcional):
+#   core, entities, scenes, ui, utils, config, assets, docs
+#
+# <descripción>:
+#   - Usar español
+#   - Máximo 50 caracteres
+#   - Imperativo ("añade" no "añadido")
+#   - Sin punto final
+#
+# Ejemplos:
+# feat(entities): añade sistema de enemigos zombie
+# fix(ui): corrige error en menú principal
+# refactor(core): divide asset_manager.py según límite 150 líneas
+# docs: actualiza FUNCIONES_DOCUMENTADAS.md con nuevas APIs
+#
+# Cuerpo del commit (opcional):
+# - Explicar QUÉ y POR QUÉ, no CÓMO
+# - Usar líneas de máximo 72 caracteres
+# - Separar del subject con línea en blanco
+#
+# Footer (opcional):
+# - Referencias a issues: Closes #123
+# - Breaking changes: BREAKING CHANGE: descripción

@@ -40,8 +40,14 @@ class AssetManager:
             try:
                 with open(config_path, "r", encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:
-                self.logger.error(f"Error cargando config/animations.json: {e}")
+            except json.JSONDecodeError as e:
+                self.logger.error(
+                    "Error de decodificación JSON en config/animations.json: %s", e
+                )
+            except OSError as e:
+                self.logger.error(
+                    "Error de E/S al cargar config/animations.json: %s", e
+                )
         # Fallback: estructura vacía
         self.logger.warning(
             "No se pudo cargar config/animations.json, usando configuración vacía."
@@ -99,13 +105,13 @@ class AssetManager:
         try:
             if os.path.exists(path):
                 image = pygame.image.load(path).convert_alpha()
-                self.logger.debug(f"Imagen cargada directamente: {path}")
+                self.logger.debug("Imagen cargada directamente: %s", path)
                 return image
             else:
-                self.logger.warning(f"Imagen no encontrada: {path}")
+                self.logger.warning("Imagen no encontrada: %s", path)
                 return self._create_placeholder(64, 64, 1.0)
-        except Exception as e:
-            self.logger.error(f"Error cargando imagen {path}: {e}")
+        except OSError as e:
+            self.logger.error("Error cargando imagen %s: %s", path, e)
             return self._create_placeholder(64, 64, 1.0)
 
     def get_character_sprite(
@@ -126,7 +132,7 @@ class AssetManager:
         # Verificar si el personaje existe en la configuración
         if character_name not in self.animation_config["characters"]:
             self.logger.warning(
-                f"Personaje no encontrado en configuración: {character_name}"
+                "Personaje no encontrado en configuración: %s", character_name
             )
             return self._create_placeholder(64, 64, scale)
 
@@ -141,7 +147,10 @@ class AssetManager:
         ]
         if animation not in available_animations:
             self.logger.warning(
-                f"Animación '{animation}' no disponible para {character_name}. Disponibles: {available_animations}"
+                "Animación '%s' no disponible para %s. Disponibles: %s",
+                animation,
+                character_name,
+                available_animations,
             )
             return self._create_placeholder(64, 64, scale)
 
@@ -169,7 +178,10 @@ class AssetManager:
                 return sprite
 
         self.logger.warning(
-            f"Sprite no encontrado: {character_name}/{animation_capitalized}_{frame}_, creando placeholder"
+            "Sprite no encontrado: %s/%s_%d, creando placeholder",
+            character_name,
+            animation_capitalized,
+            frame,
         )
         return self._create_placeholder(64, 64, scale)
 
@@ -429,4 +441,103 @@ class AssetManager:
 
     def create_placeholder(self, width: int, height: int) -> pygame.Surface:
         """Crear un placeholder con transparencia."""
-        return pygame.Surface((width, height), pygame.SRCALPHA)
+        try:
+            placeholder = pygame.Surface((width, height), flags=pygame.SRCALPHA)
+            placeholder.fill((0, 0, 0, 0))  # Transparente
+            return placeholder
+        except AttributeError:
+            self.logger.error("Error al crear placeholder: SRCALPHA no soportado.")
+            return pygame.Surface((width, height))
+
+    def cargar_imagen(self, path: str) -> Optional[pygame.Surface]:
+        """Carga una imagen desde el disco o la caché."""
+        try:
+            if path in self.cache:
+                self.logger.debug("Imagen cargada desde caché: %s", path)
+                return self.cache[path]
+
+            full_path = self.base_path / path
+            if not full_path.exists():
+                self.logger.warning("Imagen no encontrada: %s", path)
+                return None
+
+            image = pygame.image.load(full_path)
+            self.cache[path] = image
+            self.logger.debug("Imagen cargada directamente: %s", path)
+            return image
+        except pygame.error as e:
+            self.logger.error("Error cargando imagen %s: %s", path, e)
+            return None
+
+    def cargar_animacion(
+        self, character_name: str, animation: str
+    ) -> Optional[List[pygame.Surface]]:
+        """Carga una animación completa para un personaje."""
+        try:
+            frames = []
+            for frame in range(1, 10):  # Ejemplo: 10 frames
+                frame_path = f"{character_name}/{animation}_{frame}.png"
+                frame_surface = self.cargar_imagen(frame_path)
+                if frame_surface:
+                    frames.append(frame_surface)
+                else:
+                    self.logger.warning(
+                        "Frame no encontrado: %s para animación %s",
+                        frame_path,
+                        animation,
+                    )
+            if not frames:
+                self.logger.error(
+                    "No se pudieron cargar frames para %s/%s", character_name, animation
+                )
+            return frames
+        except OSError as e:
+            self.logger.error(
+                "Error de E/S al cargar animación %s/%s: %s",
+                character_name,
+                animation,
+                e,
+            )
+            return None
+
+    def cargar_botones_ui(
+        self, button_name: str, suffix: str = ""
+    ) -> Optional[pygame.Surface]:
+        """Carga un botón de la interfaz de usuario."""
+        try:
+            button_path = f"ui/{button_name}{suffix}.png"
+            button_surface = self.cargar_imagen(button_path)
+            if not button_surface:
+                self.logger.warning("Botón UI no encontrado: %s%s", button_name, suffix)
+            return button_surface
+        except OSError as e:
+            self.logger.error(
+                "Error de E/S al cargar botón UI %s%s: %s", button_name, suffix, e
+            )
+            return None
+
+    def cargar_frames(
+        self, character_name: str, animation: str
+    ) -> List[pygame.Surface]:
+        """Carga los frames de una animación específica."""
+        frames = []
+        for frame in range(1, 11):  # Ejemplo: 10 frames
+            frame_path = f"{character_name}/{animation}_{frame}.png"
+            try:
+                frame_surface = self.cargar_imagen(frame_path)
+                if frame_surface:
+                    frames.append(frame_surface)
+                else:
+                    self.logger.warning(
+                        "Frame no encontrado: %s para animación %s",
+                        frame_path,
+                        animation,
+                    )
+            except OSError as e:
+                self.logger.error(
+                    "Error de E/S al cargar frame %s para animación %s: %s",
+                    frame_path,
+                    animation,
+                    e,
+                )
+        return frames

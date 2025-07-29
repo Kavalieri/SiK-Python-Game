@@ -7,39 +7,56 @@ Fecha: 2024-12-19
 Descripción: Núcleo de la escena principal del juego, delega en submódulos especializados.
 """
 
-import pygame
-from typing import List
+import os
 import random
+from typing import List
+
+import pygame
 
 from ..core.scene_manager import Scene
-from ..utils.config_manager import ConfigManager
-from ..utils.asset_manager import AssetManager
-from ..utils.animation_manager import IntelligentAnimationManager
-from ..entities.player import Player
 from ..entities.enemy import EnemyManager
-from ..ui.hud import HUD
+from ..entities.player import Player
 from ..entities.projectile import Projectile
+from ..ui.hud import HUD
+from ..utils.animation_manager import IntelligentAnimationManager
+from ..utils.asset_manager import AssetManager
 from ..utils.camera import Camera
-from ..utils.world_generator import WorldGenerator
+from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
-
-from .game_scene_waves import GameSceneWaves
-from .game_scene_powerups import GameScenePowerups
+from ..utils.world_generator import WorldGenerator
 from .game_scene_collisions import GameSceneCollisions
+from .game_scene_powerups import GameScenePowerups
 from .game_scene_render import GameSceneRender
+from .game_scene_waves import GameSceneWaves
 
 
 class GameScene(Scene):
     """
     Núcleo de la escena principal del juego. Delegación a submódulos.
+
+    Args:
+        screen (pygame.Surface): Superficie de la pantalla del juego.
+        config (ConfigManager): Configuración del juego.
+        game_state: Estado actual del juego.
+        save_manager: Gestor de guardado del juego.
     """
 
     def __init__(
         self, screen: pygame.Surface, config: ConfigManager, game_state, save_manager
     ):
+        """
+        Inicializa la escena principal del juego.
+
+        Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+            config (ConfigManager): Configuración del juego.
+            game_state: Estado actual del juego.
+            save_manager: Gestor de guardado del juego.
+        """
         super().__init__(screen, config)
         self.game_state = game_state
         self.save_manager = save_manager
+        self.scene_manager = None  # Definición explícita del atributo
         self.logger = get_logger("SiK_Game")
         self.logger.info("[GameScene] Escena de nivel inicializada (núcleo)")
         # Inicialización de entidades y managers
@@ -81,12 +98,21 @@ class GameScene(Scene):
         )
 
     def handle_event(self, event: pygame.event.Event):
+        """
+        Maneja eventos de entrada del usuario.
+
+        Args:
+            event (pygame.event.Event): Evento de Pygame.
+        """
         self.logger.info(f"[GameScene] Evento recibido: {event.type} - {event}")
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
                 self.logger.info("Juego pausado")
                 if hasattr(self, "scene_manager") and self.scene_manager:
-                    self.scene_manager.change_scene("pause")
+                    try:
+                        self.scene_manager.change_scene("pause")
+                    except AttributeError as e:
+                        self.logger.error(f"Error al cambiar de escena: {e}")
         if self.player:
             keys = pygame.key.get_pressed()
             mouse_pos = pygame.mouse.get_pos()
@@ -103,10 +129,17 @@ class GameScene(Scene):
                         self.projectiles.append(obj)
 
     def update(self):
+        """
+        Actualiza el estado de la escena, incluyendo entidades y submódulos.
+        """
         current_time = pygame.time.get_ticks()
         delta_time = 1.0 / 60.0
-        if self.background:
+        if self.background and hasattr(self.background, "update"):
             self.background.update(delta_time)
+        elif self.background is None:
+            self.logger.warning(
+                "No se ha inicializado un fondo válido para actualizar."
+            )
         if self.player:
             self.camera.follow_target(self.player.x, self.player.y)
         self.camera.update(delta_time)
@@ -133,9 +166,15 @@ class GameScene(Scene):
             self.logger.info("Game Over")
 
     def render(self):
+        """
+        Renderiza la escena principal utilizando el submódulo de renderizado.
+        """
         self.renderer.render_scene()
 
     def _load_background(self):
+        """
+        Carga el fondo de la escena. Si ocurre un error, se registra y se inicializa como None.
+        """
         try:
             from ..utils.simple_desert_background import SimpleDesertBackground
 
@@ -146,18 +185,32 @@ class GameScene(Scene):
             self.logger.info("Fondo simple de desierto cargado correctamente")
         except Exception as e:
             self.logger.error(f"Error al cargar fondo simple: {e}")
-            self.background = pygame.Surface(
-                (self.screen.get_width(), self.screen.get_height())
-            )
-            self.background.fill((135, 206, 235))
+            # Asegurarse de que self.background sea un objeto válido
+            self.background = None
 
     def _initialize_player(self):
+        """
+        Inicializa el jugador con el personaje seleccionado. Si no se encuentra el sprite, lanza un error.
+        """
         try:
             character_key = (
                 getattr(self.game_state, "selected_character", None) or "guerrero"
             )
             player_x = 2500
             player_y = 2500
+
+            # Ruta específica para los sprites animados
+            sprite_path = f"assets/characters/used/{character_key}/idle"
+            if not os.path.exists(sprite_path):
+                self.logger.warning(f"Ruta de sprites no encontrada: {sprite_path}")
+                sprite_path = f"assets/characters/used/{character_key}/Idle"
+
+            if not os.path.exists(sprite_path):
+                self.logger.error(
+                    f"Sprites no encontrados para el personaje: {character_key}"
+                )
+                raise FileNotFoundError(f"Sprites no encontrados en {sprite_path}")
+
             self.player = Player(
                 player_x, player_y, character_key, self.config, self.animation_manager
             )
@@ -166,6 +219,9 @@ class GameScene(Scene):
             self.logger.error(f"Error al inicializar jugador: {e}")
 
     def _generate_world(self):
+        """
+        Genera el mundo del juego, incluyendo elementos como oasis, formaciones rocosas y ruinas.
+        """
         try:
             world_width = self.screen.get_width() * 4
             world_height = self.screen.get_height() * 4
