@@ -88,6 +88,27 @@ class Powerup(Entity):
 			"duration": 0.0,  # Efecto instantáneo
 			"value": 50.0,  # Cantidad de vida restaurada
 			"description": "Restaura vida"
+		},
+		PowerupType.SPREAD: {
+			"name": "Disparo Disperso",
+			"color": (128, 0, 128),  # Púrpura
+			"duration": 15.0,
+			"value": 3,  # Número de proyectiles en abanico
+			"description": "Dispara múltiples proyectiles en abanico"
+		},
+		PowerupType.EXPLOSIVE: {
+			"name": "Explosivo",
+			"color": (255, 69, 0),  # Rojo-naranja
+			"duration": 12.0,
+			"value": 2.0,  # Radio de explosión
+			"description": "Los proyectiles explotan al impactar"
+		},
+		PowerupType.SHRAPNEL: {
+			"name": "Metralla",
+			"color": (105, 105, 105),  # Gris
+			"duration": 10.0,
+			"value": 5,  # Número de fragmentos
+			"description": "Los proyectiles se dividen en fragmentos"
 		}
 	}
 	
@@ -172,7 +193,10 @@ class Powerup(Entity):
 			PowerupType.SHIELD: "🛡",
 			PowerupType.RAPID_FIRE: "🔥",
 			PowerupType.DOUBLE_SHOT: "⚡⚡",
-			PowerupType.HEALTH: "❤"
+			PowerupType.HEALTH: "❤",
+			PowerupType.SPREAD: "🎯",
+			PowerupType.EXPLOSIVE: "💥",
+			PowerupType.SHRAPNEL: "🔫"
 		}
 		return symbols.get(self.powerup_type, "?")
 	

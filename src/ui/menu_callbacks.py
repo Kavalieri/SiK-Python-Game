@@ -11,6 +11,7 @@ import logging
 from typing import Any, Optional
 from ..core.game_state import GameState
 from ..utils.save_manager import SaveManager
+from ..utils.logger import get_logger
 
 
 class MenuCallbacks:
@@ -28,23 +29,17 @@ class MenuCallbacks:
         """
         self.game_state = game_state
         self.save_manager = save_manager
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger('SiK_Game')
     
     # Callbacks de navegación principal
-    def on_welcome_start(self):
-        """Callback para iniciar desde la pantalla de bienvenida."""
-        self.logger.info("🎯 CALLBACK EJECUTADO: on_welcome_start")
-        self.logger.info("Iniciando desde pantalla de bienvenida")
-        self.game_state.set_scene("main_menu")
-    
     def on_new_game(self):
         """Callback para iniciar un nuevo juego."""
-        self.logger.info("Iniciando nuevo juego")
+        self.logger.info("[MenuCallbacks] Acción: Nuevo Juego (usuario)")
         self.game_state.set_scene("character_select")
     
     def on_continue_game(self):
         """Callback para continuar el último juego guardado."""
-        self.logger.info("Continuando último juego")
+        self.logger.info("[MenuCallbacks] Acción: Continuar Juego (usuario)")
         try:
             if self.save_manager.has_save_file():
                 self.save_manager.load_latest_save()
@@ -56,18 +51,24 @@ class MenuCallbacks:
     
     def on_load_game(self):
         """Callback para cargar un juego específico."""
-        self.logger.info("Abriendo menú de carga")
+        self.logger.info("[MenuCallbacks] Acción: Cargar Juego (usuario)")
         self.game_state.set_scene("save_menu")
     
     def on_options(self):
-        """Callback para abrir opciones."""
-        self.logger.info("Abriendo opciones")
-        self.game_state.set_scene("options")
+        self.logger.info("[MenuCallbacks] Acción: Opciones (usuario)")
+        self.logger.warning("[MenuCallbacks] Acción: Opciones - NO IMPLEMENTADO")
+        # No cambiar de escena
     
     def on_exit(self):
         """Callback para salir del juego."""
+        self.logger.info("[MenuCallbacks] Acción: Salir (usuario)")
         self.logger.info("Saliendo del juego")
+        # Marcar el juego para salir
         self.game_state.quit_game()
+        # También podemos cerrar directamente si tenemos acceso al engine
+        if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
+            if hasattr(self.game_state.scene_manager, 'game_engine'):
+                self.game_state.scene_manager.game_engine.running = False
     
     # Callbacks de menú de pausa
     def on_resume_game(self):
@@ -76,13 +77,8 @@ class MenuCallbacks:
         self.game_state.set_scene("game")
     
     def on_save_game(self):
-        """Callback para guardar el juego."""
-        self.logger.info("Guardando juego")
-        try:
-            self.save_manager.save_game()
-            self.logger.info("Juego guardado exitosamente")
-        except Exception as e:
-            self.logger.error(f"Error guardando juego: {e}")
+        self.logger.warning("[MenuCallbacks] Acción: Guardar Juego - NO IMPLEMENTADO")
+        # No cambiar de escena
     
     def on_main_menu(self):
         """Callback para volver al menú principal."""
@@ -136,15 +132,15 @@ class MenuCallbacks:
         self.game_state.set_scene("game")
     
     # Callbacks de selección de personaje
-    def on_select_character(self, character: str):
+    def on_select_character(self, character_id):
         """Callback para seleccionar personaje."""
-        self.logger.info(f"Personaje seleccionado: {character}")
-        self.game_state.selected_character = character
+        self.logger.info(f"[MenuCallbacks] Acción: Selección de personaje: {character_id}")
+        self.game_state.selected_character = character_id
         self.game_state.set_scene("game")
     
     def on_back_to_main(self):
         """Callback para volver al menú principal desde selección de personaje."""
-        self.logger.info("Volviendo al menú principal desde selección de personaje")
+        self.logger.info("[MenuCallbacks] Acción: Volver al menú principal (usuario)")
         self.game_state.set_scene("main_menu")
     
     def on_back_to_previous(self):
@@ -229,30 +225,85 @@ class MenuCallbacks:
         """Callback para seleccionar archivo de guardado."""
         self.logger.info(f"Seleccionando archivo de guardado: {file_number}")
         try:
-            self.save_manager.load_save_file(file_number)
+            info = self.save_manager.get_save_files_info()[file_number-1]
+            if not info['exists']:
+                self._show_save_menu_feedback("Slot vacío. No se puede continuar.")
+                self.logger.warning("Slot vacío. No se puede continuar.")
+                self._refresh_save_menu()
+                return
+            self.save_manager.load_save(file_number)
             self.game_state.set_scene("game")
             self.logger.info(f"Archivo de guardado {file_number} cargado")
+            self._show_save_menu_feedback("")
+            self._refresh_save_menu()
         except Exception as e:
+            self._show_save_menu_feedback(f"Error cargando slot: {e}")
             self.logger.error(f"Error cargando archivo de guardado {file_number}: {e}")
+            self._refresh_save_menu()
     
     def on_new_save(self):
         """Callback para crear nuevo archivo de guardado."""
         self.logger.info("Creando nuevo archivo de guardado")
         try:
-            self.save_manager.create_new_save()
-            self.logger.info("Nuevo archivo de guardado creado")
+            # Buscar primer slot vacío
+            for i, info in enumerate(self.save_manager.get_save_files_info(), 1):
+                if not info['exists']:
+                    self.save_manager.create_new_save(i)
+                    self._show_save_menu_feedback(f"Nuevo guardado creado en slot {i}")
+                    self.logger.info(f"Nuevo archivo de guardado creado en slot {i}")
+                    self._refresh_save_menu()
+                    return
+            self._show_save_menu_feedback("No hay slots vacíos disponibles.")
+            self.logger.warning("No hay slots vacíos disponibles.")
+            self._refresh_save_menu()
         except Exception as e:
+            self._show_save_menu_feedback(f"Error creando guardado: {e}")
             self.logger.error(f"Error creando nuevo archivo de guardado: {e}")
+            self._refresh_save_menu()
     
     def on_delete_save(self):
         """Callback para eliminar archivo de guardado."""
         self.logger.info("Eliminando archivo de guardado")
         try:
-            # TODO: Implementar selección de archivo a eliminar
-            self.save_manager.delete_save_file(1)  # Por ahora elimina el archivo 1
-            self.logger.info("Archivo de guardado eliminado")
+            # Eliminar el slot seleccionado (por simplicidad, eliminar el primero ocupado)
+            for i, info in enumerate(self.save_manager.get_save_files_info(), 1):
+                if info['exists']:
+                    self.save_manager.delete_save(i)
+                    self._show_save_menu_feedback(f"Guardado eliminado en slot {i}")
+                    self.logger.info(f"Guardado eliminado en slot {i}")
+                    self._refresh_save_menu()
+                    return
+            self._show_save_menu_feedback("No hay guardados para eliminar.")
+            self.logger.warning("No hay guardados para eliminar.")
+            self._refresh_save_menu()
         except Exception as e:
+            self._show_save_menu_feedback(f"Error eliminando guardado: {e}")
             self.logger.error(f"Error eliminando archivo de guardado: {e}")
+            self._refresh_save_menu()
+    
+    def _show_save_menu_feedback(self, msg: str):
+        # Busca el menú de guardado y actualiza un label de feedback
+        from .menu_manager import MenuManager
+        menu_manager = None
+        for obj in globals().values():
+            if isinstance(obj, MenuManager):
+                menu_manager = obj
+                break
+        if menu_manager and 'save' in menu_manager.menus:
+            menu = menu_manager.menus['save']
+            if hasattr(menu, '_feedback_label'):
+                menu._feedback_label.set_title(msg)
+    
+    def _refresh_save_menu(self):
+        from .menu_manager import MenuManager
+        menu_manager = None
+        for obj in globals().values():
+            if isinstance(obj, MenuManager):
+                menu_manager = obj
+                break
+        if menu_manager:
+            menu_manager.menus['save'] = menu_manager.factory.create_save_menu()
+            menu_manager.show_menu('save')
     
     def get_all_callbacks(self) -> dict:
         """
@@ -263,7 +314,6 @@ class MenuCallbacks:
         """
         return {
             # Navegación principal
-            'welcome_start': self.on_welcome_start,
             'new_game': self.on_new_game,
             'continue_game': self.on_continue_game,
             'load_game': self.on_load_game,

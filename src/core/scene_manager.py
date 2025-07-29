@@ -13,6 +13,7 @@ from typing import Optional, Dict
 from abc import ABC, abstractmethod
 
 from ..utils.config_manager import ConfigManager
+from ..utils.logger import get_logger
 
 
 class Scene(ABC):
@@ -71,7 +72,8 @@ class SceneManager:
 		"""
 		self.screen = screen
 		self.config = config
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[SceneManager] Gestor de escenas inicializado')
 		
 		self.scenes: Dict[str, Scene] = {}
 		self.current_scene: Optional[Scene] = None
@@ -101,6 +103,7 @@ class SceneManager:
 			self.logger.error(f"Escena no encontrada: {scene_name}")
 			return
 		
+		self.logger.info(f'[SceneManager] Cambio de escena: {self.current_scene} -> {scene_name}')
 		# Cambio inmediato de escena
 		if self.current_scene:
 			self.current_scene.exit()

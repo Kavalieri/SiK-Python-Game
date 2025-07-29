@@ -18,6 +18,7 @@ from ..utils.config_manager import ConfigManager
 from ..utils.save_manager import SaveManager
 from ..ui.menu_manager import MenuManager
 from ..scenes.character_select_scene import CharacterSelectScene
+from ..utils.logger import get_logger
 
 
 class GameEngine:
@@ -32,7 +33,8 @@ class GameEngine:
 		Args:
 			config: Gestor de configuración del juego
 		"""
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[GameEngine] Motor principal inicializado')
 		self.config = config
 		self.running = False
 		self.clock = None
@@ -100,7 +102,6 @@ class GameEngine:
 	def _setup_scenes(self):
 		"""Configura las escenas iniciales del juego."""
 		try:
-			from ..scenes.welcome_scene import WelcomeScene
 			from ..scenes.main_menu_scene import MainMenuScene
 			from ..scenes.game_scene import GameScene
 			from ..scenes.pause_scene import PauseScene
@@ -110,7 +111,7 @@ class GameEngine:
 			# Crear todas las escenas
 			loading_scene = LoadingScene(self.screen, self.config, self.game_state, self.save_manager, 
 									   self._on_loading_complete)
-			welcome_scene = WelcomeScene(self.screen, self.config, self.game_state, self.save_manager)
+			# welcome_scene = WelcomeScene(self.screen, self.config, self.game_state, self.save_manager)
 			main_menu_scene = MainMenuScene(self.screen, self.config, self.game_state, self.save_manager)
 			game_scene = GameScene(self.screen, self.config, self.game_state, self.save_manager)
 			pause_scene = PauseScene(self.screen, self.config, self.game_state, self.save_manager)
@@ -118,7 +119,7 @@ class GameEngine:
 			
 			# Añadir escenas al gestor
 			self.scene_manager.add_scene('loading', loading_scene)
-			self.scene_manager.add_scene('welcome', welcome_scene)
+			# self.scene_manager.add_scene('welcome', welcome_scene)
 			self.scene_manager.add_scene('main_menu', main_menu_scene)
 			self.scene_manager.add_scene('game', game_scene)
 			self.scene_manager.add_scene('pause', pause_scene)
@@ -127,8 +128,8 @@ class GameEngine:
 			# Configurar callbacks para transiciones entre escenas
 			self._setup_scene_transitions()
 			
-			# Establecer escena de bienvenida como inicial (temporalmente)
-			self.scene_manager.change_scene('welcome')
+			# Establecer escena de carga/bienvenida como inicial
+			self.scene_manager.change_scene('loading')
 			
 			self.logger.info("Escenas configuradas correctamente")
 			
@@ -140,16 +141,16 @@ class GameEngine:
 		"""Configura las transiciones entre escenas."""
 		try:
 			# Callbacks para la escena de bienvenida
-			welcome_scene = self.scene_manager.scenes['welcome']
-			welcome_scene.scene_manager = self.scene_manager
-			welcome_scene.menu_manager.callbacks.on_welcome_start = lambda: self.scene_manager.change_scene('main_menu')
+			# welcome_scene = self.scene_manager.scenes['welcome']
+			# welcome_scene.scene_manager = self.scene_manager
+			# welcome_scene.menu_manager.callbacks.on_welcome_start = lambda: self.scene_manager.change_scene('main_menu')
 			
 			# Callbacks para la escena del menú principal
 			main_menu_scene = self.scene_manager.scenes['main_menu']
 			main_menu_scene.menu_manager.callbacks.on_new_game = lambda: self.scene_manager.change_scene('character_select')
 			main_menu_scene.menu_manager.callbacks.on_continue_game = lambda: self.scene_manager.change_scene('game')
-			main_menu_scene.menu_manager.callbacks.on_load_game = lambda: self.scene_manager.change_scene('save_menu')
-			main_menu_scene.menu_manager.callbacks.on_options = lambda: self.scene_manager.change_scene('options')
+			main_menu_scene.menu_manager.callbacks.on_load_game = lambda: self.scene_manager.change_scene('main_menu')
+			main_menu_scene.menu_manager.callbacks.on_options = lambda: self.scene_manager.change_scene('main_menu')
 			main_menu_scene.menu_manager.callbacks.on_exit = lambda: self._quit_game()
 			
 			# Callbacks para la escena del juego
@@ -174,18 +175,18 @@ class GameEngine:
 	
 	def _quit_game(self):
 		"""Método para salir del juego."""
-		self.logger.info("Saliendo del juego...")
+		self.logger.info('[GameEngine] Saliendo del juego...')
 		self.running = False
 	
 	def _on_loading_complete(self):
 		"""Callback cuando termina la carga."""
-		self.logger.info("Carga completada, cambiando a escena de bienvenida")
-		self.scene_manager.change_scene('welcome')
+		self.logger.info("Carga completada, cambiando a menú principal")
+		self.scene_manager.change_scene('main_menu')
 	
 	def run(self):
 		"""Ejecuta el bucle principal del juego."""
 		self.running = True
-		self.logger.info("Iniciando bucle principal del juego...")
+		self.logger.info('[GameEngine] Iniciando bucle principal del juego...')
 		
 		try:
 			while self.running:
@@ -203,6 +204,7 @@ class GameEngine:
 	def _handle_events(self):
 		"""Procesa todos los eventos de Pygame."""
 		for event in pygame.event.get():
+			self.logger.info(f'[GameEngine] Evento global: {event.type} - {event}')
 			# Logging detallado de eventos
 			self._log_event(event)
 			

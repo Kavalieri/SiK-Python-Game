@@ -17,6 +17,7 @@ from ..core.game_state import GameState
 from ..utils.save_manager import SaveManager
 from .menu_factory import MenuFactory
 from .menu_callbacks import MenuCallbacks
+from ..utils.logger import get_logger
 
 
 class MenuManager:
@@ -38,7 +39,7 @@ class MenuManager:
         self.config = config
         self.game_state = game_state
         self.save_manager = save_manager
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger('SiK_Game')
         
         # Inicializar callbacks y fábrica
         self.callbacks = MenuCallbacks(game_state, save_manager)
@@ -68,19 +69,25 @@ class MenuManager:
         Args:
             menu_name: Nombre del menú a mostrar
         """
-        if menu_name in self.menus:
-            if self.current_menu:
-                self.current_menu.disable()
+        self.logger.info(f"[MenuManager] Acción: Solicitud de mostrar menú '{menu_name}'")
+        if menu_name not in self.menus:
+            self.logger.warning(f"[MenuManager] Menú no encontrado: {menu_name}")
+            return
+        if menu_name in ['options', 'save']:
+            self.logger.warning(f"[MenuManager] Menú '{menu_name}' NO IMPLEMENTADO")
+            return
+        if self.current_menu:
+            self.logger.info(f"[MenuManager] Ocultando menú actual antes de mostrar '{menu_name}'")
+            self.current_menu.disable()
             
-            self.current_menu = self.menus[menu_name]
-            self.current_menu.enable()
-            self.logger.debug(f"Menú mostrado: {menu_name}")
-        else:
-            self.logger.warning(f"Menú no encontrado: {menu_name}")
+        self.current_menu = self.menus[menu_name]
+        self.current_menu.enable()
+        self.logger.info(f"[MenuManager] Mostrando menú: {menu_name}")
     
     def hide_current_menu(self):
         """Oculta el menú actual."""
         if self.current_menu:
+            self.logger.info(f"[MenuManager] Ocultando menú actual: {self.current_menu.get_title()}")
             self.current_menu.disable()
             self.current_menu = None
             self.logger.debug("Menú actual oculto")
@@ -93,7 +100,8 @@ class MenuManager:
             events: Lista de eventos de Pygame
         """
         if self.current_menu:
-            self.logger.debug(f"MenuManager: Actualizando menú {self.current_menu.get_title()}")
+            for event in events:
+                self.logger.info(f"[MenuManager] Evento procesado en menú: {event}")
             self.current_menu.update(events)
         else:
             self.logger.warning("MenuManager: No hay menú actual para actualizar")
@@ -101,7 +109,9 @@ class MenuManager:
     def render(self):
         """Renderiza el menú actual."""
         if self.current_menu:
-            self.logger.debug(f"MenuManager: Renderizando menú {self.current_menu.get_title()}")
+            if not hasattr(self, '_last_rendered_menu') or self._last_rendered_menu != self.current_menu.get_title():
+                self.logger.info(f"[MenuManager] Menú renderizado: {self.current_menu.get_title()}")
+                self._last_rendered_menu = self.current_menu.get_title()
             self.current_menu.draw(self.screen)
         else:
             self.logger.warning("MenuManager: No hay menú actual para renderizar")
@@ -115,7 +125,7 @@ class MenuManager:
             callback: Función callback
         """
         setattr(self.callbacks, callback_name, callback)
-        self.logger.debug(f"Callback personalizado añadido: {callback_name}")
+        self.logger.info(f"[MenuManager] Callback personalizado añadido: {callback_name}")
     
     def update_save_menu(self):
         """Actualiza el menú de guardado con información actual."""

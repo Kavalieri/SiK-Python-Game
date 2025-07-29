@@ -14,6 +14,7 @@ from typing import Dict, Any
 from ..utils.config_manager import ConfigManager
 from ..utils.save_manager import SaveManager
 from .menu_callbacks import MenuCallbacks
+from ..utils.logger import get_logger
 
 
 class MenuFactory:
@@ -36,7 +37,7 @@ class MenuFactory:
         self.config = config
         self.save_manager = save_manager
         self.callbacks = callbacks
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger('SiK_Game')
         
         # Configuración de pantalla
         self.screen_width = screen.get_width()
@@ -52,25 +53,6 @@ class MenuFactory:
         theme.selection_color = (255, 165, 0)
         return theme
     
-    def create_welcome_menu(self) -> pygame_menu.Menu:
-        """Crea el menú de bienvenida."""
-        menu = pygame_menu.Menu(
-            title="SiK Python Game",
-            width=self.screen_width,
-            height=self.screen_height,
-            theme=self.theme,
-            enabled=False
-        )
-        
-        menu.add.label("¡Bienvenido al juego!", font_size=30)
-        menu.add.vertical_margin(50)
-        menu.add.button("Pulsa para empezar", self.callbacks.on_welcome_start, font_size=25)
-        menu.add.vertical_margin(20)
-        menu.add.label("Desarrollado por SiK Team", font_size=15)
-        menu.add.label("Versión 0.1.0", font_size=15)
-        
-        return menu
-    
     def create_main_menu(self) -> pygame_menu.Menu:
         """Crea el menú principal."""
         menu = pygame_menu.Menu(
@@ -80,7 +62,7 @@ class MenuFactory:
             theme=self.theme,
             enabled=False
         )
-        
+        self._main_menu_feedback_label = menu.add.label("", font_size=20)
         menu.add.button("Nuevo Juego", self.callbacks.on_new_game, font_size=25)
         menu.add.vertical_margin(10)
         menu.add.button("Continuar", self.callbacks.on_continue_game, font_size=25)
@@ -259,17 +241,18 @@ class MenuFactory:
             theme=self.theme,
             enabled=False
         )
-        
+        menu._feedback_label = menu.add.label("", font_size=20)
         menu.add.label("Archivos de Guardado:", font_size=25)
         menu.add.vertical_margin(20)
         
-        # Crear botones para cada slot de guardado
-        for i in range(1, 4):  # 3 slots de guardado
-            menu.add.button(
-                f"Slot {i}",
-                lambda slot=i: self.callbacks.on_select_save_file(slot),
-                font_size=20
-            )
+        # Mostrar detalles de cada slot
+        save_infos = self.save_manager.get_save_files_info()
+        for i, info in enumerate(save_infos, 1):
+            if info['exists']:
+                label = f"Slot {i} | {info.get('player_name', 'Sin nombre')} | Nivel: {info.get('level', 1)} | Puntos: {info.get('score', 0)} | Última vez: {info.get('last_used', 'N/A')}"
+            else:
+                label = f"Slot {i} | VACÍO"
+            menu.add.button(label, lambda slot=i: self.callbacks.on_select_save_file(slot), font_size=20)
             menu.add.vertical_margin(5)
         
         menu.add.vertical_margin(10)
@@ -291,18 +274,19 @@ class MenuFactory:
         menus = {}
         
         try:
-            menus['welcome'] = self.create_welcome_menu()
             menus['main'] = self.create_main_menu()
             menus['pause'] = self.create_pause_menu()
             menus['upgrade'] = self.create_upgrade_menu()
             menus['character_select'] = self.create_character_select_menu()
-            menus['options'] = self.create_options_menu()
             menus['inventory'] = self.create_inventory_menu()
             menus['save'] = self.create_save_menu()
-            
             self.logger.info(f"Todos los menús creados exitosamente: {len(menus)} menús")
             
         except Exception as e:
             self.logger.error(f"Error creando menús: {e}")
         
         return menus 
+
+    def _show_main_menu_feedback(self, msg: str):
+        if hasattr(self, '_main_menu_feedback_label'):
+            self._main_menu_feedback_label.set_title(msg) 

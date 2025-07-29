@@ -1,0 +1,15 @@
+{
+  "title": "SiK Python Game",
+  "subtitle": "Cargando...",
+  "version": "v1.0.0",
+  "tips": [
+    "Rompe las cajas para encontrar valiosas recompensas.",
+    "Prioriza la supervivencia: cuanto más avances, más puntos obtienes.",
+    "Los cactus dañan al contacto, ¡evítalos!",
+    "Los árboles bloquean el paso y los proyectiles, ¡úsalos a tu favor!",
+    "Las piedras y esqueletos solo entorpecen, pero pueden protegerte de los disparos enemigos.",
+    "La hierba y los arbustos ralentizan a todos los personajes, ¡planifica tu ruta!",
+    "Las cajas pueden contener powerups o puntos extra, ¡no las ignores!",
+    "Recuerda: puedes cambiar de personaje en cada partida para descubrir nuevas habilidades."
+  ]
+} 

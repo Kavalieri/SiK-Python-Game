@@ -26,6 +26,7 @@ from ..entities.enemy_types import EnemyTypes, EnemyRarity
 from ..utils.camera import Camera
 from ..utils.world_generator import WorldGenerator
 from ..utils.desert_background import DesertBackground
+from ..utils.logger import get_logger
 
 
 class GameScene(Scene):
@@ -46,7 +47,8 @@ class GameScene(Scene):
 		super().__init__(screen, config)
 		self.game_state = game_state
 		self.save_manager = save_manager
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[GameScene] Escena de nivel inicializada')
 		
 		# Inicializar gestores
 		self.asset_manager = AssetManager()
@@ -126,6 +128,7 @@ class GameScene(Scene):
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Procesa eventos de Pygame."""
+		self.logger.info(f'[GameScene] Evento recibido: {event.type} - {event}')
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
 				# Pausar juego

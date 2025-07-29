@@ -51,6 +51,12 @@ class MainMenuScene(Scene):
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Procesa eventos de Pygame."""
+		self.logger.debug(f"[MainMenuScene] Evento recibido: {event.type} - {event}")
+		# Procesar eventos de menú aquí
+		if event.type == pygame.KEYDOWN:
+			self.logger.info(f"[MainMenuScene] Tecla pulsada: {event.key}")
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			self.logger.info(f"[MainMenuScene] Click ratón: {event.button} en {event.pos}")
 		self.menu_manager.update([event])
 	
 	def update(self):
@@ -67,34 +73,28 @@ class MainMenuScene(Scene):
 	
 	def _on_new_game(self):
 		"""Callback para nuevo juego."""
-		self.logger.info("Iniciando nuevo juego")
-		# Aquí se cambiaría a la escena de selección de personaje o directamente al juego
-		# Por ahora solo ocultamos el menú
-		self.menu_manager.hide_current_menu()
+		self.logger.info("[MainMenuScene] Acción: Nuevo Juego - mostrando menú de guardado para nueva partida")
+		self.menu_manager.show_menu('save')
 	
 	def _on_continue_game(self):
 		"""Callback para continuar juego."""
-		self.logger.info("Continuando juego")
-		# Aquí se cargaría la partida guardada
-		# Por ahora solo ocultamos el menú
-		self.menu_manager.hide_current_menu()
+		self.logger.info("[MainMenuScene] Acción: Continuar Juego - mostrando menú de guardado para continuar")
+		self.menu_manager.show_menu('save')
 	
 	def _on_load_game(self):
 		"""Callback para cargar partida."""
-		self.logger.info("Cargando partida")
-		# Aquí se mostraría el menú de carga
-		self.menu_manager.show_menu('save')
+		self.logger.warning("[MainMenuScene] Acción: Cargar Juego - NO IMPLEMENTADO")
+		# El menú sigue operativo
 	
 	def _on_options(self):
 		"""Callback para opciones."""
-		self.logger.info("Abriendo opciones")
-		# Aquí se mostraría el menú de opciones
-		self.menu_manager.show_menu('options')
+		self.logger.warning("[MainMenuScene] Acción: Opciones - NO IMPLEMENTADO")
+		# El menú sigue operativo
 	
 	def _on_exit(self):
 		"""Callback para salir."""
-		self.logger.info("Saliendo del juego")
-		# Aquí se cerraría el juego
+		self.logger.info("[MainMenuScene] Acción: Salir - cerrando juego")
+		self.menu_manager.hide_current_menu()
+		import pygame, sys
 		pygame.quit()
-		import sys
 		sys.exit() 

@@ -138,4 +138,10 @@ class GameState:
 		self.player_name = state_dict.get('player_name', 'Player')
 		self.settings = state_dict.get('settings', self.settings)
 		
-		self.logger.info("Estado del juego cargado") 
+		self.logger.info("Estado del juego cargado")
+	
+	def quit_game(self):
+		"""Marca el juego para salir."""
+		self.logger.info("Solicitando salida del juego")
+		self.status = GameStatus.MENU  # Reset al menú
+		# El GameEngine detectará este estado y cerrará el juego 

@@ -15,6 +15,7 @@ from ..utils.config_manager import ConfigManager
 from .character_data import CharacterData
 from .character_animations import CharacterAnimations
 from .character_ui import CharacterUI
+from ..utils.logger import get_logger
 
 
 class CharacterSelectScene(Scene):
@@ -37,7 +38,7 @@ class CharacterSelectScene(Scene):
 		# Inicializar módulos especializados
 		self.character_data = CharacterData()
 		self.character_animations = CharacterAnimations()
-		self.character_ui = CharacterUI(self.screen_width, self.screen_height)
+		self.character_ui = CharacterUI(self.screen_width, self.screen_height, config)
 		
 		# Lista de personajes disponibles
 		self.character_keys = CharacterData.get_all_characters()
@@ -48,7 +49,8 @@ class CharacterSelectScene(Scene):
 		self.mouse_pos = (0, 0)
 		
 		# Logger
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[CharacterSelectScene] Escena de selección de personaje inicializada')
 	
 	def update(self):
 		"""Actualiza la escena."""
@@ -105,6 +107,12 @@ class CharacterSelectScene(Scene):
 		image_y = y + 90
 		character_image = self.character_animations.get_character_image(char_key)
 		if character_image:
+			# Determinar si hay que hacer flip horizontal según el cursor
+			mouse_x, _ = self.mouse_pos
+			sprite_center_x = image_x + image_size // 2
+			flip = mouse_x < sprite_center_x
+			if flip:
+				character_image = pygame.transform.flip(character_image, True, False)
 			scaled_image = pygame.transform.scale(character_image, (image_size, image_size))
 			image_rect = scaled_image.get_rect(center=(image_x + image_size//2, image_y + image_size//2))
 			self.screen.blit(scaled_image, image_rect)
@@ -149,7 +157,9 @@ class CharacterSelectScene(Scene):
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Maneja eventos de la escena."""
+		self.logger.info(f'[CharacterSelectScene] Evento recibido: {event.type} - {event}')
 		if event.type == pygame.KEYDOWN:
+			self.logger.info(f"[CharacterSelectScene] Tecla pulsada: {event.key}")
 			if event.key == pygame.K_LEFT or event.key == pygame.K_a:
 				self._previous_character()
 			elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -160,6 +170,7 @@ class CharacterSelectScene(Scene):
 				self._on_back_clicked()
 		
 		elif event.type == pygame.MOUSEBUTTONDOWN:
+			self.logger.info(f"[CharacterSelectScene] Click ratón: {event.button} en {event.pos}")
 			if event.button == 1:  # Click izquierdo
 				self._handle_click(event.pos)
 	

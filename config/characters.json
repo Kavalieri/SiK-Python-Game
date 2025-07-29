@@ -22,7 +22,7 @@
           "cooldown": 0.5,
           "hitbox": {"ancho": 60, "alto": 40, "offset_x": 30, "offset_y": 0},
           "animacion": "Attack",
-          "sonido": "sword_slash.wav",
+          "sonido": "shoot.wav",
           "efectos": []
         },
         {
@@ -33,7 +33,7 @@
           "cooldown": 0.3,
           "hitbox": {"ancho": 50, "alto": 40, "offset_x": 25, "offset_y": 0},
           "animacion": "Attack",
-          "sonido": "sword_combo.wav",
+          "sonido": "shoot.wav",
           "efectos": ["combo"]
         }
       ],
@@ -44,7 +44,8 @@
         "Combo de ataques"
       ],
       "color_placeholder": [139, 69, 19],
-      "símbolo": "⚔️"
+      "símbolo": "⚔️",
+      "escala_sprite": 0.6
     },
     "adventureguirl": {
       "nombre": "Sara",
@@ -72,7 +73,7 @@
             "sprite": "arrow.png"
           },
           "animacion": "Shoot",
-          "sonido": "arrow_shot.wav",
+          "sonido": "shoot.wav",
           "efectos": []
         },
         {
@@ -87,7 +88,7 @@
             "sprite": "magic_arrow.png"
           },
           "animacion": "Shoot",
-          "sonido": "magic_arrow.wav",
+          "sonido": "shoot.wav",
           "efectos": ["magic"]
         }
       ],
@@ -98,7 +99,8 @@
         "Evasión mejorada"
       ],
       "color_placeholder": [255, 182, 193],
-      "símbolo": "👧"
+      "símbolo": "👧",
+      "escala_sprite": 0.7
     },
     "robot": {
       "nombre": "Guiral",
@@ -148,7 +150,8 @@
         "Blindaje mejorado"
       ],
       "color_placeholder": [128, 128, 128],
-      "símbolo": "🤖"
+      "símbolo": "🤖",
+      "escala_sprite": 0.65
     }
   },
   "upgrades": {

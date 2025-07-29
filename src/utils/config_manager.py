@@ -263,15 +263,26 @@ class ConfigManager:
 		powerups = self.get_powerups_config()
 		return powerups.get("tipos_powerups", {}).get(powerup_type, {})
 	
-	def get_ui_color(self, color_name: str) -> list:
-		"""Obtiene un color específico de la UI."""
-		ui_config = self.get_ui_config()
-		return ui_config.get("colores", {}).get(color_name, [255, 255, 255])
-	
-	def get_ui_font_size(self, font_type: str) -> int:
-		"""Obtiene el tamaño de fuente específico de la UI."""
-		ui_config = self.get_ui_config()
-		return ui_config.get("fuentes", {}).get(font_type, 24)
+	def get_ui_dimension(self, key: str, default: int = 0) -> int:
+		try:
+			return int(self.config['ui']['dimensiones'][key])
+		except Exception:
+			self.logger.warning(f"Dimensión UI no encontrada: {key}")
+			return default
+
+	def get_ui_color(self, key: str, default=(255,255,255)) -> tuple:
+		try:
+			return tuple(self.config['ui']['colores'][key])
+		except Exception:
+			self.logger.warning(f"Color UI no encontrado: {key}")
+			return default
+
+	def get_ui_font_size(self, key: str, default: int = 24) -> int:
+		try:
+			return int(self.config['ui']['fuentes'][key])
+		except Exception:
+			self.logger.warning(f"Tamaño de fuente UI no encontrado: {key}")
+			return default
 	
 	def get_display_config(self) -> Dict[str, Any]:
 		"""Obtiene la configuración completa de display."""

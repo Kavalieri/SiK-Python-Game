@@ -14,6 +14,9 @@ import logging
 from typing import Optional, Callable
 from ..core.scene_manager import Scene
 from ..utils.config_manager import ConfigManager
+import random
+import json
+from ..utils.logger import get_logger
 
 
 class LoadingScene(Scene):
@@ -36,7 +39,8 @@ class LoadingScene(Scene):
 		super().__init__(screen, config)
 		self.game_state = game_state
 		self.save_manager = save_manager
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[LoadingScene] Escena de carga inicializada')
 		
 		# Estado de carga
 		self.loading_progress = 0.0
@@ -61,6 +65,19 @@ class LoadingScene(Scene):
 		# Iniciar carga en segundo plano
 		self.loading_thread = None
 		self.start_background_loading()
+		
+		self._has_advanced = False  # Para evitar múltiples llamadas
+		# Cargar configuración de pantalla de carga
+		self.loading_screen_config = self._load_loading_screen_config()
+		self.tips = self.loading_screen_config.get('tips', [
+			"Rompe las cajas para encontrar valiosas recompensas.",
+			"Prioriza la supervivencia: cuanto más avances, más puntos obtienes.",
+			"Los cactus dañan al contacto, ¡evítalos!"
+		])
+		self.title = self.loading_screen_config.get('title', 'SiK Python Game')
+		self.subtitle = self.loading_screen_config.get('subtitle', 'Cargando...')
+		self.version = self.loading_screen_config.get('version', 'v1.0.0')
+		self.current_tip = random.choice(self.tips)
 		
 		self.logger.info("Escena de carga inicializada")
 	
@@ -100,21 +117,22 @@ class LoadingScene(Scene):
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Maneja eventos de la escena de carga."""
-		# En la escena de carga, solo permitir cerrar la ventana
+		self.logger.info(f'[LoadingScene] Evento recibido: {event.type} - {event}')
+		# En la escena de carga, solo permitir cerrar la ventana o continuar tras la carga
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			exit()
+		if self.loading_complete and not self._has_advanced:
+			if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
+				self._has_advanced = True
+				if self.on_loading_complete:
+					self.on_loading_complete()
 	
 	def update(self):
 		"""Actualiza la lógica de la escena de carga."""
 		# Actualizar timer de mensajes
 		self.message_timer += 1.0 / 60.0  # Asumiendo 60 FPS
-		
-		# Verificar si la carga está completa
-		if self.loading_complete and self.on_loading_complete:
-			# Pequeña pausa para mostrar "¡Listo para jugar!"
-			if self.message_timer > 1.0:
-				self.on_loading_complete()
+		# Ya no cambiamos de escena automáticamente tras la carga
 	
 	def render(self):
 		"""Renderiza la escena de carga."""
@@ -155,13 +173,13 @@ class LoadingScene(Scene):
 		font_large = pygame.font.Font(None, 72)
 		font_small = pygame.font.Font(None, 36)
 		
-		# Título principal
-		title_text = font_large.render("SiK Python Game", True, (255, 255, 255))
+		# Título principal configurable
+		title_text = font_large.render(self.title, True, (255, 255, 255))
 		title_rect = title_text.get_rect(center=(self.screen.get_width() // 2, 150))
 		self.screen.blit(title_text, title_rect)
 		
-		# Subtítulo
-		subtitle_text = font_small.render("Cargando...", True, (200, 200, 200))
+		# Subtítulo configurable
+		subtitle_text = font_small.render(self.subtitle, True, (200, 200, 200))
 		subtitle_rect = subtitle_text.get_rect(center=(self.screen.get_width() // 2, 200))
 		self.screen.blit(subtitle_text, subtitle_rect)
 	
@@ -229,13 +247,25 @@ class LoadingScene(Scene):
 		"""Renderiza información adicional."""
 		font = pygame.font.Font(None, 20)
 		
-		# Versión del juego
-		version_text = font.render("v1.0.0", True, (150, 150, 150))
+		# Versión configurable
+		version_text = font.render(self.version, True, (150, 150, 150))
 		version_rect = version_text.get_rect(bottomright=(self.screen.get_width() - 20, self.screen.get_height() - 20))
 		self.screen.blit(version_text, version_rect)
+		
+		# Consejo aleatorio
+		tip_text = font.render(f"Consejo: {self.current_tip}", True, (180, 220, 255))
+		tip_rect = tip_text.get_rect(center=(self.screen.get_width() // 2, 500))
+		self.screen.blit(tip_text, tip_rect)
 		
 		# Instrucciones
 		if self.loading_complete:
 			instruction_text = font.render("Presiona cualquier tecla para continuar", True, (200, 200, 200))
 			instruction_rect = instruction_text.get_rect(center=(self.screen.get_width() // 2, 550))
 			self.screen.blit(instruction_text, instruction_rect) 
+
+	def _load_loading_screen_config(self):
+		try:
+			with open('config/loading_screen.json', 'r', encoding='utf-8') as f:
+				return json.load(f)
+		except Exception:
+			return {} 

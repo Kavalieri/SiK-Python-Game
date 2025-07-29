@@ -119,6 +119,11 @@ class AssetManager:
             self.logger.warning(f"Personaje no encontrado en configuración: {character_name}")
             return self._create_placeholder(64, 64, scale)
         
+        # Leer escala personalizada si no se ha especificado un scale explícito
+        if scale == 1.0:
+            char_config = self.animation_config['characters'][character_name]
+            scale = char_config.get('escala_sprite', 1.0)
+        
         # Verificar si la animación existe para este personaje
         available_animations = self.animation_config['characters'][character_name]['animations']
         if animation not in available_animations:
@@ -146,7 +151,7 @@ class AssetManager:
         self.logger.warning(f"Sprite no encontrado: {character_name}/{animation_capitalized}_{frame}_, creando placeholder")
         return self._create_placeholder(64, 64, scale)
     
-    def get_character_animation_frames(self, character_name: str, animation: str, max_frames: int = 20) -> List[pygame.Surface]:
+    def get_character_animation_frames(self, character_name: str, animation: str, max_frames: int = None) -> List[pygame.Surface]:
         """
         Obtiene todos los frames de una animación específica.
         
@@ -171,6 +176,10 @@ class AssetManager:
         if animation not in available_animations:
             self.logger.warning(f"Animación '{animation}' no disponible para {character_name}. Disponibles: {available_animations}")
             return frames
+        
+        # Obtener el número máximo de frames desde la configuración
+        if max_frames is None:
+            max_frames = self.animation_config['characters'][character_name].get('total_frames', 10)
         
         # Cargar frames hasta encontrar uno que no exista o alcanzar el máximo
         while frame <= max_frames:

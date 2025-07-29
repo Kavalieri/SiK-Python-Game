@@ -19,15 +19,12 @@ class CharacterUI:
     Gestiona la interfaz de usuario para la selección de personajes.
     """
     
-    def __init__(self, screen_width: int, screen_height: int):
+    def __init__(self, screen_width: int, screen_height: int, config_manager):
         """Inicializa la interfaz de usuario de personajes."""
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.logger = logging.getLogger(__name__)
-        
-        # Cargar configuración de UI
-        from ..utils.config_manager_v2 import ConfigManagerV2
-        self.config_manager = ConfigManagerV2()
+        self.config_manager = config_manager
         
         # Inicializar fuentes y colores desde configuración
         self._init_ui_from_config()

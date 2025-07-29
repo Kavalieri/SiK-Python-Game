@@ -2,23 +2,23 @@
   "characters": {
     "adventureguirl": {
       "animations": ["Dead", "Idle", "Jump", "Run", "Shoot"],
-      "total_frames": 53
+      "total_frames": 10
     },
     "guerrero": {
       "animations": ["Attack", "Dead", "Idle", "Jump", "JumpAttack", "Run", "Walk"],
-      "total_frames": 70
+      "total_frames": 10
     },
     "robot": {
       "animations": ["Dead", "Idle", "Jump", "Run", "Shoot"],
-      "total_frames": 82
+      "total_frames": 10
     },
     "zombieguirl": {
       "animations": ["Attack", "Dead", "Idle", "Walk"],
-      "total_frames": 45
+      "total_frames": 8
     },
     "zombiemale": {
       "animations": ["Attack", "Dead", "Idle", "Walk"],
-      "total_frames": 45
+      "total_frames": 8
     }
   },
   "sprite_paths": [

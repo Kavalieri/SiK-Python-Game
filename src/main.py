@@ -18,9 +18,23 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+# Configurar logger ANTES de cualquier import de módulos del juego
+from src.utils.logger import setup_logger
+logger = setup_logger()
+logger.info('Logger centralizado inicializado antes de imports de juego')
+
+print('PYTHONPATH:', sys.path)
+
+import importlib
+for mod in ['src.ui.menu_manager', 'src.ui.menu_factory', 'src.ui.menu_callbacks']:
+    try:
+        m = importlib.import_module(mod)
+        print(f"{mod} loaded from: {m.__file__}")
+    except Exception as e:
+        print(f"Error loading {mod}: {e}")
+
 from src.core.game_engine import GameEngine
 from src.utils.config_manager import ConfigManager
-from src.utils.logger import setup_logger
 
 
 def main():
@@ -29,7 +43,6 @@ def main():
 	"""
 	try:
 		# Configurar logging
-		logger = setup_logger()
 		logger.info("Iniciando SiK Python Game...")
 		
 		# Cargar configuración

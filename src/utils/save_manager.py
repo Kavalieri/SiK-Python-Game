@@ -423,4 +423,25 @@ class SaveManager:
 			
 		except Exception as e:
 			self.logger.error(f"Error al importar archivo de guardado: {e}")
-			return False 
+			return False
+	
+	def has_save_file(self) -> bool:
+		"""
+		Verifica si existe algún archivo de guardado.
+		
+		Returns:
+			True si existe al menos un archivo de guardado
+		"""
+		return any(save_info['exists'] for save_info in self.save_files)
+	
+	def load_latest_save(self) -> bool:
+		"""
+		Carga el último archivo de guardado usado.
+		
+		Returns:
+			True si se cargó exitosamente
+		"""
+		last_save = self.get_last_save_file()
+		if last_save:
+			return self.load_save(last_save) is not None
+		return False 

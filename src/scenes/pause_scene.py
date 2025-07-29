@@ -14,6 +14,7 @@ from typing import Optional
 from ..core.scene_manager import Scene
 from ..utils.config_manager import ConfigManager
 from ..ui.menu_manager import MenuManager
+from ..utils.logger import get_logger
 
 
 class PauseScene(Scene):
@@ -34,7 +35,8 @@ class PauseScene(Scene):
 		super().__init__(screen, config)
 		self.game_state = game_state
 		self.save_manager = save_manager
-		self.logger = logging.getLogger(__name__)
+		self.logger = get_logger('SiK_Game')
+		self.logger.info('[PauseScene] Escena de pausa inicializada')
 		
 		# Inicializar menú
 		self.menu_manager = MenuManager(screen, config, game_state, save_manager)
@@ -50,6 +52,11 @@ class PauseScene(Scene):
 	
 	def handle_event(self, event: pygame.event.Event):
 		"""Procesa eventos de Pygame."""
+		self.logger.info(f'[PauseScene] Evento recibido: {event.type} - {event}')
+		if event.type == pygame.KEYDOWN:
+			self.logger.info(f"[PauseScene] Tecla pulsada: {event.key}")
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			self.logger.info(f"[PauseScene] Click ratón: {event.button} en {event.pos}")
 		if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
 			# Reanudar juego con ESC
 			self._on_resume_game()

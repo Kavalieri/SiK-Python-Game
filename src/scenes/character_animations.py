@@ -102,10 +102,9 @@ class CharacterAnimations:
             # Crear sprite de placeholder
             placeholder = pygame.Surface((120, 120))
             
-            # Obtener datos del personaje desde la configuración
-            from ..utils.config_manager_v2 import ConfigManagerV2
-            config_manager = ConfigManagerV2()
-            char_data = config_manager.get_character_data(character_key)
+            # Obtener datos del personaje desde CharacterData
+            from .character_data import CharacterData
+            char_data = CharacterData.get_character_data(character_key)
             
             if char_data:
                 # Usar color y símbolo de la configuración
