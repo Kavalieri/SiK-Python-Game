@@ -179,3 +179,28 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Excluir archivos y carpetas generadas por el juego o temporales
+saves/
+logs/
+backups__DISABLED/
+releases/
+*.pyc
+__pycache__/
+.DS_Store
+*.swp
+*.swo
+*.tmp
+*.bak
+*.old
+*.orig
+# Excluir archivos de pruebas locales
+*.local
+# Excluir archivos de configuración de entorno
+.env
+# Excluir archivos de caché de editores
+.vscode/
+.idea/
+# Incluir explícitamente documentación y tests
+!docs/
+!tests/

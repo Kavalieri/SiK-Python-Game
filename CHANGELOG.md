@@ -3,13 +3,11 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
 ## [Unreleased] - 2024-12-19
-### Restauración crítica y refactorización
-- Restauración de todos los archivos tras pérdida de saltos de línea por error de automatización.
-- Reaplicación del flujo avanzado de menús y guardado: selección de slots, callbacks, navegación, diferenciación de botón Salir y cierre de ventana.
-- Restauración y refactorización de `slot_selection_scene.py` y `options_scene.py`.
-- Actualización de la documentación y diagrama Mermaid en `docs/FLUJO_MENUS_GUARDADO.md`.
-- Políticas de formato reforzadas: tabulaciones para indentación, saltos de línea LF forzados en el repo mediante `.gitattributes`.
-- Pruebas de navegación y funcionamiento correctas.
+### Modularización y limpieza para migración de plataforma
+- Modularización completa de la escena principal (`GameScene`) en submódulos: oleadas, powerups, colisiones, renderizado.
+- Refactorización de `game_scene.py` a wrapper limpio y delegación en `game_scene_core.py`.
+- Actualización y refuerzo de `.gitignore` para excluir saves, logs, backups, releases y archivos temporales, manteniendo solo código, documentación y tests.
+- Preparación del proyecto para migración y colaboración multiplataforma.
 
 ## [0.1.4] - 2025-07-29
 

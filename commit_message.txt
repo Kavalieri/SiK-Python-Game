@@ -1,1 +1,1 @@
-restauración crítica: recuperado el proyecto tras incidente de saltos de línea, reaplicado el flujo avanzado de menús y guardado, diferenciación de botón Salir y cierre de ventana, refuerzo de políticas de formato y documentación actualizada
+modularización completa de la escena principal, actualización de .gitignore y limpieza de exclusiones para migración de plataforma; proyecto listo para desarrollo multiplataforma
