@@ -252,6 +252,9 @@ src/
 - **Formato**: `tipo(ámbito): descripción` (máx 50 caracteres)
 - **Script automatizado**: `scripts/commit_profesional.ps1` para workflow completo
 - **Pre-commit hooks**: validación automática de calidad antes de commit
+- **Validación obligatoria**: SIEMPRE verificar éxito del commit con `git status` antes de continuar
+- **Staging completo**: Agregar TODOS los cambios relacionados con `git add .` antes del commit
+- **Verificación post-commit**: Confirmar que no quedan cambios unstaged después del commit
 - **Documentación**: `docs/COMMITS_PROFESIONALES.md` con guía completa
 
 ### Gestión de Archivos y Repositorio

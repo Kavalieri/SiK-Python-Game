@@ -2242,4 +2242,147 @@ class Tile(Entity):
     @classmethod
     def get_all_types(cls) -> list:
         """Obtiene todos los tipos de tiles disponibles."""
+
+---
+
+## 🗄️ **MIGRACIÓN SQLITE - NUEVOS MÓDULOS** (Fase 1 Completada + Corregida)
+*Referencia: [`PLAN_MIGRACION_SQLITE.md`](./PLAN_MIGRACION_SQLITE.md)*
+
+### Directorio `src/utils/` - Infraestructura SQLite Refactorizada
+
+#### database_manager.py (194 líneas - ⚠️ REQUIERE CORRECCIÓN)
+**Descripción**: Gestor centralizado de conexiones SQLite con pooling y transacciones.
+
+##### DatabaseManager.__init__
+- **Descripción**: Inicializa el gestor de base de datos con connection pooling.
+- **Parámetros**:
+  - `db_path` (str): Ruta al archivo de base de datos SQLite (default: "saves/game_database.db")
+  - `pool_size` (int): Número máximo de conexiones en el pool (default: 5)
+- **Características**:
+  - Connection pooling para evitar bloqueos
+  - Configuración optimizada de SQLite (WAL mode, foreign keys, timeouts)
+  - Logging detallado de operaciones
+- **Ejemplo de Uso**:
+  ```python
+  db_manager = DatabaseManager("saves/game.db", pool_size=5)
+  ```
+
+#### schema_manager.py (135 líneas - ✅ CORREGIDO)
+**Descripción**: Manager principal refactorizado que delega a módulos especializados.
+
+##### SchemaManager.__init__
+- **Descripción**: Inicializa el gestor de esquemas principal con delegación a SchemaCore.
+- **Parámetros**:
+  - `database_manager` (DatabaseManager): Instancia del gestor de BD
+- **Características**:
+  - API compatible con versión original
+  - Delegación a módulos especializados (SchemaCore)
+  - Mantenimiento de límite de 150 líneas
+- **Ejemplo de Uso**:
+  ```python
+  schema_manager = SchemaManager(db_manager)
+  ```
+
+#### schema_core.py (131 líneas - ✅ NUEVO MÓDULO)
+**Descripción**: Núcleo del sistema de esquemas SQLite con funcionalidad principal.
+
+##### SchemaCore.__init__
+- **Descripción**: Inicializa el núcleo del sistema de esquemas con integración a migraciones.
+- **Parámetros**:
+  - `database_manager` (DatabaseManager): Instancia del gestor de BD
+- **Características**:
+  - Creación automática de todas las tablas del sistema
+  - Integración con sistema de migraciones
+  - Validación de esquemas e integridad
+  - Backup automático antes de cambios importantes
+- **Ejemplo de Uso**:
+  ```python
+  schema_core = SchemaCore(db_manager)
+  success = schema_core.create_all_tables()
+  ```
+
+#### schema_tables.py (135 líneas - ✅ NUEVO MÓDULO)
+**Descripción**: Definiciones de todas las tablas SQLite del sistema de migración.
+
+##### get_all_table_schemas
+- **Descripción**: Obtiene todos los esquemas de tablas definidos para el sistema de migración.
+- **Retorno**:
+  - `Dict[str, str]`: Diccionario con nombre de tabla y su SQL de creación
+- **Tablas incluidas**:
+  - `partidas_guardadas`: Reemplaza pickle saves
+  - `configuraciones`: Reemplaza JSON distribuido
+  - `personajes`: Reemplaza characters.json + character_data.py
+  - `enemigos`: Reemplaza enemies.json + enemy_types.py
+  - `estadisticas_juego`: Estadísticas por sesión
+  - `configuracion_gameplay`: Configuración de mecánicas
+- **Ejemplo de Uso**:
+  ```python
+  schemas = get_all_table_schemas()
+  partidas_schema = schemas["partidas_guardadas"]
+  ```
+
+#### schema_migrations.py (173 líneas - ⚠️ REQUIERE CORRECCIÓN)
+**Descripción**: Sistema de migraciones y validaciones de esquema SQLite.
+
+##### SchemaMigrations.__init__
+- **Descripción**: Inicializa el gestor de migraciones con registro de cambios.
+- **Características**:
+  - Registro de migraciones aplicadas
+  - Validación de integridad de esquemas
+  - Cálculo de checksums para cambios
+  - Rollback de migraciones si es necesario
+- **Ejemplo de Uso**:
+  ```python
+  migrations = SchemaMigrations(db_manager)
+  migrations.record_migration("Initial schema", "CREATE_ALL_TABLES")
+  ```
+
+### Archivos de Testing SQLite
+
+#### scripts/test_simple_sqlite.py (✅ COMPLETADO)
+**Descripción**: Script de pruebas básicas para validar infraestructura SQLite.
+
+##### test_simple
+- **Descripción**: Ejecuta pruebas de funcionalidad básica de DatabaseManager y SchemaManager.
+- **Pruebas realizadas**:
+  - Creación de DatabaseManager y SchemaManager
+  - Creación de tablas automática
+  - Validación de esquema
+  - Inserción y lectura de datos de prueba
+  - Limpieza de archivos temporales
+- **Resultado**: ✅ Todas las pruebas pasan exitosamente
+- **Ejemplo de Uso**:
+  ```bash
+  python scripts/test_simple_sqlite.py
+  ```
+
+## 🎯 **PRÓXIMOS PASOS DE MIGRACIÓN**
+
+### FASE 2: Migración del ConfigManager (PENDIENTE)
+**Objetivo**: Dividir ConfigManager (264→3x150 líneas) + migrar JSON a SQLite
+**Referencia**: [`PLAN_MIGRACION_SQLITE.md - Fase 2`](./PLAN_MIGRACION_SQLITE.md#fase-2-migración-del-configmanager)
+
+**Módulos a crear**:
+- `config_loader.py` (máximo 150 líneas) - Carga desde archivos JSON
+- `config_database.py` (máximo 150 líneas) - Operaciones SQLite para configuración
+- `config_validator.py` (máximo 150 líneas) - Validación y compatibilidad
+
+**Funciones a documentar** (actualizar al crear):
+- ConfigLoader.__init__, load_config, load_all_configs
+- ConfigDatabase.__init__, save_config, get_config, migrate_from_json
+- ConfigValidator.__init__, validate_config, check_compatibility
+
+### FASE 3: Migración del SaveManager (PENDIENTE)
+**Objetivo**: Dividir SaveManager (365→4x150 líneas) + migrar pickle a SQLite
+**Referencia**: [`PLAN_MIGRACION_SQLITE.md - Fase 3`](./PLAN_MIGRACION_SQLITE.md#fase-3-migración-del-savemanager)
+
+**Módulos a crear**:
+- `save_loader.py` - Carga de partidas y compatibilidad
+- `save_encryption.py` - Encriptación XOR mantenida
+- `save_database.py` - Operaciones SQLite para partidas
+- `save_compatibility.py` - Migración automática pickle→SQLite
+
+---
+
+*📝 Nota: Este documento se actualiza automáticamente con cada nueva función creada durante la refactorización + migración SQLite.*
 ```

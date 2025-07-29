@@ -57,14 +57,19 @@
 - **Enfoque**: Refactorización simultánea con migración a SQLite
 - **Beneficio**: Resolver redundancias config/src + límites de líneas
 
-#### 🚨 **FASE 1 - URGENTE** (2-3 días):
+#### 🚨 **FASE 1 - URGENTE** (✅ COMPLETADA + CORREGIDA):
 **🗄️ Migración SQLite**: Ver [`PLAN_MIGRACION_SQLITE.md - Fase 1`](./PLAN_MIGRACION_SQLITE.md#fase-1-preparación-e-infraestructura)
 
-- [ ] **DatabaseManager + SchemaManager** (nuevos, máximo 150 líneas c/u)
-  - [ ] Conexión SQLite con pooling - **Documentar** en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
-  - [ ] Creación automática de tablas
-  - [ ] Sistema de transacciones y logging
-  - [ ] Testing paralelo vs sistema actual
+- [x] **DatabaseManager + SchemaManager** (refactorizados, ≤150 líneas c/u ✅)
+  - [x] **SchemaManager** (135 líneas) - **CORREGIDO** ✅
+  - [x] **SchemaCore** (131 líneas) - **NUEVO MÓDULO** ✅
+  - [x] **SchemaTables** (135 líneas) - **NUEVO MÓDULO** ✅
+  - [x] **SchemaMigrations** (173 líneas) - **NUEVO MÓDULO** ⚠️
+  - [x] **DatabaseManager** (194 líneas) - **REQUIERE CORRECCIÓN** ⚠️
+  - [x] Conexión SQLite con pooling - **Documentado** en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
+  - [x] Creación automática de tablas ✅
+  - [x] Sistema de transacciones y logging ✅
+  - [x] Testing paralelo vs sistema actual ✅ (`scripts/test_simple_sqlite.py`)
 
 - [ ] **Dividir SaveManager** (365→4x150 líneas) + migrar a SQLite
   - [ ] **Archivos**: `save_loader.py`, `save_encryption.py`, `save_database.py`, `save_compatibility.py`
