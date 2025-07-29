@@ -54,7 +54,7 @@ class MenuFactory:
         return theme
     
     def create_main_menu(self) -> pygame_menu.Menu:
-        """Crea el menú principal."""
+        """Crea el menú principal con flujo avanzado y callbacks diferenciados."""
         menu = pygame_menu.Menu(
             title="Menú Principal",
             width=self.screen_width,
@@ -63,7 +63,7 @@ class MenuFactory:
             enabled=False
         )
         self._main_menu_feedback_label = menu.add.label("", font_size=20)
-        menu.add.button("Nuevo Juego", self.callbacks.on_new_game, font_size=25)
+        menu.add.button("Inicio", self.callbacks.on_new_game, font_size=25)
         menu.add.vertical_margin(10)
         menu.add.button("Continuar", self.callbacks.on_continue_game, font_size=25)
         menu.add.vertical_margin(10)
@@ -72,9 +72,8 @@ class MenuFactory:
         menu.add.button("Opciones", self.callbacks.on_options, font_size=25)
         menu.add.vertical_margin(10)
         menu.add.button("Salir", self.callbacks.on_exit, font_size=25)
-        
         return menu
-    
+
     def create_pause_menu(self) -> pygame_menu.Menu:
         """Crea el menú de pausa."""
         menu = pygame_menu.Menu(
@@ -233,7 +232,7 @@ class MenuFactory:
         return menu
     
     def create_save_menu(self) -> pygame_menu.Menu:
-        """Crea el menú de guardado."""
+        """Crea el menú de selección de slots de guardado avanzado."""
         menu = pygame_menu.Menu(
             title="Gestión de Guardado",
             width=self.screen_width,
@@ -244,7 +243,6 @@ class MenuFactory:
         menu._feedback_label = menu.add.label("", font_size=20)
         menu.add.label("Archivos de Guardado:", font_size=25)
         menu.add.vertical_margin(20)
-        
         # Mostrar detalles de cada slot
         save_infos = self.save_manager.get_save_files_info()
         for i, info in enumerate(save_infos, 1):
@@ -252,16 +250,12 @@ class MenuFactory:
                 label = f"Slot {i} | {info.get('player_name', 'Sin nombre')} | Nivel: {info.get('level', 1)} | Puntos: {info.get('score', 0)} | Última vez: {info.get('last_used', 'N/A')}"
             else:
                 label = f"Slot {i} | VACÍO"
-            menu.add.button(label, lambda slot=i: self.callbacks.on_select_save_file(slot), font_size=20)
+            menu.add.button(label, lambda slot=i: self.callbacks.on_select_slot(slot), font_size=20)
             menu.add.vertical_margin(5)
-        
         menu.add.vertical_margin(10)
-        menu.add.button("Nuevo Guardado", self.callbacks.on_new_save, font_size=20)
+        menu.add.button("Vaciar Slot", lambda: self.callbacks.on_clear_slot(1), font_size=20)  # Ejemplo para slot 1
         menu.add.vertical_margin(5)
-        menu.add.button("Eliminar Guardado", self.callbacks.on_delete_save, font_size=20)
-        menu.add.vertical_margin(10)
-        menu.add.button("Volver", self.callbacks.on_back_to_previous, font_size=20)
-        
+        menu.add.button("Volver", self.callbacks.on_back_to_main_from_slots, font_size=20)
         return menu
     
     def create_all_menus(self) -> Dict[str, pygame_menu.Menu]:

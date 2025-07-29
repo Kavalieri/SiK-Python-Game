@@ -100,79 +100,81 @@ class GameEngine:
 			raise
 	
 	def _setup_scenes(self):
-		"""Configura las escenas iniciales del juego."""
+		"""Configura las escenas iniciales del juego y documenta el flujo avanzado de menús y guardado."""
 		try:
 			from ..scenes.main_menu_scene import MainMenuScene
 			from ..scenes.game_scene import GameScene
 			from ..scenes.pause_scene import PauseScene
 			from ..scenes.character_select_scene import CharacterSelectScene
 			from ..scenes.loading_scene import LoadingScene
+			from ..scenes.slot_selection_scene import SlotSelectionScene
+			from ..scenes.options_scene import OptionsScene
 			
 			# Crear todas las escenas
-			loading_scene = LoadingScene(self.screen, self.config, self.game_state, self.save_manager, 
-									   self._on_loading_complete)
-			# welcome_scene = WelcomeScene(self.screen, self.config, self.game_state, self.save_manager)
+			loading_scene = LoadingScene(self.screen, self.config, self.game_state, self.save_manager, self._on_loading_complete)
 			main_menu_scene = MainMenuScene(self.screen, self.config, self.game_state, self.save_manager)
 			game_scene = GameScene(self.screen, self.config, self.game_state, self.save_manager)
 			pause_scene = PauseScene(self.screen, self.config, self.game_state, self.save_manager)
 			character_select_scene = CharacterSelectScene(self.screen, self.config, self.game_state, self.save_manager)
+			slot_selection_scene = SlotSelectionScene(self.screen, self.config, self.game_state, self.save_manager)
+			options_scene = OptionsScene(self.screen, self.config, self.game_state, self.save_manager)
 			
 			# Añadir escenas al gestor
 			self.scene_manager.add_scene('loading', loading_scene)
-			# self.scene_manager.add_scene('welcome', welcome_scene)
 			self.scene_manager.add_scene('main_menu', main_menu_scene)
 			self.scene_manager.add_scene('game', game_scene)
 			self.scene_manager.add_scene('pause', pause_scene)
 			self.scene_manager.add_scene('character_select', character_select_scene)
+			self.scene_manager.add_scene('slot_selection', slot_selection_scene)
+			self.scene_manager.add_scene('options', options_scene)
 			
 			# Configurar callbacks para transiciones entre escenas
 			self._setup_scene_transitions()
 			
-			# Establecer escena de carga/bienvenida como inicial
+			# Establecer escena de carga como inicial
 			self.scene_manager.change_scene('loading')
-			
-			self.logger.info("Escenas configuradas correctamente")
-			
+			self.logger.info("Escenas configuradas correctamente (flujo avanzado de menús y guardado)")
 		except Exception as e:
 			self.logger.error(f"Error al configurar escenas: {e}")
 			raise
-	
+
 	def _setup_scene_transitions(self):
-		"""Configura las transiciones entre escenas."""
+		"""Configura las transiciones entre escenas y documenta la diferenciación de botón Salir y cierre de ventana."""
 		try:
-			# Callbacks para la escena de bienvenida
-			# welcome_scene = self.scene_manager.scenes['welcome']
-			# welcome_scene.scene_manager = self.scene_manager
-			# welcome_scene.menu_manager.callbacks.on_welcome_start = lambda: self.scene_manager.change_scene('main_menu')
-			
-			# Callbacks para la escena del menú principal
 			main_menu_scene = self.scene_manager.scenes['main_menu']
-			main_menu_scene.menu_manager.callbacks.on_new_game = lambda: self.scene_manager.change_scene('character_select')
-			main_menu_scene.menu_manager.callbacks.on_continue_game = lambda: self.scene_manager.change_scene('game')
-			main_menu_scene.menu_manager.callbacks.on_load_game = lambda: self.scene_manager.change_scene('main_menu')
-			main_menu_scene.menu_manager.callbacks.on_options = lambda: self.scene_manager.change_scene('main_menu')
-			main_menu_scene.menu_manager.callbacks.on_exit = lambda: self._quit_game()
-			
-			# Callbacks para la escena del juego
-			game_scene = self.scene_manager.scenes['game']
-			game_scene.scene_manager = self.scene_manager
-			
-			# Callbacks para la escena de pausa
-			pause_scene = self.scene_manager.scenes['pause']
-			pause_scene.menu_manager.callbacks.on_resume_game = lambda: self.scene_manager.change_scene('game')
-			pause_scene.menu_manager.callbacks.on_save_game = lambda: self.save_manager.save_game()
-			pause_scene.menu_manager.callbacks.on_main_menu = lambda: self.scene_manager.change_scene('main_menu')
-			pause_scene.menu_manager.callbacks.on_exit = lambda: self._quit_game()
-			
-			# Callbacks para la escena de selección de personaje
+			slot_selection_scene = self.scene_manager.scenes['slot_selection']
+			options_scene = self.scene_manager.scenes['options']
 			character_select_scene = self.scene_manager.scenes['character_select']
-			character_select_scene.scene_manager = self.scene_manager
+			pause_scene = self.scene_manager.scenes['pause']
 			
-			self.logger.info("Transiciones entre escenas configuradas")
+			# Menú principal
+			main_menu_scene.menu_manager.callbacks.on_new_game = lambda: self.scene_manager.change_scene('slot_selection')
+			main_menu_scene.menu_manager.callbacks.on_continue_game = lambda: self._handle_continue_game()
+			main_menu_scene.menu_manager.callbacks.on_load_game = lambda: self.scene_manager.change_scene('slot_selection')
+			main_menu_scene.menu_manager.callbacks.on_options = lambda: self.scene_manager.change_scene('options')
+			main_menu_scene.menu_manager.callbacks.on_exit = lambda: self._log_and_quit_menu()
 			
+			# Selección de slots
+			slot_selection_scene.menu_manager.callbacks.on_select_slot = lambda slot: self._handle_slot_selection(slot)
+			slot_selection_scene.menu_manager.callbacks.on_clear_slot = lambda slot: self._handle_clear_slot(slot)
+			slot_selection_scene.menu_manager.callbacks.on_back_to_main_from_slots = lambda: self.scene_manager.change_scene('main_menu')
+			
+			# Opciones
+			options_scene.menu_manager.callbacks.on_back_to_main = lambda: self.scene_manager.change_scene('main_menu')
+			
+			# Selección de personaje
+			character_select_scene.menu_manager.callbacks.on_character_selected = lambda char: self._handle_character_selection(char)
+			
+			# Pausa
+			pause_scene.menu_manager.callbacks.on_resume_game = lambda: self.scene_manager.change_scene('game')
+			pause_scene.menu_manager.callbacks.on_save_game = lambda: self._handle_save_game()
+			pause_scene.menu_manager.callbacks.on_main_menu = lambda: self.scene_manager.change_scene('main_menu')
+			pause_scene.menu_manager.callbacks.on_exit = lambda: self._log_and_quit_menu()
+			
+			self.logger.info("Transiciones entre escenas configuradas (flujo avanzado)")
 		except Exception as e:
 			self.logger.error(f"Error configurando transiciones: {e}")
-	
+
 	def _quit_game(self):
 		"""Método para salir del juego."""
 		self.logger.info('[GameEngine] Saliendo del juego...')
@@ -250,3 +252,42 @@ class GameEngine:
 		self.logger.info("Limpiando recursos del juego...")
 		pygame.quit()
 		self.logger.info("Juego cerrado correctamente") 
+
+	def _log_and_quit_menu(self):
+		"""Diferencia el cierre por botón Salir del menú y el cierre de ventana."""
+		self.logger.info('[Menu] Botón Salir pulsado - Cierre solicitado por el usuario desde el menú')
+		self._quit_game()
+
+	def _handle_continue_game(self):
+		"""Maneja la acción de continuar juego desde el último slot activo."""
+		last_save = self.save_manager.get_last_save_file()
+		if last_save:
+			self.logger.info(f"[GameEngine] Continuando juego desde: {last_save}")
+			self.save_manager.load_save(last_save, self.game_state)
+			self.scene_manager.change_scene('game')
+		else:
+			self.logger.warning("[GameEngine] No hay partida guardada para continuar")
+
+	def _handle_slot_selection(self, slot: int):
+		"""Maneja la selección de un slot de guardado."""
+		self.logger.info(f"[GameEngine] Slot seleccionado: {slot}")
+		# Lógica para activar el slot y navegar a selección de personaje
+		self.save_manager.set_active_slot(slot)
+		self.scene_manager.change_scene('character_select')
+
+	def _handle_clear_slot(self, slot: int):
+		"""Maneja el vaciado de un slot de guardado."""
+		self.logger.info(f"[GameEngine] Vaciar slot: {slot}")
+		self.save_manager.clear_slot(slot)
+		self.scene_manager.change_scene('slot_selection')
+
+	def _handle_character_selection(self, character: str):
+		"""Maneja la selección de personaje tras elegir slot."""
+		self.logger.info(f"[GameEngine] Personaje seleccionado: {character}")
+		self.game_state.selected_character = character
+		self.scene_manager.change_scene('game')
+
+	def _handle_save_game(self):
+		"""Maneja el guardado manual desde el menú de pausa."""
+		self.logger.info("[GameEngine] Guardando partida manualmente en slot activo")
+		self.save_manager.save_game() 

@@ -64,22 +64,18 @@ class MenuManager:
     
     def show_menu(self, menu_name: str):
         """
-        Muestra un menú específico.
+        Muestra un menú específico, asegurando integración con el flujo avanzado y callbacks diferenciados.
         
         Args:
             menu_name: Nombre del menú a mostrar
         """
-        self.logger.info(f"[MenuManager] Acción: Solicitud de mostrar menú '{menu_name}'")
+        self.logger.info(f"[MenuManager] Acción: Solicitud de mostrar menú '{menu_name}' (flujo avanzado)")
         if menu_name not in self.menus:
             self.logger.warning(f"[MenuManager] Menú no encontrado: {menu_name}")
-            return
-        if menu_name in ['options', 'save']:
-            self.logger.warning(f"[MenuManager] Menú '{menu_name}' NO IMPLEMENTADO")
             return
         if self.current_menu:
             self.logger.info(f"[MenuManager] Ocultando menú actual antes de mostrar '{menu_name}'")
             self.current_menu.disable()
-            
         self.current_menu = self.menus[menu_name]
         self.current_menu.enable()
         self.logger.info(f"[MenuManager] Mostrando menú: {menu_name}")

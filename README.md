@@ -270,3 +270,39 @@ Este proyecto forma parte de una investigación sobre el potencial de la intelig
 
 *Este proyecto representa el futuro del desarrollo de software asistido por IA*
 
+# Registro de restauración y políticas de formato
+
+## Restauración crítica (2024-12-19)
+
+- Se restauró el proyecto tras un error masivo de formato que eliminó los saltos de línea en todos los archivos `.py`, `.md`, `.json`, `.txt`.
+- Se recuperaron los archivos desde el último commit y se reaplicaron todos los cambios funcionales realizados en la sesión:
+  - Flujo avanzado de menús y guardado (selección de slots, callbacks, navegación, diferenciación de botón Salir y cierre de ventana).
+  - Restauración y refactorización de `slot_selection_scene.py` y `options_scene.py`.
+  - Actualización de la documentación y diagrama Mermaid en `docs/FLUJO_MENUS_GUARDADO.md`.
+  - Pruebas de navegación y funcionamiento correctas.
+
+## Políticas de formato y control de cambios
+
+- **Indentación:**
+  - Todo el proyecto usa **tabulaciones** para la indentación en los scripts Python.
+  - Se revisará cualquier archivo nuevo para mantener la coherencia.
+- **Saltos de línea:**
+  - Se utiliza `.gitattributes` para forzar `LF` en el repositorio y evitar problemas de diffs por saltos de línea.
+  - Los archivos locales pueden verse en `CRLF` en Windows, pero el repo siempre tendrá `LF`.
+
+## Estado actual
+
+- El flujo de menús, guardado y navegación está funcional y documentado.
+- El botón "Salir" y el cierre de ventana están diferenciados en los logs.
+- El código está limpio y estructurado tras la restauración.
+
+## Próximos pasos
+
+- Limpieza de código y refactorización adicional.
+- Manejo y corrección de los elementos que todavía no funcionan.
+- Refuerzo de testing y documentación continua.
+
+---
+
+> **Este registro deja constancia de la recuperación y las políticas de formato para futuras referencias y colaboración segura.**
+

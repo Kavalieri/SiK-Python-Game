@@ -60,16 +60,13 @@ class MenuCallbacks:
         # No cambiar de escena
     
     def on_exit(self):
-        """Callback para salir del juego."""
-        self.logger.info("[MenuCallbacks] Acción: Salir (usuario)")
-        self.logger.info("Saliendo del juego")
-        # Marcar el juego para salir
-        self.game_state.quit_game()
-        # También podemos cerrar directamente si tenemos acceso al engine
+        """Callback para salir del juego (botón Salir del menú principal)."""
+        self.logger.info("[MenuCallbacks] Acción: Salir (usuario) - Botón Salir pulsado")
+        # Aquí no se cierra la ventana directamente, sino que se delega al engine para diferenciar logs
         if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
             if hasattr(self.game_state.scene_manager, 'game_engine'):
-                self.game_state.scene_manager.game_engine.running = False
-    
+                self.game_state.scene_manager.game_engine._log_and_quit_menu()
+
     # Callbacks de menú de pausa
     def on_resume_game(self):
         """Callback para reanudar el juego."""
@@ -131,12 +128,34 @@ class MenuCallbacks:
         self.logger.info("Continuando después de mejoras")
         self.game_state.set_scene("game")
     
-    # Callbacks de selección de personaje
-    def on_select_character(self, character_id):
-        """Callback para seleccionar personaje."""
-        self.logger.info(f"[MenuCallbacks] Acción: Selección de personaje: {character_id}")
-        self.game_state.selected_character = character_id
-        self.game_state.set_scene("game")
+    # Callback para selección de slot
+    def on_select_slot(self, slot: int):
+        """Callback para seleccionar un slot de guardado."""
+        self.logger.info(f"[MenuCallbacks] Acción: Seleccionar Slot {slot} (usuario)")
+        if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
+            if hasattr(self.game_state.scene_manager, 'game_engine'):
+                self.game_state.scene_manager.game_engine._handle_slot_selection(slot)
+
+    # Callback para vaciar slot
+    def on_clear_slot(self, slot: int):
+        """Callback para vaciar un slot de guardado."""
+        self.logger.info(f"[MenuCallbacks] Acción: Vaciar Slot {slot} (usuario)")
+        if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
+            if hasattr(self.game_state.scene_manager, 'game_engine'):
+                self.game_state.scene_manager.game_engine._handle_clear_slot(slot)
+
+    # Callback para volver al menú principal desde selección de slots
+    def on_back_to_main_from_slots(self):
+        self.logger.info("[MenuCallbacks] Acción: Volver al Menú Principal desde Slots (usuario)")
+        if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
+            self.game_state.scene_manager.change_scene('main_menu')
+
+    # Callback para selección de personaje
+    def on_character_selected(self, character: str):
+        self.logger.info(f"[MenuCallbacks] Acción: Personaje Seleccionado '{character}' (usuario)")
+        if hasattr(self.game_state, 'scene_manager') and self.game_state.scene_manager:
+            if hasattr(self.game_state.scene_manager, 'game_engine'):
+                self.game_state.scene_manager.game_engine._handle_character_selection(character)
     
     def on_back_to_main(self):
         """Callback para volver al menú principal desde selección de personaje."""
@@ -333,7 +352,7 @@ class MenuCallbacks:
             'continue_after_upgrade': self.on_continue_after_upgrade,
             
             # Selección de personaje
-            'select_character': self.on_select_character,
+            'select_character': self.on_character_selected,
             'back_to_main': self.on_back_to_main,
             'back_to_previous': self.on_back_to_previous,
             
