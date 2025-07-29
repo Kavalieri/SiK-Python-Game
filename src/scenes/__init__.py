@@ -12,9 +12,9 @@ from .character_select_scene import CharacterSelectScene
 from .loading_scene import LoadingScene
 
 __all__ = [
-	'MainMenuScene',
-	'GameScene',
-	'PauseScene',
-	'CharacterSelectScene',
-	'LoadingScene'
-] 
+    "MainMenuScene",
+    "GameScene",
+    "PauseScene",
+    "CharacterSelectScene",
+    "LoadingScene",
+]

@@ -1,0 +1,22 @@
+---
+description: Estado funcional validado del proyecto migrado a Stack 2025.
+globs:
+- src/**/*
+- config/**/*
+- assets/**/*
+- pyproject.toml
+- .pre-commit-config.yaml
+alwaysApply: false
+---
+- ✅ MIGRACIÓN COMPLETADA a Stack 2025: Poetry + Ruff + Pre-commit
+- ✅ Repositorio limpio sin archivos grandes (releases/ excluidos)
+- ✅ Sistema de calidad de código funcionando (32 errores restantes identificados)
+- ✅ Documentación actualizada con herramientas modernas
+- 🔄 PENDIENTE: Refactorización de archivos >150 líneas
+- 🔄 PENDIENTE: Corrección de errores E722, E402, F841 identificados por Ruff
+- Verificar el flujo de juego completo sin errores después de refactorización.
+- Validar animaciones, selección, enemigos y guardado en ejecución real.
+- Todo sistema funcional debe estar documentado en docs/INSTRUCCIONES_DESARROLLO.md.
+- Conservar trazabilidad entre código y documentación de funcionalidades.
+
+@INSTRUCCIONES_DESARROLLO.md @COLABORACION.md

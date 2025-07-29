@@ -78,4 +78,4 @@ flowchart TD
 
 > **Advertencia:** Si se detecta cualquier alteración masiva de formato, restaurar desde el control de versiones antes de continuar el desarrollo.
 
-_Actualizado automáticamente tras recuperación y refactorización crítica (2025-07-29)._ 
+_Actualizado automáticamente tras recuperación y refactorización crítica (2025-07-29)._

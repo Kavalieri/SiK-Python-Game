@@ -1,0 +1,197 @@
+---
+description: Configuración específica para VS Code y extensiones recomendadas.
+globs:
+- "**"
+alwaysApply: false
+---
+- 🔧 EXTENSIONES OBLIGATORIAS:
+  - Python (ms-python.python)
+  - Pylance (ms-python.vscode-pylance)
+  - Ruff (charliermarsh.ruff)
+  - GitHub Copilot (GitHub.copilot)
+  - Error Lens (usernamehw.errorlens)
+  - Thunder Client (rangav.vscode-thunder-client)
+  - GitLens (eamodio.gitlens)
+
+- ⚙️ CONFIGURACIÓN VS CODE:
+  ```json
+  {
+      "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "python.linting.enabled": false,
+      "python.formatting.provider": "none",
+      "ruff.enable": true,
+      "ruff.organizeImports": true,
+      "ruff.fixAll": true,
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+          "source.organizeImports.ruff": "explicit",
+          "source.fixAll.ruff": "explicit"
+      },
+      "python.analysis.typeCheckingMode": "strict",
+      "python.analysis.autoImportCompletions": true,
+      "files.exclude": {
+          "**/__pycache__": true,
+          "**/.pytest_cache": true,
+          "**/.mypy_cache": true,
+          "**/.ruff_cache": true
+      },
+      "terminal.integrated.defaultProfile.windows": "PowerShell"
+  }
+  ```
+
+- 🚀 TAREAS VS CODE (tasks.json):
+  ```json
+  {
+      "version": "2.0.0",
+      "tasks": [
+          {
+              "label": "🎮 Ejecutar Juego",
+              "type": "shell",
+              "command": "poetry",
+              "args": ["run", "python", "src/main.py"],
+              "group": {
+                  "kind": "build",
+                  "isDefault": true
+              },
+              "presentation": {
+                  "echo": true,
+                  "reveal": "always",
+                  "focus": false,
+                  "panel": "new"
+              },
+              "problemMatcher": []
+          },
+          {
+              "label": "🧪 Ejecutar Tests",
+              "type": "shell",
+              "command": "poetry",
+              "args": ["run", "pytest", "--cov=src", "tests/"],
+              "group": "test",
+              "presentation": {
+                  "echo": true,
+                  "reveal": "always",
+                  "focus": false,
+                  "panel": "new"
+              }
+          },
+          {
+              "label": "🔍 Análisis Ruff",
+              "type": "shell",
+              "command": "poetry",
+              "args": ["run", "ruff", "check", "src/", "tests/"],
+              "group": "build",
+              "presentation": {
+                  "echo": true,
+                  "reveal": "always",
+                  "focus": false,
+                  "panel": "new"
+              }
+          },
+          {
+              "label": "📦 Build Ejecutable",
+              "type": "shell",
+              "command": "poetry",
+              "args": ["run", "python", "tools/package_improved.py"],
+              "group": "build",
+              "presentation": {
+                  "echo": true,
+                  "reveal": "always",
+                  "focus": false,
+                  "panel": "new"
+              }
+          }
+      ]
+  }
+  ```
+
+- 🎯 LAUNCH CONFIGURATIONS (launch.json):
+  ```json
+  {
+      "version": "0.2.0",
+      "configurations": [
+          {
+              "name": "🎮 Debug Juego Principal",
+              "type": "python",
+              "request": "launch",
+              "program": "${workspaceFolder}/src/main.py",
+              "console": "integratedTerminal",
+              "cwd": "${workspaceFolder}",
+              "env": {
+                  "PYTHONPATH": "${workspaceFolder}"
+              }
+          },
+          {
+              "name": "🧪 Debug Tests",
+              "type": "python",
+              "request": "launch",
+              "module": "pytest",
+              "args": ["tests/", "-v", "--tb=short"],
+              "console": "integratedTerminal",
+              "cwd": "${workspaceFolder}"
+          },
+          {
+              "name": "🔧 Debug Script Específico",
+              "type": "python",
+              "request": "launch",
+              "program": "${file}",
+              "console": "integratedTerminal",
+              "cwd": "${workspaceFolder}"
+          }
+      ]
+  }
+  ```
+
+- 📋 SNIPPETS PERSONALIZADOS:
+  ```json
+  {
+      "Clase Manager": {
+          "prefix": "manager",
+          "body": [
+              "class ${1:Nombre}Manager:",
+              "    \"\"\"",
+              "    Gestor para ${2:descripción}.",
+              "    \"\"\"",
+              "    ",
+              "    def __init__(self):",
+              "        \"\"\"Inicializa el gestor.\"\"\"",
+              "        self._logger = logging.getLogger(self.__class__.__name__)",
+              "        self._inicializado = False",
+              "    ",
+              "    def inicializar(self) -> bool:",
+              "        \"\"\"",
+              "        Inicializa el gestor.",
+              "        ",
+              "        Returns:",
+              "            True si la inicialización fue exitosa.",
+              "        \"\"\"",
+              "        try:",
+              "            # TODO: Implementar inicialización",
+              "            self._inicializado = True",
+              "            self._logger.info(f\"{self.__class__.__name__} inicializado correctamente\")",
+              "            return True",
+              "        except Exception as e:",
+              "            self._logger.error(f\"Error al inicializar {self.__class__.__name__}: {e}\")",
+              "            return False"
+          ],
+          "description": "Plantilla para crear un Manager del juego"
+      }
+  }
+  ```
+
+- ⌨️ ATAJOS DE TECLADO:
+  - F5: Debug juego principal
+  - Ctrl+Shift+T: Ejecutar tests
+  - Ctrl+Shift+R: Análisis Ruff
+  - Ctrl+Shift+B: Build ejecutable
+  - F12: Ir a definición
+  - Shift+F12: Buscar referencias
+  - Ctrl+.: Quick fix / Code actions
+
+- 🐛 DEBUG AVANZADO:
+  - Breakpoints condicionales en lógica crítica
+  - Logpoints para tracking sin parar ejecución
+  - Exception breakpoints en pygame.error
+  - Watch variables de estado del juego
+  - Call stack para debugging de colisiones
+
+@INSTRUCCIONES_DESARROLLO.md

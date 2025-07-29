@@ -210,4 +210,4 @@ get_audio_file(category, sound_name)
 ---
 
 *Sistema implementado el 19 de diciembre de 2024*
-*Autor: SiK Team* 
+*Autor: SiK Team*

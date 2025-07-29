@@ -1,0 +1,99 @@
+---
+description: Estándares de testing y control de calidad.
+globs:
+- tests/**/*.py
+- src/**/*.py
+alwaysApply: false
+---
+- 🧪 ESTRATEGIA DE TESTING:
+  - Cobertura mínima: 80% en src/
+  - Tests unitarios para cada módulo
+  - Tests de integración para flujos críticos
+  - Tests de sistema para gameplay completo
+  - Mock para recursos externos (archivos, sonidos)
+
+- 📊 MÉTRICAS DE CALIDAD:
+  - 0 errores de Ruff obligatorio
+  - 0 advertencias de type checking
+  - Máximo 150 líneas por archivo
+  - Complejidad ciclomática < 10
+  - Documentación al 100% en funciones públicas
+
+- 🔧 HERRAMIENTAS DE CALIDAD:
+  ```powershell
+  # Ejecutar todos los checks
+  poetry run ruff check src/ tests/
+  poetry run ruff format src/ tests/
+  poetry run mypy src/
+  poetry run pytest --cov=src tests/
+
+  # Pre-commit automático
+  poetry run pre-commit install
+  poetry run pre-commit run --all-files
+  ```
+
+- 📝 ESTRUCTURA DE TESTS:
+  ```python
+  import pytest
+  import pygame
+  from unittest.mock import Mock, patch
+  from src.managers.asset_manager import AssetManager
+
+  class TestAssetManager:
+      """Tests para el gestor de assets del juego."""
+
+      @pytest.fixture
+      def asset_manager(self):
+          """Fixture que proporciona una instancia de AssetManager."""
+          pygame.init()
+          return AssetManager()
+
+      def test_cargar_imagen_existente(self, asset_manager):
+          """Verifica que se carga correctamente una imagen existente."""
+          # Arrange
+          ruta_imagen = "assets/characters/used/guerrero_idle_1.png"
+
+          # Act
+          imagen = asset_manager.cargar_imagen(ruta_imagen)
+
+          # Assert
+          assert imagen is not None
+          assert isinstance(imagen, pygame.Surface)
+
+      @patch('pygame.image.load')
+      def test_cargar_imagen_inexistente(self, mock_load, asset_manager):
+          """Verifica el manejo de errores al cargar imagen inexistente."""
+          # Arrange
+          mock_load.side_effect = pygame.error("No se puede cargar")
+          ruta_falsa = "assets/inexistente.png"
+
+          # Act & Assert
+          with pytest.raises(pygame.error):
+              asset_manager.cargar_imagen(ruta_falsa)
+  ```
+
+- 🎮 TESTS ESPECÍFICOS DEL JUEGO:
+  - TestGameEngine: Inicialización, bucle principal, cambio de escenas
+  - TestPlayer: Movimiento, disparos, colisiones, animaciones
+  - TestEnemySystem: Generación, IA, eliminación, oleadas
+  - TestProjectileSystem: Creación, movimiento, colisiones
+  - TestPowerupSystem: Aparición, efectos, duración
+  - TestUISystem: Menús, HUD, transiciones
+  - TestConfigManager: Carga, guardado, validación
+  - TestAssetManager: Carga de recursos, cache, memoria
+
+- 📈 PROCESO DE CI/CD LOCAL:
+  1. Pre-commit hooks ejecutan Ruff + MyPy
+  2. Tests ejecutados con pytest en cada commit
+  3. Coverage report generado automáticamente
+  4. Build del ejecutable en releases/
+  5. Logs de calidad en logs/quality.log
+
+- 🐛 DEBUG Y PROFILING:
+  - Logging detallado en desarrollo
+  - Pygame profiler para rendimiento
+  - Memory profiler para optimización
+  - FPS counter en modo debug
+  - Stack traces completos en errores
+
+@INSTRUCCIONES_DESARROLLO.md

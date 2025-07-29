@@ -37,4 +37,4 @@
 
 ---
 
-Para cualquier ampliación, corrección o duda, consulta este documento y los archivos de configuración en `config/`. 
+Para cualquier ampliación, corrección o duda, consulta este documento y los archivos de configuración en `config/`.

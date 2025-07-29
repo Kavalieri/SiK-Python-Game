@@ -10,8 +10,6 @@ Descripción: Punto de entrada principal del videojuego 2D desarrollado con Pyth
 """
 
 import sys
-import os
-import logging
 from pathlib import Path
 
 # Añadir el directorio raíz al path para imports
@@ -24,33 +22,33 @@ from src.utils.logger import setup_logger
 
 
 def main():
-	"""
-	Función principal que inicializa y ejecuta el juego.
-	"""
-	try:
-		# Configurar logging
-		logger = setup_logger()
-		logger.info("Iniciando SiK Python Game...")
-		
-		# Cargar configuración
-		config = ConfigManager()
-		logger.info("Configuración cargada correctamente")
-		
-		# Inicializar motor del juego
-		game_engine = GameEngine(config)
-		logger.info("Motor del juego inicializado")
-		
-		# Ejecutar bucle principal del juego
-		game_engine.run()
-		
-	except KeyboardInterrupt:
-		logger.info("Juego interrumpido por el usuario")
-	except Exception as e:
-		logger.error(f"Error crítico en el juego: {e}")
-		raise
-	finally:
-		logger.info("Cerrando SiK Python Game...")
+    """
+    Función principal que inicializa y ejecuta el juego.
+    """
+    try:
+        # Configurar logging
+        logger = setup_logger()
+        logger.info("Iniciando SiK Python Game...")
+
+        # Cargar configuración
+        config = ConfigManager()
+        logger.info("Configuración cargada correctamente")
+
+        # Inicializar motor del juego
+        game_engine = GameEngine(config)
+        logger.info("Motor del juego inicializado")
+
+        # Ejecutar bucle principal del juego
+        game_engine.run()
+
+    except KeyboardInterrupt:
+        logger.info("Juego interrumpido por el usuario")
+    except Exception as e:
+        logger.error(f"Error crítico en el juego: {e}")
+        raise
+    finally:
+        logger.info("Cerrando SiK Python Game...")
 
 
 if __name__ == "__main__":
-	main() 
+    main()

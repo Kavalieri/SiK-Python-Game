@@ -186,4 +186,4 @@
 ### 2024-07-28 - Integración de Powerups
 - Sistema de powerups con sprites reales
 - Integración completa en Asset Manager
-- Visualización en tests unificados 
+- Visualización en tests unificados

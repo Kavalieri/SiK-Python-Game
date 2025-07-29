@@ -1,0 +1,40 @@
+---
+description: Estándares de calidad 2025 para código fuente del proyecto.
+globs:
+- src/**/*.py
+- tests/**/*.py
+- tools/**/*.py
+alwaysApply: true
+---
+- 🎯 MÉTRICAS OBLIGATORIAS:
+  - Archivos ≤150 líneas (CRÍTICO)
+  - Cobertura de tests ≥80%
+  - 0 errores de Ruff
+  - 0 warnings de type checking
+  - Complejidad ciclomática ≤10 por función
+
+- 🏗️ ARQUITECTURA:
+  - Modular y extensible
+  - Separación clara de responsabilidades
+  - Interfaces bien definidas
+  - Principios SOLID aplicados
+
+- 📚 DOCUMENTACIÓN:
+  - 100% funciones públicas documentadas
+  - Type hints obligatorios
+  - Docstrings en español con formato Google
+  - Comentarios explicativos en lógica compleja
+
+- 🧪 TESTING:
+  - Tests unitarios para nueva funcionalidad
+  - Tests de integración para flujos críticos
+  - Ejecución continua con pytest
+  - Refactorización segura con tests como red de seguridad
+
+- 🔄 DESARROLLO:
+  - Pre-commit hooks pasando siempre
+  - Commits atómicos y descriptivos
+  - Refactorización continua
+  - Monitoreo de métricas de calidad
+
+@INSTRUCCIONES_DESARROLLO.md @COLABORACION.md

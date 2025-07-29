@@ -2,7 +2,7 @@
   "teclado": {
     "movimiento": {
       "arriba": "w",
-      "abajo": "s", 
+      "abajo": "s",
       "izquierda": "a",
       "derecha": "d"
     },
@@ -44,4 +44,4 @@
     "ratón_habilitado": true,
     "auto_detección_gamepad": true
   }
-} 
+}

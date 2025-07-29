@@ -144,4 +144,4 @@ exclude_lines = [
 	"if __name__ == .__main__.:",
 	"class .*\\bProtocol\\):",
 	"@(abc\\.)?abstractmethod",
-] 
+]

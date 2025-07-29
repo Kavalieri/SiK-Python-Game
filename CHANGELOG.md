@@ -65,7 +65,7 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 
 #### 🎮 Estado del Flujo de Menús
 - **Pantalla de bienvenida**: ✅ Funcional
-- **Menú principal**: ✅ Funcional  
+- **Menú principal**: ✅ Funcional
 - **Selección de personaje**: ✅ Funcional
 - **Transiciones**: ✅ Todas funcionan correctamente
 

@@ -34,40 +34,75 @@ SiK Python Game es un proyecto de videojuego 2D que utiliza Python como lenguaje
 - **Físicas realistas**: Integración con Pymunk para físicas 2D
 - **Interfaz moderna**: Uso de pygame-menu y pygame-gui para interfaces
 
-## 📋 Requisitos
+## 📋 Requisitos del Sistema
 
-- Python 3.8 o superior
-- Pygame-ce 2.4.0 o superior
-- Dependencias listadas en `requirements.txt`
+### Software Obligatorio
+- **Python 3.11+** - Lenguaje de programación principal
+- **Poetry** - Gestión moderna de dependencias y entornos virtuales
+- **Git** - Control de versiones
+- **PowerShell 5.1+** - Terminal recomendada (Windows 11)
+
+### Herramientas de Desarrollo (instaladas automáticamente)
+- **Pygame-ce 2.4.0+** - Motor gráfico 2D
+- **Ruff** - Linter y formateador de código (reemplaza Black + Flake8)
+- **Pre-commit** - Hooks de calidad de código
+- **Pytest** - Framework de testing
+
+### Hardware Recomendado
+- **RAM**: 4GB mínimo, 8GB recomendado
+- **Espacio en disco**: 500MB para el proyecto + dependencias
+- **GPU**: Compatible con OpenGL 2.1+ (para aceleración gráfica)
 
 ## 🛠️ Instalación
 
-1. **Clonar el repositorio**:
-   ```bash
-   git clone <url-del-repositorio>
-   cd SiK-Python-Game
-   ```
+### Prerrequisitos
+- Python 3.11 o superior
+- Poetry (gestor de dependencias moderno)
+- Git
+- Windows 11 con PowerShell (entorno recomendado)
 
-2. **Crear entorno virtual** (recomendado):
-   ```bash
-   python -m venv venv
-   # En Windows:
-   venv\Scripts\activate
-   # En Linux/Mac:
-   source venv/bin/activate
-   ```
+### 1. Clonar el repositorio
+```powershell
+git clone https://github.com/Kavalieri/SiK-Python-Game.git
+cd SiK-Python-Game
+```
 
-3. **Instalar dependencias**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 2. Instalar Poetry (si no está instalado)
+```powershell
+# Instalador oficial recomendado
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+```
+
+### 3. Configurar entorno de desarrollo
+```powershell
+# Instalar dependencias del proyecto
+poetry install
+
+# Configurar hooks de calidad de código
+poetry run pre-commit install
+
+# Verificar instalación
+poetry run python src/main.py --version
+```
 
 ## 🎯 Cómo Ejecutar
 
-El punto de entrada principal del juego es `src/main.py`:
+### Ejecución estándar
+```powershell
+poetry run python src/main.py
+```
 
-```bash
-python src/main.py
+### Ejecución con opciones de desarrollo
+```powershell
+# Con debug activado
+poetry run python src/main.py --debug
+
+# Ejecutar tests
+poetry run pytest tests/
+
+# Verificar calidad de código
+poetry run ruff check src/
+poetry run ruff format src/
 ```
 
 ## 📁 Estructura del Proyecto
@@ -305,4 +340,3 @@ Este proyecto forma parte de una investigación sobre el potencial de la intelig
 ---
 
 > **Este registro deja constancia de la recuperación y las políticas de formato para futuras referencias y colaboración segura.**
-

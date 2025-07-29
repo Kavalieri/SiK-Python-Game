@@ -1,0 +1,22 @@
+repos:
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+        exclude: ^(backups__DISABLED/|releases/|backup_.*/).*$
+      - id: ruff-format
+        exclude: ^(backups__DISABLED/|releases/|backup_.*/).*$
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(backups__DISABLED/|releases/|backup_.*/).*$
+      - id: end-of-file-fixer
+        exclude: ^(backups__DISABLED/|releases/|backup_.*/).*$
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=50000']
+      - id: check-merge-conflict
+      - id: debug-statements
+        exclude: ^(backups__DISABLED/|releases/|backup_.*/).*$

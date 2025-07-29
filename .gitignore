@@ -173,18 +173,32 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Cursor  
-#  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to 
+# Cursor
+#  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+.cursor
 
 # Excluir archivos y carpetas generadas por el juego o temporales
 saves/
 logs/
 backups__DISABLED/
 releases/
+
+# Excluir archivos de empaquetado y distribución
+*.exe
+*.zip
+*.tar.gz
+*.tar.bz2
+*.7z
+*.rar
+dist/
+build/
+*.spec
+
+# Excluir archivos temporales del sistema
 *.pyc
 __pycache__/
 .DS_Store
@@ -194,6 +208,10 @@ __pycache__/
 *.bak
 *.old
 *.orig
+
+# Excluir directorios de backup temporales
+backup_*/
+cleanup_*/
 # Excluir archivos de pruebas locales
 *.local
 # Excluir archivos de configuración de entorno

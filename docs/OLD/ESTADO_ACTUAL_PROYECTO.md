@@ -2,8 +2,8 @@
 
 ## 📊 Resumen Ejecutivo
 
-**Fecha de actualización:** 29 de Julio de 2025  
-**Versión actual:** 0.1.3  
+**Fecha de actualización:** 29 de Julio de 2025
+**Versión actual:** 0.1.3
 **Estado:** ✅ **FUNCIONAL - Flujo de menús completo**
 
 ## 🎮 Estado del Juego
@@ -159,4 +159,4 @@ python -m pytest tests/
 
 ---
 
-**Estado del proyecto:** ✅ **LISTO PARA DESARROLLO ACTIVO** 
+**Estado del proyecto:** ✅ **LISTO PARA DESARROLLO ACTIVO**

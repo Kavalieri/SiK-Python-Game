@@ -90,30 +90,30 @@ import logging
 class GestorEjemplo:
 	"""
 	Gestor de ejemplo que muestra las convenciones del proyecto.
-	
+
 	Attributes:
 		configuracion: Configuración del gestor
 		logger: Logger para el gestor
 	"""
-	
+
 	def __init__(self, configuracion: Dict[str, Any]):
 		"""
 		Inicializa el gestor de ejemplo.
-		
+
 		Args:
 			configuracion: Configuración inicial del gestor
 		"""
 		self.configuracion = configuracion
 		self.logger = logging.getLogger(__name__)
 		self.logger.info("Gestor de ejemplo inicializado")
-	
+
 	def procesar_datos(self, datos: str) -> Optional[str]:
 		"""
 		Procesa los datos de entrada.
-		
+
 		Args:
 			datos: Datos a procesar
-			
+
 		Returns:
 			Datos procesados o None si hay error
 		"""
@@ -128,57 +128,71 @@ class GestorEjemplo:
 
 ## 🔧 Herramientas de Desarrollo
 
-### Herramientas Obligatorias
+### Stack Tecnológico 2025
 
-1. **Black**: Formateo de código
-2. **Flake8**: Linting y verificación de estilo
-3. **MyPy**: Verificación de tipos
-4. **Pytest**: Testing
+1. **Ruff** - Linter y formateador ultrarrápido (reemplaza Black + Flake8 + isort)
+2. **Pre-commit** - Hooks de calidad de código automáticos
+3. **Poetry** - Gestión moderna de dependencias
+4. **Pytest** - Framework de testing
+5. **Pylance** - Language server para Python (type checking)
 
 ### Comandos de Desarrollo
 
-```bash
-# Formatear código
-black src/
+```powershell
+# Instalar dependencias
+poetry install
 
-# Verificar estilo
-flake8 src/
+# Configurar hooks de calidad
+poetry run pre-commit install
 
-# Verificar tipos
-mypy src/
+# Formatear y verificar código (automático con pre-commit)
+poetry run ruff check src/
+poetry run ruff format src/
 
 # Ejecutar tests
-pytest tests/
+poetry run pytest tests/
 
 # Ejecutar tests con cobertura
-pytest tests/ --cov=src --cov-report=html
+poetry run pytest tests/ --cov=src --cov-report=html
+
+# Verificar instalación completa
+poetry run pre-commit run --all-files
 ```
 
 ### Configuración de IDE
 
-#### Visual Studio Code
+#### Visual Studio Code (Recomendado)
 
-Recomendamos las siguientes extensiones:
-- Python
-- Pylance
-- Black Formatter
-- Flake8
-- Python Test Explorer
+**Extensiones requeridas:**
+- Python (Microsoft)
+- Pylance (Microsoft)
+- Ruff (Astral Software)
+- Pre-commit Hook (Pre-commit)
 
-Configuración recomendada en `.vscode/settings.json`:
+**Configuración recomendada en `.vscode/settings.json`:**
 
 ```json
 {
-	"python.formatting.provider": "black",
-	"python.linting.enabled": true,
-	"python.linting.flake8Enabled": true,
-	"python.linting.mypyEnabled": true,
+	"python.defaultInterpreterPath": "./.venv/Scripts/python.exe",
+	"python.terminal.activateEnvironment": true,
+	"ruff.enable": true,
+	"ruff.organizeImports": true,
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
-	}
+		"source.organizeImports": "explicit"
+	},
+	"editor.rulers": [88],
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true
 }
 ```
+
+#### PyCharm (Alternativa)
+
+**Configuración recomendada:**
+- Intérprete: Poetry virtual environment
+- Code style: Configurar para Ruff
+- Plugins: Poetry, Pre-commit Hook
 
 ## 🧪 Testing
 
@@ -213,18 +227,18 @@ from src.utils.config_manager import ConfigManager
 
 class TestConfigManager:
 	"""Pruebas para el ConfigManager."""
-	
+
 	def test_default_config(self):
 		"""Prueba que la configuración por defecto se carga correctamente."""
 		config = ConfigManager()
-		
+
 		assert "game" in config.config
 		assert config.get("game", "title") == "SiK Python Game"
-	
+
 	def test_set_value(self):
 		"""Prueba establecer un valor de configuración."""
 		config = ConfigManager()
-		
+
 		config.set("game", "debug", True)
 		assert config.get("game", "debug") == True
 ```
@@ -244,19 +258,19 @@ class TestConfigManager:
 def funcion_ejemplo(parametro1: str, parametro2: int = 10) -> bool:
 	"""
 	Descripción breve de la función.
-	
+
 	Descripción más detallada si es necesaria.
-	
+
 	Args:
 		parametro1: Descripción del primer parámetro
 		parametro2: Descripción del segundo parámetro (opcional)
-		
+
 	Returns:
 		Descripción del valor de retorno
-		
+
 	Raises:
 		ValueError: Cuando el parámetro1 es inválido
-		
+
 	Example:
 		>>> funcion_ejemplo("test", 5)
 		True

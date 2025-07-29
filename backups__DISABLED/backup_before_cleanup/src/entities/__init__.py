@@ -14,17 +14,17 @@ from .powerup import Powerup, PowerupType, PowerupEffect
 from .tile import Tile, TileType
 
 __all__ = [
-	'Entity',
-	'Player',
-	'Enemy',
-	'EnemyConfig',
-	'EnemyBehavior',
-	'EnemyRarity',
-	'EnemyTypes',
-	'Projectile',
-	'Powerup',
-	'PowerupType',
-	'PowerupEffect',
-	'Tile',
-	'TileType'
-] 
+    "Entity",
+    "Player",
+    "Enemy",
+    "EnemyConfig",
+    "EnemyBehavior",
+    "EnemyRarity",
+    "EnemyTypes",
+    "Projectile",
+    "Powerup",
+    "PowerupType",
+    "PowerupEffect",
+    "Tile",
+    "TileType",
+]

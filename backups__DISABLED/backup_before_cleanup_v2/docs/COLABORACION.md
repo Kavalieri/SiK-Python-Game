@@ -90,30 +90,30 @@ import logging
 class GestorEjemplo:
 	"""
 	Gestor de ejemplo que muestra las convenciones del proyecto.
-	
+
 	Attributes:
 		configuracion: Configuración del gestor
 		logger: Logger para el gestor
 	"""
-	
+
 	def __init__(self, configuracion: Dict[str, Any]):
 		"""
 		Inicializa el gestor de ejemplo.
-		
+
 		Args:
 			configuracion: Configuración inicial del gestor
 		"""
 		self.configuracion = configuracion
 		self.logger = logging.getLogger(__name__)
 		self.logger.info("Gestor de ejemplo inicializado")
-	
+
 	def procesar_datos(self, datos: str) -> Optional[str]:
 		"""
 		Procesa los datos de entrada.
-		
+
 		Args:
 			datos: Datos a procesar
-			
+
 		Returns:
 			Datos procesados o None si hay error
 		"""
@@ -213,18 +213,18 @@ from src.utils.config_manager import ConfigManager
 
 class TestConfigManager:
 	"""Pruebas para el ConfigManager."""
-	
+
 	def test_default_config(self):
 		"""Prueba que la configuración por defecto se carga correctamente."""
 		config = ConfigManager()
-		
+
 		assert "game" in config.config
 		assert config.get("game", "title") == "SiK Python Game"
-	
+
 	def test_set_value(self):
 		"""Prueba establecer un valor de configuración."""
 		config = ConfigManager()
-		
+
 		config.set("game", "debug", True)
 		assert config.get("game", "debug") == True
 ```
@@ -244,19 +244,19 @@ class TestConfigManager:
 def funcion_ejemplo(parametro1: str, parametro2: int = 10) -> bool:
 	"""
 	Descripción breve de la función.
-	
+
 	Descripción más detallada si es necesaria.
-	
+
 	Args:
 		parametro1: Descripción del primer parámetro
 		parametro2: Descripción del segundo parámetro (opcional)
-		
+
 	Returns:
 		Descripción del valor de retorno
-		
+
 	Raises:
 		ValueError: Cuando el parámetro1 es inválido
-		
+
 	Example:
 		>>> funcion_ejemplo("test", 5)
 		True

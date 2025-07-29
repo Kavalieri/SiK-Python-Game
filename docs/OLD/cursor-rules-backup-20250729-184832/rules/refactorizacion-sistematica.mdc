@@ -1,0 +1,38 @@
+---
+description: Proceso de refactorización sistemática para archivos >150 líneas.
+globs:
+- src/**/*.py
+alwaysApply: true
+---
+- 🎯 OBJETIVO CRÍTICO: Ningún archivo >150 líneas
+- 📊 ARCHIVOS IDENTIFICADOS PARA REFACTORIZACIÓN:
+  - src/entities/entity.py (>300 líneas) - ALTA PRIORIDAD
+  - src/ui/menu_factory.py (>300 líneas) - ALTA PRIORIDAD
+  - src/ui/menu_callbacks.py (>300 líneas) - ALTA PRIORIDAD
+  - src/utils/world_generator.py (>300 líneas) - MEDIA PRIORIDAD
+  - src/utils/animation_manager.py (>280 líneas) - MEDIA PRIORIDAD
+
+- 🔧 ESTRATEGIA DE DIVISIÓN:
+  1. Identificar responsabilidades separadas dentro del archivo
+  2. Crear submódulos específicos por responsabilidad
+  3. Mantener API pública intacta para evitar breaking changes
+  4. Crear tests unitarios para cada submódulo
+  5. Verificar funcionalidad completa después de división
+
+- ✅ PROCESO SEGURO:
+  1. Crear backup del archivo original
+  2. Ejecutar tests antes de refactorización
+  3. Dividir archivo manteniendo funcionalidad
+  4. Ejecutar tests después de cada división
+  5. Actualizar imports en archivos dependientes
+  6. Verificar ejecución completa del juego
+  7. Commit atómico por cada archivo refactorizado
+
+- 🚨 REGLAS CRÍTICAS:
+  - NO cambiar comportamiento público de clases/funciones
+  - Mantener backward compatibility
+  - Tests deben pasar después de cada refactorización
+  - Documentar cambios en CHANGELOG.md
+  - Actualizar imports en archivos dependientes
+
+@INSTRUCCIONES_DESARROLLO.md

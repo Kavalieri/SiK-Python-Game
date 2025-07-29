@@ -1,7 +1,7 @@
 # Resumen Final del Proyecto SiK Python Game
 
-**Fecha:** 29 de Julio de 2025  
-**Versión:** 0.1.0  
+**Fecha:** 29 de Julio de 2025
+**Versión:** 0.1.0
 **Estado:** ✅ COMPLETAMENTE FUNCIONAL
 
 ## 🎯 Objetivo Cumplido
@@ -188,4 +188,4 @@ El juego está **listo para ser jugado** y **preparado para futuras expansiones*
 
 ---
 
-**¡El proyecto SiK Python Game está COMPLETAMENTE FUNCIONAL y listo para ser disfrutado!** 🎮✨ 
+**¡El proyecto SiK Python Game está COMPLETAMENTE FUNCIONAL y listo para ser disfrutado!** 🎮✨

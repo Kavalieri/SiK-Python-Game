@@ -269,4 +269,3 @@ Este proyecto forma parte de una investigación sobre el potencial de la intelig
 **Desarrollado con 🤖 Inteligencia Artificial por el equipo SiK**
 
 *Este proyecto representa el futuro del desarrollo de software asistido por IA*
-

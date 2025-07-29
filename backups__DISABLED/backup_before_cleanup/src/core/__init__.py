@@ -9,4 +9,4 @@ from .game_engine import GameEngine
 from .game_state import GameState
 from .scene_manager import SceneManager
 
-__all__ = ['GameEngine', 'GameState', 'SceneManager'] 
+__all__ = ["GameEngine", "GameState", "SceneManager"]

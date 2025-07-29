@@ -151,4 +151,4 @@ Para añadir nuevos tests:
 1. Crear el archivo en la carpeta `scripts/`
 2. Seguir el patrón de los tests existentes
 3. Añadir la opción al menú en `run_tests.py`
-4. Documentar en este README 
+4. Documentar en este README
