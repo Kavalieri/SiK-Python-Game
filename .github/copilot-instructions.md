@@ -157,6 +157,16 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - **Commits atómicos** por cada refactorización o cambio significativo
 - **Evitar** movimientos directos en explorador
 
+### 📁 **Gestión Documental Organizada** (NUEVO - OBLIGATORIO)
+- **Lógica de archivo**: Ver `docs/LOGICA_GESTION_DOCUMENTAL.md` para proceso completo
+- **Directorio activo**: `docs/` SOLO para documentos de trabajo en curso
+- **Sistema de archivo**: `docs/ARCHIVO/2025/[categoria]/` para documentos completados
+- **Categorías de archivo**: refactorizacion, migracion-sqlite, terminal-powershell, commits-github, configuracion
+- **Proceso obligatorio**: Mover documentos completados/sustituidos a archivo correspondiente
+- **Mantener docs/ limpio**: Máximo documentos activos esenciales para desarrollo actual
+- **Archivar tras completar**: Cada fase/proyecto → mover documentación a ARCHIVO
+- **Consulta histórica**: Estructura organizada por año y tema en docs/ARCHIVO/
+
 ### Priorización: GitHub CLI vs Git Tradicional
 **Usar GitHub CLI (`gh`) para:**
 - Obtener información del repositorio y estado general

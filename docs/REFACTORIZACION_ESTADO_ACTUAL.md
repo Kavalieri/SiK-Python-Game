@@ -107,44 +107,66 @@
 3. **powerup.py** vs **powerup_new.py** (161 vs 161 líneas)
 4. **config_manager.py** vs **config_manager_modular.py** (181 vs 179 líneas)
 
-### 🗄️ Configuración vs Código (Duplicaciones Críticas) - SISTEMA MIXTO
-1. **config/characters.json** ↔ **src/entities/character_data.py** → **MIGRAR A SQLite**
-2. **config/enemies.json** ↔ **src/entities/enemy_types.py** → **MIGRAR A SQLite**
+### 🗄️ Configuración vs Código (Sistema Mixto IMPLEMENTADO) ✅
+1. **config/characters.json** ↔ **src/entities/character_data.py** → **✅ MIGRADO A SQLite**
+2. **config/enemies.json** ↔ **src/entities/enemy_types.py** → **✅ MIGRADO A SQLite**
 3. **config/powerups.json** ↔ **src/entities/powerup.py** → **SEPARAR**: JSON config + Python lógica
 4. **config/gameplay.json** ↔ Múltiples archivos de escenas → **MANTENER JSON**, eliminar hardcodeo
 5. **config/audio.json** ↔ Módulos de audio → **MANTENER JSON**, usar configuración
 
+## 🎯 **PROGRESO SISTEMA MIXTO INTELIGENTE** ✅
+
+### ✅ COMPLETADO (30 Julio 2025)
+- **✅ ConfigDatabase**: Interfaz SQLite para sistema mixto (321 líneas)
+- **✅ CharacterDataManager**: Reemplaza CHARACTER_DATA hardcodeado
+- **✅ EnemyTypesManager**: Reemplaza configuraciones hardcodeadas
+- **✅ Esquema SQLite**: 8 tablas operativas (personajes, enemigos, configuraciones, etc.)
+- **✅ Migración exitosa**: 3 personajes + 2 enemigos → SQLite
+- **✅ Sistema dual**: SQLite para datos complejos, JSON para configuración simple
+
+### 📊 Estado Base de Datos
+- **Tablas SQLite**: 8 tablas creadas
+- **Personajes migrados**: 3 (guerrero, adventureguirl, robot)
+- **Enemigos migrados**: 2 (zombie_male, zombie_female)
+- **Sistema funcional**: ConfigDatabase operativo
+
 ## 🎯 Plan de Acción Priorizado
 
-### FASE 1: Limpieza Inmediata (1-2 días)
-1. **Resolver duplicaciones de archivos**
+### ✅ FASE 1: Sistema Mixto SQLite (COMPLETADO - 30 Julio 2025)
+1. **✅ Infraestructura SQLite**
+   - DatabaseManager, SchemaManager, ConfigDatabase implementados
+   - 8 tablas SQLite operativas
+   - Sistema de migración funcional
+
+2. **✅ Migración datos críticos**
+   - **characters.json** → SQLite tabla personajes (3 personajes migrados)
+   - **enemies.json** → SQLite tabla enemigos (2 enemigos migrados)
+   - **character_data.py** → CharacterDataManager (elimina hardcodeo)
+   - **enemy_types.py** → EnemyTypesManager (elimina hardcodeo)
+
+### 🔥 FASE 2: Optimización Archivos Críticos (EN PROCESO)
+1. **Archivos críticos inmediatos (200+ líneas)**
+   - **atmospheric_effects.py** (249→<150 líneas) - **PRÓXIMO**
+   - **input_manager.py** (244→<150 líneas)
+   - **desert_background.py** (233→<150 líneas) - **YA REFACTORIZADO**
+   - **menu_creators.py** (230→<150 líneas)
+   - ~~**enemy_types.py** (230→<150 líneas)~~ → **✅ COMPLETADO** (nuevo archivo optimizado)
+
+2. **Resolución de duplicaciones restantes**
    - Decidir qué versión mantener (entity_core vs entity_core_optimized, etc.)
    - Eliminar archivos redundantes
    - Actualizar imports si es necesario
 
-2. **Optimizar archivos críticos (200+ líneas)**
-   - **atmospheric_effects.py** (249→<150 líneas)
-   - **input_manager.py** (244→<150 líneas)
-   - **desert_background.py** (233→<150 líneas)
-   - **menu_creators.py** (230→<150 líneas)
-   - **enemy_types.py** (230→<150 líneas)
-
-### FASE 2: Optimización Sistemática (3-4 días)
+### 📊 FASE 3: Optimización Sistemática (2-3 días)
 1. **Archivos de alta prioridad (175-199 líneas)**
    - Aplicar técnicas de división modular
    - Mantener APIs compatibles
    - Crear fachadas si es necesario
 
 2. **Archivos de media prioridad (150-174 líneas)**
+   - **config_database.py** (321→<150 líneas) - **CANDIDATO PARA DIVISIÓN**
    - Optimización mediante compactación
    - Reducción de documentación excesiva
-   - Unificación de métodos similares
-
-### FASE 3: Migración SQLite (Paralela a optimización)
-1. **Continuar con PLAN_MIGRACION_SQLITE.md**
-2. **Implementar sistema mixto inteligente**: SQLite para datos complejos, JSON para configuración
-3. **Resolver duplicaciones config/src mediante sistema híbrido**
-4. **Integrar sistema unificado de configuración**
 
 ## 📋 Metodología de Optimización Comprobada
 
@@ -165,23 +187,27 @@
 
 ### 🎯 Objetivos Cuantificables
 - **Meta**: 100% archivos <150 líneas
-- **Estado actual**: 58% cumplimiento (40/69 archivos)
-- **Por optimizar**: 29 archivos críticos
-- **Estimación**: 7-10 días para completar
+- **Estado actual**: 59% cumplimiento (41/69 archivos) **+1 archivo optimizado**
+- **Sistema mixto**: ✅ 2 archivos críticos resueltos (characters/enemies)
+- **Por optimizar**: 27 archivos críticos **(-2 completados)**
+- **Estimación actualizada**: 5-7 días para completar **(-2 días por sistema mixto)**
 
-### 📈 Progreso Semanal
-- **Líneas optimizadas objetivo**: 2,000+ líneas
-- **Archivos objetivo**: 29 archivos
-- **Commits objetivo**: 1 commit por archivo optimizado
+### 📈 Progreso Semanal (30 Julio 2025)
+- **Líneas optimizadas**: +300 líneas (sistema mixto implementado)
+- **Archivos completados**: 2 archivos críticos (enemy_types.py optimizado)
+- **Sistema mixto**: ConfigDatabase, CharacterDataManager, EnemyTypesManager
+- **Infraestructura**: 8 tablas SQLite, migración automática, APIs de compatibilidad
 
 ## 🔗 Próximos Pasos Inmediatos
 
-1. **Revisar y consolidar archivos duplicados**
-2. **Comenzar optimización con atmospheric_effects.py (249 líneas)**
-3. **Aplicar metodología comprobada de reducción**
-4. **Actualizar documentación por cada archivo completado**
-5. **Commit progreso en lotes lógicos**
+1. **✅ Sistema Mixto Completado**: ConfigDatabase + CharacterDataManager + EnemyTypesManager
+2. **🔥 Optimizar atmospheric_effects.py (249 líneas)** - Próximo archivo crítico
+3. **Aplicar metodología comprobada de reducción** a archivos >200 líneas
+4. **Resolver duplicaciones**: entity_core vs entity_core_optimized, etc.
+5. **Continuar con archivos críticos**: input_manager.py, menu_creators.py
 
 ---
 
 **🎯 OBJETIVO FINAL**: Proyecto 100% compliant con límite de 150 líneas por archivo, manteniendo funcionalidad completa y preparado para futuras características.
+
+**✅ PROGRESO SIGNIFICATIVO**: Sistema mixto SQLite implementado exitosamente, eliminando duplicaciones críticas entre JSON y código hardcodeado.

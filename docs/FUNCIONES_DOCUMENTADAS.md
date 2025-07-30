@@ -292,16 +292,35 @@
 - **DuneRenderer.remove_dune(dune)**: Remueve duna específica del sistema
 - **DuneRenderer.regenerate_dunes()**: Regenera todas las dunas con nuevas configuraciones
 
-#### AtmosphericEffects (src/utils/atmospheric_effects.py) - 211 líneas
-- **AtmosphericEffects.__init__(screen_width, screen_height)**: Inicializa sistema de efectos atmosféricos
-- **AtmosphericEffects.update(delta_time)**: Actualiza viento, calor y efectos temporales
-- **AtmosphericEffects.render_sky_gradient(screen)**: Renderiza gradiente del cielo del desierto
-- **AtmosphericEffects.render_heat_shimmer(screen)**: Renderiza ondas de calor y distorsión atmosférica
-- **AtmosphericEffects.render_wind_effect(screen)**: Renderiza líneas visuales del viento
-- **AtmosphericEffects.render_dust_clouds(screen, camera_offset)**: Renderiza nubes de polvo en horizonte
-- **AtmosphericEffects.set_wind_parameters(strength, base_angle)**: Configura parámetros del viento
-- **AtmosphericEffects.set_heat_shimmer_strength(strength)**: Configura intensidad efectos de calor
-- **AtmosphericEffects.get_wind_data()**: Obtiene datos actuales del viento para sincronización
+#### AtmosphericEffects (src/utils/atmospheric_effects.py) - 101 líneas (REFACTORIZADO)
+- **AtmosphericEffects.__init__(screen_width, screen_height)**: Inicializa sistema coordinado con SkyRenderer + HeatShimmerEffects + WindEffects
+- **AtmosphericEffects.update(delta_time)**: Actualiza todos los efectos atmosféricos delegando a sistemas especializados
+- **AtmosphericEffects.render_sky_gradient(screen)**: Delegado a SkyRenderer.render_sky_gradient()
+- **AtmosphericEffects.render_heat_shimmer(screen)**: Delegado a HeatShimmerEffects.render_heat_shimmer()
+- **AtmosphericEffects.render_wind_effect(screen)**: Delegado a WindEffects.render_wind_effect()
+- **AtmosphericEffects.render_dust_clouds(screen, camera_offset)**: Delegado a WindEffects.render_dust_clouds()
+- **AtmosphericEffects.set_wind_parameters(strength, base_angle)**: Delegado a WindEffects.set_wind_parameters()
+- **AtmosphericEffects.set_heat_shimmer_strength(strength)**: Delegado a HeatShimmerEffects.set_heat_shimmer_strength()
+- **AtmosphericEffects.get_wind_data()**: Delegado a WindEffects.get_wind_data()
+
+#### SkyRenderer (src/utils/sky_renderer.py) - 58 líneas (NUEVO MÓDULO)
+- **SkyRenderer.__init__(screen_width, screen_height)**: Inicializa renderizador del cielo con colores del desierto
+- **SkyRenderer.render_sky_gradient(screen)**: Renderiza gradiente vertical del cielo (horizon→mid→top)
+- **SkyRenderer._interpolate_color(color1, color2, t)**: Interpola entre dos colores RGB
+
+#### HeatShimmerEffects (src/utils/heat_shimmer_effects.py) - 65 líneas (NUEVO MÓDULO)
+- **HeatShimmerEffects.__init__(screen_width, screen_height)**: Inicializa sistema de ondas de calor
+- **HeatShimmerEffects.update(delta_time)**: Actualiza tiempo para animación de shimmer
+- **HeatShimmerEffects.render_heat_shimmer(screen)**: Renderiza ondas de calor ondulantes en parte inferior
+- **HeatShimmerEffects.set_heat_shimmer_strength(strength)**: Configura intensidad del efecto (0.0-1.0)
+
+#### WindEffects (src/utils/wind_effects.py) - 103 líneas (NUEVO MÓDULO)
+- **WindEffects.__init__(screen_width, screen_height)**: Inicializa sistema de efectos de viento
+- **WindEffects.update(delta_time)**: Actualiza tiempo del viento para animaciones
+- **WindEffects.render_wind_effect(screen)**: Renderiza líneas sutiles de viento
+- **WindEffects.render_dust_clouds(screen, camera_offset)**: Renderiza nubes de polvo con parallax
+- **WindEffects.set_wind_parameters(strength, base_angle)**: Configura fuerza y ángulo del viento
+- **WindEffects.get_wind_data()**: Obtiene datos actuales del viento (fuerza, ángulo)
 
 #### DesertBackground (src/utils/desert_background.py) - 187 líneas (FACHADA)
 - **DesertBackground.__init__(screen_width, screen_height)**: Fachada que integra SandParticles + DuneRenderer + AtmosphericEffects

@@ -104,7 +104,10 @@
 
 - **✅ SandParticleSystem** (158 líneas) - Sistema de partículas de arena con efectos de viento
 - **✅ DuneRenderer** (172 líneas) - Renderizado de dunas con sombras y efectos visuales
-- **✅ AtmosphericEffects** (211 líneas) - Efectos atmosféricos, cielo, calor y viento
+- **✅ AtmosphericEffects** (101 líneas - REFACTORIZADO) - Fachada coordinadora
+  - **SkyRenderer** (58 líneas) - Gradientes del cielo del desierto
+  - **HeatShimmerEffects** (65 líneas) - Ondas de calor y distorsión
+  - **WindEffects** (103 líneas) - Efectos de viento y nubes de polvo
 - **✅ DesertBackground** (187 líneas) - Fachada de compatibilidad manteniendo API original
 
 **Beneficios logrados:**
