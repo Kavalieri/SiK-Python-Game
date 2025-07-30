@@ -7,12 +7,13 @@ Fecha: 2024
 Descripción: Métodos especializados para renderizar todos los elementos del HUD.
 """
 
+from typing import TYPE_CHECKING, Dict, Optional
+
 import pygame
-from typing import Dict, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .hud_elements import HUDElement, HUDConfiguration
     from ..core.game_state import GameState
+    from .hud_elements import HUDConfiguration, HUDElement
 
 
 class HUDRenderer:

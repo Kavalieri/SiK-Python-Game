@@ -1,29 +1,27 @@
 """
-Save Manager - Gestor de Guardado
-================================
+Save Manager - Sistema de Guardado Refactorizado
+===============================================
 
 Autor: SiK Team
-Fecha: 2024
-Descripción: Sistema de guardado con cifrado y gestión de archivos de partida.
+Fecha: 2025-07-30
+Descripción: Fachada del sistema de guardado que mantiene compatibilidad con API original.
 """
 
-import json
 import logging
-import hashlib
-from pathlib import Path
 from typing import Dict, Any, Optional, List
-from datetime import datetime
-import pickle
-import zlib
 
 from .config_manager import ConfigManager
-# Importación diferida para evitar importación circular
-# from ..core.game_state import GameState
+from .save_loader import SaveLoader
+from .save_encryption import SaveEncryption
+from .save_database import SaveDatabase
+from .save_compatibility import SaveCompatibility
 
 
 class SaveManager:
     """
-    Gestiona el sistema de guardado del juego con cifrado y múltiples archivos.
+    Gestor de guardado refactorizado que mantiene la API original.
+
+    Este módulo actúa como fachada unificada del sistema modular de guardado.
     """
 
     def __init__(self, config: ConfigManager):
@@ -31,432 +29,264 @@ class SaveManager:
         Inicializa el gestor de guardado.
 
         Args:
-                config: Configuración del juego
+            config: Configuración del juego
         """
         self.config = config
         self.logger = logging.getLogger(__name__)
 
-        # Configuración de guardado
-        self.saves_path = Path(config.get("paths", "saves", "saves"))
-        self.max_save_files = 3
-        self.encryption_key = self._generate_encryption_key()
+        # Inicializar componentes modulares
+        self._init_components()
 
-        # Crear directorio de guardados si no existe
-        self.saves_path.mkdir(parents=True, exist_ok=True)
+    def _init_components(self) -> None:
+        """Inicializa los componentes del sistema modular."""
+        try:
+            # Componente de encriptación
+            self.encryption_handler = SaveEncryption(self.config)
 
-        # Información de archivos de guardado
-        self.save_files = self._load_save_files_info()
-        self.current_save_file = None
+            # Componente de carga de archivos
+            self.loader = SaveLoader(self.config, self.encryption_handler)
 
-        self.logger.info(f"Gestor de guardado inicializado en: {self.saves_path}")
-
-    def _generate_encryption_key(self) -> str:
-        """
-        Genera una clave de cifrado basada en la configuración del juego.
-
-        Returns:
-                Clave de cifrado
-        """
-        # Usar información del juego para generar una clave única
-        game_title = self.config.get("game", "title", "SiK Python Game")
-        version = self.config.get("game", "version", "0.1.0")
-
-        key_string = f"{game_title}_{version}_save_key"
-        return hashlib.sha256(key_string.encode()).hexdigest()[:32]
-
-    def _load_save_files_info(self) -> List[Dict[str, Any]]:
-        """
-        Carga la información de los archivos de guardado existentes.
-
-        Returns:
-                Lista con información de archivos de guardado
-        """
-        save_files = []
-
-        for i in range(self.max_save_files):
-            save_file = self.saves_path / f"save_{i + 1}.dat"
-            save_info_file = self.saves_path / f"save_{i + 1}_info.json"
-
-            save_info = {
-                "file_number": i + 1,
-                "file_path": str(save_file),
-                "info_path": str(save_info_file),
-                "exists": save_file.exists(),
-                "last_used": None,
-                "player_name": None,
-                "level": 1,
-                "score": 0,
-                "play_time": 0,
-            }
-
-            if save_info_file.exists():
+            # Componente de base de datos (opcional)
+            self.database = None
+            if self.config.get("save_system", "use_sqlite", False):
                 try:
-                    with open(save_info_file, "r", encoding="utf-8") as f:
-                        info_data = json.load(f)
-                        save_info.update(info_data)
-                except Exception as e:
-                    self.logger.error(
-                        f"Error al cargar información del archivo {i + 1}: {e}"
+                    from .database_manager import DatabaseManager
+
+                    db_manager = DatabaseManager()
+                    self.database = SaveDatabase(db_manager, self.encryption_handler)
+                    self.logger.info("Sistema SQLite inicializado")
+                except ImportError:
+                    self.logger.warning(
+                        "DatabaseManager no disponible, usando solo pickle"
                     )
+                except Exception as e:
+                    self.logger.error("Error inicializando SQLite: %s", e)
 
-            save_files.append(save_info)
+            # Componente de compatibilidad
+            self.compatibility = SaveCompatibility(
+                self.config, self.loader, self.database, self.encryption_handler
+            )
 
-        return save_files
+            self.logger.info("SaveManager inicializado correctamente")
+
+        except Exception as e:
+            self.logger.error("Error inicializando SaveManager: %s", e)
+            raise
+
+    # === API ORIGINAL MANTENIDA ===
 
     def get_save_files_info(self) -> List[Dict[str, Any]]:
         """
         Obtiene información de todos los archivos de guardado.
 
         Returns:
-                Lista con información de archivos de guardado
+            Lista de información de archivos de guardado
         """
-        return self.save_files.copy()
+        return self.compatibility.get_saves_info_unified()
 
-    def create_new_save(self, save_file_number: int) -> bool:
+    def save_game(
+        self, game_state, additional_data: Optional[Dict[str, Any]] = None
+    ) -> bool:
         """
-        Crea un nuevo archivo de guardado.
+        Guarda el estado del juego en el slot activo.
 
         Args:
-                save_file_number: Número del archivo de guardado (1-3)
+            game_state: Estado del juego a guardar
+            additional_data: Datos adicionales a guardar
 
         Returns:
-                True si se creó correctamente
+            True si se guardó correctamente
         """
-        if not 1 <= save_file_number <= self.max_save_files:
-            self.logger.error(
-                f"Número de archivo de guardado inválido: {save_file_number}"
-            )
-            return False
-
-        # Verificar si el archivo ya existe
-        save_info = self.save_files[save_file_number - 1]
-        if save_info["exists"]:
-            self.logger.warning(f"El archivo de guardado {save_file_number} ya existe")
-            return False
-
-        self.current_save_file = save_file_number
-        self.logger.info(f"Nuevo archivo de guardado creado: {save_file_number}")
-        return True
+        # Obtener slot activo del game_state
+        slot = getattr(game_state, "active_slot", 1)
+        return self.compatibility.save_game_unified(slot, game_state, additional_data)
 
     def load_save(self, save_file_number: int) -> Optional[Dict[str, Any]]:
         """
         Carga un archivo de guardado.
 
         Args:
-                save_file_number: Número del archivo de guardado (1-3)
+            save_file_number: Número del archivo de guardado
 
         Returns:
-                Datos del guardado o None si hay error
+            Datos del guardado o None si hay error
         """
-        if not 1 <= save_file_number <= self.max_save_files:
-            self.logger.error(
-                f"Número de archivo de guardado inválido: {save_file_number}"
-            )
-            return None
+        return self.compatibility.load_game_unified(save_file_number)
 
-        save_info = self.save_files[save_file_number - 1]
-        if not save_info["exists"]:
-            self.logger.error(f"El archivo de guardado {save_file_number} no existe")
-            return None
-
-        try:
-            save_file = Path(save_info["file_path"])
-
-            # Leer archivo cifrado
-            with open(save_file, "rb") as f:
-                encrypted_data = f.read()
-
-            # Descifrar datos
-            decrypted_data = self._decrypt_data(encrypted_data)
-
-            # Descomprimir y deserializar
-            decompressed_data = zlib.decompress(decrypted_data)
-            save_data = pickle.loads(decompressed_data)
-
-            self.current_save_file = save_file_number
-            self.logger.info(
-                f"Archivo de guardado {save_file_number} cargado correctamente"
-            )
-
-            return save_data
-
-        except Exception as e:
-            self.logger.error(
-                f"Error al cargar archivo de guardado {save_file_number}: {e}"
-            )
-            return None
-
-    def save_game(self, game_state, additional_data: Dict[str, Any] = None) -> bool:
+    def create_new_save(self, save_file_number: int) -> bool:
         """
-        Guarda el estado del juego.
+        Crea un nuevo archivo de guardado.
 
         Args:
-                game_state: Estado del juego a guardar
-                additional_data: Datos adicionales a guardar
+            save_file_number: Número del archivo de guardado (1-3)
 
         Returns:
-                True si se guardó correctamente
+            True si se creó correctamente
         """
-        if self.current_save_file is None:
-            self.logger.error("No hay archivo de guardado seleccionado")
-            return False
-
         try:
-            # Preparar datos para guardar
-            save_data = {
-                "game_state": game_state.get_state_dict(),
-                "additional_data": additional_data or {},
-                "save_timestamp": datetime.now().isoformat(),
-                "game_version": self.config.get("game", "version", "0.1.0"),
+            # Crear archivo de información vacío
+            save_info = {
+                "file_number": save_file_number,
+                "exists": True,
+                "last_used": None,
+                "player_name": f"Nuevo Jugador {save_file_number}",
+                "level": 1,
+                "score": 0,
+                "play_time": 0,
             }
 
-            # Serializar y comprimir datos
-            serialized_data = pickle.dumps(save_data)
-            compressed_data = zlib.compress(serialized_data)
+            # Si SQLite está disponible, crear entrada en base de datos
+            if self.database:
+                return self.database.create_new_save_slot(save_file_number, save_info)
+            else:
+                # Crear usando sistema pickle tradicional
+                from pathlib import Path
+                import json
+                from datetime import datetime
 
-            # Cifrar datos
-            encrypted_data = self._encrypt_data(compressed_data)
+                saves_path = Path(self.config.get("paths", "saves", "saves"))
+                saves_path.mkdir(exist_ok=True)
 
-            # Guardar archivo cifrado
-            save_info = self.save_files[self.current_save_file - 1]
-            save_file = Path(save_info["file_path"])
+                info_file = saves_path / f"save_{save_file_number}_info.json"
+                save_info["last_used"] = datetime.now().isoformat()
 
-            with open(save_file, "wb") as f:
-                f.write(encrypted_data)
+                with open(info_file, "w", encoding="utf-8") as f:
+                    json.dump(save_info, f, indent=4, ensure_ascii=False)
 
-            # Actualizar información del archivo
-            self._update_save_info(save_info, game_state)
-
-            # Guardar información del archivo
-            info_file = Path(save_info["info_path"])
-            with open(info_file, "w", encoding="utf-8") as f:
-                json.dump(save_info, f, indent=4, ensure_ascii=False)
-
-            self.logger.info(f"Juego guardado en archivo {self.current_save_file}")
-            return True
+                self.logger.info("Nuevo save creado: slot %d", save_file_number)
+                return True
 
         except Exception as e:
-            self.logger.error(f"Error al guardar el juego: {e}")
+            self.logger.error(
+                "Error creando nuevo save slot %d: %s", save_file_number, e
+            )
             return False
-
-    def _update_save_info(self, save_info: Dict[str, Any], game_state):
-        """
-        Actualiza la información del archivo de guardado.
-
-        Args:
-                save_info: Información del archivo de guardado
-                game_state: Estado del juego
-        """
-        save_info["exists"] = True
-        save_info["last_used"] = datetime.now().isoformat()
-        save_info["player_name"] = game_state.player_name
-        save_info["level"] = game_state.level
-        save_info["score"] = game_state.score
-        save_info["play_time"] = getattr(game_state, "play_time", 0)
 
     def delete_save(self, save_file_number: int) -> bool:
         """
         Elimina un archivo de guardado.
 
         Args:
-                save_file_number: Número del archivo de guardado (1-3)
+            save_file_number: Número del archivo de guardado
 
         Returns:
-                True si se eliminó correctamente
+            True si se eliminó correctamente
         """
-        if not 1 <= save_file_number <= self.max_save_files:
-            self.logger.error(
-                f"Número de archivo de guardado inválido: {save_file_number}"
-            )
-            return False
-
-        save_info = self.save_files[save_file_number - 1]
-        if not save_info["exists"]:
-            self.logger.warning(f"El archivo de guardado {save_file_number} no existe")
-            return False
-
         try:
-            # Eliminar archivo de guardado
-            save_file = Path(save_info["file_path"])
+            success = False
+
+            # Eliminar de SQLite si está disponible
+            if self.database:
+                success = self.database.delete_save_from_database(save_file_number)
+
+            # Eliminar archivos pickle
+            from pathlib import Path
+
+            saves_path = Path(self.config.get("paths", "saves", "saves"))
+
+            save_file = saves_path / f"save_{save_file_number}.dat"
+            info_file = saves_path / f"save_{save_file_number}_info.json"
+
             if save_file.exists():
                 save_file.unlink()
+                success = True
 
-            # Eliminar archivo de información
-            info_file = Path(save_info["info_path"])
             if info_file.exists():
                 info_file.unlink()
+                success = True
 
-            # Resetear información
-            save_info["exists"] = False
-            save_info["last_used"] = None
-            save_info["player_name"] = None
-            save_info["level"] = 1
-            save_info["score"] = 0
-            save_info["play_time"] = 0
+            if success:
+                self.logger.info("Save eliminado: slot %d", save_file_number)
 
-            # Si era el archivo actual, deseleccionarlo
-            if self.current_save_file == save_file_number:
-                self.current_save_file = None
+            return success
 
-            self.logger.info(f"Archivo de guardado {save_file_number} eliminado")
+        except Exception as e:
+            self.logger.error("Error eliminando save slot %d: %s", save_file_number, e)
+            return False
+
+    def backup_saves(self) -> bool:
+        """
+        Crea una copia de seguridad de todos los archivos de guardado.
+
+        Returns:
+            True si el backup fue exitoso
+        """
+        try:
+            from pathlib import Path
+            import shutil
+            from datetime import datetime
+
+            saves_path = Path(self.config.get("paths", "saves", "saves"))
+            backup_path = (
+                saves_path
+                / "backups"
+                / f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
+            backup_path.mkdir(parents=True, exist_ok=True)
+
+            # Backup archivos pickle
+            for save_file in saves_path.glob("save_*.dat"):
+                shutil.copy2(save_file, backup_path)
+
+            for info_file in saves_path.glob("save_*_info.json"):
+                shutil.copy2(info_file, backup_path)
+
+            # Backup base de datos SQLite si existe
+            if self.database:
+                self.database.backup_database(str(backup_path / "game_database.db"))
+
+            self.logger.info("Backup creado en: %s", backup_path)
             return True
 
         except Exception as e:
-            self.logger.error(
-                f"Error al eliminar archivo de guardado {save_file_number}: {e}"
-            )
+            self.logger.error("Error creando backup: %s", e)
             return False
 
-    def _encrypt_data(self, data: bytes) -> bytes:
-        """
-        Cifra los datos usando la clave de cifrado.
+    # === NUEVAS FUNCIONALIDADES ===
 
-        Args:
-                data: Datos a cifrar
+    def migrate_to_sqlite(self) -> Dict[str, bool]:
+        """
+        Migra todas las partidas al sistema SQLite.
 
         Returns:
-                Datos cifrados
+            Diccionario con resultados de migración
         """
-        # Implementación simple de cifrado XOR
-        # En producción, usar una biblioteca de cifrado más robusta
-        key_bytes = self.encryption_key.encode()
-        encrypted = bytearray()
+        return self.compatibility.migrate_all_pickle_to_sqlite()
 
-        for i, byte in enumerate(data):
-            key_byte = key_bytes[i % len(key_bytes)]
-            encrypted.append(byte ^ key_byte)
-
-        return bytes(encrypted)
-
-    def _decrypt_data(self, encrypted_data: bytes) -> bytes:
+    def get_system_info(self) -> Dict[str, Any]:
         """
-        Descifra los datos usando la clave de cifrado.
-
-        Args:
-                encrypted_data: Datos cifrados
+        Obtiene información del sistema de guardado.
 
         Returns:
-                Datos descifrados
+            Información del sistema actual
         """
-        # El cifrado XOR es simétrico, por lo que descifrar es igual que cifrar
-        return self._encrypt_data(encrypted_data)
+        return {
+            "sqlite_available": self.database is not None,
+            "encryption_enabled": self.encryption_handler is not None,
+            "save_format": "sqlite" if self.database else "pickle",
+            "auto_migration": self.config.get("save_system", "auto_migrate", True),
+            "total_saves": len(self.get_save_files_info()),
+        }
 
-    def get_last_save_file(self) -> Optional[int]:
+    def validate_saves_integrity(self) -> Dict[str, bool]:
         """
-        Obtiene el número del último archivo de guardado utilizado.
+        Valida la integridad de todas las partidas guardadas.
 
         Returns:
-                Número del archivo de guardado o None si no hay ninguno
+            Diccionario con resultados de validación por slot
         """
-        last_used = None
-        last_timestamp = None
+        results = {}
+        save_files = self.get_save_files_info()
 
-        for save_info in self.save_files:
-            if save_info["exists"] and save_info["last_used"]:
-                if last_timestamp is None or save_info["last_used"] > last_timestamp:
-                    last_timestamp = save_info["last_used"]
-                    last_used = save_info["file_number"]
+        for save_info in save_files:
+            if save_info["exists"]:
+                slot = save_info["file_number"]
 
-        return last_used
+                # Intentar cargar el save para validar integridad
+                try:
+                    data = self.load_save(slot)
+                    results[f"slot_{slot}"] = data is not None
+                except Exception:
+                    results[f"slot_{slot}"] = False
 
-    def auto_save(self, game_state, additional_data: Dict[str, Any] = None) -> bool:
-        """
-        Guarda automáticamente el juego en el archivo actual o el último usado.
-
-        Args:
-                game_state: Estado del juego a guardar
-                additional_data: Datos adicionales a guardar
-
-        Returns:
-                True si se guardó correctamente
-        """
-        # Si no hay archivo actual, usar el último
-        if self.current_save_file is None:
-            last_save = self.get_last_save_file()
-            if last_save:
-                self.current_save_file = last_save
-            else:
-                # Crear nuevo archivo si no hay ninguno
-                self.current_save_file = 1
-                self.create_new_save(1)
-
-        return self.save_game(game_state, additional_data)
-
-    def export_save_debug(self, save_file_number: int, output_path: str) -> bool:
-        """
-        Exporta un archivo de guardado en formato legible para debug.
-
-        Args:
-                save_file_number: Número del archivo de guardado
-                output_path: Ruta donde guardar el archivo de debug
-
-        Returns:
-                True si se exportó correctamente
-        """
-        save_data = self.load_save(save_file_number)
-        if save_data is None:
-            return False
-
-        try:
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(save_data, f, indent=4, ensure_ascii=False)
-
-            self.logger.info(
-                f"Archivo de guardado {save_file_number} exportado para debug: {output_path}"
-            )
-            return True
-
-        except Exception as e:
-            self.logger.error(f"Error al exportar archivo de guardado: {e}")
-            return False
-
-    def import_save_debug(self, save_file_number: int, input_path: str) -> bool:
-        """
-        Importa un archivo de guardado desde formato de debug.
-
-        Args:
-                save_file_number: Número del archivo de guardado
-                input_path: Ruta del archivo de debug a importar
-
-        Returns:
-                True si se importó correctamente
-        """
-        try:
-            with open(input_path, "r", encoding="utf-8") as f:
-                save_data = json.load(f)
-
-            # Crear archivo de guardado desde datos de debug
-            self.current_save_file = save_file_number
-
-            # Crear un GameState temporal para guardar
-            from ..core.game_state import GameState
-
-            temp_game_state = GameState()
-            temp_game_state.load_state(save_data.get("game_state", {}))
-
-            return self.save_game(temp_game_state, save_data.get("additional_data", {}))
-
-        except Exception as e:
-            self.logger.error(f"Error al importar archivo de guardado: {e}")
-            return False
-
-    def has_save_file(self) -> bool:
-        """
-        Verifica si existe algún archivo de guardado.
-
-        Returns:
-                True si existe al menos un archivo de guardado
-        """
-        return any(save_info["exists"] for save_info in self.save_files)
-
-    def load_latest_save(self) -> bool:
-        """
-        Carga el último archivo de guardado usado.
-
-        Returns:
-                True si se cargó exitosamente
-        """
-        last_save = self.get_last_save_file()
-        if last_save:
-            return self.load_save(last_save) is not None
-        return False
+        return results
