@@ -2,31 +2,33 @@
 applyTo: '**'
 ---
 
-# Instrucciones Personalizadas del Usuario
+# Instrucciones Personalizadas - SiK Python Game
 
-## Directrices Generales
-- Mantener consistencia con el estilo del proyecto SiK Python Game
-- Priorizar calidad de código sobre velocidad de desarrollo
-- Documentar todas las decisiones importantes
-- Seguir las convenciones establecidas en el proyecto
+## 🚨 FLUJO POST-OPERACIÓN OBLIGATORIO
+**Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
+```powershell
+.\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
+```
+- **Método validado**: SendKeys (Ctrl+K U) preserva pestañas pinned
+- **Libera**: 272+ MB caché VS Code comprobados
+- **Sin efectos secundarios**: No cambia tamaño ventana
 
-## Preferencias de Desarrollo
-- Usar español para todos los elementos del código
-- Maximizar la legibilidad y mantenibilidad
-- Implementar soluciones robustas y escalables
-- Evitar optimizaciones prematuras
+## 🎯 Directrices Críticas
+- **CONSULTAR PRIMERO**: `docs/refactorizacion_progreso.md` antes de CUALQUIER cambio
+- **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
+- **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
+- **Commits**: Solo `.\scripts\simple_commit.ps1 "mensaje"` (método unificado)
 
-## Gestión del Repositorio
-- **Priorizar GitHub CLI** (`gh`) sobre Git tradicional cuando sea posible
-- **Operaciones del repositorio**: usar `gh repo` para consultas e información
-- **Issues y PRs**: gestionar exclusivamente con `gh issue` y `gh pr`
-- **Releases**: crear y gestionar con `gh release`
-- **Navegación**: usar `gh browse` para abrir rápidamente el repositorio
-- **Git tradicional**: solo para operaciones básicas (add, commit, mv)
+## 🛠️ Stack y Preferencias
+- **Español completo**: Código, comentarios, variables, documentación
+- **GitHub CLI prioritario**: `gh` > git tradicional para operaciones repo
+- **PowerShell**: Shell predeterminado (NO `&&`, usar `;`)
+- **Calidad**: 0 errores Ruff + 0 warnings MyPy + 100% cobertura tests
 
-## Flujo de Trabajo
-- Validar cambios antes de implementar
-- Mantener backup de archivos críticos
-- Documentar procesos y decisiones
+## 📋 Responsabilidades Automáticas
+- **Mantener consistencia** con arquitectura modular SiK Python Game
+- **Documentar decisiones** importantes en archivos correspondientes
+- **Actualizar automáticamente** documentación tras cambios significativos
+- **Priorizar robustez** y mantenibilidad sobre velocidad desarrollo
 - Seguir metodología incremental
 - **Usar scripts automatizados** cuando estén disponibles (`commit_profesional.ps1`)

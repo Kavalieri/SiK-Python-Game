@@ -1,336 +1,106 @@
 # Instrucciones para GitHub Copilot - SiK Python Game
 
-## 🗄️ PRIORIDAD MÁXIMA: REFACTORIZACIÓN + MIGRACIÓN SQLITE
+## � **PRIORIDADES CRÍTICAS** (Consultar PRIMERO)
 
-### Estado Crítico del Proyecto
-- **23 archivos CRÍTICOS** exceden límite de 150 líneas
-- **11 archivos >300 líneas** r### Método de Commit Unificado (NUEVO - OBLIGATORIO)
-- **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
-- **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
-- **Flujo optimizado**: pre-commit → staging → commit → push (resuelve conflictos de hooks)
-- **Conventional Commits**: Formato automático `tipo(ámbito): descripción`
-- **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
-- **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
-- **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
-- **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
-- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
-- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
-- **Resuelve problema crítico**: Pre-commit hooks modificando archivos post-stagingvisión URGENTE
-- **Migración SQLite INTEGRADA** con refactorización simultánea
-- **Sistema de documentación COHESIVO** con referencias cruzadas obligatorias
+### 1️⃣ **REFACTORIZACIÓN + MIGRACIÓN SQLITE** (23 archivos críticos)
+- **Estado**: 23 archivos exceden 150 líneas → 11 >300 líneas **URGENTE**
+- **Método**: División funcional preservando 100% funcionalidad + migración SQLite
+- **Límite ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
 
-### 🔗 Sistema de Documentación Integrado (CONSULTAR EN ORDEN)
-1. **`docs/refactorizacion_progreso.md`** - **DOCUMENTO CENTRAL** - Consultar PRIMERO siempre
-2. **`docs/PLAN_MIGRACION_SQLITE.md`** - Plan detallado y checklist de migración SQLite
-3. **`docs/FUNCIONES_DOCUMENTADAS.md`** - **ACTUALIZAR** con cada función nueva/modificada
-4. **`docs/INDICE_MIGRACION_SQLITE.md`** - Vista rápida del progreso de migración
-5. **Este archivo** - Reglas base del proyecto
+### 2️⃣ **DOCUMENTACIÓN CENTRAL** (Consultar en orden)
+1. [`docs/refactorizacion_progreso.md`](../docs/refactorizacion_progreso.md) - **DOCUMENTO CENTRAL**
+2. [`docs/PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md) - Plan SQLite + checklist
+3. [`docs/FUNCIONES_DOCUMENTADAS.md`](../docs/FUNCIONES_DOCUMENTADAS.md) - **ACTUALIZAR** siempre
+4. [`docs/INDICE_MIGRACION_SQLITE.md`](../docs/INDICE_MIGRACION_SQLITE.md) - Vista rápida
 
-### Protocolo de Trabajo OBLIGATORIO
-1. **ANTES de cualquier cambio**: consultar [`docs/refactorizacion_progreso.md`](../docs/refactorizacion_progreso.md)
-2. **Si toca persistencia**: revisar [`docs/PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md)
-3. **DURANTE cualquier edición**: actualizar [`docs/FUNCIONES_DOCUMENTADAS.md`](../docs/FUNCIONES_DOCUMENTADAS.md)
-4. **DESPUÉS de cualquier cambio**: actualizar progreso en documentos correspondientes
-5. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede
+### 3️⃣ **WORKFLOW OBLIGATORIO**
+- **ANTES**: Consultar `refactorizacion_progreso.md` + revisar si toca SQLite
+- **DURANTE**: Actualizar `FUNCIONES_DOCUMENTADAS.md` + dividir si >150 líneas
+- **DESPUÉS**: Commit con `.\scripts\simple_commit.ps1 "mensaje"` + limpieza VS Code
 
-## 📋 Automantenimiento y Documentación Crítica
+## ⚡ **SISTEMAS AUTOMATIZADOS**
 
-### Responsabilidades Primarias
-- **PRIORIDAD 1**: Consultar y actualizar `docs/refactorizacion_progreso.md` en CADA operación
-- **PRIORIDAD 2**: Actualizar `docs/FUNCIONES_DOCUMENTADAS.md` con TODAS las funciones nuevas/modificadas
-- **PRIORIDAD 3**: Dividir INMEDIATAMENTE cualquier archivo que exceda 150 líneas
-- **Mantener actualizado** este archivo con cualquier cambio significativo del proyecto
-- **Actualizar automáticamente** `CHANGELOG.md` con cambios importantes
-- **Actualizar automáticamente** `README.md` con cambios importantes
-- **Documentar decisiones** importantes en archivos correspondientes
-- **Reflejar cambios** de arquitectura, reglas o convenciones inmediatamente
+### 🔄 **Commits y Versionado**
+- **Diario**: `.\scripts\simple_commit.ps1 "mensaje"` (Conventional Commits automático)
+- **Completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
+- **Pre-commit**: Hooks ejecutados ANTES staging (resuelve conflictos)
 
-### Archivos de Seguimiento Obligatorio
-- **`docs/refactorizacion_progreso.md`** - **DOCUMENTO CENTRAL** - Estado de refactorización (23 archivos críticos)
-- **`docs/PLAN_MIGRACION_SQLITE.md`** - Plan detallado de migración base de datos con checklist
-- **`docs/FUNCIONES_DOCUMENTADAS.md`** - Catálogo completo de funciones por módulo (actualizar siempre)
-- **`docs/INDICE_MIGRACION_SQLITE.md`** - Vista rápida del progreso de migración SQLite
-- **`CHANGELOG.md`** - Registro de cambios significativos
-- **Este archivo** - Base de reglas del proyecto
+### 🧹 **Limpieza Post-Operación** (NUEVO - INTEGRADO)
+**Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
+```powershell
+.\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
+```
+- **Método validado**: SendKeys (Ctrl+K U)
+- **Preserva**: Pestañas pinned y modificadas
+- **Libera**: Caché VS Code (272+ MB comprobados)
+- **Sin efectos**: No cambia tamaño ventana
 
-## 🗄️ Migración SQLite Integrada
+### 🗄️ **Migración SQLite** (Fase 1 ✅ - Fase 2-4 pendiente)
+- **DatabaseManager**: Modularizado y funcional
+- **SchemaManager**: Sistema completo de tablas
+- **Próximo**: ConfigManager (264→3x150 líneas) + SaveManager (365→4x150 líneas)
 
-### Estrategia de Refactorización con Base de Datos
-- **Enfoque dual**: División de archivos + migración a SQLite simultánea
-- **Prioridad**: SaveManager (365 líneas) y ConfigManager (264 líneas) primero
-- **Objetivo**: Resolver duplicaciones config/src + límites de líneas
-- **Referencias**: [`PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md) para esquemas y checklist detallado
+## 📋 **REGLAS FUNDAMENTALES**
 
-### Archivos con Migración SQLite Prioritaria
-1. **SaveManager** (365 líneas) → 4 módulos + SQLite (partidas_guardadas)
-2. **ConfigManager** (264 líneas) → 3 módulos + SQLite (configuraciones, personajes, enemigos)
-3. **GameState** (151 líneas) → 3 módulos + SQLite (estadisticas_juego)
+### 🔧 **División de Archivos** (CRÍTICO)
+**REGLA ABSOLUTA**: Ningún archivo >150 líneas - Dividir INMEDIATAMENTE
+1. **División funcional**: Core + Extensions, Manager + Operations
+2. **Preservar APIs**: 100% compatibilidad mantenida
+3. **Commit atómico**: Por cada archivo dividido
+4. **Actualizar**: `FUNCIONES_DOCUMENTADAS.md` automáticamente
 
-## 📋 Regla Crítica: Límite de Líneas
-**NINGÚN archivo puede superar 150 líneas**. Dividir inmediatamente si se excede.
-**REGLA DE DIVISIÓN**: Dividir SIEMPRE en 2 módulos operativos preservando toda la funcionalidad útil.
+### 🛠️ **Stack y Herramientas**
+- **Python 3.11+** + **Pygame-ce** (NO pygame estándar) + **Poetry**
+- **GitHub CLI prioritario**: `gh` > git tradicional
+- **PowerShell**: Shell predeterminado (NO `&&`, usar `;`)
+- **Español**: Código, comentarios, variables, funciones
 
-## 🚨 Archivos Críticos que Requieren Refactorización URGENTE
+### 🏗️ **Arquitectura Modular**
+```
+src/core/     # Motor, scene manager
+src/entities/ # Jugador, enemigos, proyectiles
+src/scenes/   # Menús, gameplay, transiciones
+src/ui/       # HUD, componentes UI
+src/utils/    # Assets, config, helpers
+```
 
-### Archivos Críticos (>300 líneas) - División INMEDIATA + Migración SQLite
-1. **src/entities/entity.py** (479 líneas) - **CRÍTICO** - Sin migración SQLite (objetos en memoria)
-2. **src/utils/asset_manager.py** (464 líneas) - **CRÍTICO** - Posible cache SQLite futuro
+### 🎯 **Convenciones**
+- **Variables**: `generacion_enemigos`, `velocidad_movimiento`
+- **Clases**: `GestorEnemigos`, `PersonajeJugador` (PascalCase español)
+- **Type hints**: Obligatorios en parámetros y retornos
+- **Docstrings**: Español completo con Args/Returns/Raises
+## 🎮 **CONTEXTO DEL PROYECTO**
+
+**Videojuego 2D bullet hell** - Pygame-ce + Python 3.11+ + Poetry
+Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
+
+### 🚨 **Archivos Críticos que Requieren Refactorización URGENTE**
+1. **src/entities/entity.py** (479 líneas) - **CRÍTICO** - Sin migración SQLite
+2. **src/utils/asset_manager.py** (464 líneas) - **CRÍTICO** - Cache SQLite futuro
 3. **src/ui/hud.py** (397 líneas) - **CRÍTICO** - Sin migración SQLite
-4. **src/entities/player.py** (390 líneas) - **CRÍTICO** - Sin migración SQLite
-5. **src/entities/player_combat.py** (382 líneas) - **CRÍTICO** - Sin migración SQLite
-6. **src/utils/desert_background.py** (381 líneas) - **CRÍTICO** - Sin migración SQLite
-7. **src/entities/enemy.py** (373 líneas) - **CRÍTICO** - Sin migración SQLite (objetos en memoria)
-8. **🗄️ src/utils/save_manager.py** (365 líneas) - **CRÍTICO + MIGRACIÓN SQLITE** - pickle→SQLite
-9. **src/core/game_engine.py** (352 líneas) - **CRÍTICO** - Sin migración SQLite
-10. **src/scenes/character_ui.py** (350 líneas) - **CRÍTICO** - Sin migración SQLite
-11. **src/ui/menu_callbacks.py** (336 líneas) - **CRÍTICO** - Sin migración SQLite
+4. **🗄️ src/utils/save_manager.py** (365 líneas) - **CRÍTICO + MIGRACIÓN SQLITE**
+5. **🗄️ src/utils/config_manager.py** (264 líneas) - **MIGRACIÓN SQLITE**
 
-### Archivos Moderados con Migración SQLite Prioritaria
-- **🗄️ src/utils/config_manager.py** (264 líneas) - **MIGRACIÓN SQLITE** - JSON→SQLite
-- **🗄️ src/core/game_state.py** (151 líneas) - **MIGRACIÓN SQLITE** - Estadísticas→SQLite
+**⚠️ IMPORTANTE**: Consultar `docs/refactorizacion_progreso.md` antes de editar
+## 🔄 **REGLAS DE TRABAJO**
 
-### ⚠️ IMPORTANTE: Antes de editar cualquier archivo
-1. **Consultar** `docs/refactorizacion_progreso.md` para ver estado actual
-2. **Si archivo >150 líneas**: DIVIDIR antes de cualquier cambio
-3. **Actualizar** ambos archivos de seguimiento después de cambios
+### ⚡ **Comandos y Herramientas**
+- **Poetry**: `poetry run python src/main.py`, `poetry install`, `poetry add package_name`
+- **PowerShell**: Shell predeterminado (NO `&&`, usar `;`)
+- **GitHub CLI prioritario**: `gh repo view` > `git status`
 
-### 🔧 Proceso de División Seguro (OBLIGATORIO)
-**REGLA FUNDAMENTAL**: **NUNCA eliminar métodos útiles** - SIEMPRE dividir en 2 partes operativas
+### � **Commits y Gestión**
+- **Diario**: `.\scripts\simple_commit.ps1 "mensaje"`
+- **GitHub CLI**: `gh` para repo, issues, PRs, releases
+- **Git local**: Solo `git add`, `git commit`, branching
+- **Commits atómicos**: Por cada refactorización
 
-1. **Backup** del archivo original en carpeta temporal
-2. **Tests** ejecutar para validar estado actual
-3. **Dividir en 2 módulos operativos** por responsabilidades claras (NO eliminar funcionalidad)
-4. **Mantener APIs completas** - preservar todos los métodos públicos útiles
-5. **Validar** funcionalidad completa tras división (100% equivalencia)
-6. **Commit** atómico por cada archivo dividido
-7. **Actualizar** documentación de funciones automáticamente
-
-#### Estrategia de División (PREFERIR siempre):
-- **Opción 1**: División funcional (Core + Extensions, Manager + Operations, etc.)
-- **Opción 2**: División por responsabilidad (Input + Output, Data + Logic, etc.)
-- **Opción 3**: División temporal (Init + Runtime, Setup + Execution, etc.)
-- **EVITAR**: Eliminación de métodos, pérdida de funcionalidad, APIs incompletas
-
-## 🎮 Contexto del Proyecto
-Videojuego 2D bullet hell desarrollado con Pygame-ce. El jugador se mueve libremente con cámara fluida, dispara hacia el cursor del ratón y enfrenta oleadas de enemigos con IA avanzada. Desarrollo en **Windows 11 + VS Code** con asistencia 100% IA.
-
-## 🛠️ Stack Tecnológico
-- **Python 3.11+** con type hints obligatorios
-- **Pygame-ce** (NO pygame estándar)
-- **Poetry** para dependencias (NO pip/requirements.txt)
-- **Ruff** para linting/formateo
-- **Pre-commit** para hooks de calidad
-- **PyTest** con cobertura mínima 80%
-- **GitHub CLI** para gestión avanzada del repositorio
-
-## 📋 Convenciones de Código
-
-### Idioma y Nomenclatura
-- **Idioma**: Español para código, comentarios y documentación
-- **Variables/funciones**: `generacion_enemigos`, `jugador`, `velocidad_movimiento`
-- **Clases**: PascalCase español (`GestorEnemigos`, `PersonajeJugador`)
-- **Constantes**: SNAKE_CASE español (`VELOCIDAD_MAXIMA`, `TIEMPO_RESPAWN`)
-
-### Documentación Obligatoria
-- **Docstrings completas** en español para todas las funciones públicas
-- **Type hints obligatorios** en parámetros y retornos
-- **Comentarios contextuales** antes de lógica compleja
-- **Args, Returns, Raises** documentados
-- **Actualización automática** de `docs/FUNCIONES_DOCUMENTADAS.md`
-
-## 🏗️ Arquitectura del Proyecto
-
-### Estructura de Directorios
-```
-src/
-├── core/          # Motor del juego, scene manager
-├── entities/      # Jugador, enemigos, proyectiles
-├── scenes/        # Menús, gameplay, transiciones
-├── ui/            # HUD, menús, componentes UI
-├── utils/         # Assets, configuración, helpers
-└── main.py        # Punto de entrada único
-```
-
-### Separación de Responsabilidades
-- **Un archivo = una responsabilidad específica**
-- **Modularización extrema** para mantener límite de 150 líneas
-- **APIs claras** entre módulos
-- **Dependencias mínimas** entre componentes
-- **PRESERVACIÓN TOTAL**: Nunca eliminar métodos útiles durante refactorización
-- **DIVISIÓN INTELIGENTE**: Separar en 2 módulos operativos manteniendo funcionalidad completa
-- **EQUIVALENCIA FUNCIONAL**: Los módulos divididos deben ofrecer 100% de la funcionalidad original
-
-## ⚙️ Configuración Modular
-- **Todas las configuraciones** en `config/` como archivos JSON
-- **NO valores hardcoded** en Python
-- **ConfigManager** centralizado con validación de esquemas
-- **Separación por áreas**: audio, enemies, display, gameplay, ui, input
-
-## 🧪 Calidad y Testing
-
-### Métricas Obligatorias
-- **0 errores Ruff** siempre
-- **0 advertencias MyPy** siempre
+### 🎯 **Calidad y Testing**
+- **0 errores Ruff** + **0 advertencias MyPy** siempre
 - **100% cobertura tests** mínimo
-- **Complejidad ciclomática < 10**
-- **100% documentación** en funciones públicas
-
-### Comandos de Validación
-- `poetry run ruff check src/ tests/`
-- `poetry run ruff format src/ tests/`
-- `poetry run mypy src/`
-- `poetry run pytest --cov=src tests/`
-- `poetry run pre-commit run --all-files`
-
-## 🎯 Sistemas del Juego
-
-### Enemigos
-- **Tipos**: zombie masculino/femenino con variantes (normal, raro, élite, legendario)
-- **IA**: estados de patrulla, persecución y ataque
-- **Detección**: 300px como distancia estándar
-- **Comportamiento**: definido en `config/enemies.json`
-
-### Assets y Recursos
-- **Estructura obligatoria**: `assets/characters/used/`, `assets/ui/`, `assets/sounds/`
-- **Cache centralizado** de imágenes y sonidos
-- **Rutas absolutas** siempre
-- **Gestión de memoria** eficiente
-
-### HUD y Menús
-- **HUD permanente**: vida, mejoras, puntos, cronómetro
-- **Menús**: bienvenida, principal, pausa, opciones, mejoras, inventario, guardado
-- **Compatibilidad**: todas las resoluciones soportadas
-- **Separación**: lógica independiente de representación visual
-
-## 🛠️ Herramientas y Ejecución
-
-### Comandos Principales con Poetry
-- **Ejecución del juego**: `poetry run python src/main.py`
-- **Instalación dependencias**: `poetry install`
-- **Agregar paquetes**: `poetry add package_name`
-- **Limpieza de caché**: `poetry cache clear pypi --all`
-
-### Configuración Pygame-ce
-- **USAR SOLO**: `poetry add pygame-ce` (NO pygame estándar)
-- **Si hay conflictos**: `poetry remove pygame` seguido de `poetry add pygame-ce`
-- **Verificar instalación**: confirmar compatibilidad de métodos pygame-ce
-
-### GitHub CLI para Gestión Avanzada (PRIORITARIO)
-- **Documentación oficial**: https://cli.github.com/manual/
-- **Matriz de decisión completa**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md`
-- **Regla principal**: SIEMPRE preferir `gh` cuando esté disponible
-
-#### Comandos Esenciales GitHub CLI
-- **Repositorio**: `gh repo view`, `gh repo create`, `gh repo fork`, `gh repo clone`
-- **Issues**: `gh issue list`, `gh issue create`, `gh issue view --web`
-- **Pull Requests**: `gh pr create --fill`, `gh pr list`, `gh pr merge`
-- **Releases**: `gh release create`, `gh release upload`, `gh release list`
-- **Navegación**: `gh browse` (abrir en navegador), `gh status`
-- **Búsqueda**: `gh search repos`, `gh search code`, `gh search issues`
-- **Actions**: `gh workflow run`, `gh run list`, `gh workflow list`
-
-#### Git Tradicional (SOLO Local)
-- **Staging/Commits**: `git add`, `git commit`, `git commit --amend`
-- **Branching local**: `git branch`, `git checkout`, `git switch`
-- **Estado local**: `git status`, `git log`, `git diff`
-
-### Scripts Principales
-- `scripts/run_tests.py` - Testing interactivo
-- `scripts/cleanup_project.py` - Limpieza automática
-- **`scripts/unified_commit.ps1` - Método de commit unificado (NUEVO)**
-- **`scripts/simple_commit.ps1` - Commits cotidianos simplificados (NUEVO)**
-- `tools/package_improved.py` - Build ejecutable
-
-## 🔄 Reglas de Trabajo
-
-### Comandos Terminal PowerShell
-- **NO usar `&&`** para encadenar comandos (usar `;` si necesario)
-- **Comandos separados** por línea para mayor claridad
-- **PowerShell** como shell predeterminado en Windows
-- **Filtrado de texto**: `Select-String` en lugar de `grep`
-- **Búsqueda en archivos**: `Get-Content archivo.txt | Select-String "patrón"`
-
-### Configuración Terminal VS Code (CRÍTICO)
-- **Terminal optimizado**: Ver `docs/CONFIGURACION_TERMINAL_OPTIMIZADA.md` para configuración completa
-- **Usar terminal existente** cuando esté disponible en lugar de crear nuevos
-- **Scripts PowerShell ASCII-only**: **PROHIBIDOS emojis, Unicode y caracteres especiales**
-- **Timeouts automáticos**: Todos los comandos largos deben tener timeout (30-45s máximo)
-- **Detección de output**: Usar `isBackground=false` para comandos que requieren respuesta inmediata
-- **Scripts terminal-safe**: OBLIGATORIO usar `scripts/terminal_safe_commit.ps1` para commits
-- **Recuperación automática**: Si hay problemas, usar `scripts/reset_terminal_state.ps1`
-- **Validación pre-comando**: Verificar responsividad con `scripts/test_ascii_safe.ps1`
-- **Estado validado**: Terminal completamente funcional (30 jul 2025) - ver documentación
-
-### Reglas PowerShell Scripts (OBLIGATORIO)
-- **NUNCA usar emojis** (🚀, ✅, ❌, etc.) - causan problemas encoding
-- **NUNCA usar Unicode** - solo caracteres ASCII básicos
-- **Usar [OK], [ERROR], [WARN]** en lugar de símbolos
-- **Usar Write-Host con -ForegroundColor** para colores
-- **Incluir timeouts** en todos los comandos que pueden colgarse
-- **Validar estado terminal** antes de operaciones complejas
-
-### Método de Commit Unificado (NUEVO - OBLIGATORIO)
-- **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
-- **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
-- **Flujo optimizado**: pre-commit → staging → commit → push (resuelve conflictos de hooks)
-- **Conventional Commits**: Formato automático `tipo(ámbito): descripción`
-- **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
-- **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
-- **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
-- **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
-- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
-- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
-
-### Optimización de Entorno de Trabajo (NUEVO - RECOMENDADO)
-- **Script de limpieza**: `scripts/workspace_cleanup.ps1` para optimizar VS Code y caché
-- **Configuración automática**: `scripts/setup_auto_cleanup.ps1` para integrar limpieza
-- **Niveles de limpieza**: light (diario), deep (semanal), complete (mensual)
-- **Capacidades VS Code**: Cierre automático de pestañas con comandos workbench
-- **Limpieza de caché**: Python (__pycache__), Poetry, Git, VS Code workspaceStorage
-- **Optimización memoria**: Garbage collection .NET y análisis de uso de memoria
-- **Integración commits**: Limpieza automática después de commits exitosos
-- **Atajos de teclado**: Ctrl+K Ctrl+L (light), Ctrl+K Ctrl+T (tabs), Ctrl+K Ctrl+D (deep)
-- **Documentación**: `docs/OPTIMIZACION_ENTORNO_TRABAJO.md` con guía completa
-- **Uso recomendado**: `.\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
-
-### Gestión de Archivos y Repositorio
-- **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
-- **Matriz de decisión**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md` (consultar SIEMPRE)
-- **Información del repositorio**: `gh repo view` (preferir sobre git status)
-- **Gestión de issues/PRs**: `gh issue create`, `gh pr create --fill`
-- **Releases y distribución**: `gh release create`, `gh release upload`
-- **Git tradicional**: solo para `git add`, `git commit`, operaciones locales
-- **Commits atómicos** por cada refactorización o cambio significativo
-- **Evitar** movimientos directos en explorador
-
-### Priorización: GitHub CLI vs Git Tradicional
-**Usar GitHub CLI (`gh`) para:**
-- Obtener información del repositorio y estado general
-- Gestionar issues, pull requests y releases
-- Navegar rápidamente al repositorio en navegador
-- Clonar repositorios y gestionar forks
-- Buscar repositorios y contenido en GitHub
-- Ejecutar y monitorear GitHub Actions
-
-**Usar Git tradicional solo para:**
-- Operaciones locales básicas: `git add`, `git commit`
-- Control de versiones local y staging
-- Branching local: `git branch`, `git checkout`
-- Consultar logs y diferencias locales
-- **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
-- **Usar método unificado**: `.\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
-
-### Flujo Autónomo
-- **Continuar automáticamente** hasta puntos de prueba
-- **Resolver errores** de forma autónoma
-- **Documentar cambios** significativos inmediatamente
-
-### Estrategia para Problemas
-- **Comentar líneas** problemáticas temporalmente
-- **Probar sin conflictos** para identificar impacto real
-- **Documentar soluciones** implementadas
-
-## 🤖 Optimización para IA
+- **Complejidad < 10** por función
+- **Funciones <30 líneas** para IA optimal
+## 🤖 **OPTIMIZACIÓN PARA IA**
 
 ### Patrones para GitHub Copilot
 - **Nombres autodescriptivos** en español
