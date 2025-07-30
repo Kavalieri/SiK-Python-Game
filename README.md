@@ -1,342 +1,380 @@
-# SiK Python Game
+# 🎮 SiK Python Game
 
-Un videojuego 2D desarrollado **100% con agentes de inteligencia artificial y asistentes**, utilizando Python y Pygame-ce, siguiendo las mejores prácticas de la comunidad.
+<div align="center">
 
-## 🤖 Desarrollo con Inteligencia Artificial
+[![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
+[![Poetry](https://img.shields.io/badge/poetry-1.5+-orange.svg)](https://python-poetry.org)
+[![Pygame-ce](https://img.shields.io/badge/pygame--ce-2.4+-green.svg)](https://pyga.me)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
-**Este proyecto es un experimento pionero en desarrollo de videojuegos asistido por IA.** Todo el código, documentación, arquitectura y decisiones de diseño han sido generados y refinados mediante la colaboración entre desarrolladores humanos y agentes de inteligencia artificial avanzados.
+**Videojuego 2D bullet hell desarrollado 100% con IA | Python + Pygame-ce + Poetry**
 
-### Características del Desarrollo con IA:
-- **Arquitectura completa**: Diseñada y implementada por agentes de IA
-- **Código optimizado**: Generado con mejores prácticas y patrones de diseño
-- **Documentación automática**: Comentarios y documentación generados por IA
-- **Testing inteligente**: Scripts de prueba creados automáticamente
-- **Iteración continua**: Mejoras basadas en feedback y análisis de IA
+*Un experimento pionero en desarrollo de videojuegos asistido por inteligencia artificial*
 
-### Tecnologías de IA Utilizadas:
-- **Asistentes de código**: Generación y refactorización de código
-- **Análisis de patrones**: Optimización de arquitectura y rendimiento
-- **Generación de documentación**: Comentarios y guías automáticas
-- **Testing automatizado**: Scripts de verificación inteligentes
+[🚀 Instalación Rápida](#-instalación-rápida) • [🎯 Cómo Jugar](#-cómo-jugar) • [🤝 Contribuir](#-contribuir) • [📚 Documentación](#-documentación)
 
-## 🎮 Descripción
+</div>
 
-SiK Python Game es un proyecto de videojuego 2D que utiliza Python como lenguaje principal y Pygame-ce como motor gráfico. El proyecto está diseñado con una arquitectura modular y escalable, siguiendo las convenciones de la comunidad Python, y representa un hito en el desarrollo de software asistido por inteligencia artificial.
+## 🌟 ¿Qué es SiK Python Game?
 
-## 🚀 Características
+SiK Python Game es un **videojuego 2D bullet hell** que representa un hito en el desarrollo de software: **todo el código, arquitectura y documentación han sido generados mediante la colaboración entre desarrolladores humanos y agentes de inteligencia artificial avanzados**.
 
-- **Arquitectura modular**: Código organizado en paquetes y módulos bien estructurados
-- **Sistema de escenas**: Gestión eficiente de diferentes pantallas del juego
-- **Gestión de assets**: Carga y caché optimizado de recursos
-- **Sistema de entrada**: Soporte para teclado, ratón y gamepad
-- **Configuración flexible**: Sistema de configuración basado en JSON
-- **Logging completo**: Sistema de logging con rotación de archivos
-- **Físicas realistas**: Integración con Pymunk para físicas 2D
-- **Interfaz moderna**: Uso de pygame-menu y pygame-gui para interfaces
+### 🤖 Desarrollo 100% Asistido por IA
 
-## 📋 Requisitos del Sistema
+> **Experimento pionero**: Cada línea de código, decisión arquitectónica y mejora de rendimiento ha sido creada mediante la colaboración inteligente entre humanos e IA.
 
-### Software Obligatorio
-- **Python 3.11+** - Lenguaje de programación principal
-- **Poetry** - Gestión moderna de dependencias y entornos virtuales
-- **Git** - Control de versiones
-- **PowerShell 5.1+** - Terminal recomendada (Windows 11)
+**Lo que hace especial a este proyecto:**
+- 🧠 **Arquitectura inteligente**: Diseñada por agentes de IA especializados
+- 🔄 **Refactorización automática**: Mejoras continuas basadas en análisis de IA
+- 📚 **Documentación viva**: Comentarios y guías generados automáticamente
+- 🧪 **Testing inteligente**: Scripts de verificación creados por IA
+- ⚡ **Optimización continua**: Rendimiento mejorado mediante análisis automatizado
 
-### Herramientas de Desarrollo (instaladas automáticamente)
-- **Pygame-ce 2.4.0+** - Motor gráfico 2D
-- **Ruff** - Linter y formateador de código (reemplaza Black + Flake8)
-- **Pre-commit** - Hooks de calidad de código
-- **Pytest** - Framework de testing
+## 🎯 Características del Juego
 
-### Hardware Recomendado
-- **RAM**: 4GB mínimo, 8GB recomendado
-- **Espacio en disco**: 500MB para el proyecto + dependencias
-- **GPU**: Compatible con OpenGL 2.1+ (para aceleración gráfica)
+<table>
+<tr>
+<td width="50%">
 
-## 🛠️ Instalación
+### 🎮 **Gameplay**
+- **Bullet hell 2D**: Esquiva oleadas de proyectiles
+- **3 personajes únicos**: Cada uno con habilidades especiales
+- **Sistema de progressión**: Mejora tus estadísticas
+- **Múltiples niveles**: Dificultad escalada dinámicamente
+
+### 🎨 **Visual & Audio**
+- **Fondo dinámico**: Desierto procedural con efectos atmosféricos
+- **Animaciones fluidas**: Sistema de estados avanzado
+- **Efectos de partículas**: Arena, calor y viento realistas
+- **Audio inmersivo**: Música y efectos sincronizados
+
+</td>
+<td width="50%">
+
+### 🛠️ **Tecnología**
+- **Python 3.11+**: Lenguaje principal
+- **Pygame-ce**: Motor gráfico moderno
+- **Poetry**: Gestión de dependencias
+- **SQLite**: Base de datos integrada
+- **Arquitectura modular**: Fácil de extender
+
+### ⚙️ **Desarrollo**
+- **Pre-commit hooks**: Calidad de código automática
+- **Testing automatizado**: Pytest + coverage
+- **Documentación completa**: Instrucciones jerárquicas
+- **GitHub CLI**: Flujo de trabajo optimizado
+
+</td>
+</tr>
+</table>
+
+## 🚀 Instalación Rápida
 
 ### Prerrequisitos
-- Python 3.11 o superior
-- Poetry (gestor de dependencias moderno)
-- Git
-- Windows 11 con PowerShell (entorno recomendado)
+- 🐍 **Python 3.11+** ([Descargar](https://python.org))
+- 📦 **Poetry** ([Instalar](https://python-poetry.org/docs/#installation))
+- 🔧 **Git** ([Descargar](https://git-scm.com/))
 
-### 1. Clonar el repositorio
+### Instalación en 3 pasos
+
 ```powershell
+# 1. Clonar el repositorio
 git clone https://github.com/Kavalieri/SiK-Python-Game.git
 cd SiK-Python-Game
-```
 
-### 2. Instalar Poetry (si no está instalado)
-```powershell
-# Instalador oficial recomendado
-(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
-```
-
-### 3. Configurar entorno de desarrollo
-```powershell
-# Instalar dependencias del proyecto
+# 2. Instalar dependencias
 poetry install
 
-# Configurar hooks de calidad de código
-poetry run pre-commit install
-
-# Verificar instalación
-poetry run python src/main.py --version
-```
-
-## 🎯 Cómo Ejecutar
-
-### Ejecución estándar
-```powershell
+# 3. ¡Ejecutar!
 poetry run python src/main.py
 ```
 
-### Ejecución con opciones de desarrollo
+### Instalación para Desarrollo
+
 ```powershell
-# Con debug activado
+# Configurar entorno completo de desarrollo
+poetry install --with dev
+
+# Configurar hooks de calidad
+poetry run pre-commit install
+
+# Verificar instalación
 poetry run python src/main.py --debug
+```
+
+## 🎯 Cómo Jugar
+
+### Controles
+
+<table>
+<tr>
+<th>🎮 Acción</th>
+<th>⌨️ Teclado</th>
+<th>🖱️ Ratón</th>
+<th>🎮 Gamepad</th>
+</tr>
+<tr>
+<td>Movimiento</td>
+<td><code>WASD</code> / <code>↑↓←→</code></td>
+<td>-</td>
+<td>Stick izquierdo</td>
+</tr>
+<tr>
+<td>Disparar</td>
+<td><code>Espacio</code> / <code>J</code></td>
+<td>Clic izquierdo</td>
+<td><code>A</code> / <code>X</code></td>
+</tr>
+<tr>
+<td>Pausa</td>
+<td><code>Escape</code></td>
+<td>-</td>
+<td><code>Start</code></td>
+</tr>
+<tr>
+<td>Menú</td>
+<td><code>Escape</code></td>
+<td>Clic derecho</td>
+<td><code>B</code></td>
+</tr>
+</table>
+
+### Personajes Disponibles
+
+| Personaje | Tipo | Especialidad | Velocidad | Daño |
+|-----------|------|--------------|-----------|------|
+| 🗡️ **Kava (Guerrero)** | Melee | Combate cercano | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 🏹 **Adventure Girl** | Ranged | Ataques a distancia | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| 🤖 **Robot** | Hybrid | Versatilidad | ⭐⭐ | ⭐⭐⭐⭐ |
+
+## 📁 Arquitectura del Proyecto
+
+```
+📦 SiK-Python-Game/
+├── 🎮 src/                     # Código fuente principal
+│   ├── 🔧 core/               # Motor del juego
+│   ├── 👾 entities/           # Personajes, enemigos, proyectiles
+│   ├── 🎭 scenes/             # Escenas del juego
+│   ├── 🖼️ ui/                 # Interfaz de usuario
+│   └── ⚙️ utils/              # Utilidades y sistemas
+├── 🎨 assets/                 # Recursos del juego
+├── 📚 docs/                   # Documentación
+├── 🧪 tests/                  # Tests automatizados
+├── 🛠️ dev-tools/              # Herramientas de desarrollo
+└── 💾 saves/                  # Partidas guardadas
+```
+
+## 🔧 Desarrollo
+
+### Scripts de Desarrollo Principales
+
+```powershell
+# Ejecutar el juego
+poetry run python src/main.py
 
 # Ejecutar tests
-poetry run pytest tests/
+poetry run pytest tests/ -v
 
 # Verificar calidad de código
 poetry run ruff check src/
 poetry run ruff format src/
+
+# Commit con calidad automática
+.\dev-tools\scripts\simple_commit.ps1 "mensaje"
+
+# Limpieza del entorno
+.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
 ```
 
-## 📁 Estructura del Proyecto
+### Estándares de Calidad
 
+- ✅ **0 errores Ruff** + **0 warnings MyPy**
+- ✅ **100% cobertura de tests** mínimo
+- ✅ **Máximo 150 líneas** por archivo
+- ✅ **Documentación completa** en español
+- ✅ **Type hints** obligatorios
+
+## 🗂️ Estado Actual del Proyecto
+
+### ✅ Completado
+- 🎮 **Motor base**: Funcionamiento completo
+- 👾 **3 personajes**: Con habilidades únicas
+- 🎨 **Sistema visual**: Animaciones + efectos
+- 💾 **Sistema de guardado**: SQLite + encriptación
+- 🧪 **Testing**: Cobertura automatizada
+- 📚 **Documentación**: Sistema jerárquico
+
+### 🔄 En Desarrollo
+- 🗄️ **Migración SQLite**: Sistema mixto inteligente
+- 📋 **Refactorización**: 29 archivos críticos >150 líneas
+- ⚡ **Optimización**: Rendimiento y memoria
+- 🎯 **Nuevas mecánicas**: Powerups y combos
+
+### 📊 Métricas del Proyecto
+- **29 archivos** requieren refactorización (>150 líneas)
+- **9 archivos críticos** (>200 líneas) - prioridad máxima
+- **4,267 líneas** de código analizadas
+- **20.4% cobertura** de tests (en mejora continua)
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Este proyecto es especial porque combina desarrollo humano con asistencia de IA.
+
+### 🚀 Cómo Contribuir
+
+1. **📋 Fork** el repositorio
+2. **🌿 Crea** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. **📝 Consulta** las instrucciones en [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
+4. **✅ Verifica** que tu código cumple los estándares:
+   ```powershell
+   poetry run ruff check src/
+   poetry run pytest tests/
+   ```
+5. **� Commit** usando el sistema unificado:
+   ```powershell
+   .\dev-tools\scripts\simple_commit.ps1 "feat: descripción de tu cambio"
+   ```
+6. **🚀 Push** a tu rama (`git push origin feature/AmazingFeature`)
+7. **🔄 Abre** un Pull Request
+
+### � Antes de Contribuir
+
+- 📖 **Lee** [`docs/REFACTORIZACION_ESTADO_ACTUAL.md`](docs/REFACTORIZACION_ESTADO_ACTUAL.md)
+- 🎯 **Consulta** las [instrucciones jerárquicas](.github/instructions/) por tema
+- ⚡ **Límite absoluto**: 150 líneas por archivo
+- 🧪 **Testing**: Mantén 100% cobertura mínima
+- 📚 **Documenta**: Actualiza [`docs/FUNCIONES_DOCUMENTADAS.md`](docs/FUNCIONES_DOCUMENTADAS.md)
+
+### 🎯 Áreas Prioritarias de Contribución
+
+| Prioridad | Área | Descripción | Dificultad |
+|-----------|------|-------------|------------|
+| 🔥 **CRÍTICA** | Refactorización | 9 archivos >200 líneas | ⭐⭐⭐ |
+| �️ **ALTA** | Migración SQLite | Sistema mixto inteligente | ⭐⭐⭐⭐ |
+| 🎮 **MEDIA** | Nuevas mecánicas | Powerups y combos | ⭐⭐ |
+| 🎨 **MEDIA** | Assets | Gráficos y sonidos | ⭐ |
+| 🧪 **BAJA** | Testing | Cobertura adicional | ⭐⭐ |
+
+## � Documentación
+
+### 📖 Documentación Principal
+- 📋 [**Estado de Refactorización**](docs/REFACTORIZACION_ESTADO_ACTUAL.md) - **CONSULTAR PRIMERO**
+- �️ [**Plan Migración SQLite**](docs/PLAN_MIGRACION_SQLITE.md) - Esquemas y checklist
+- � [**Funciones Documentadas**](docs/FUNCIONES_DOCUMENTADAS.md) - Catálogo completo
+- 🔧 [**Flujo de Menús**](docs/FLUJO_MENUS_GUARDADO.md) - Sistema de navegación
+
+### � Instrucciones para IA (Sistema Jerárquico)
+- 🏠 [**Principal**](.github/copilot-instructions.md) - Instrucciones base
+- 📁 [**Módulos específicos**](.github/instructions/) - 11 temas organizados
+- 🔄 [**Refactorización**](.github/instructions/refactorizacion.instructions.md)
+- 🗄️ [**Migración SQLite**](.github/instructions/migracion-sqlite.instructions.md)
+
+### �️ Herramientas de Desarrollo
+- 🧹 [**Limpieza VS Code**](dev-tools/scripts/vscode_cleanup_sendkeys.ps1)
+- 📝 [**Commits Unificados**](dev-tools/scripts/simple_commit.ps1)
+- 🧪 [**Testing**](dev-tools/testing/) - Scripts de verificación
+
+## 🔬 Investigación y Metodología IA
+
+### 💡 Lo que Hace Especial a Este Proyecto
+
+Este proyecto demuestra el **futuro del desarrollo de software**: la colaboración simbiótica entre humanos e IA para crear código de calidad profesional.
+
+**Metodología desarrollada:**
+1. 🧠 **Análisis de requisitos** por agentes especializados
+2. 🏗️ **Diseño arquitectónico** automático con mejores prácticas
+3. 💻 **Generación de código** siguiendo estándares estrictos
+4. 🧪 **Testing automatizado** y verificación continua
+5. 📚 **Documentación viva** que evoluciona con el código
+
+### 📊 Resultados del Experimento
+
+- ✅ **4,267+ líneas** de código generadas por IA
+- ✅ **Arquitectura modular** diseñada automáticamente
+- ✅ **Sistema de testing** creado inteligentemente
+- ✅ **Documentación completa** generada dinámicamente
+- ✅ **Optimizaciones** aplicadas por análisis automatizado
+
+## 🐛 Reportar Issues
+
+¿Encontraste un problema? ¡Ayúdanos a mejorar!
+
+### 📋 Información a Incluir
+
+```markdown
+**Descripción del problema:**
+[Describe qué esperabas que pasara vs qué pasó realmente]
+
+**Pasos para reproducir:**
+1. Ejecutar `poetry run python src/main.py`
+2. Hacer clic en '...'
+3. Ver error
+
+**Entorno:**
+- OS: [Windows 11, macOS, Linux]
+- Python: [3.11.x]
+- Poetry: [1.5.x]
+
+**Logs:**
+[Pegar contenido relevante de `logs/game.log`]
 ```
-SiK-Python-Game/
-├── src/                    # Código fuente principal
-│   ├── core/              # Motor del juego
-│   │   ├── game_engine.py # Motor principal
-│   │   ├── game_state.py  # Estado global
-│   │   └── scene_manager.py # Gestor de escenas
-│   ├── entities/          # Entidades del juego
-│   ├── managers/          # Gestores especializados
-│   ├── ui/               # Interfaz de usuario
-│   ├── utils/            # Utilidades
-│   └── main.py           # Punto de entrada
-├── assets/               # Recursos del juego
-├── docs/                 # Documentación
-├── tools/                # Herramientas de desarrollo
-├── logs/                 # Archivos de log
-├── saves/                # Partidas guardadas
-└── config.json           # Configuración del juego
-```
 
-## 🔧 Configuración
+### 🔍 Antes de Reportar
 
-El juego utiliza un sistema de configuración basado en JSON. El archivo `config.json` se crea automáticamente en la primera ejecución con valores por defecto.
+- ✅ Verifica los [**logs**](logs/game.log) del juego
+- ✅ Revisa la [**configuración**](config.json)
+- ✅ Consulta [**issues existentes**](https://github.com/Kavalieri/SiK-Python-Game/issues)
+- ✅ Prueba con la [**última versión**](https://github.com/Kavalieri/SiK-Python-Game)
 
-### Configuración por defecto:
+## 🎖️ Reconocimientos
 
-```json
-{
-    "game": {
-        "title": "SiK Python Game",
-        "version": "0.1.0",
-        "debug": false
-    },
-    "display": {
-        "width": 1280,
-        "height": 720,
-        "fps": 60,
-        "fullscreen": false,
-        "vsync": true
-    },
-    "audio": {
-        "master_volume": 1.0,
-        "music_volume": 0.7,
-        "sfx_volume": 0.8,
-        "enabled": true
-    }
-}
-```
+### 🤝 Colaboradores
 
-## 🎮 Controles
+<table>
+<tr>
+<td align="center">
+<strong>🤖 Agentes de IA</strong><br>
+<em>Arquitectura y código principal</em>
+</td>
+<td align="center">
+<strong>👥 Equipo SiK</strong><br>
+<em>Dirección y supervisión</em>
+</td>
+<td align="center">
+<strong>🌟 Comunidad</strong><br>
+<em>Feedback y mejoras</em>
+</td>
+</tr>
+</table>
 
-### Teclado:
-- **WASD / Flechas**: Movimiento
-- **Espacio**: Saltar
-- **J / Enter**: Atacar
-- **E**: Interactuar
-- **Escape**: Pausa/Menú
+### 🙏 Agradecimientos Especiales
 
-### Ratón:
-- **Clic izquierdo**: Seleccionar/Interactuar
-- **Clic derecho**: Menú contextual
-
-### Gamepad:
-- **Stick izquierdo**: Movimiento
-- **A**: Saltar
-- **X**: Atacar
-- **B**: Interactuar
-- **Start**: Pausa
-
-## 🛠️ Desarrollo
-
-### Convenciones de Código
-
-- **Idioma**: Español para comentarios y documentación
-- **Estilo**: PEP 8 con tabulación
-- **Nomenclatura**: Variables y funciones en español
-- **Documentación**: Docstrings en todas las funciones y clases
-
-### Herramientas de Desarrollo
-
-- **Formateo**: Black
-- **Linting**: Flake8
-- **Type checking**: MyPy
-- **Testing**: Pytest
-
-### Comandos de Desarrollo
-
-```bash
-# Formatear código
-black src/
-
-# Verificar estilo
-flake8 src/
-
-# Verificar tipos
-mypy src/
-
-# Ejecutar tests
-pytest tests/
-```
-
-## 📝 Logging
-
-El juego incluye un sistema de logging completo que registra:
-- Información de inicialización
-- Eventos del juego
-- Errores y excepciones
-- Rendimiento y debug
-
-Los logs se guardan en `logs/game.log` con rotación automática.
-
-## 🎨 Assets
-
-Los assets del juego se organizan en la carpeta `assets/`:
-- `images/`: Imágenes y sprites
-- `sounds/`: Efectos de sonido y música
-- `fonts/`: Fuentes tipográficas
-- `ui/`: Elementos de interfaz
-
-## 🔄 Control de Versiones
-
-- **Commits**: Documentados con `commit_message.txt`
-- **Changelog**: Mantenido en `CHANGELOG.md`
-- **Colaboración**: Guías en `docs/COLABORACION.md`
+- **GitHub Copilot** - Asistente principal de código
+- **Pygame-ce Community** - Motor gráfico moderno
+- **Python Community** - Lenguaje y ecosistema
+- **Poetry Team** - Gestión de dependencias elegante
 
 ## 📄 Licencia
 
-Este proyecto está bajo la licencia especificada en `LICENSE`.
+Este proyecto está licenciado bajo la **MIT License**. Consulta [LICENSE](LICENSE) para más detalles.
 
-## 👥 Colaboración
+## 🔗 Enlaces Útiles
 
-Para contribuir al proyecto, consulta `docs/COLABORACION.md` para las guías de desarrollo y colaboración.
-
-## 🐛 Reportar Problemas
-
-Si encuentras algún problema o tienes una sugerencia, por favor:
-1. Revisa los logs en `logs/game.log`
-2. Verifica la configuración en `config.json`
-3. Consulta la documentación en `docs/`
-
-## 🆕 Nuevas Características Implementadas
-
-### 🎭 Sistema de Animaciones del Jugador
-- **Animaciones fluidas**: Idle, walk, attack con transiciones suaves
-- **Rotación dinámica**: El jugador rota según la dirección del movimiento y posición del mouse
-- **Estados de animación**: Sistema de estados que cambia automáticamente según las acciones
-- **Timer de ataque**: Animación de ataque que se activa al disparar
-
-### 🏜️ Fondo Dinámico de Desierto
-- **Gradientes atmosféricos**: Cielo con gradiente de azul a naranja atardecer
-- **Dunas procedimentales**: Dunas generadas dinámicamente con formas naturales
-- **Partículas de arena**: Sistema de partículas que simula arena en el viento
-- **Efectos atmosféricos**: Ondulación de calor y efectos de viento
-- **Parallax**: Diferentes capas con movimiento a distintas velocidades
-
-### 🎮 Menú de Selección Mejorado
-- **Interfaz visual**: Diseño moderno con paneles y botones funcionales
-- **Información detallada**: Estadísticas y habilidades de cada personaje
-- **Selección interactiva**: Clics funcionales con feedback visual
-- **Navegación fluida**: Botones de volver y comenzar juego operativos
-
-### 🔧 Mejoras Técnicas
-- **Sistema de animaciones robusto**: Gestión centralizada de animaciones
-- **Optimización de rendimiento**: Fondos dinámicos eficientes
-- **Gestión de errores**: Manejo robusto de assets faltantes
-- **Tests automatizados**: Scripts de verificación de funcionalidad
-
-## 🔬 Investigación y Desarrollo
-
-Este proyecto forma parte de una investigación sobre el potencial de la inteligencia artificial en el desarrollo de software. Demuestra cómo los agentes de IA pueden:
-
-- **Comprender requisitos complejos** y traducirlos en arquitectura de software
-- **Generar código de calidad** siguiendo estándares profesionales
-- **Mantener consistencia** en patrones de diseño y convenciones
-- **Iterar y mejorar** basándose en feedback y análisis
-- **Documentar automáticamente** el código y procesos
-
-### Metodología de Desarrollo:
-1. **Análisis de requisitos** por agentes de IA
-2. **Diseño de arquitectura** automatizado
-3. **Generación de código** con mejores prácticas
-4. **Testing automatizado** y verificación
-5. **Documentación continua** y actualización
-
-## 📊 Estadísticas del Proyecto
-
-- **Líneas de código**: Generadas 100% por IA
-- **Arquitectura**: Diseñada por agentes de IA
-- **Documentación**: Creada automáticamente
-- **Tests**: Generados inteligentemente
-- **Optimizaciones**: Aplicadas por análisis de IA
+- 🏠 [**Repositorio**](https://github.com/Kavalieri/SiK-Python-Game)
+- 📖 [**Wiki**](https://github.com/Kavalieri/SiK-Python-Game/wiki)
+- 🐛 [**Issues**](https://github.com/Kavalieri/SiK-Python-Game/issues)
+- 💬 [**Discusiones**](https://github.com/Kavalieri/SiK-Python-Game/discussions)
+- 📦 [**Releases**](https://github.com/Kavalieri/SiK-Python-Game/releases)
 
 ---
 
-**Desarrollado con 🤖 Inteligencia Artificial por el equipo SiK**
+<div align="center">
 
-*Este proyecto representa el futuro del desarrollo de software asistido por IA*
+**🤖 Desarrollado con Inteligencia Artificial por el equipo SiK**
 
-# Registro de restauración y políticas de formato
+*Pioneros en el desarrollo de software asistido por IA*
 
-## Restauración crítica (2024-12-19)
+⭐ **¡Dale una estrella si te gusta el proyecto!** ⭐
 
-- Se restauró el proyecto tras un error masivo de formato que eliminó los saltos de línea en todos los archivos `.py`, `.md`, `.json`, `.txt`.
-- Se recuperaron los archivos desde el último commit y se reaplicaron todos los cambios funcionales realizados en la sesión:
-  - Flujo avanzado de menús y guardado (selección de slots, callbacks, navegación, diferenciación de botón Salir y cierre de ventana).
-  - Restauración y refactorización de `slot_selection_scene.py` y `options_scene.py`.
-  - Actualización de la documentación y diagrama Mermaid en `docs/FLUJO_MENUS_GUARDADO.md`.
-  - Pruebas de navegación y funcionamiento correctas.
-
-## Políticas de formato y control de cambios
-
-- **Indentación:**
-  - Todo el proyecto usa **tabulaciones** para la indentación en los scripts Python.
-  - Se revisará cualquier archivo nuevo para mantener la coherencia.
-- **Saltos de línea:**
-  - Se utiliza `.gitattributes` para forzar `LF` en el repositorio y evitar problemas de diffs por saltos de línea.
-  - Los archivos locales pueden verse en `CRLF` en Windows, pero el repo siempre tendrá `LF`.
-
-## Estado actual
-
-- El flujo de menús, guardado y navegación está funcional y documentado.
-- El botón "Salir" y el cierre de ventana están diferenciados en los logs.
-- El código está limpio y estructurado tras la restauración.
-
-## Próximos pasos
-
-- Limpieza de código y refactorización adicional.
-- Manejo y corrección de los elementos que todavía no funcionan.
-- Refuerzo de testing y documentación continua.
-
----
-
-> **Este registro deja constancia de la recuperación y las políticas de formato para futuras referencias y colaboración segura.**
+</div>
