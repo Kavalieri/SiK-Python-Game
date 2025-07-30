@@ -100,7 +100,89 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - **100% cobertura tests** mínimo
 - **Complejidad < 10** por función
 - **Funciones <30 líneas** para IA optimal
-## 🤖 **OPTIMIZACIÓN PARA IA**
+- **Búsqueda en archivos**: `Get-Content archivo.txt | Select-String "patrón"`
+
+### Configuración Terminal VS Code (CRÍTICO)
+- **Terminal optimizado**: Ver `docs/CONFIGURACION_TERMINAL_OPTIMIZADA.md` para configuración completa
+- **Usar terminal existente** cuando esté disponible en lugar de crear nuevos
+- **Scripts PowerShell ASCII-only**: **PROHIBIDOS emojis, Unicode y caracteres especiales**
+- **Timeouts automáticos**: Todos los comandos largos deben tener timeout (30-45s máximo)
+- **Detección de output**: Usar `isBackground=false` para comandos que requieren respuesta inmediata
+- **Scripts terminal-safe**: OBLIGATORIO usar `scripts/terminal_safe_commit.ps1` para commits
+- **Recuperación automática**: Si hay problemas, usar `scripts/reset_terminal_state.ps1`
+- **Validación pre-comando**: Verificar responsividad con `scripts/test_ascii_safe.ps1`
+- **Estado validado**: Terminal completamente funcional (30 jul 2025) - ver documentación
+
+### Reglas PowerShell Scripts (OBLIGATORIO)
+- **NUNCA usar emojis** (🚀, ✅, ❌, etc.) - causan problemas encoding
+- **NUNCA usar Unicode** - solo caracteres ASCII básicos
+- **Usar [OK], [ERROR], [WARN]** en lugar de símbolos
+- **Usar Write-Host con -ForegroundColor** para colores
+- **Incluir timeouts** en todos los comandos que pueden colgarse
+- **Validar estado terminal** antes de operaciones complejas
+
+### Método de Commit Unificado (NUEVO - OBLIGATORIO)
+- **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
+- **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
+- **Flujo optimizado**: pre-commit → staging → commit → push (resuelve conflictos de hooks)
+- **Conventional Commits**: Formato automático `tipo(ámbito): descripción`
+- **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
+- **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
+- **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
+- **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
+- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
+- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
+
+### Optimización de Entorno de Trabajo (NUEVO - RECOMENDADO)
+- **Script de limpieza**: `scripts/workspace_cleanup.ps1` para optimizar VS Code y caché
+- **Configuración automática**: `scripts/setup_auto_cleanup.ps1` para integrar limpieza
+- **Niveles de limpieza**: light (diario), deep (semanal), complete (mensual)
+- **Capacidades VS Code**: Cierre automático de pestañas con comandos workbench
+- **Limpieza de caché**: Python (__pycache__), Poetry, Git, VS Code workspaceStorage
+- **Optimización memoria**: Garbage collection .NET y análisis de uso de memoria
+- **Integración commits**: Limpieza automática después de commits exitosos
+- **Atajos de teclado**: Ctrl+K Ctrl+L (light), Ctrl+K Ctrl+T (tabs), Ctrl+K Ctrl+D (deep)
+- **Documentación**: `docs/OPTIMIZACION_ENTORNO_TRABAJO.md` con guía completa
+- **Uso recomendado**: `.\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
+
+### Gestión de Archivos y Repositorio
+- **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
+- **Matriz de decisión**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md` (consultar SIEMPRE)
+- **Información del repositorio**: `gh repo view` (preferir sobre git status)
+- **Gestión de issues/PRs**: `gh issue create`, `gh pr create --fill`
+- **Releases y distribución**: `gh release create`, `gh release upload`
+- **Git tradicional**: solo para `git add`, `git commit`, operaciones locales
+- **Commits atómicos** por cada refactorización o cambio significativo
+- **Evitar** movimientos directos en explorador
+
+### Priorización: GitHub CLI vs Git Tradicional
+**Usar GitHub CLI (`gh`) para:**
+- Obtener información del repositorio y estado general
+- Gestionar issues, pull requests y releases
+- Navegar rápidamente al repositorio en navegador
+- Clonar repositorios y gestionar forks
+- Buscar repositorios y contenido en GitHub
+- Ejecutar y monitorear GitHub Actions
+
+**Usar Git tradicional solo para:**
+- Operaciones locales básicas: `git add`, `git commit`
+- Control de versiones local y staging
+- Branching local: `git branch`, `git checkout`
+- Consultar logs y diferencias locales
+- **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
+- **Usar método unificado**: `.\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
+
+### Flujo Autónomo
+- **Continuar automáticamente** hasta puntos de prueba
+- **Resolver errores** de forma autónoma
+- **Documentar cambios** significativos inmediatamente
+
+### Estrategia para Problemas
+- **Comentar líneas** problemáticas temporalmente
+- **Probar sin conflictos** para identificar impacto real
+- **Documentar soluciones** implementadas
+
+## 🤖 Optimización para IA
 
 ### Patrones para GitHub Copilot
 - **Nombres autodescriptivos** en español
