@@ -9,7 +9,7 @@ Descripción: Definiciones de tipos, estados y estadísticas para entidades.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 class EntityType(Enum):
