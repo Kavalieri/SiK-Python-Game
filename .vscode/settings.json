@@ -12,7 +12,6 @@
 			".github/OJO.instructions.md"
 		]
 	},
-
 	// Configuración de Python y Ruff (linter/formatter moderno)
 	"[python]": {
 		"editor.defaultFormatter": "charliermarsh.ruff",
@@ -22,11 +21,9 @@
 			"source.organizeImports.ruff": "explicit"
 		}
 	},
-
 	// Configuración de Ruff (extensión nativa v2024.x)
 	"ruff.configurationPreference": "filesystemFirst",
 	"ruff.enable": true,
-
 	// Configuración de Python y Type Checking (Pylance)
 	"python.analysis.typeCheckingMode": "basic",
 	"python.analysis.autoImportCompletions": true,
@@ -41,8 +38,14 @@
 		"source.unusedImports",
 		"source.convertImportFormat"
 	],
-	"python.analysis.extraPaths": ["src", "tests"],
-	"python.analysis.include": ["src/**", "tests/**"],
+	"python.analysis.extraPaths": [
+		"src",
+		"tests"
+	],
+	"python.analysis.include": [
+		"src/**",
+		"tests/**"
+	],
 	"python.analysis.exclude": [
 		"**/__pycache__",
 		"**/.*",
@@ -50,11 +53,9 @@
 		"backups*/**",
 		"logs/**"
 	],
-
 	// Configuración específica del proyecto
 	"python.defaultInterpreterPath": "./venv/Scripts/python.exe",
 	"python.terminal.activateEnvironment": true,
-
 	// Testing con Pytest
 	"python.testing.pytestEnabled": true,
 	"python.testing.pytestArgs": [
@@ -65,7 +66,6 @@
 	],
 	"python.testing.unittestEnabled": false,
 	"python.testing.nosetestsEnabled": false,
-
 	// Configuración de Coverage Gutters
 	"coverage-gutters.coverageFileNames": [
 		"coverage.xml",
@@ -77,14 +77,12 @@
 	"coverage-gutters.showRulerCoverage": true,
 	"coverage-gutters.highlightdark": "rgba(255, 0, 0, 0.2)",
 	"coverage-gutters.noHighlightDark": "rgba(255, 255, 255, 0.1)",
-
 	// Git y versionado
 	"git.enableSmartCommit": true,
 	"git.confirmSync": false,
 	"gitHistory.showInPanel": true,
 	"git-graph.repository.fetchAndPrune": true,
 	"git-graph.repository.onLoad.showCheckedOutBranch": true,
-
 	// Code Runner
 	"code-runner.executorMap": {
 		"python": "cd $dir && python $fileName"
@@ -92,25 +90,58 @@
 	"code-runner.runInTerminal": true,
 	"code-runner.saveFileBeforeRun": true,
 	"code-runner.clearPreviousOutput": true,
-
 	// Pytest Runner
 	"python.testing.autoTestDiscoverOnSaveEnabled": true,
-
-	// Configuración del editor
-	"editor.rulers": [100],
+	// Configuración del editor (optimizada para límite 150 líneas)
+	"editor.rulers": [
+		150
+	], // Nuestro límite de líneas por archivo
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
 	"editor.renderWhitespace": "selection",
 	"editor.trimAutoWhitespace": true,
-
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "explicit"
+	},
+	"editor.wordWrap": "bounded",
+	"editor.wordWrapColumn": 150,
+	// === PowerShell Configuration Optimizada ===
+	"terminal.integrated.defaultProfile.windows": "PowerShell",
+	"terminal.integrated.profiles.windows": {
+		"PowerShell": {
+			"source": "PowerShell",
+			"icon": "terminal-powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass"
+			]
+		},
+		"PowerShell Core": {
+			"path": "pwsh.exe",
+			"icon": "terminal-powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass"
+			]
+		}
+	},
+	// === PowerShell Extension Settings ===
+	"powershell.integratedConsole.showOnStartup": false,
+	"powershell.debugging.createTemporaryIntegratedConsole": false,
+	"powershell.codeFormatting.preset": "OTBS",
+	"powershell.scriptAnalysis.enable": true,
+	"powershell.developer.enableConsoleRepl": false,
 	// Terminal integrado
 	"terminal.integrated.env.windows": {
 		"PYTHONPATH": "${workspaceFolder}/src"
 	},
 	"terminal.integrated.enablePersistentSessions": false,
-	"terminal.integrated.defaultProfile.windows": "PowerShell",
-
+	"terminal.integrated.scrollback": 10000,
+	"terminal.integrated.fontSize": 14,
 	// Configuración de archivos
 	"files.exclude": {
 		"**/__pycache__": true,
@@ -121,7 +152,6 @@
 		"htmlcov": false,
 		".coverage": false
 	},
-
 	// Configuración de búsqueda
 	"search.exclude": {
 		"**/__pycache__": true,
@@ -131,7 +161,6 @@
 		".ruff_cache": true,
 		"htmlcov": true
 	},
-
 	// Asociaciones de archivos
 	"files.associations": {
 		"*.yaml": "yaml",
@@ -139,11 +168,11 @@
 		".env.*": "properties",
 		"requirements*.txt": "pip-requirements"
 	},
-
 	// Configuración adicional de herramientas
 	"mypy.configFile": "pyproject.toml",
-	"isort.args": ["--settings-path=pyproject.toml"],
-
+	"isort.args": [
+		"--settings-path=pyproject.toml"
+	],
 	// Autoguardado
 	"files.autoSave": "onFocusChange",
 	"files.autoSaveDelay": 1000
