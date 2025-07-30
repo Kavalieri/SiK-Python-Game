@@ -1,127 +1,41 @@
 """
-Powerup System - Sistema de Powerups
-===================================
+Powerup System - Sistema de Powerups (FACHADA)
+==============================================
 
 Autor: SiK Team
 Fecha: 2024
-Descripción: Sistema de powerups que mejoran temporalmente al jugador.
+Descripción: Fachada del sistema modular de powerups.
+Mantiene API original para compatibilidad con delegación a módulos especializados.
 """
 
 import logging
-import math
 import random
-from dataclasses import dataclass
-from enum import Enum
 
 import pygame
 
 from .entity import Entity, EntityStats, EntityType
-
-
-class PowerupType(Enum):
-    """Tipos de powerups disponibles."""
-
-    SPEED = "speed"
-    DAMAGE = "damage"
-    SHIELD = "shield"
-    RAPID_FIRE = "rapid_fire"
-    DOUBLE_SHOT = "double_shot"
-    HEALTH = "health"
-    SPREAD = "spread"
-    EXPLOSIVE = "explosive"
-    SHRAPNEL = "shrapnel"
-
-
-@dataclass
-class PowerupEffect:
-    """Efecto de un powerup."""
-
-    type: PowerupType
-    duration: float  # Duración en segundos
-    value: float  # Valor del efecto
-    description: str
+from .powerup_effects import PowerupEffects
+from .powerup_renderer import PowerupRenderer
+from .powerup_types import PowerupConfiguration, PowerupEffect, PowerupType
 
 
 class Powerup(Entity):
     """
-    Powerup que mejora temporalmente al jugador.
+    Powerup que mejora temporalmente al jugador (FACHADA).
+    Mantiene 100% compatibilidad con API original.
     """
 
-    # Configuración de powerups
-    POWERUP_CONFIGS = {
-        PowerupType.SPEED: {
-            "name": "Velocidad",
-            "color": (0, 255, 0),  # Verde
-            "duration": 10.0,
-            "value": 1.5,  # Multiplicador de velocidad
-            "description": "Aumenta la velocidad de movimiento",
-        },
-        PowerupType.DAMAGE: {
-            "name": "Daño",
-            "color": (255, 0, 0),  # Rojo
-            "duration": 15.0,
-            "value": 2.0,  # Multiplicador de daño
-            "description": "Aumenta el daño de los proyectiles",
-        },
-        PowerupType.SHIELD: {
-            "name": "Escudo",
-            "color": (0, 0, 255),  # Azul
-            "duration": 12.0,
-            "value": 0.5,  # Reducción de daño recibido
-            "description": "Reduce el daño recibido",
-        },
-        PowerupType.RAPID_FIRE: {
-            "name": "Disparo Rápido",
-            "color": (255, 255, 0),  # Amarillo
-            "duration": 8.0,
-            "value": 0.3,  # Reducción del tiempo entre disparos
-            "description": "Aumenta la velocidad de disparo",
-        },
-        PowerupType.DOUBLE_SHOT: {
-            "name": "Doble Disparo",
-            "color": (255, 0, 255),  # Magenta
-            "duration": 20.0,
-            "value": 2,  # Número de proyectiles
-            "description": "Dispara dos proyectiles a la vez",
-        },
-        PowerupType.HEALTH: {
-            "name": "Vida",
-            "color": (255, 165, 0),  # Naranja
-            "duration": 0.0,  # Efecto instantáneo
-            "value": 50.0,  # Cantidad de vida restaurada
-            "description": "Restaura vida",
-        },
-        PowerupType.SPREAD: {
-            "name": "Disparo Disperso",
-            "color": (128, 0, 128),  # Púrpura
-            "duration": 15.0,
-            "value": 3,  # Número de proyectiles en abanico
-            "description": "Dispara múltiples proyectiles en abanico",
-        },
-        PowerupType.EXPLOSIVE: {
-            "name": "Explosivo",
-            "color": (255, 69, 0),  # Rojo-naranja
-            "duration": 12.0,
-            "value": 2.0,  # Radio de explosión
-            "description": "Los proyectiles explotan al impactar",
-        },
-        PowerupType.SHRAPNEL: {
-            "name": "Metralla",
-            "color": (105, 105, 105),  # Gris
-            "duration": 10.0,
-            "value": 5,  # Número de fragmentos
-            "description": "Los proyectiles se dividen en fragmentos",
-        },
-    }
+    # Configuración para compatibilidad
+    POWERUP_CONFIGS = PowerupConfiguration.POWERUP_CONFIGS
 
     def __init__(self, x: float, y: float, powerup_type: PowerupType):
         """
-        Inicializa un powerup.
+        Inicializa un powerup modular.
 
         Args:
-                x: Posición X
-                y: Posición Y
-                powerup_type: Tipo de powerup
+            x: Posición X
+            y: Posición Y
+            powerup_type: Tipo de powerup
         """
         # Crear estadísticas básicas
         stats = EntityStats(
@@ -139,73 +53,30 @@ class Powerup(Entity):
         )
 
         self.powerup_type = powerup_type
-        self.config = self.POWERUP_CONFIGS[powerup_type]
         self.logger = logging.getLogger(__name__)
 
-        # Configurar sprite
-        self._setup_sprite()
+        # Inicializar módulos especializados
+        self.config_manager = PowerupConfiguration()
+        self.effects_manager = PowerupEffects()
+        self.renderer = PowerupRenderer(powerup_type, self.width, self.height)
 
-        # Efecto de flotación
+        # Propiedades para compatibilidad
+        self.config = self.config_manager.get_config(powerup_type)
+        self.sprite = self.renderer.get_sprite()
+
+        # Efecto de flotación (delegado a renderer)
         self.float_offset = 0
         self.float_speed = 2.0
-        self.float_amplitude = 5.0
-
-        self.logger.debug(f"Powerup {powerup_type.value} creado en ({x}, {y})")
-
-    def _setup_sprite(self):
-        """Configura el sprite del powerup."""
-        try:
-            # Crear sprite con el color del powerup
-            self.sprite = pygame.Surface((self.width, self.height))
-            self.sprite.fill(self.config["color"])
-
-            # Añadir borde blanco
-            pygame.draw.rect(
-                self.sprite, (255, 255, 255), (0, 0, self.width, self.height), 2
-            )
-
-            # Añadir símbolo según el tipo
-            self._add_symbol()
-
-        except Exception as e:
-            self.logger.error(f"Error al crear sprite de powerup: {e}")
-            # Sprite por defecto
-            self.sprite = pygame.Surface((self.width, self.height))
-            self.sprite.fill((128, 128, 128))
-
-    def _add_symbol(self):
-        """Añade un símbolo al sprite según el tipo de powerup."""
-        font = pygame.font.Font(None, 20)
-        symbol = self._get_symbol()
-        text = font.render(symbol, True, (255, 255, 255))
-
-        # Centrar el símbolo
-        text_rect = text.get_rect(center=(self.width // 2, self.height // 2))
-        self.sprite.blit(text, text_rect)
-
-    def _get_symbol(self) -> str:
-        """Obtiene el símbolo para el tipo de powerup."""
-        symbols = {
-            PowerupType.SPEED: "⚡",
-            PowerupType.DAMAGE: "⚔",
-            PowerupType.SHIELD: "🛡",
-            PowerupType.RAPID_FIRE: "🔥",
-            PowerupType.DOUBLE_SHOT: "⚡⚡",
-            PowerupType.HEALTH: "❤",
-            PowerupType.SPREAD: "🎯",
-            PowerupType.EXPLOSIVE: "💥",
-            PowerupType.SHRAPNEL: "🔫",
-        }
-        return symbols.get(self.powerup_type, "?")
 
     def update(self, delta_time: float):
         """Actualiza el powerup."""
         super().update(delta_time)
 
-        # Efecto de flotación
-        self.float_offset += self.float_speed * delta_time
-        if self.float_offset > 2 * 3.14159:  # 2π
-            self.float_offset = 0
+        # Actualizar animación de flotación
+        self.renderer.update_animation(delta_time)
+
+        # Sincronizar para compatibilidad
+        self.float_offset = self.renderer.float_offset
 
     def _update_logic(self, delta_time: float):
         """Actualiza la lógica específica del powerup."""
@@ -214,41 +85,29 @@ class Powerup(Entity):
 
     def render(self, screen: pygame.Surface, camera_offset: tuple = (0, 0)):
         """Renderiza el powerup con efecto de flotación."""
-        if not self.is_alive or not self.sprite:
+        if not self.is_alive:
             return
 
-        # Calcular posición con flotación
-        if camera_offset != (0, 0):
-            render_x = camera_offset[0]
-            render_y = camera_offset[1]
-        else:
-            render_x = self.x
-            render_y = self.y
+        # Delegar renderizado al renderer
+        self.renderer.render(screen, self.x, self.y, camera_offset)
 
-        # Aplicar efecto de flotación
-        float_y = render_y + self.float_amplitude * math.sin(self.float_offset)
-
-        # Renderizar sprite
-        screen.blit(self.sprite, (render_x, float_y))
-
-        # Debug: mostrar rectángulo de colisión
-        if hasattr(self, "config") and hasattr(self.config, "get"):
-            try:
-                debug_enabled = self.config.get("game", {}).get("debug", False)
-                if debug_enabled:
-                    debug_rect = pygame.Rect(render_x, float_y, self.width, self.height)
-                    pygame.draw.rect(screen, (255, 255, 0), debug_rect, 2)
-            except Exception as e:
-                self.logger.debug(f"Error en lógica de debug: {e}")
+        # Debug si está habilitado
+        if hasattr(self, "debug") and self.debug:
+            self.renderer.render_debug(screen, self.x, self.y, camera_offset)
 
     def get_effect(self) -> PowerupEffect:
         """Obtiene el efecto del powerup."""
-        return PowerupEffect(
-            type=self.powerup_type,
-            duration=self.config["duration"],
-            value=self.config["value"],
-            description=self.config["description"],
-        )
+        return self.effects_manager.create_effect(self.powerup_type)
+
+    # Métodos de compatibilidad con API original
+    def _setup_sprite(self):
+        """Delegado al renderer para compatibilidad."""
+        # El renderer ya maneja esto
+        self.sprite = self.renderer.get_sprite()
+
+    def _get_symbol(self) -> str:
+        """Delegado a la configuración para compatibilidad."""
+        return self.config_manager.get_symbol(self.powerup_type)
 
     @classmethod
     def create_random(cls, x: float, y: float) -> "Powerup":
@@ -256,11 +115,11 @@ class Powerup(Entity):
         Crea un powerup aleatorio.
 
         Args:
-                x: Posición X
-                y: Posición Y
+            x: Posición X
+            y: Posición Y
 
         Returns:
-                Powerup aleatorio
+            Powerup aleatorio
         """
         powerup_type = random.choice(list(PowerupType))
         return cls(x, y, powerup_type)
@@ -268,4 +127,35 @@ class Powerup(Entity):
     @classmethod
     def get_all_types(cls) -> list:
         """Obtiene todos los tipos de powerups disponibles."""
-        return list(PowerupType)
+        return PowerupConfiguration.get_all_types()
+
+    # Propiedades para mantener compatibilidad
+    @property
+    def color(self) -> tuple:
+        """Color del powerup para compatibilidad."""
+        return self.renderer.get_color()
+
+    @property
+    def symbol(self) -> str:
+        """Símbolo del powerup para compatibilidad."""
+        return self.config_manager.get_symbol(self.powerup_type)
+
+    @property
+    def name(self) -> str:
+        """Nombre del powerup para compatibilidad."""
+        return self.config.get("name", "Desconocido")
+
+    @property
+    def duration(self) -> float:
+        """Duración del powerup para compatibilidad."""
+        return self.config.get("duration", 0.0)
+
+    @property
+    def value(self) -> float:
+        """Valor del powerup para compatibilidad."""
+        return self.config.get("value", 1.0)
+
+    @property
+    def description(self) -> str:
+        """Descripción del powerup para compatibilidad."""
+        return self.config.get("description", "")

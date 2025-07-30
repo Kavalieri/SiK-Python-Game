@@ -326,10 +326,12 @@
 **🗄️ Migración SQLite**: Ver [`PLAN_MIGRACION_SQLITE.md - Fase 2`](./PLAN_MIGRACION_SQLITE.md#fase-2-migración-del-configmanager)
 
 - [ ] **Dividir ConfigManager** (264→3x150 líneas) + migrar JSON a SQLite
-  - [ ] **Archivos**: `config_loader.py`, `config_database.py`, `config_validator.py`
-  - [ ] **Referencia**: [ConfigManager en diagnóstico](#directorio-srcutils-100-completado) (264 líneas, 176% sobre límite)
-  - [ ] **Migración**: JSON modular → SQLite - Ver [esquemas](./PLAN_MIGRACION_SQLITE.md#esquema-sqlite-propuesto)
-  - [ ] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) por cada módulo
+  - [x] **ConfigManager refactorizado** (✅ COMPLETADO - Julio 30, 2025)
+  - [x] **Fachada modular**: ConfigManager (153 líneas) delega a ConfigLoader y ConfigDatabase
+  - [x] **Archivos**: `config_loader.py`, `config_database.py`, `config_manager.py` (fachada)
+  - [x] **Referencia**: [ConfigManager en diagnóstico](#directorio-srcutils-100-completado) (264→153 líneas, 58% reducción)
+  - [x] **Migración**: JSON modular → SQLite - Ver [esquemas](./PLAN_MIGRACION_SQLITE.md#esquema-sqlite-propuesto) ✅
+  - [x] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) por cada módulo ✅
 
 - [ ] **Resolver duplicaciones** config/src mediante SQLite
   - [ ] **Crítico**: [characters.json ↔ character_data.py](#redundancias-de-configuración-vs-código) (DUPLICACIÓN TOTAL)
@@ -357,11 +359,18 @@
   - [x] **API preservada**: 100% compatibilidad mediante `entity.py` como bridge (30 líneas) ✅
   - [x] **Documentado**: Todas las clases divididas en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) ✅
 
-- [ ] **Migrar asset_manager.py** (464→4x150 líneas)
-  - [ ] **Segundo más crítico**: [asset_manager.py](#archivos-más-críticos) (464 líneas, 309% sobre límite)
-  - [ ] **División propuesta**: `asset_loader.py`, `asset_cache.py`, `asset_manager.py`, `image_processor.py`
-  - [ ] **Cache SQLite**: Posible migración de metadata de assets para optimización futura
-  - [ ] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) por módulo
+- [x] **Migrar asset_manager.py** (464→4x150 líneas) ✅ **COMPLETADO**
+  - [x] **Segundo más crítico**: [asset_manager.py](#archivos-más-críticos) (464→114 líneas, 76% reducción) ✅
+  - [x] **División ejecutada**: `asset_loader.py`, `character_assets.py`, `ui_assets.py`, `asset_manager.py` (fachada)
+  - [x] **Cache SQLite**: No aplica - assets son recursos en memoria ✅
+  - [x] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) por módulo ✅
+
+- [x] **Migrar world_generator.py** (277→4x150 líneas) ✅ **COMPLETADO**
+  - [x] **Tercer archivo crítico**: [world_generator.py](#archivos-más-críticos) (277→126 líneas, 54% reducción en fachada) ✅
+  - [x] **División ejecutada**: `world_core.py` (124), `cluster_generator.py` (108), `world_validator.py` (111), `world_generator.py` (126)
+  - [x] **Total distribuido**: 469 líneas (277→469, separación de responsabilidades) ✅
+  - [x] **API preservada**: 100% compatibilidad mediante fachada con delegación inteligente ✅
+  - [x] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) por módulo ✅
 
 - [ ] **Finalizar migración SQLite**
   - [ ] Validación completa del sistema
