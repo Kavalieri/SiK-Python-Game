@@ -18,10 +18,10 @@ Estas son las instrucciones principales para el repositorio SiK Python Game. Las
 ```
 
 ### 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS**
-- **CONSULTAR PRIMERO**: `docs/REFACTORIZACION_ESTADO_ACTUAL.md` antes de CUALQUIER cambio
+- **CONSULTAR PRIMERO**: `docs/ANALISIS_POST_MODERNIZACION.md` antes de CUALQUIER cambio
 - **LÍMITE ABSOLUTO**: 250 líneas por archivo - dividir INMEDIATAMENTE si se excede
 - **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
-- **Commits**: Solo `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (método unificado)
+- **Commits**: Solo `.\dev-tools\scripts\robust_commit.ps1 "mensaje"` (método robusto definitivo)
 
 ## 📁 **INSTRUCCIONES ESPECÍFICAS**
 

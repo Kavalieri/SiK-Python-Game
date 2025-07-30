@@ -1,10 +1,29 @@
 # Control de Versiones
 
 ## 📝 **Commits y Gestión**
-- **Diario**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
+- **MÉTODO PRINCIPAL**: `.\dev-tools\scripts\robust_commit.ps1 "mensaje"` para commits cotidianos
+- **ALTERNATIVA**: `.\dev-tools\scripts\manage_precommit.ps1` para gestión de pre-commit hooks
 - **GitHub CLI**: `gh` para repo, issues, PRs, releases
 - **Git local**: Solo `git add`, `git commit`, branching
 - **Commits atómicos**: Por cada refactorización
+
+### 🛠️ **Sistema de Commits Robusto** (NUEVO - OBLIGATORIO)
+- **Script principal**: `robust_commit.ps1` con manejo inteligente de pre-commit hooks
+- **Problema resuelto**: Archivos modificados por hooks tras staging
+- **Reintentos automáticos**: Hasta 3 intentos con staging robusto
+- **Opciones disponibles**:
+  - `robust_commit.ps1 "mensaje"` - Commit normal
+  - `robust_commit.ps1 "mensaje" -Push` - Commit + push
+  - `robust_commit.ps1 "mensaje" -DisablePreCommit` - Sin hooks
+  - `robust_commit.ps1 "mensaje" -Force` - Forzar en caso de error
+- **Documentación completa**: `docs/SISTEMA_COMMITS_ROBUSTO.md`
+
+### Gestión de Pre-commit Hooks
+- **Estado actual**: `manage_precommit.ps1 status` - Ver configuración actual
+- **Deshabilitar temporalmente**: `manage_precommit.ps1 disable` - Para múltiples commits
+- **Habilitar nuevamente**: `manage_precommit.ps1 enable` - Restaurar hooks
+- **Desinstalar**: `manage_precommit.ps1 uninstall -Force` - Eliminar completamente
+- **Reinstalar**: `manage_precommit.ps1 reinstall` - Restaurar desde backup
 
 ### Gestión de Archivos y Repositorio
 - **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
@@ -41,4 +60,4 @@
 - Branching local: `git branch`, `git checkout`
 - Consultar logs y diferencias locales
 - **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
-- **Usar método unificado**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
+- **Usar método robusto**: `.\dev-tools\scripts\robust_commit.ps1 "mensaje"` para commits cotidianos
