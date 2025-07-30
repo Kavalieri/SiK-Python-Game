@@ -12,7 +12,8 @@
 │   ├── 🧪 testing/            # Tests automatizados (unitarios e integración)
 │   ├── 📦 packaging/          # Herramientas de empaquetado y distribución
 │   ├── 🔄 migration/          # Scripts de migración y refactorización
-│   └── 📁 archive/            # Scripts obsoletos (valor histórico)
+│   ├── 📊 coverage/           # Reportes de cobertura de código
+│   └── 📁 archive/            # Scripts obsoletos y backups históricos
 └── 💾 saves/                  # Partidas guardadaslds.io/badge/poetry-1.5+-orange.svg)](https://python-poetry.org)
 [![Pygame-ce](https://img.shields.io/badge/pygame--ce-2.4+-green.svg)](https://pyga.me)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

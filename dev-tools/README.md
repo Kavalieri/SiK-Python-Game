@@ -80,11 +80,18 @@ Conjunto completo de herramientas, scripts y utilidades para el desarrollo, test
 - Herramientas de refactorización automática
 - Scripts de validación de migración
 
-### 📁 archive/ - Scripts Obsoletos
+### � coverage/ - Reportes de Cobertura
+**Análisis de cobertura de código** generados automáticamente:
+- `htmlcov/` - Reportes HTML interactivos de cobertura
+- `coverage.xml` - Reportes XML para integración continua
+- Análisis detallado línea por línea de tests
+
+### �📁 archive/ - Scripts Obsoletos
 **Archivos históricos** que ya no se usan pero se conservan:
 - Scripts descontinuados con valor histórico
 - Versiones anteriores de herramientas
 - Experimentos completados
+- `backups/historical/` - Backups históricos del proyecto
 
 ## 🚀 Guía de Uso
 
@@ -129,6 +136,11 @@ python .\dev-tools\debugging\debug_game_engine.py
 ### 📦 archive/ (Histórico)
 - Scripts obsoletos o descontinuados
 - Conservados por referencia histórica
+- Backups históricos del proyecto
+
+### 📊 coverage/ (Análisis)
+- Reportes de cobertura HTML y XML
+- Análisis de testing automatizados
 
 ## 🎯 **USO RÁPIDO**
 
@@ -152,7 +164,8 @@ python dev-tools\packaging\package_improved.py
 - **🧪 Testing y validación**: `testing/` (tests unitarios e integración)
 - **📦 Distribución**: `packaging/` (creación de ejecutables)
 - **🔄 Migración**: `migration/` (transformaciones de datos)
-- **📁 Histórico**: `archive/` (referencia de versiones anteriores)
+- **� Análisis**: `coverage/` (reportes de cobertura de código)
+- **�📁 Histórico**: `archive/` (referencia de versiones anteriores)
 
 ## ⚠️ **ESTRUCTURA CENTRALIZADA**
 
