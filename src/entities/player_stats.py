@@ -9,7 +9,7 @@ Descripción: Módulo que maneja las estadísticas específicas del jugador.
 
 from dataclasses import dataclass
 from typing import Dict, Any
-from .entity import EntityStats
+from .entity_types import EntityStats
 
 
 @dataclass

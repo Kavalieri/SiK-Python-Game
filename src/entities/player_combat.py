@@ -163,6 +163,31 @@ class PlayerCombat:
             "Combo añadido %s, combo actual: %s", amount, self.stats.combo
         )
 
+    def attack(
+        self,
+        player_core,
+        target_pos: Tuple[int, int],
+        current_time: float,
+        enemies: List[Any],
+    ) -> List[Any]:
+        """
+        Ejecuta un ataque del jugador.
+
+        Args:
+            player_core: Núcleo del jugador
+            target_pos: Posición objetivo del ataque
+            current_time: Tiempo actual del juego
+            enemies: Lista de enemigos en el área
+
+        Returns:
+            Lista de resultados del ataque (proyectiles u otros efectos)
+        """
+        # Por ahora, simplemente crear proyectiles
+        # TODO: Implementar lógica específica según el tipo de ataque y enemigos
+        _ = enemies  # Evitar warning de argumento no usado
+        player_pos = (player_core.x, player_core.y)
+        return self.shoot(player_pos, target_pos, current_time)
+
     def get_combat_stats(self) -> dict:
         """
         Obtiene estadísticas de combate actuales.

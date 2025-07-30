@@ -11,8 +11,12 @@ import logging
 import time
 from typing import Any, Dict, List, Tuple
 
+import pygame
+import pygame.mixer
+
 from ..entities.powerup import PowerupEffect
 from .attack_configuration import AttackConfig
+from .entity import EntityState
 from .player_combat import PlayerCombat
 from .player_core import AnimationState, PlayerCore
 from .player_effects import PlayerEffects
@@ -81,10 +85,8 @@ class PlayerIntegration:
         # Sonido
         if attack_cfg.sonido:
             try:
-                import pygame.mixer
-
                 pygame.mixer.Sound(f"assets/sounds/{attack_cfg.sonido}").play()
-            except (FileNotFoundError, pygame.error) as e:
+            except (FileNotFoundError, RuntimeError) as e:
                 self.logger.warning(
                     "No se pudo reproducir el sonido de ataque: %s (%s)",
                     attack_cfg.sonido,
@@ -105,8 +107,6 @@ class PlayerIntegration:
             True si el jugador murió
         """
         if self.combat.take_damage(damage, source):
-            from .entity import EntityState
-
             self.player_core.state = EntityState.DEAD
             return True
         return False

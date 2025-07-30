@@ -9,6 +9,7 @@ Descripción: Módulo que maneja los efectos activos y powerups del jugador.
 
 import logging
 from typing import Dict, Tuple
+
 from ..entities.powerup import PowerupEffect, PowerupType
 
 

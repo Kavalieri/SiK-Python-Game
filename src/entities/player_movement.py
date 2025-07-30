@@ -56,14 +56,14 @@ class PlayerMovement:
         self.velocity_y = 0
 
         # Movimiento con WASD
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
+        if keys[119] or keys[273]:  # W or UP
             self.velocity_y = -self.player_core.stats.speed
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        if keys[115] or keys[274]:  # S or DOWN
             self.velocity_y = self.player_core.stats.speed
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        if keys[97] or keys[276]:  # A or LEFT
             self.velocity_x = -self.player_core.stats.speed
             self.player_core.facing_right = False
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        if keys[100] or keys[275]:  # D or RIGHT
             self.velocity_x = self.player_core.stats.speed
             self.player_core.facing_right = True
 

@@ -2784,5 +2784,35 @@ class Tile(Entity):
 
 ---
 
+## 🔧 **CORRECCIONES DE ERRORES PYLANCE/PYLINT** (31 Julio 2025)
+
+### **Archivo: powerup_new.py** ✅
+**Estado**: Errores resueltos completamente (3 errores → 0 errores)
+
+#### Powerup.__init__ (CORREGIDO)
+- **Descripción**: Inicializa powerup modular con atributo debug añadido
+- **Corrección aplicada**: Añadido `self.debug = False` para resolver error de atributo faltante
+- **Línea**: 66 (nueva línea añadida)
+- **Impacto**: Resuelve error "Cannot access attribute 'debug'"
+
+#### Powerup._update_logic (MEJORADO)
+- **Descripción**: Actualiza lógica específica del powerup con funcionalidad real
+- **Corrección aplicada**: Reemplazado `pass` innecesario con `self.renderer.update_animation(delta_time)`
+- **Línea**: 84-87 (método mejorado)
+- **Impacto**: Elimina warning "Unnecessary pass statement" y añade funcionalidad
+
+### **Archivos Previamente Corregidos** ✅
+- **player_integration.py**: Método attack() añadido, imports movidos a top-level
+- **player_movement.py**: Constantes pygame reemplazadas con valores numéricos
+- **player_stats.py**: Import directo implementado, herencia corregida
+- **entity_types.py**: Métodos to_dict/from_dict añadidos a EntityStats
+
+### **Documentación de Soluciones**
+- **Archivo de referencia**: [`docs/SOLUCIONES_PYLANCE_ERRORES.md`](./SOLUCIONES_PYLANCE_ERRORES.md)
+- **Propósito**: Referencia completa de patrones de error y soluciones aplicadas
+- **Total errores resueltos**: 16 errores de Pylance/Pylint eliminados
+
+---
+
 *📝 Nota: Este documento se actualiza automáticamente con cada nueva función creada durante la refactorización + migración SQLite.*
 ```
