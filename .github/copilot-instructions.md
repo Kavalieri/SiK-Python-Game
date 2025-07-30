@@ -4,7 +4,18 @@
 
 ### Estado Crítico del Proyecto
 - **23 archivos CRÍTICOS** exceden límite de 150 líneas
-- **11 archivos >300 líneas** requieren división URGENTE
+- **11 archivos >300 líneas** r### Método de Commit Unificado (NUEVO - OBLIGATORIO)
+- **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
+- **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
+- **Flujo optimizado**: pre-commit → staging → commit → push (resuelve conflictos de hooks)
+- **Conventional Commits**: Formato automático `tipo(ámbito): descripción`
+- **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
+- **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
+- **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
+- **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
+- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
+- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
+- **Resuelve problema crítico**: Pre-commit hooks modificando archivos post-stagingvisión URGENTE
 - **Migración SQLite INTEGRADA** con refactorización simultánea
 - **Sistema de documentación COHESIVO** con referencias cruzadas obligatorias
 
@@ -223,10 +234,11 @@ src/
 - **Branching local**: `git branch`, `git checkout`, `git switch`
 - **Estado local**: `git status`, `git log`, `git diff`
 
-### Scripts Personalizados
+### Scripts Principales
 - `scripts/run_tests.py` - Testing interactivo
 - `scripts/cleanup_project.py` - Limpieza automática
-- `scripts/commit_profesional.ps1` - Commits profesionales automatizados
+- **`scripts/unified_commit.ps1` - Método de commit unificado (NUEVO)**
+- **`scripts/simple_commit.ps1` - Commits cotidianos simplificados (NUEVO)**
 - `tools/package_improved.py` - Build ejecutable
 
 ## 🔄 Reglas de Trabajo
@@ -238,17 +250,17 @@ src/
 - **Filtrado de texto**: `Select-String` en lugar de `grep`
 - **Búsqueda en archivos**: `Get-Content archivo.txt | Select-String "patrón"`
 
-### Commits y Push Profesionales
-- **Template obligatorio**: `.gitmessage` con Conventional Commits en español
+### Método de Commit Unificado (NUEVO - OBLIGATORIO)
+- **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
+- **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
+- **Flujo optimizado**: pre-commit → staging → commit → push (resuelve conflictos de hooks)
+- **Conventional Commits**: Formato automático `tipo(ámbito): descripción`
 - **Tipos**: feat, fix, docs, refactor, test, chore, perf, style
 - **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
-- **Formato**: `tipo(ámbito): descripción` (máx 50 caracteres)
-- **Script automatizado**: `scripts/commit_profesional.ps1` para workflow completo
-- **Pre-commit hooks**: validación automática de calidad antes de commit
-- **Validación obligatoria**: SIEMPRE verificar éxito del commit con `git status` antes de continuar
-- **Staging completo**: Agregar TODOS los cambios relacionados con `git add .` antes del commit
-- **Verificación post-commit**: Confirmar que no quedan cambios unstaged después del commit
-- **Documentación**: `docs/COMMITS_PROFESIONALES.md` con guía completa
+- **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
+- **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
+- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
+- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
 
 ### Gestión de Archivos y Repositorio
 - **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
@@ -275,6 +287,7 @@ src/
 - Branching local: `git branch`, `git checkout`
 - Consultar logs y diferencias locales
 - **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
+- **Usar método unificado**: `.\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
 
 ### Flujo Autónomo
 - **Continuar automáticamente** hasta puntos de prueba

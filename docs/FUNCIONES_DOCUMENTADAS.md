@@ -51,13 +51,32 @@
 - **AssetLoader.get_cache_info()**: Información del estado del caché
 - **AssetLoader.is_placeholder_sprite(sprite)**: Verifica si sprite es placeholder
 
-#### CharacterAssets (src/utils/character_assets.py) - 186 líneas (⚠️ REQUIERE OPTIMIZACIÓN)
-- **CharacterAssets.__init__(asset_loader)**: Inicializa gestor de assets de personajes
-- **CharacterAssets._load_animation_config()**: Carga config/animations.json
-- **CharacterAssets.get_character_sprite(character_name, animation, frame, scale)**: Obtiene sprite específico
-- **CharacterAssets.get_character_animation_frames(character_name, animation, max_frames)**: Carga frames completos
-- **CharacterAssets.get_character_animation_info(character_name)**: Info completa de animaciones
-- **CharacterAssets._calculate_optimal_fps(frame_count, anim_type)**: Calcula FPS óptimo por tipo
+#### CharacterAssets (src/utils/character_assets.py) - 69 líneas (FACHADA REFACTORIZADA)
+- **CharacterAssets.__init__(asset_loader)**: Fachada que integra CharacterAssetsLoader + CharacterAssetsAnimation
+- **CharacterAssets.get_character_sprite()**: Delegado a CharacterAssetsLoader
+- **CharacterAssets.get_character_animation_frames()**: Delegado a CharacterAssetsAnimation
+- **CharacterAssets.get_character_animation_info()**: Delegado a CharacterAssetsAnimation
+- **CharacterAssets._calculate_optimal_fps()**: Delegado a CharacterAssetsAnimation (compatibilidad)
+- **CharacterAssets.animation_config**: Propiedad de compatibilidad
+- **CharacterAssets.is_character_available()**: Delegado a CharacterAssetsLoader
+- **CharacterAssets.get_available_animations()**: Delegado a CharacterAssetsLoader
+- **CharacterAssets.get_character_config()**: Delegado a CharacterAssetsLoader
+- **CharacterAssets.preload_character_animations()**: Delegado a CharacterAssetsAnimation
+
+#### CharacterAssetsLoader (src/utils/character_assets_loader.py) - 148 líneas
+- **CharacterAssetsLoader.__init__(asset_loader)**: Inicializa cargador con configuración de animaciones
+- **CharacterAssetsLoader._load_animation_config()**: Carga config/animations.json con manejo de errores
+- **CharacterAssetsLoader.get_character_sprite(character_name, animation, frame, scale)**: Obtiene sprite específico con múltiples rutas de búsqueda
+- **CharacterAssetsLoader.is_character_available(character_name)**: Verifica disponibilidad de personaje
+- **CharacterAssetsLoader.get_available_animations(character_name)**: Lista animaciones disponibles
+- **CharacterAssetsLoader.get_character_config(character_name)**: Configuración completa del personaje
+
+#### CharacterAssetsAnimation (src/utils/character_assets_animation.py) - 147 líneas
+- **CharacterAssetsAnimation.__init__(assets_loader)**: Inicializa gestor de animaciones con cargador
+- **CharacterAssetsAnimation.get_character_animation_frames(character_name, animation, max_frames)**: Carga todos los frames de una animación
+- **CharacterAssetsAnimation.get_character_animation_info(character_name)**: Info completa de todas las animaciones
+- **CharacterAssetsAnimation.calculate_optimal_fps(frame_count, anim_type)**: Calcula FPS óptimo por tipo y cantidad de frames
+- **CharacterAssetsAnimation.preload_character_animations(character_name)**: Precarga todas las animaciones de un personaje
 
 #### UIAssets (src/utils/ui_assets.py) - 109 líneas
 - **UIAssets.__init__(asset_loader)**: Inicializa gestor de assets de UI
