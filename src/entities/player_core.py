@@ -89,18 +89,31 @@ class PlayerCore:
         """Obtiene las estadísticas base del personaje."""
         if character_name in CHARACTER_DATA:
             char_data = CHARACTER_DATA[character_name]
-            return PlayerStats(
-                health=char_data.get("health", 100),
-                max_health=char_data.get("health", 100),
-                speed=char_data.get("speed", 200),
-                damage=char_data.get("damage", 25),
-                shoot_speed=char_data.get("shoot_speed", 0.2),
-                bullet_speed=char_data.get("bullet_speed", 500),
-                bullet_damage=char_data.get("bullet_damage", 25),
-                shield=char_data.get("shield", 0),
-                max_shield=char_data.get("max_shield", 100),
+            # Verificar que char_data no sea None antes de usar .get()
+            if char_data is not None and isinstance(char_data, dict):
+                return PlayerStats(
+                    health=char_data.get("health", 100),
+                    max_health=char_data.get("health", 100),
+                    speed=char_data.get("speed", 200),
+                    damage=char_data.get("damage", 25),
+                    shoot_speed=char_data.get("shoot_speed", 0.2),
+                    bullet_speed=char_data.get("bullet_speed", 500),
+                    bullet_damage=char_data.get("bullet_damage", 25),
+                    shield=char_data.get("shield", 0),
+                    max_shield=char_data.get("max_shield", 100),
+                )
+            else:
+                self.logger.warning(
+                    "Datos de personaje '%s' son None o no válidos, usando estadísticas por defecto",
+                    character_name,
+                )
+        else:
+            self.logger.warning(
+                "Personaje '%s' no encontrado en CHARACTER_DATA, usando estadísticas por defecto",
+                character_name,
             )
-        # Estadísticas por defecto
+
+        # Estadísticas por defecto si el personaje no existe o los datos son None
         return PlayerStats()
 
     def _create_fallback_sprite(self):
