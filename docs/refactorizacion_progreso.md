@@ -65,7 +65,9 @@
   - [x] **SchemaCore** (130 líneas) - **COMPLETADO** ✅
   - [x] **SchemaTables** (135 líneas) - **COMPLETADO** ✅
   - [x] **SchemaMigrations** (129 líneas) - **OPTIMIZADO** ✅
-  - [x] **DatabaseManager** (150 líneas) - **OPTIMIZADO** ✅
+  - [x] **DatabaseManager** (71 líneas) - **REFACTORIZADO MODULAR** ✅
+  - [x] **DatabaseConnection** (114 líneas) - **NUEVO MÓDULO** ✅
+  - [x] **DatabaseOperations** (88 líneas) - **NUEVO MÓDULO** ✅
   - [x] Conexión SQLite con pooling - **Documentado** en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
   - [x] Creación automática de tablas ✅
   - [x] Sistema de transacciones y logging ✅

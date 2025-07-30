@@ -80,7 +80,7 @@ def test_executable_basic(exe_path):
             return False
 
         file_size = exe_path.stat().st_size
-        logger.info(f"Tamaño del ejecutable: {file_size / (1024*1024):.1f} MB")
+        logger.info(f"Tamaño del ejecutable: {file_size / (1024 * 1024):.1f} MB")
 
         # Verificar que el archivo no está corrupto
         if file_size < 1024 * 1024:  # Menos de 1MB
@@ -186,7 +186,7 @@ def test_executable_zip():
             file_list = zipf.namelist()
 
             logger.info(f"📦 Archivo ZIP: {zip_path.name}")
-            logger.info(f"📦 Tamaño: {zip_path.stat().st_size / (1024*1024):.1f} MB")
+            logger.info(f"📦 Tamaño: {zip_path.stat().st_size / (1024 * 1024):.1f} MB")
             logger.info(f"📦 Archivos contenidos: {len(file_list)}")
 
             # Verificar que contiene el ejecutable

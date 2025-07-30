@@ -223,7 +223,7 @@ class ProjectCleanerV2:
 
         plan_content = f"""# PLAN DE REFACTORIZACIÓN V2 - LÍMITE 150 LÍNEAS
 
-**Fecha**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+**Fecha**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 ## 📊 RESUMEN
 
@@ -241,7 +241,7 @@ class ProjectCleanerV2:
 **Dividir en:**
 - {suggestion}
 
-**Prioridad:** {'ALTA' if line_count > 400 else 'MEDIA' if line_count > 250 else 'BAJA'}
+**Prioridad:** {"ALTA" if line_count > 400 else "MEDIA" if line_count > 250 else "BAJA"}
 """
 
         plan_content += """

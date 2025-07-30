@@ -74,8 +74,8 @@ class SaveManager:
         save_files = []
 
         for i in range(self.max_save_files):
-            save_file = self.saves_path / f"save_{i+1}.dat"
-            save_info_file = self.saves_path / f"save_{i+1}_info.json"
+            save_file = self.saves_path / f"save_{i + 1}.dat"
+            save_info_file = self.saves_path / f"save_{i + 1}_info.json"
 
             save_info = {
                 "file_number": i + 1,
@@ -96,7 +96,7 @@ class SaveManager:
                         save_info.update(info_data)
                 except Exception as e:
                     self.logger.error(
-                        f"Error al cargar información del archivo {i+1}: {e}"
+                        f"Error al cargar información del archivo {i + 1}: {e}"
                     )
 
             save_files.append(save_info)

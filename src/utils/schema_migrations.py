@@ -48,7 +48,7 @@ class SchemaMigrations:
             # Obtener tablas existentes
             existing_tables = self.db_manager.execute_query(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'",
-                fetch_all=True,
+                fetch_results=True,
             )
 
             if existing_tables:
@@ -65,7 +65,7 @@ class SchemaMigrations:
 
             # Validar integridad referencial
             integrity_result = self.db_manager.execute_query(
-                "PRAGMA integrity_check", fetch_all=True
+                "PRAGMA integrity_check", fetch_results=True
             )
             if integrity_result and len(integrity_result) > 0:
                 first_result = integrity_result[0]
@@ -100,7 +100,7 @@ class SchemaMigrations:
         """Obtiene el historial de migraciones aplicadas."""
         try:
             result = self.db_manager.execute_query(
-                "SELECT * FROM schema_metadata ORDER BY id ASC", fetch_all=True
+                "SELECT * FROM schema_metadata ORDER BY id ASC", fetch_results=True
             )
             return result if isinstance(result, list) else []
         except (ValueError, RuntimeError) as e:
@@ -116,7 +116,7 @@ class SchemaMigrations:
             WHERE type='table' AND name NOT LIKE 'sqlite_%'
             ORDER BY name
             """
-            tables = self.db_manager.execute_query(tables_query, fetch_all=True)
+            tables = self.db_manager.execute_query(tables_query, fetch_results=True)
 
             # Crear string único del esquema
             schema_string = ""
@@ -139,7 +139,9 @@ class SchemaMigrations:
             SELECT sql FROM sqlite_master
             WHERE type='table' AND name NOT LIKE 'sqlite_%'
             """
-            ddl_statements = self.db_manager.execute_query(ddl_query, fetch_all=True)
+            ddl_statements = self.db_manager.execute_query(
+                ddl_query, fetch_results=True
+            )
 
             with open(backup_path, "w", encoding="utf-8") as f:
                 f.write("-- Schema backup\n")

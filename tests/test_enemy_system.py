@@ -156,7 +156,7 @@ def test_enemy_system():
     for i, enemy in enumerate(enemies):
         info = enemy.get_enemy_info()
         print(
-            f"  {i+1}. {info['name']} - Rareza: {info['rarity']} - Comportamiento: {info['behavior']}"
+            f"  {i + 1}. {info['name']} - Rareza: {info['rarity']} - Comportamiento: {info['behavior']}"
         )
         print(
             f"     Vida: {info['health']} - Daño: {info['damage']} - Puntos: {info['score_value']}"
@@ -233,7 +233,7 @@ def test_enemy_system():
     behavior_names = ["Persecución", "Vagabundeo", "Emboscada", "Enjambre", "Jefe"]
 
     for i, enemy in enumerate(behavior_enemies):
-        print(f"  {i+1}. {behavior_names[i]}: {enemy.enemy_config.name}")
+        print(f"  {i + 1}. {behavior_names[i]}: {enemy.enemy_config.name}")
 
     # Renderizado y simulación
     print("\n🎨 Probando renderizado...")
