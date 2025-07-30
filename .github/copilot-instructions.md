@@ -250,6 +250,25 @@ src/
 - **Filtrado de texto**: `Select-String` en lugar de `grep`
 - **Búsqueda en archivos**: `Get-Content archivo.txt | Select-String "patrón"`
 
+### Configuración Terminal VS Code (CRÍTICO)
+- **Terminal optimizado**: Ver `docs/CONFIGURACION_TERMINAL_OPTIMIZADA.md` para configuración completa
+- **Usar terminal existente** cuando esté disponible en lugar de crear nuevos
+- **Scripts PowerShell ASCII-only**: **PROHIBIDOS emojis, Unicode y caracteres especiales**
+- **Timeouts automáticos**: Todos los comandos largos deben tener timeout (30-45s máximo)
+- **Detección de output**: Usar `isBackground=false` para comandos que requieren respuesta inmediata
+- **Scripts terminal-safe**: OBLIGATORIO usar `scripts/terminal_safe_commit.ps1` para commits
+- **Recuperación automática**: Si hay problemas, usar `scripts/reset_terminal_state.ps1`
+- **Validación pre-comando**: Verificar responsividad con `scripts/test_ascii_safe.ps1`
+- **Estado validado**: Terminal completamente funcional (30 jul 2025) - ver documentación
+
+### Reglas PowerShell Scripts (OBLIGATORIO)
+- **NUNCA usar emojis** (🚀, ✅, ❌, etc.) - causan problemas encoding
+- **NUNCA usar Unicode** - solo caracteres ASCII básicos
+- **Usar [OK], [ERROR], [WARN]** en lugar de símbolos
+- **Usar Write-Host con -ForegroundColor** para colores
+- **Incluir timeouts** en todos los comandos que pueden colgarse
+- **Validar estado terminal** antes de operaciones complejas
+
 ### Método de Commit Unificado (NUEVO - OBLIGATORIO)
 - **Script principal**: `scripts/unified_commit.ps1` para commits completos con validaciones
 - **Script simple**: `scripts/simple_commit.ps1` para uso cotidiano
