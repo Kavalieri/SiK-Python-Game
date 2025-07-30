@@ -77,6 +77,7 @@
 
 ## 📋 Regla Crítica: Límite de Líneas
 **NINGÚN archivo puede superar 150 líneas**. Dividir inmediatamente si se excede.
+**REGLA DE DIVISIÓN**: Dividir SIEMPRE en 2 módulos operativos preservando toda la funcionalidad útil.
 
 ## 🚨 Archivos Críticos que Requieren Refactorización URGENTE
 
@@ -103,12 +104,21 @@
 3. **Actualizar** ambos archivos de seguimiento después de cambios
 
 ### 🔧 Proceso de División Seguro (OBLIGATORIO)
+**REGLA FUNDAMENTAL**: **NUNCA eliminar métodos útiles** - SIEMPRE dividir en 2 partes operativas
+
 1. **Backup** del archivo original en carpeta temporal
 2. **Tests** ejecutar para validar estado actual
-3. **Dividir** por responsabilidades claras y específicas
-4. **Validar** funcionalidad completa tras división
-5. **Commit** atómico por cada archivo dividido
-6. **Actualizar** documentación de funciones automáticamente
+3. **Dividir en 2 módulos operativos** por responsabilidades claras (NO eliminar funcionalidad)
+4. **Mantener APIs completas** - preservar todos los métodos públicos útiles
+5. **Validar** funcionalidad completa tras división (100% equivalencia)
+6. **Commit** atómico por cada archivo dividido
+7. **Actualizar** documentación de funciones automáticamente
+
+#### Estrategia de División (PREFERIR siempre):
+- **Opción 1**: División funcional (Core + Extensions, Manager + Operations, etc.)
+- **Opción 2**: División por responsabilidad (Input + Output, Data + Logic, etc.)
+- **Opción 3**: División temporal (Init + Runtime, Setup + Execution, etc.)
+- **EVITAR**: Eliminación de métodos, pérdida de funcionalidad, APIs incompletas
 
 ## 🎮 Contexto del Proyecto
 Videojuego 2D bullet hell desarrollado con Pygame-ce. El jugador se mueve libremente con cámara fluida, dispara hacia el cursor del ratón y enfrenta oleadas de enemigos con IA avanzada. Desarrollo en **Windows 11 + VS Code** con asistencia 100% IA.
@@ -155,6 +165,9 @@ src/
 - **Modularización extrema** para mantener límite de 150 líneas
 - **APIs claras** entre módulos
 - **Dependencias mínimas** entre componentes
+- **PRESERVACIÓN TOTAL**: Nunca eliminar métodos útiles durante refactorización
+- **DIVISIÓN INTELIGENTE**: Separar en 2 módulos operativos manteniendo funcionalidad completa
+- **EQUIVALENCIA FUNCIONAL**: Los módulos divididos deben ofrecer 100% de la funcionalidad original
 
 ## ⚙️ Configuración Modular
 - **Todas las configuraciones** en `config/` como archivos JSON
