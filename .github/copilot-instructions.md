@@ -1,5 +1,22 @@
 # Instrucciones para GitHub Copilot - SiK Python Game
 
+## 🚨 **FLUJO POST-OPERACIÓN OBLIGATORIO**
+**Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
+```powershell
+.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
+```
+- **Método validado**: SendKeys (Ctrl+K U) preserva pestañas pinned
+- **Libera**: 272+ MB caché VS Code comprobados
+- **Sin efectos secundarios**: No cambia tamaño ventana
+
+## 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS**
+- **CONSULTAR PRIMERO**: `docs/REFACTORIZACION_ESTADO_ACTUAL.md` antes de CUALQUIER cambio
+- **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
+- **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
+- **Commits**: Solo `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (método unificado)
+- **Stack preferido**: Español completo, GitHub CLI prioritario, PowerShell shell
+- **Calidad**: 0 errores Ruff + 0 warnings MyPy + 100% cobertura tests
+
 ## � **PRIORIDADES CRÍTICAS** (Consultar PRIMERO)
 
 ### 1️⃣ **REFACTORIZACIÓN + MIGRACIÓN SQLITE** (29 archivos críticos)
@@ -25,15 +42,8 @@
 - **Completo**: `.\dev-tools\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
 - **Pre-commit**: Hooks ejecutados ANTES staging (resuelve conflictos)
 
-### 🧹 **Limpieza Post-Operación** (NUEVO - INTEGRADO)
-**Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
-```powershell
-.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
-```
-- **Método validado**: SendKeys (Ctrl+K U)
-- **Preserva**: Pestañas pinned y modificadas
-- **Libera**: Caché VS Code (272+ MB comprobados)
-- **Sin efectos**: No cambia tamaño ventana
+### 🧹 **Limpieza Post-Operación** (INTEGRADO ARRIBA)
+**RECORDATORIO**: Usar `.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"` tras operaciones importantes.
 
 ### 🗄️ **Migración SQLite** (Fase 1 ✅ - Fase 2-4 pendiente)
 - **Sistema mixto inteligente**: SQLite para datos complejos, JSON para configuración

@@ -1,1 +1,0 @@
-modularización completa de la escena principal, actualización de .gitignore y limpieza de exclusiones para migración de plataforma; proyecto listo para desarrollo multiplataforma

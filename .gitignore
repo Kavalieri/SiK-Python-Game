@@ -181,13 +181,31 @@ cython_debug/
 .cursorindexingignore
 .cursor
 
-# Excluir archivos y carpetas generadas por el juego o temporales
+# === CONFIGURACIÓN ESPECÍFICA DEL PROYECTO SiK-Python-Game ===
+
+# Directorios del juego
 saves/
 logs/
 backups__DISABLED/
 releases/
 
-# Excluir archivos de empaquetado y distribución
+# Estructura de herramientas de desarrollo unificada
+# dev-tools/ se mantiene en control de versiones pero excluir temporales
+dev-tools/testing/fixtures/temp/
+dev-tools/archive/temp/
+dev-tools/debugging/temp/
+
+# Archivos temporales del proyecto
+cleanup_*/
+backup_*/
+*.temp
+*.tmp
+*.bak
+*.old
+*.orig
+commit_message.txt
+
+# Archivos de empaquetado y distribución
 *.exe
 *.zip
 *.tar.gz
@@ -198,29 +216,12 @@ dist/
 build/
 *.spec
 
-# Excluir archivos temporales del sistema
-*.pyc
-__pycache__/
-.DS_Store
-*.swp
-*.swo
-*.tmp
-*.bak
-*.old
-*.orig
-
-# Excluir directorios de backup temporales
-backup_*/
-cleanup_*/
-# Excluir archivos de pruebas locales
-*.local
-# Excluir archivos de configuración de entorno
-.env
-# Excluir archivos de caché de editores
-# Editor configuration (VS Code) - excluir todo excepto settings.json del proyecto
+# Configuración de editores (mantener solo configuración del proyecto)
 .vscode/
 !.vscode/settings.json
 .idea/
-# Incluir explícitamente documentación y tests
-!docs/
-!tests/
+.cursor/
+.cursorignore
+.cursorindexingignore
+
+# === CONFIGURACIÓN ESTÁNDAR PYTHON ===
