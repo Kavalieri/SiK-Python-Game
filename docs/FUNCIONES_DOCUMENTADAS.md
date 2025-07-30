@@ -192,6 +192,52 @@
 - **SaveManager.get_system_info()**: Información del sistema de guardado actual
 - **SaveManager.validate_saves_integrity()**: Valida integridad de todas las partidas guardadas
 
+### 🏜️ Funciones de Sistema Desert Background Refactorizado (COMPLETADO)
+**Sistema modular Desert Background dividido: 458 líneas → 4 módulos**
+
+#### SandParticleSystem (src/utils/sand_particles.py) - 158 líneas
+- **SandParticle.__init__(x, y, screen_width, screen_height)**: Inicializa partícula de arena individual
+- **SandParticle.update(delta_time)**: Actualiza movimiento y vida de la partícula
+- **SandParticle.render(screen, camera_offset)**: Renderiza partícula con transparencia
+- **SandParticleSystem.__init__(screen_width, screen_height, particle_count)**: Inicializa sistema de partículas
+- **SandParticleSystem.update(delta_time)**: Actualiza todas las partículas del sistema
+- **SandParticleSystem.render(screen, camera_offset)**: Renderiza todas las partículas
+- **SandParticleSystem.set_wind_effect(wind_strength, wind_angle)**: Aplica efectos de viento
+- **SandParticleSystem.set_particle_count(count)**: Configura número de partículas dinámicamente
+
+#### DuneRenderer (src/utils/dune_renderer.py) - 172 líneas
+- **Dune.__init__(x, y, width, height, screen_width)**: Inicializa duna individual del terreno
+- **Dune.render(screen, camera_offset)**: Renderiza duna con sombras y efectos
+- **DuneRenderer.__init__(screen_width, screen_height)**: Inicializa sistema de renderizado de dunas
+- **DuneRenderer.render(screen, camera_offset)**: Renderiza todas las dunas ordenadas por profundidad
+- **DuneRenderer.render_dune_effects(screen, camera_offset)**: Renderiza brillos y efectos especiales
+- **DuneRenderer.add_dune(x, y, width, height)**: Añade nueva duna al sistema dinámicamente
+- **DuneRenderer.remove_dune(dune)**: Remueve duna específica del sistema
+- **DuneRenderer.regenerate_dunes()**: Regenera todas las dunas con nuevas configuraciones
+
+#### AtmosphericEffects (src/utils/atmospheric_effects.py) - 211 líneas
+- **AtmosphericEffects.__init__(screen_width, screen_height)**: Inicializa sistema de efectos atmosféricos
+- **AtmosphericEffects.update(delta_time)**: Actualiza viento, calor y efectos temporales
+- **AtmosphericEffects.render_sky_gradient(screen)**: Renderiza gradiente del cielo del desierto
+- **AtmosphericEffects.render_heat_shimmer(screen)**: Renderiza ondas de calor y distorsión atmosférica
+- **AtmosphericEffects.render_wind_effect(screen)**: Renderiza líneas visuales del viento
+- **AtmosphericEffects.render_dust_clouds(screen, camera_offset)**: Renderiza nubes de polvo en horizonte
+- **AtmosphericEffects.set_wind_parameters(strength, base_angle)**: Configura parámetros del viento
+- **AtmosphericEffects.set_heat_shimmer_strength(strength)**: Configura intensidad efectos de calor
+- **AtmosphericEffects.get_wind_data()**: Obtiene datos actuales del viento para sincronización
+
+#### DesertBackground (src/utils/desert_background.py) - 187 líneas (FACHADA)
+- **DesertBackground.__init__(screen_width, screen_height)**: Fachada que integra SandParticles + DuneRenderer + AtmosphericEffects
+- **DesertBackground.update(delta_time)**: Delegado que actualiza todos los sistemas coordinadamente
+- **DesertBackground.render(screen, camera_offset)**: Renderizado completo en orden correcto (cielo→dunas→partículas→efectos)
+- **DesertBackground.set_particle_count(count)**: Delegado a SandParticleSystem.set_particle_count()
+- **DesertBackground.set_wind_parameters(strength, angle)**: Delegado a AtmosphericEffects.set_wind_parameters()
+- **DesertBackground.set_heat_shimmer_intensity(intensity)**: Delegado a AtmosphericEffects.set_heat_shimmer_strength()
+- **DesertBackground.add_dune(x, y, width, height)**: Delegado a DuneRenderer.add_dune()
+- **DesertBackground.get_system_info()**: Información consolidada de todos los sistemas
+- **DesertBackground.get_performance_metrics()**: Métricas de rendimiento y carga de rendering
+- **DesertBackground.optimize_for_performance(target_fps)**: Optimización automática basada en FPS objetivo
+
 ### 🗄️ Funciones Pendientes de Documentar
 **ACTUALIZAR cuando se dividan SaveManager, ConfigManager, etc.**
 
