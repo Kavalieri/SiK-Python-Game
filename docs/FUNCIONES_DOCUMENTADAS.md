@@ -9,11 +9,38 @@
 - **🔍 Vista Rápida**: [`INDICE_MIGRACION_SQLITE.md`](./INDICE_MIGRACION_SQLITE.md) - Progreso de migración
 - **⚙️ Instrucciones**: [`.github/copilot-instructions.md`](../.github/copilot-instructions.md) - Reglas del proyecto
 
-### 🗄️ Funciones de Migración SQLite
-**AGREGAR aquí las funciones de DatabaseManager, SchemaManager y módulos divididos durante la refactorización**
-- Cuando se cree `DatabaseManager`: documentar `conectar()`, `ejecutar_query()`, `cerrar_conexion()`
-- Cuando se divida `SaveManager`: documentar funciones de `save_loader.py`, `save_encryption.py`, etc.
-- Cuando se divida `ConfigManager`: documentar funciones de `config_database.py`, `config_loader.py`, etc.
+### 🗄️ Funciones de Migración SQLite (FASE 1 COMPLETADA)
+**Sistema modular DatabaseManager dividido aplicando reglas de preservación**
+
+#### DatabaseConnection (src/utils/database_connection.py)
+- **DatabaseConnection.__init__(db_path, pool_size)**: Inicializa gestor de conexiones con pooling
+- **DatabaseConnection._initialize_pool()**: Crea pool de conexiones SQLite optimizadas
+- **DatabaseConnection._create_connection()**: Crea conexión individual con pragmas optimizados
+- **DatabaseConnection.get_connection()**: Context manager para obtener conexión del pool
+- **DatabaseConnection.close_all_connections()**: Cierra todas las conexiones del pool
+- **DatabaseConnection.get_connection_info()**: Información del estado de conexiones
+
+#### DatabaseOperations (src/utils/database_operations.py)
+- **DatabaseOperations.__init__(connection_manager)**: Inicializa operaciones con gestor de conexiones
+- **DatabaseOperations.execute_query(query, params, fetch_results)**: Ejecuta queries SQL con parámetros
+- **DatabaseOperations.transaction()**: Context manager para transacciones SQLite
+- **DatabaseOperations.backup_database(backup_path)**: Crea backup de la base de datos
+- **DatabaseOperations.vacuum_database()**: Optimiza BD con VACUUM
+
+#### DatabaseManager (src/utils/database_manager.py) - Fachada Unificada
+- **DatabaseManager.__init__(db_path, pool_size)**: Fachada que integra Connection + Operations
+- **DatabaseManager.get_connection()**: Delegado a DatabaseConnection
+- **DatabaseManager.execute_query()**: Delegado a DatabaseOperations
+- **DatabaseManager.transaction()**: Delegado a DatabaseOperations
+- **DatabaseManager.backup_database()**: Delegado a DatabaseOperations
+- **DatabaseManager.vacuum_database()**: Delegado a DatabaseOperations
+- **DatabaseManager.close_all_connections()**: Delegado a DatabaseConnection
+- **DatabaseManager.get_connection_info()**: Delegado a DatabaseConnection
+- **DatabaseManager.db_path**: Propiedad de compatibilidad
+- **DatabaseManager.pool_size**: Propiedad de compatibilidad
+
+### 🗄️ Funciones Pendientes de Documentar
+**ACTUALIZAR cuando se dividan SaveManager, ConfigManager, etc.**
 
 Este archivo contiene la documentación generada automáticamente para todas las funciones del proyecto SiK Python Game.
 

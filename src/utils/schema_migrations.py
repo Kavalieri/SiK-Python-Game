@@ -8,6 +8,7 @@ Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 import hashlib
 import logging
 from typing import Any, Dict, Optional
+
 from .database_manager import DatabaseManager
 
 
