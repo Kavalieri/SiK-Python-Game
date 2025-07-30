@@ -2,19 +2,19 @@
 
 ## � **PRIORIDADES CRÍTICAS** (Consultar PRIMERO)
 
-### 1️⃣ **REFACTORIZACIÓN + MIGRACIÓN SQLITE** (23 archivos críticos)
-- **Estado**: 23 archivos exceden 150 líneas → 11 >300 líneas **URGENTE**
+### 1️⃣ **REFACTORIZACIÓN + MIGRACIÓN SQLITE** (29 archivos críticos)
+- **Estado**: 29 archivos exceden 150 líneas → 9 archivos >200 líneas **CRÍTICO**
 - **Método**: División funcional preservando 100% funcionalidad + migración SQLite
 - **Límite ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
 
 ### 2️⃣ **DOCUMENTACIÓN CENTRAL** (Consultar en orden)
-1. [`docs/refactorizacion_progreso.md`](../docs/refactorizacion_progreso.md) - **DOCUMENTO CENTRAL**
+1. [`docs/REFACTORIZACION_ESTADO_ACTUAL.md`](../docs/REFACTORIZACION_ESTADO_ACTUAL.md) - **DOCUMENTO CENTRAL ACTUALIZADO**
 2. [`docs/PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md) - Plan SQLite + checklist
 3. [`docs/FUNCIONES_DOCUMENTADAS.md`](../docs/FUNCIONES_DOCUMENTADAS.md) - **ACTUALIZAR** siempre
 4. [`docs/INDICE_MIGRACION_SQLITE.md`](../docs/INDICE_MIGRACION_SQLITE.md) - Vista rápida
 
 ### 3️⃣ **WORKFLOW OBLIGATORIO**
-- **ANTES**: Consultar `refactorizacion_progreso.md` + revisar si toca SQLite
+- **ANTES**: Consultar `REFACTORIZACION_ESTADO_ACTUAL.md` + revisar si toca SQLite
 - **DURANTE**: Actualizar `FUNCIONES_DOCUMENTADAS.md` + dividir si >150 líneas
 - **DESPUÉS**: Commit con `.\scripts\simple_commit.ps1 "mensaje"` + limpieza VS Code
 
@@ -75,13 +75,13 @@ src/utils/    # Assets, config, helpers
 Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 
 ### 🚨 **Archivos Críticos que Requieren Refactorización URGENTE**
-1. **src/entities/entity.py** (479 líneas) - **CRÍTICO** - Sin migración SQLite
-2. **src/utils/asset_manager.py** (464 líneas) - **CRÍTICO** - Cache SQLite futuro
-3. **src/ui/hud.py** (397 líneas) - **CRÍTICO** - Sin migración SQLite
-4. **🗄️ src/utils/save_manager.py** (365 líneas) - **CRÍTICO + MIGRACIÓN SQLITE**
-5. **🗄️ src/utils/config_manager.py** (264 líneas) - **MIGRACIÓN SQLITE**
+1. **src/utils/atmospheric_effects.py** (249 líneas) - **CRÍTICO** - Sin migración SQLite
+2. **src/utils/input_manager.py** (244 líneas) - **CRÍTICO** - Sin migración SQLite
+3. **src/utils/desert_background.py** (233 líneas) - **CRÍTICO** - Sin migración SQLite
+4. **🗄️ src/ui/menu_creators.py** (230 líneas) - **CRÍTICO** - UI optimization
+5. **🗄️ src/entities/enemy_types.py** (230 líneas) - **MIGRACIÓN SQLITE** (config/enemies.json)
 
-**⚠️ IMPORTANTE**: Consultar `docs/refactorizacion_progreso.md` antes de editar
+**⚠️ IMPORTANTE**: Consultar `docs/REFACTORIZACION_ESTADO_ACTUAL.md` antes de editar
 ## 🔄 **REGLAS DE TRABAJO**
 
 ### ⚡ **Comandos y Herramientas**
