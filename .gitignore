@@ -217,7 +217,9 @@ cleanup_*/
 # Excluir archivos de configuración de entorno
 .env
 # Excluir archivos de caché de editores
+# Editor configuration (VS Code) - excluir todo excepto settings.json del proyecto
 .vscode/
+!.vscode/settings.json
 .idea/
 # Incluir explícitamente documentación y tests
 !docs/

@@ -1,0 +1,150 @@
+{
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": true,
+		"markdown": true,
+		"python": true,
+		"json": true
+	},
+	"github.copilot.advanced": {
+		"promptFiles": [
+			".github/copilot-instructions.md",
+			".github/OJO.instructions.md"
+		]
+	},
+
+	// Configuración de Python y Ruff (linter/formatter moderno)
+	"[python]": {
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.ruff": "explicit",
+			"source.organizeImports.ruff": "explicit"
+		}
+	},
+
+	// Configuración de Ruff (extensión nativa v2024.x)
+	"ruff.configurationPreference": "filesystemFirst",
+	"ruff.enable": true,
+
+	// Configuración de Python y Type Checking (Pylance)
+	"python.analysis.typeCheckingMode": "basic",
+	"python.analysis.autoImportCompletions": true,
+	"python.analysis.inlayHints.functionReturnTypes": true,
+	"python.analysis.inlayHints.variableTypes": true,
+	"python.analysis.inlayHints.pytestParameters": true,
+	"python.analysis.autoSearchPaths": true,
+	"python.analysis.diagnosticMode": "workspace",
+	"python.analysis.completeFunctionParens": true,
+	"python.analysis.autoFormatStrings": true,
+	"python.analysis.fixAll": [
+		"source.unusedImports",
+		"source.convertImportFormat"
+	],
+	"python.analysis.extraPaths": ["src", "tests"],
+	"python.analysis.include": ["src/**", "tests/**"],
+	"python.analysis.exclude": [
+		"**/__pycache__",
+		"**/.*",
+		"releases/**",
+		"backups*/**",
+		"logs/**"
+	],
+
+	// Configuración específica del proyecto
+	"python.defaultInterpreterPath": "./venv/Scripts/python.exe",
+	"python.terminal.activateEnvironment": true,
+
+	// Testing con Pytest
+	"python.testing.pytestEnabled": true,
+	"python.testing.pytestArgs": [
+		"tests",
+		"--cov=src",
+		"--cov-report=html",
+		"--cov-report=xml"
+	],
+	"python.testing.unittestEnabled": false,
+	"python.testing.nosetestsEnabled": false,
+
+	// Configuración de Coverage Gutters
+	"coverage-gutters.coverageFileNames": [
+		"coverage.xml",
+		"htmlcov/index.html",
+		".coverage"
+	],
+	"coverage-gutters.showGutterCoverage": true,
+	"coverage-gutters.showLineCoverage": true,
+	"coverage-gutters.showRulerCoverage": true,
+	"coverage-gutters.highlightdark": "rgba(255, 0, 0, 0.2)",
+	"coverage-gutters.noHighlightDark": "rgba(255, 255, 255, 0.1)",
+
+	// Git y versionado
+	"git.enableSmartCommit": true,
+	"git.confirmSync": false,
+	"gitHistory.showInPanel": true,
+	"git-graph.repository.fetchAndPrune": true,
+	"git-graph.repository.onLoad.showCheckedOutBranch": true,
+
+	// Code Runner
+	"code-runner.executorMap": {
+		"python": "cd $dir && python $fileName"
+	},
+	"code-runner.runInTerminal": true,
+	"code-runner.saveFileBeforeRun": true,
+	"code-runner.clearPreviousOutput": true,
+
+	// Pytest Runner
+	"python.testing.autoTestDiscoverOnSaveEnabled": true,
+
+	// Configuración del editor
+	"editor.rulers": [100],
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+	"editor.renderWhitespace": "selection",
+	"editor.trimAutoWhitespace": true,
+
+	// Terminal integrado
+	"terminal.integrated.env.windows": {
+		"PYTHONPATH": "${workspaceFolder}/src"
+	},
+	"terminal.integrated.enablePersistentSessions": false,
+	"terminal.integrated.defaultProfile.windows": "PowerShell",
+
+	// Configuración de archivos
+	"files.exclude": {
+		"**/__pycache__": true,
+		"**/*.pyc": true,
+		".pytest_cache": true,
+		".mypy_cache": true,
+		".ruff_cache": true,
+		"htmlcov": false,
+		".coverage": false
+	},
+
+	// Configuración de búsqueda
+	"search.exclude": {
+		"**/__pycache__": true,
+		"**/*.pyc": true,
+		".pytest_cache": true,
+		".mypy_cache": true,
+		".ruff_cache": true,
+		"htmlcov": true
+	},
+
+	// Asociaciones de archivos
+	"files.associations": {
+		"*.yaml": "yaml",
+		"*.yml": "yaml",
+		".env.*": "properties",
+		"requirements*.txt": "pip-requirements"
+	},
+
+	// Configuración adicional de herramientas
+	"mypy.configFile": "pyproject.toml",
+	"isort.args": ["--settings-path=pyproject.toml"],
+
+	// Autoguardado
+	"files.autoSave": "onFocusChange",
+	"files.autoSaveDelay": 1000
+}
