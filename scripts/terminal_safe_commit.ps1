@@ -45,8 +45,8 @@ function Invoke-CommandWithTimeout {
         param($cmd, $workingDir)
         try {
             Set-Location $workingDir
-            Invoke-Expression $cmd
-            return @{ Success = $true; Output = $null }
+            $output = Invoke-Expression $cmd 2>&1 | Out-String
+            return @{ Success = $true; Output = $output }
         } catch {
             return @{ Success = $false; Error = $_.Exception.Message }
         }
@@ -162,7 +162,10 @@ if ($null -eq $addResult) {
 $statusResult = Invoke-CommandWithTimeout "git status --porcelain" $GIT_TIMEOUT "Status check"
 if ($null -eq $statusResult -or $null -eq $statusResult.Output -or $statusResult.Output.Trim() -eq "") {
     Write-Host "[WARN] No hay cambios para commit" -ForegroundColor $ColorWarning
+    Write-Host "[DEBUG] StatusResult: $($statusResult | ConvertTo-Json)" -ForegroundColor $ColorInfo
     exit 0
+} else {
+    Write-Host "[OK] Cambios detectados para commit" -ForegroundColor $ColorSuccess
 }
 
 # 5. Formatear mensaje con Conventional Commits
