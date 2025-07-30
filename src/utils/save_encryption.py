@@ -9,7 +9,7 @@ Descripción: Módulo especializado en encriptación/desencriptación de archivo
 
 import hashlib
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
 from .config_manager import ConfigManager
 

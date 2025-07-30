@@ -7,13 +7,14 @@ Fecha: 2025-07-30
 Descripción: Fachada del sistema de fondo dinámico de desierto tras refactorización modular.
 """
 
-import pygame
-from typing import Tuple
 import logging
+from typing import Tuple
 
-from .sand_particles import SandParticleSystem
-from .dune_renderer import DuneRenderer
+import pygame
+
 from .atmospheric_effects import AtmosphericEffects
+from .dune_renderer import DuneRenderer
+from .sand_particles import SandParticleSystem
 
 
 class DesertBackground:

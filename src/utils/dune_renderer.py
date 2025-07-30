@@ -7,11 +7,12 @@ Fecha: 2025-07-30
 Descripción: Sistema de renderizado de dunas y terreno del desierto.
 """
 
-import pygame
-import random
-import math
-from typing import List, Tuple
 import logging
+import math
+import random
+from typing import List, Tuple
+
+import pygame
 
 
 class Dune:

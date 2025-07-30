@@ -10,7 +10,7 @@ Descripción: Módulo para interfaz con base de datos SQLite para el sistema de 
 import json
 import logging
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
 from .database_manager import DatabaseManager
 from .save_encryption import SaveEncryption

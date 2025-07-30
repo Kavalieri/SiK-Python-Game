@@ -7,11 +7,12 @@ Fecha: 2025-07-30
 Descripción: Sistema de efectos atmosféricos y cielo del desierto.
 """
 
-import pygame
-import random
-import math
-from typing import Tuple
 import logging
+import math
+import random
+from typing import Tuple
+
+import pygame
 
 
 class AtmosphericEffects:
