@@ -7,9 +7,11 @@ Fecha: 2024-12-19
 Descripción: Módulo para configuración de temas visuales de menús.
 """
 
+from typing import Dict
+
 import pygame
 import pygame_menu
-from typing import Dict
+
 from ..utils.logger import get_logger
 
 

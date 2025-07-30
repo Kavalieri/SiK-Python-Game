@@ -9,9 +9,10 @@ Descripción: Módulo para creación de menús específicos del juego.
 
 import pygame
 import pygame_menu
+
 from ..utils.logger import get_logger
-from .menu_theme import MenuTheme
 from .menu_configuration import MenuConfiguration
+from .menu_theme import MenuTheme
 
 
 class MenuCreators:

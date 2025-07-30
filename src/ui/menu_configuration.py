@@ -7,8 +7,10 @@ Fecha: 2024-12-19
 Descripción: Módulo para configuración de widgets y opciones de menús.
 """
 
+from typing import Any, Callable, Dict, List
+
 import pygame_menu
-from typing import Dict, List, Callable, Any
+
 from ..utils.logger import get_logger
 
 

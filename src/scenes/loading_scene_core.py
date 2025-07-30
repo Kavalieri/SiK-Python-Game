@@ -9,7 +9,7 @@ Descripción: Configuración y estado central de la escena de carga.
 
 import json
 import random
-from typing import Callable, Dict, Any
+from typing import Any, Callable, Dict
 
 import pygame
 
