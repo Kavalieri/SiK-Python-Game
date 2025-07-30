@@ -183,18 +183,46 @@ cython_debug/
 
 # === CONFIGURACIÓN ESPECÍFICA DEL PROYECTO SiK-Python-Game ===
 
-# Directorios del juego
+# Directorios de datos generados por el juego
 saves/
 logs/
-backups__DISABLED/
+
+# Releases y distribución
 releases/
 
-# Estructura de herramientas de desarrollo unificada
-# dev-tools/ se mantiene en control de versiones pero excluir temporales
-dev-tools/testing/fixtures/temp/
-dev-tools/archive/temp/
-dev-tools/debugging/temp/
+# === ESTRUCTURA CENTRALIZADA DEV-TOOLS ===
+# Los directorios base se mantienen, pero excluir contenido temporal/generado
 
+# Coverage y testing generados
+dev-tools/coverage/htmlcov/
+dev-tools/coverage/coverage.xml
+dev-tools/coverage/.coverage*
+dev-tools/testing/reports/
+dev-tools/testing/fixtures/temp/
+dev-tools/testing/pytest_cache/
+
+# Benchmarking y profiling
+dev-tools/benchmarking/results/
+dev-tools/benchmarking/.benchmarks/
+
+# Archive temporal
+dev-tools/archive/temp/
+dev-tools/archive/backups/auto/
+
+# Debugging temporal
+dev-tools/debugging/temp/
+dev-tools/debugging/dumps/
+dev-tools/debugging/profiles/
+
+# Packaging generado
+dev-tools/packaging/dist/
+dev-tools/packaging/build/
+dev-tools/packaging/releases/
+
+# Scripts temporales
+dev-tools/scripts/temp/
+
+# === ARCHIVOS TEMPORALES Y BACKUP ===
 # Archivos temporales del proyecto
 cleanup_*/
 backup_*/
@@ -203,9 +231,11 @@ backup_*/
 *.bak
 *.old
 *.orig
+*_backup.*
+*_original.*
 commit_message.txt
 
-# Archivos de empaquetado y distribución
+# === ARCHIVOS DE EMPAQUETADO Y DISTRIBUCIÓN ===
 *.exe
 *.zip
 *.tar.gz
@@ -216,12 +246,45 @@ dist/
 build/
 *.spec
 
-# Configuración de editores (mantener solo configuración del proyecto)
+# === CONFIGURACIÓN DE EDITORES ===
+# VS Code
 .vscode/
 !.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# PyCharm/IntelliJ
 .idea/
+
+# Cursor AI
 .cursor/
 .cursorignore
 .cursorindexingignore
+
+# === CONFIGURACIÓN DE DESARROLLO ===
+# Configuración personal de desarrollador
+.env.local
+.env.development.local
+config.local.json
+
+# === SISTEMA OPERATIVO ===
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
 
 # === CONFIGURACIÓN ESTÁNDAR PYTHON ===
