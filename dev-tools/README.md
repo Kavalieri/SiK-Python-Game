@@ -1,7 +1,27 @@
 # dev-tools/ - Herramientas de Desarrollo
 
 ## 🛠️ **PROPÓSITO**
-Conjunto completo de herramientas, scripts y utilidades para el desarrollo, testing, migración y mantenimiento del proyecto **SiK Python Game**. Este directorio centraliza todas las herramientas que no forman parte del juego en sí.
+Conjunto comple### � coverage/ - Reportes de Cobertura
+**Análisis de cobertura de código** generados automáticamente:
+- `htmlcov/` - Reportes HTML interactivos de cobertura
+- `coverage.xml` - Reportes XML para integración continua
+- Análisis detallado línea por línea de tests
+
+> **🚫 EXCLUIDO DE GIT**: Archivos generados automáticamente por pytest-cov
+
+### 📚 docs/ - Documentación de Desarrollo
+**Documentación técnica** específica para desarrollo y mantenimiento:
+- `GITIGNORE_SPECIFICATION.md` - ✅ Especificación completa del .gitignore
+- `DEVELOPMENT_WORKFLOW.md` - Flujo de trabajo de desarrollo
+- `TESTING_GUIDELINES.md` - Guías de testing y calidad de código
+- Documentación de APIs internas y herramientas
+
+### �📁 archive/ - Scripts Obsoletos
+**Archivos históricos** que ya no se usan pero se conservan:
+- Scripts descontinuados con valor histórico
+- Versiones anteriores de herramientas
+- Experimentos completados
+- `backups/historical/` - Backups históricos del proyectoientas, scripts y utilidades para el desarrollo, testing, migración y mantenimiento del proyecto **SiK Python Game**. Este directorio centraliza todas las herramientas que no forman parte del juego en sí.
 
 > **🎯 ESTRUCTURA CENTRALIZADA**: Todas las herramientas de desarrollo están organizadas aquí para mantener la raíz del proyecto limpia.
 
