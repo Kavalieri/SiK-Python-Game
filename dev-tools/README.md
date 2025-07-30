@@ -1,13 +1,16 @@
-# Sistema de Herramientas de Desarrollo (dev-tools/) - ESTRUCTURA UNIFICADA
+# dev-tools/ - Herramientas de Desarrollo
 
-> **🎯 IMPORTANTE**: Esta es la **ÚNICA** estructura de herramientas del proyecto. Se han unificado y movido aquí **TODOS** los elementos de los antiguos directorios `scripts/`, `tests/`, `tools/` y archivos sueltos de debugging.
+## 🛠️ **PROPÓSITO**
+Conjunto completo de herramientas, scripts y utilidades para el desarrollo, testing, migración y mantenimiento del proyecto **SiK Python Game**. Este directorio centraliza todas las herramientas que no forman parte del juego en sí.
 
-## 📊 Resumen de la Unificación
+> **🎯 ESTRUCTURA UNIFICADA**: Todos los elementos de los antiguos directorios `scripts/`, `tests/`, `tools/` y archivos de debugging han sido organizados aquí.
 
-**Total de archivos organizados**: 102 archivos
-- **scripts/**: 43 archivos (scripts de producción)
-- **testing/**: 37 archivos (pruebas y experimentación)
-- **migration/**: 6 archivos (herramientas SQLite)
+## 📊 **ESTADO ACTUAL**
+- **Scripts automatizados**: Commit, limpieza, migración
+- **Testing completo**: Unitarios, integración, funcionales
+- **Migración SQLite**: Herramientas de migración de datos
+- **Archivos obsoletos**: Sistema de archivo organizado (29 archivos movidos)
+- **Total organizados**: 102+ archivos de herramientas
 - **debugging/**: 1 archivo (debug del motor)
 - **archive/**: 9 archivos (scripts obsoletos)
 - **packaging/**: 1 archivo (empaquetado)

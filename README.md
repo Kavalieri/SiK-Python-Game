@@ -152,18 +152,23 @@ poetry run python src/main.py --debug
 
 ```
 📦 SiK-Python-Game/
-├── 🎮 src/                     # Código fuente principal
+├── 🎮 src/                     # Código fuente principal (135 archivos) → README.md
 │   ├── 🔧 core/               # Motor del juego
 │   ├── 👾 entities/           # Personajes, enemigos, proyectiles
 │   ├── 🎭 scenes/             # Escenas del juego
 │   ├── 🖼️ ui/                 # Interfaz de usuario
 │   └── ⚙️ utils/              # Utilidades y sistemas
-├── 🎨 assets/                 # Recursos del juego
-├── 📚 docs/                   # Documentación
-├── 🧪 tests/                  # Tests automatizados
-├── 🛠️ dev-tools/              # Herramientas de desarrollo
+├── 🎨 assets/                 # Recursos del juego (6 categorías) → README.md
+├── ⚙️ config/                 # Configuración modular (10 archivos JSON) → README.md
+├── 📚 docs/                   # Documentación técnica (5 docs activos) → README.md
+├── 🧪 tests/                  # Tests automatizados (6 suites) → README.md
+├── � tools/                  # Empaquetado y distribución → README.md
+├── 📜 scripts/                # Scripts de utilidad (15+ herramientas) → README.md
+├── �🛠️ dev-tools/              # Herramientas avanzadas (102+ archivos) → README.md
 └── 💾 saves/                  # Partidas guardadas
 ```
+
+> **📋 Cada directorio incluye su propio README.md** con documentación detallada de su propósito, contenido y uso.
 
 ## 🔧 Desarrollo
 
