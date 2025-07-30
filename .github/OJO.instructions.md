@@ -7,7 +7,7 @@ applyTo: '**'
 ## 🚨 FLUJO POST-OPERACIÓN OBLIGATORIO
 **Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
 ```powershell
-.\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
+.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
 ```
 - **Método validado**: SendKeys (Ctrl+K U) preserva pestañas pinned
 - **Libera**: 272+ MB caché VS Code comprobados
@@ -17,7 +17,7 @@ applyTo: '**'
 - **CONSULTAR PRIMERO**: `docs/refactorizacion_progreso.md` antes de CUALQUIER cambio
 - **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
 - **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
-- **Commits**: Solo `.\scripts\simple_commit.ps1 "mensaje"` (método unificado)
+- **Commits**: Solo `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (método unificado)
 
 ## 🛠️ Stack y Preferencias
 - **Español completo**: Código, comentarios, variables, documentación

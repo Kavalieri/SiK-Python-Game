@@ -16,19 +16,19 @@
 ### 3️⃣ **WORKFLOW OBLIGATORIO**
 - **ANTES**: Consultar `REFACTORIZACION_ESTADO_ACTUAL.md` + revisar si toca SQLite
 - **DURANTE**: Actualizar `FUNCIONES_DOCUMENTADAS.md` + dividir si >150 líneas
-- **DESPUÉS**: Commit con `.\scripts\simple_commit.ps1 "mensaje"` + limpieza VS Code
+- **DESPUÉS**: Commit con `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` + limpieza VS Code
 
 ## ⚡ **SISTEMAS AUTOMATIZADOS**
 
 ### 🔄 **Commits y Versionado**
-- **Diario**: `.\scripts\simple_commit.ps1 "mensaje"` (Conventional Commits automático)
-- **Completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
+- **Diario**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (Conventional Commits automático)
+- **Completo**: `.\dev-tools\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
 - **Pre-commit**: Hooks ejecutados ANTES staging (resuelve conflictos)
 
 ### 🧹 **Limpieza Post-Operación** (NUEVO - INTEGRADO)
 **Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
 ```powershell
-.\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
+.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
 ```
 - **Método validado**: SendKeys (Ctrl+K U)
 - **Preserva**: Pestañas pinned y modificadas
@@ -92,7 +92,7 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - **GitHub CLI prioritario**: `gh repo view` > `git status`
 
 ### � **Commits y Gestión**
-- **Diario**: `.\scripts\simple_commit.ps1 "mensaje"`
+- **Diario**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
 - **GitHub CLI**: `gh` para repo, issues, PRs, releases
 - **Git local**: Solo `git add`, `git commit`, branching
 - **Commits atómicos**: Por cada refactorización
@@ -132,8 +132,8 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - **Ámbitos**: core, entities, scenes, ui, utils, config, assets, docs
 - **Pre-commit hooks**: Ejecutados ANTES del staging para evitar conflictos
 - **Documentación completa**: `docs/METODO_COMMIT_UNIFICADO.md` con guía detallada
-- **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
-- **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
+- **Uso diario**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"`
+- **Uso completo**: `.\dev-tools\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
 
 ### Optimización de Entorno de Trabajo (NUEVO - RECOMENDADO)
 - **Script de limpieza**: `scripts/workspace_cleanup.ps1` para optimizar VS Code y caché
@@ -145,7 +145,7 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - **Integración commits**: Limpieza automática después de commits exitosos
 - **Atajos de teclado**: Ctrl+K Ctrl+L (light), Ctrl+K Ctrl+T (tabs), Ctrl+K Ctrl+D (deep)
 - **Documentación**: `docs/OPTIMIZACION_ENTORNO_TRABAJO.md` con guía completa
-- **Uso recomendado**: `.\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
+- **Uso recomendado**: `.\dev-tools\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
 
 ### Gestión de Archivos y Repositorio
 - **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
@@ -182,7 +182,7 @@ Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
 - Branching local: `git branch`, `git checkout`
 - Consultar logs y diferencias locales
 - **OBLIGATORIO**: Verificar cambios staged con `git status` antes de cada commit
-- **Usar método unificado**: `.\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
+- **Usar método unificado**: `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` para commits cotidianos
 
 ### Flujo Autónomo
 - **Continuar automáticamente** hasta puntos de prueba
