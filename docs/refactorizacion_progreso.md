@@ -11,13 +11,13 @@
 
 ## Resumen General
 - **Estado Actual**: **REFACTORIZACIÓN EN PROGRESO AVANZADO**
-- **Porcentaje Completado**: **8 de 11 archivos críticos completados (73%)**
+- **Porcentaje Completado**: **9 de 11 archivos críticos completados (82%)**
 - **Última Actualización**: 30 de Julio, 2025
 
 ### 📊 Estadísticas Actualizadas del Progreso
 - **Archivos analizados**: **68/68 archivos** del proyecto (100%)
-- **Archivos críticos completados**: **8 de 11 archivos** más críticos (73%)
-- **Archivos críticos restantes**: **3 archivos** pendientes de refactorización
+- **Archivos críticos completados**: **9 de 11 archivos** más críticos (82%)
+- **Archivos críticos restantes**: **2 archivos** pendientes de refactorización
 - **Redundancias críticas**: **5 duplicaciones totales** entre config/ y src/
 - **Funciones documentadas**: **200+ funciones** catalogadas completamente
 
@@ -30,8 +30,7 @@
 4. **✅ src/utils/desert_background.py**: 181 líneas (121% límite) - **COMPLETADO** (458→728 líneas distribuidas en 4 módulos)
 5. **✅ src/scenes/character_ui.py**: 273 líneas (182% límite) - **COMPLETADO** (420→1,200+ líneas distribuidas en 6 módulos especializados)
 6. **✅ src/entities/player.py**: 153 líneas (102% límite) - **COMPLETADO** (324→590 líneas distribuidas en 4 módulos)
-7. **src/entities/player_combat.py**: 323 líneas (215% sobre límite) - **CRÍTICO**
-8. **src/ui/menu_callbacks.py**: 379 líneas (253% sobre límite) - **CRÍTICO**
+8. **✅ src/ui/menu_callbacks.py**: 91 líneas (61% límite) - **COMPLETADO** (380→605 líneas distribuidas en 5 módulos especializados)
 9. **src/entities/enemy.py**: 372 líneas (248% sobre límite) - **CRÍTICO**
 10. **src/core/game_engine.py**: 351 líneas (234% sobre límite) - **CRÍTICO**
 11. **✅ src/entities/entity.py**: 30 líneas (20% límite) - **COMPLETADO** (479→445 líneas distribuidas)
@@ -185,6 +184,26 @@
 - ✅ **Documentado completo** - Todas las funciones catalogadas en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
 
 **Archivo crítico resuelto** - De CRÍTICO (215% límite) → MODULAR (4 componentes especializados ≤159 líneas)
+
+#### 🎯 **MenuCallbacks Refactorizado** (✅ COMPLETADO - Julio 30, 2025)
+**380 líneas → 5 módulos (605 líneas totales distribuidas, 100% funcionalidad preservada + especialización callbacks)**
+
+- **✅ NavigationCallbacks** (127 líneas) - Navegación y transiciones entre escenas del juego
+- **✅ UpgradeCallbacks** (127 líneas) - Mejoras y upgrades del jugador (stats, equipamiento)
+- **✅ OptionsCallbacks** (117 líneas) - Configuración y opciones del juego (resolución, volumen, controles)
+- **✅ SaveCallbacks** (143 líneas) - Guardado y gestión de slots (carga, guardado, slots)
+- **✅ MenuCallbacks** (91 líneas) - Fachada de compatibilidad manteniendo API original
+
+**Beneficios logrados:**
+- ✅ **API 100% compatible** - Todos los métodos públicos preservados con delegación inteligente
+- ✅ **Separación por responsabilidades** - Navegación, upgrades, opciones, guardado, compatibilidad
+- ✅ **Arquitectura modular** - Cada componente tiene responsabilidad única y clara
+- ✅ **Sistema de compatibilidad** - Fachada preserva métodos legacy para código existente
+- ✅ **Límites respetados** - Todos los módulos ≤143 líneas (promedio 121 líneas)
+- ✅ **Imports validados** - Sistema funcionando correctamente sin errores de dependencias
+- ✅ **Documentado completo** - Todas las funciones catalogadas en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
+
+**Archivo crítico resuelto** - De CRÍTICO (253% límite) → MODULAR (5 componentes especializados ≤143 líneas)
 
 #### 🛠️ **PowerShell Workflow Optimizado** (✅ COMPLETADO - Julio 30, 2025)
 **Configuración completa de VS Code para desarrollo eficiente con PowerShell**
@@ -541,9 +560,10 @@
   - **Líneas**: 58 (39% límite) - Fachada + 4 módulos con separación funcional
   - **Acciones**: **COMPLETADO** ✅ - HUDElements, HUDRendering, HUDCore, HUD modularizados.
 - [x] Revisar `menu_callbacks.py`
-  - **Estado**: Revisado y documentado. **CRÍTICO**: 336 líneas exceden extremadamente el límite de 150.
-  - **Líneas**: 336 (224% sobre límite)
-  - **Acciones**: **URGENTE** - Dividir en submódulos: MenuCallbacks, NavigationCallbacks, ActionCallbacks.
+  - **Estado**: **✅ COMPLETADO** - Refactorizado en 5 módulos especializados.
+  - **Líneas**: 91 (61% límite) - Fachada + 4 módulos especializados (605 líneas distribuidas)
+  - **Módulos**: NavigationCallbacks (127), UpgradeCallbacks (127), OptionsCallbacks (117), SaveCallbacks (143), MenuCallbacks (91)
+  - **Acciones**: **COMPLETADO** ✅ - navigation_callbacks, upgrade_callbacks, options_callbacks, save_callbacks, menu_callbacks modularizados.
 - [x] Revisar `menu_factory.py`
   - **Estado**: Revisado y documentado. **CRÍTICO**: 283 líneas exceden límite de 150.
   - **Líneas**: 283 (189% sobre límite)

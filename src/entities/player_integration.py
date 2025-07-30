@@ -12,7 +12,8 @@ import time
 from typing import Any, Dict, List, Tuple
 
 from ..entities.powerup import PowerupEffect
-from .player_combat import AttackConfig, PlayerCombat
+from .attack_configuration import AttackConfig
+from .player_combat import PlayerCombat
 from .player_core import AnimationState, PlayerCore
 from .player_effects import PlayerEffects
 from .player_stats import PlayerStats
