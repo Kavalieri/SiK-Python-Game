@@ -11,8 +11,6 @@ from typing import Optional
 
 import pygame
 
-from ..utils.animation_manager import AnimationPlayer
-
 
 class EnemyCore:
     """Núcleo base para enemigos con configuración y estado básico."""
@@ -51,7 +49,9 @@ class EnemyCore:
         self.target = None
 
         # Sistema de animación
-        self.animation_player = AnimationPlayer(animation_manager, enemy_type, "Idle")
+        self.animation_player = animation_manager.create_animation_player(
+            enemy_type, "Idle"
+        )
         self.current_animation = "Idle"
 
         # Tracking de movimiento para dirección
