@@ -1,119 +1,159 @@
-# Dev Tools - SiK Python Game
+# Sistema de Herramientas de Desarrollo (dev-tools/) - ESTRUCTURA UNIFICADA
 
-## 📁 Estructura de Herramientas de Desarrollo
+> **🎯 IMPORTANTE**: Esta es la **ÚNICA** estructura de herramientas del proyecto. Se han unificado y movido aquí **TODOS** los elementos de los antiguos directorios `scripts/`, `tests/`, `tools/` y archivos sueltos de debugging.
 
-Este directorio contiene todas las herramientas, scripts y utilidades para el desarrollo del proyecto SiK Python Game.
+## 📊 Resumen de la Unificación
 
-### 📋 Organización por Categorías
+**Total de archivos organizados**: 102 archivos
+- **scripts/**: 43 archivos (scripts de producción)
+- **testing/**: 37 archivos (pruebas y experimentación)
+- **migration/**: 6 archivos (herramientas SQLite)
+- **debugging/**: 1 archivo (debug del motor)
+- **archive/**: 9 archivos (scripts obsoletos)
+- **packaging/**: 1 archivo (empaquetado)
+- **fixtures/**: 5 archivos (datos de prueba)
 
-#### `scripts/` - Scripts de Producción Activos
-Scripts estables y utilizados regularmente en el desarrollo:
-- **Commits**: `simple_commit.ps1`, `unified_commit.ps1`
-- **Limpieza**: `workspace_cleanup.ps1`, `vscode_cleanup_sendkeys.ps1`
-- **Análisis**: `analyze_file_sizes.py`, `file_analyzer.py`
-- **Organización**: `reorganize_*.py`
+## 🗂️ Estructura Detallada
 
-#### `testing/` - Scripts de Prueba y Testing
-Scripts para pruebas, debugging y validación:
-- **Tests PowerShell**: `test_*.ps1`
-- **Tests Python**: `test_*.py` (experimentales)
-- **Diagnósticos**: `diagnose_*.ps1`, `debug_*.ps1`
-- **Fixtures**: Archivos de prueba temporales
+### 📁 scripts/ - Scripts de Producción (43 archivos)
+**TODOS** los scripts estables y de uso frecuente del proyecto:
 
-#### `migration/` - Scripts de Migración SQLite
-Scripts específicos para la migración a SQLite:
-- **Inicialización**: `initialize_schema.py`
-- **Migración**: `run_migration_step2.py`
-- **Verificación**: `check_system.py`
-- **Tests**: `test_*_database.py`
+**Gestión de Commits Inteligentes:**
+- `intelligent_commit.ps1`, `intelligent_commit.py`
+- `professional_commit.py`, `robust_commit.py`
+- `smart_commit.py`, `smart_commit_system.py`
+- `simple_commit.ps1`, `unified_commit.ps1`
+- `quick_commit.py`
 
-#### `packaging/` - Herramientas de Empaquetado
-Scripts para generar releases y distribuciones:
-- **Empaquetado**: `package_improved.py`
-- **Distribución**: Scripts de release
+**Limpieza y Mantenimiento:**
+- `cleanup_project.py`, `cleanup_project_v2.py`
+- `cleanup_tests.py`, `cleanup_commit_scripts.py`
+- `workspace_cleanup.ps1`, `workspace_cleanup_fixed.ps1`
+- `clean_asset_names.py`
 
-#### `debugging/` - Herramientas de Debug
-Herramientas para debugging del juego:
-- **Debug Game**: `debug_game_engine.py`
-- **Análisis**: Herramientas de análisis de rendimiento
+**Herramientas VS Code:**
+- `close_vscode_tabs.ps1`, `definitive_tab_closer.ps1`
+- `simple_tab_closer.ps1`, `working_tab_closer.ps1`
+- `smart_tab_manager.ps1`, `simple_uri_closer.ps1`
+- `real_vscode_methods.ps1`, `vscode_cleanup_sendkeys.ps1`
 
-#### `archive/` - Scripts Obsoletos
+**Análisis y Organización:**
+- `analyze_file_sizes.py`, `file_analyzer.py`
+- `reorganize_characters.py`, `reorganize_guerrero.py`
+- `validar_documentacion.py`
+
+**Automatización y Setup:**
+- `setup_auto_cleanup.ps1`, `setup_dev_tools.sh`
+- `pre_commit_check.py`, `reset_terminal_state.ps1`
+- `verify_all_paths.ps1`
+
+**Herramientas de Testing y Debug:**
+- `run_tests.py`, `run_unified_tests.py`
+- `final_cleanup_demo.ps1`
+
+### 📁 testing/ - Scripts de Pruebas y Experimentación (37 archivos)
+**TODOS** los scripts experimentales y de testing del proyecto:
+
+**Tests del Motor del Juego:**
+- `test_game_engine_simple.py`
+- `test_menu_flow.py`
+- `test_simple_game.py`
+- `test_atmospheric_effects.py`
+
+**Tests de Sistemas:**
+- `test_config.py`, `test_config_manager.py`
+- `test_config_simple.py`, `test_config_system.py`
+- `test_enemy_system.py`, `test_powerup_system.py`
+- `test_projectile_system.py`, `test_unified_system.py`
+- `test_simple_config.py`
+
+**Tests de Funcionalidad:**
+- `test_game_functionality.py`
+- `test_game_launch.py`
+
+**Tests de VS Code y Terminal (PowerShell):**
+- `test_vscode_tabs.ps1`, `test_controlled_tabs.ps1`
+- `test_final_method.ps1`, `test_final_method_fixed.ps1`
+- `test_sendkeys_fixed.ps1`, `test_sendkeys_only.ps1`
+- `test_terminal_responsive.ps1`, `test_terminal_simple.ps1`
+- `test_uri_only.ps1`, `test_palette_only.ps1`
+
+**Diagnóstico y Debug:**
+- `debug_vscode_path.ps1`, `diagnose_vscode_problem.ps1`
+- `diagnostico_terminal.ps1`, `investigate_vscode_api.ps1`
+- `test_commit_system.ps1`, `test_integration.ps1`
+- `test_detection_behavior.ps1`, `test_problema_especifico.ps1`
+- `test_ascii_safe.ps1`
+
+**Subdirectorio fixtures/ (5 archivos):**
+- Datos de prueba y configuraciones temporales
+
+### 📁 debugging/ - Herramientas de Debugging (1 archivo)
+Scripts específicos para debugging del motor del juego:
+- `debug_game_engine.py` - Debug específico del motor de juego
+
+### 📁 migration/ - Herramientas de Migración (6 archivos)
+Scripts relacionados con SQLite y migraciones de datos:
+- Herramientas de base de datos
+- Scripts de migración de sistema de guardado
+
+### 📁 packaging/ - Herramientas de Empaquetado (1 archivo)
+Scripts para generar distribuciones del juego:
+- Empaquetado de releases
+
+### 📁 archive/ - Scripts Obsoletos (9 archivos)
 Scripts que ya no se usan pero se conservan por valor histórico:
 - Scripts descontinuados
 - Versiones anteriores de herramientas
 - Experimentos completados
 
-## 🚀 Uso
+## 🚀 Guía de Uso
 
-### Scripts de Producción
+### Para Scripts de Producción
 ```powershell
-# Commit rápido
-.\dev-tools\scripts\simple_commit.ps1 "mensaje"
-
-# Limpieza workspace
-.\dev-tools\scripts\workspace_cleanup.ps1 -Level "light"
-
-# Análisis de archivos
-python .\dev-tools\scripts\analyze_file_sizes.py
+# Ejecutar desde la raíz del proyecto
+.\dev-tools\scripts\intelligent_commit.ps1
+.\dev-tools\scripts\workspace_cleanup.ps1
 ```
 
-### Testing y Debugging
+### Para Testing y Experimentación
 ```powershell
-# Tests de integración
-.\dev-tools\testing\test_commit_system.ps1
+# Tests del motor del juego
+python .\dev-tools\testing\test_game_engine_simple.py
 
-# Debugging del juego
+# Tests de configuración
+python .\dev-tools\testing\test_config_system.py
+```
+
+### Para Debugging
+```powershell
+# Debug del motor del juego
 python .\dev-tools\debugging\debug_game_engine.py
 ```
 
-### Migración SQLite
-```powershell
-# Inicializar esquema
-python .\dev-tools\migration\initialize_schema.py
+## 📋 Criterios de Organización
 
-# Ejecutar migración
-python .\dev-tools\migration\run_migration_step2.py
-```
+### ✅ scripts/ (Producción)
+- Scripts estables y probados
+- Uso regular en el desarrollo
+- Funcionalidad completa y documentada
 
-## 📋 Migración desde Estructura Anterior
+### 🧪 testing/ (Experimental)
+- Scripts en desarrollo o experimentales
+- Pruebas unitarias y de integración
+- Herramientas de diagnóstico
 
-### Desde `scripts/`
-- Scripts activos → `dev-tools/scripts/`
-- Tests → `dev-tools/testing/`
-- Scripts obsoletos → `dev-tools/archive/`
+### 🐛 debugging/ (Debug)
+- Herramientas específicas de debugging
+- Scripts para análisis de problemas
 
-### Desde `tools/`
-- Herramientas packaging → `dev-tools/packaging/`
-- Herramientas debug → `dev-tools/debugging/`
+### 📦 archive/ (Histórico)
+- Scripts obsoletos o descontinuados
+- Conservados por referencia histórica
 
-### Desde raíz
-- Scripts migración SQLite → `dev-tools/migration/`
-- Tests temporales → `dev-tools/testing/`
+## ⚠️ Directorio Unificado
 
-## 🎯 Criterios de Organización
+**ANTES**: Archivos dispersos en `scripts/`, `tests/`, `tools/`, raíz del proyecto
+**AHORA**: Todo centralizado en `dev-tools/` con categorización clara
 
-### `scripts/` (Producción)
-- ✅ Scripts utilizados regularmente
-- ✅ Funcionalidad estable y probada
-- ✅ Documentados y mantenidos
-
-### `testing/` (Experimental)
-- ⚠️ Scripts de prueba
-- ⚠️ Herramientas de diagnóstico
-- ⚠️ Tests experimentales
-
-### `archive/` (Obsoleto)
-- 📦 Scripts descontinuados
-- 📦 Versiones antiguas
-- 📦 Experimentos completados
-
-## 🔄 Mantenimiento
-
-1. **Revisión mensual**: Evaluar scripts en testing/ para promoción o archivo
-2. **Limpieza trimestral**: Mover scripts obsoletos a archive/
-3. **Documentación**: Mantener este README actualizado
-4. **Referencias**: Actualizar rutas en documentación del proyecto
-
----
-
-**Nota**: Esta reorganización mejora la mantenibilidad y claridad del proyecto, separando herramientas de desarrollo del código principal del juego.
+Esta estructura elimina la redundancia y facilita el mantenimiento del proyecto.
