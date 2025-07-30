@@ -142,6 +142,83 @@
 - **HUD.add_damage_indicator(position, damage, is_critical)**: Delegado a HUDCore
 - **HUD.add_powerup_notification(powerup_type)**: Delegado a HUDCore
 
+### 🗄️ Funciones de Enemy Refactorizado (COMPLETADO)
+**Sistema modular Enemy dividido: 307 líneas → 4 módulos (407 líneas distribuidas)**
+
+#### EnemyCore (src/entities/enemy_core.py) - 116 líneas
+- **EnemyCore.__init__(x, y, enemy_type, animation_manager)**: Inicializa núcleo del enemigo con configuración y estado base
+- **EnemyCore._setup_enemy_type()**: Configura propiedades específicas según tipo ('zombiemale', 'zombieguirl')
+- **EnemyCore.take_damage(damage)**: Aplica daño y marca como muerto si vida llega a 0
+- **EnemyCore.get_current_frame()**: Obtiene frame actual de animación con escalado y volteo
+- **EnemyCore.get_rect()**: Obtiene rectángulo de colisión del enemigo
+- **EnemyCore.reset_attack_state()**: Resetea estado de ataque del enemigo
+
+#### EnemyBehavior (src/entities/enemy_behavior.py) - 114 líneas
+- **EnemyBehavior.__init__(core)**: Inicializa sistema de IA con referencia al núcleo
+- **EnemyBehavior.update(dt, player_pos)**: Actualiza IA y comportamiento según presencia del jugador
+- **EnemyBehavior._is_player_in_range(player_pos)**: Verifica si jugador está en rango de detección (300px)
+- **EnemyBehavior._chase_player(player_pos, dt)**: Persigue al jugador calculando dirección y movimiento
+- **EnemyBehavior._patrol(dt)**: Patrulla en área definida usando puntos de patrulla
+- **EnemyBehavior._generate_patrol_points()**: Genera puntos aleatorios alrededor de posición inicial
+- **EnemyBehavior._attack_player()**: Ataca jugador si cooldown ha terminado
+- **EnemyBehavior._update_facing_direction()**: Actualiza dirección basada en movimiento
+
+#### EnemyManager (src/entities/enemy_manager.py) - 134 líneas
+- **EnemyManager.__init__(animation_manager)**: Inicializa gestor con configuración de spawn
+- **EnemyManager.update(dt, player_pos)**: Actualiza todos los enemigos y maneja spawn
+- **EnemyManager._spawn_enemies(dt)**: Genera nuevos enemigos según timer y límite
+- **EnemyManager._spawn_enemy()**: Genera enemigo en posición aleatoria en bordes del mundo
+- **EnemyManager.render(screen, camera_offset)**: Renderiza todos los enemigos con offset de cámara
+- **EnemyManager.get_enemies_in_range(pos, range)**: Obtiene enemigos en rango específico
+- **EnemyManager.clear_all_enemies()**: Elimina todos los enemigos
+- **EnemyManager.get_enemy_count()**: Obtiene número de enemigos activos
+
+#### Enemy (src/entities/enemy.py) - 43 líneas (FACHADA)
+- **Enemy.__init__(x, y, enemy_type, animation_manager)**: Fachada que integra EnemyCore + EnemyBehavior
+- **Enemy.update(dt, player_pos)**: Delegado a EnemyBehavior.update()
+- **Enemy.take_damage(damage)**: Delegado a EnemyCore.take_damage()
+- **Enemy.get_current_frame()**: Delegado a EnemyCore.get_current_frame()
+- **Enemy.get_rect()**: Delegado a EnemyCore.get_rect()
+- **Enemy.is_attack_ready()**: Delegado a EnemyCore.is_attack_ready()
+- **Enemy.reset_attack_state()**: Delegado a EnemyCore.reset_attack_state()
+
+### 🗄️ Funciones de GameEngine Refactorizado (COMPLETADO)
+**Sistema modular GameEngine dividido: 299 líneas → 4 módulos (432 líneas distribuidas)**
+
+#### GameEngineCore (src/core/game_engine_core.py) - 105 líneas
+- **GameEngineCore.__init__(config)**: Inicializa núcleo con configuración y componentes base
+- **GameEngineCore._initialize_pygame()**: Inicializa Pygame con pantalla, mixer y reloj
+- **GameEngineCore._initialize_components()**: Inicializa componentes principales (estado, guardado, menús, escenas)
+- **GameEngineCore._cleanup()**: Limpia recursos y cierra Pygame al finalizar
+
+#### GameEngineScenes (src/core/game_engine_scenes.py) - 133 líneas
+- **GameEngineScenes.__init__(core)**: Inicializa gestor de escenas con referencia al núcleo
+- **GameEngineScenes._setup_scenes()**: Configura escenas iniciales y flujo de menús/guardado
+- **GameEngineScenes._setup_scene_transitions()**: Configura transiciones entre escenas
+- **GameEngineScenes._setup_callbacks()**: Configura callbacks entre escenas (condensados)
+- **GameEngineScenes._on_loading_complete()**: Callback cuando carga inicial está completa
+- **GameEngineScenes._quit_game()**: Cierra juego desde menú
+
+#### GameEngineEvents (src/core/game_engine_events.py) - 96 líneas
+- **GameEngineEvents.__init__(core, scenes)**: Inicializa manejo de eventos con referencias a core y scenes
+- **GameEngineEvents._handle_events()**: Procesa eventos de Pygame incluyendo QUIT
+- **GameEngineEvents._log_event(event)**: Registra eventos para debug con información detallada
+- **GameEngineEvents.handle_continue_game()**: Maneja continuar desde último slot activo
+- **GameEngineEvents.handle_slot_selection(slot)**: Maneja selección de slot y navega a personajes
+- **GameEngineEvents.handle_clear_slot(slot)**: Maneja vaciado de slot de guardado
+- **GameEngineEvents.handle_character_selection(character)**: Maneja selección de personaje tras slot
+- **GameEngineEvents.handle_save_game()**: Maneja guardado manual desde menú de pausa
+- **GameEngineEvents.log_and_quit_menu()**: Diferencia cierre por botón vs cierre de ventana
+- **GameEngineEvents.quit_game()**: Establece running = False para salir
+
+#### GameEngine (src/core/game_engine.py) - 98 líneas (FACHADA)
+- **GameEngine.__init__(config)**: Fachada que integra GameEngineCore + GameEngineScenes + GameEngineEvents
+- **GameEngine.run()**: Ejecuta bucle principal con delegación a eventos, actualización y renderizado
+- **GameEngine._handle_events()**: Delegado a GameEngineEvents._handle_events()
+- **GameEngine._update()**: Actualiza lógica delegando al scene_manager
+- **GameEngine._render()**: Renderiza juego en pantalla y actualiza display
+- **GameEngine._cleanup()**: Delegado a GameEngineCore._cleanup()
+
 ### 🗄️ Funciones de SaveManager Refactorizado (COMPLETADO)
 **Sistema modular SaveManager dividido: 463 líneas → 5 módulos**
 
