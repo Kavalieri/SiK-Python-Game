@@ -92,9 +92,9 @@ def test_schema_manager():
 
         # Validar esquema
         validation = schema_manager.validate_schema()
-        assert validation[
-            "valid"
-        ], f"Validación de esquema falló: {validation['errors']}"
+        assert validation["valid"], (
+            f"Validación de esquema falló: {validation['errors']}"
+        )
         logger.info(
             f"✅ Esquema válido: {len(validation['tables_found'])} tablas encontradas"
         )
@@ -164,18 +164,18 @@ def test_integration():
         partida = db_manager.execute_query(
             "SELECT * FROM partidas_guardadas WHERE slot = ?", (1,), fetch_one=True
         )
-        assert (
-            partida and partida["nombre_jugador"] == "TestPlayer"
-        ), "Datos de partida no insertados"
+        assert partida and partida["nombre_jugador"] == "TestPlayer", (
+            "Datos de partida no insertados"
+        )
 
         config = db_manager.execute_query(
             "SELECT * FROM configuraciones WHERE categoria = ? AND clave = ?",
             ("audio", "master_volume"),
             fetch_one=True,
         )
-        assert (
-            config and config["valor"] == "0.8"
-        ), "Datos de configuración no insertados"
+        assert config and config["valor"] == "0.8", (
+            "Datos de configuración no insertados"
+        )
 
         logger.info("✅ Integración: TODAS LAS PRUEBAS PASARON")
 

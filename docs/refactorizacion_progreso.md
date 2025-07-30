@@ -23,17 +23,17 @@
 ### 🚨 Hallazgos Críticos Finales
 
 #### 📋 Archivos Más Críticos (>300 líneas):
-1. **src/entities/entity.py**: 479 líneas (319% sobre límite) - **CRÍTICO**
-2. **src/utils/asset_manager.py**: 464 líneas (309% sobre límite) - **CRÍTICO**
-3. **src/ui/hud.py**: 397 líneas (265% sobre límite) - **CRÍTICO**
-4. **src/entities/player.py**: 390 líneas (260% sobre límite) - **CRÍTICO**
-5. **src/entities/player_combat.py**: 382 líneas (255% sobre límite) - **CRÍTICO**
-6. **src/utils/desert_background.py**: 381 líneas (254% sobre límite) - **CRÍTICO**
-7. **src/entities/enemy.py**: 373 líneas (249% sobre límite) - **CRÍTICO**
-8. **src/utils/save_manager.py**: 365 líneas (243% sobre límite) - **CRÍTICO**
-9. **src/core/game_engine.py**: 352 líneas (235% sobre límite) - **CRÍTICO**
-10. **src/scenes/character_ui.py**: 350 líneas (233% sobre límite) - **CRÍTICO**
-11. **src/ui/menu_callbacks.py**: 336 líneas (224% sobre límite) - **CRÍTICO**
+1. **src/utils/asset_manager.py**: 543 líneas (362% sobre límite) - **CRÍTICO**
+2. **src/ui/hud.py**: 471 líneas (314% sobre límite) - **CRÍTICO**
+3. **src/utils/save_manager.py**: 462 líneas (308% sobre límite) - **CRÍTICO**
+4. **src/utils/desert_background.py**: 457 líneas (305% sobre límite) - **CRÍTICO**
+5. **src/scenes/character_ui.py**: 419 líneas (279% sobre límite) - **CRÍTICO**
+6. **src/entities/player.py**: 389 líneas (259% sobre límite) - **CRÍTICO**
+7. **src/entities/player_combat.py**: 381 líneas (254% sobre límite) - **CRÍTICO**
+8. **src/ui/menu_callbacks.py**: 379 líneas (253% sobre límite) - **CRÍTICO**
+9. **src/entities/enemy.py**: 372 líneas (248% sobre límite) - **CRÍTICO**
+10. **src/core/game_engine.py**: 351 líneas (234% sobre límite) - **CRÍTICO**
+11. **✅ src/entities/entity.py**: 30 líneas (20% límite) - **COMPLETADO** (479→445 líneas distribuidas)
 
 #### 🔄 Redundancias de Configuración vs Código:
 1. **config/characters.json** ↔ **src/entities/character_data.py** (DUPLICACIÓN TOTAL)
@@ -113,11 +113,12 @@
   - [ ] **Integración SQLite**: Estado → tabla `partidas_guardadas`, estadísticas → tabla `estadisticas_juego`
   - [ ] **Actualizar**: [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) con nuevos módulos
 
-- [ ] **Migrar entity.py** (479→4x150 líneas)
-  - [ ] **Archivo más crítico**: [entity.py](#archivos-más-críticos) (479 líneas, 319% sobre límite)
-  - [ ] **División propuesta**: `entity_types.py`, `entity_stats.py`, `entity_core.py`, `entity_effects.py`
-  - [ ] **Sin migración SQLite**: Entidades son objetos en memoria, no persistentes
-  - [ ] **Documentar**: Todas las clases divididas en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md)
+- [x] **Migrar entity.py** (479→4x150 líneas) ✅ **COMPLETADO**
+  - [x] **Archivo más crítico**: [entity.py](#archivos-más-críticos) (479 líneas, 319% sobre límite) ✅
+  - [x] **División ejecutada**: `entity_types.py` (35 líneas), `entity_effects.py` (133 líneas), `entity_rendering.py` (112 líneas), `entity_core.py` (135 líneas)
+  - [x] **Sin migración SQLite**: Entidades son objetos en memoria, no persistentes ✅
+  - [x] **API preservada**: 100% compatibilidad mediante `entity.py` como bridge (30 líneas) ✅
+  - [x] **Documentado**: Todas las clases divididas en [`FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) ✅
 
 - [ ] **Migrar asset_manager.py** (464→4x150 líneas)
   - [ ] **Segundo más crítico**: [asset_manager.py](#archivos-más-críticos) (464 líneas, 309% sobre límite)
