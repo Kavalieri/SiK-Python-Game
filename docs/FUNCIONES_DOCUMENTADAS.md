@@ -39,6 +39,42 @@
 - **DatabaseManager.db_path**: Propiedad de compatibilidad
 - **DatabaseManager.pool_size**: Propiedad de compatibilidad
 
+### 🗄️ Funciones de AssetManager Refactorizado (COMPLETADO)
+**Sistema modular AssetManager dividido: 544 líneas → 4 módulos (≤150 líneas c/u)**
+
+#### AssetLoader (src/utils/asset_loader.py) - 122 líneas
+- **AssetLoader.__init__(base_path)**: Inicializa cargador base con sistema de caché
+- **AssetLoader.load_image(path, scale)**: Carga imagen con caché y escalado
+- **AssetLoader.load_image_direct(path)**: Carga imagen directa sin caché
+- **AssetLoader.create_placeholder(width, height, scale)**: Crea sprite placeholder magenta
+- **AssetLoader.clear_cache()**: Limpia caché completa de imágenes
+- **AssetLoader.get_cache_info()**: Información del estado del caché
+- **AssetLoader.is_placeholder_sprite(sprite)**: Verifica si sprite es placeholder
+
+#### CharacterAssets (src/utils/character_assets.py) - 186 líneas (⚠️ REQUIERE OPTIMIZACIÓN)
+- **CharacterAssets.__init__(asset_loader)**: Inicializa gestor de assets de personajes
+- **CharacterAssets._load_animation_config()**: Carga config/animations.json
+- **CharacterAssets.get_character_sprite(character_name, animation, frame, scale)**: Obtiene sprite específico
+- **CharacterAssets.get_character_animation_frames(character_name, animation, max_frames)**: Carga frames completos
+- **CharacterAssets.get_character_animation_info(character_name)**: Info completa de animaciones
+- **CharacterAssets._calculate_optimal_fps(frame_count, anim_type)**: Calcula FPS óptimo por tipo
+
+#### UIAssets (src/utils/ui_assets.py) - 109 líneas
+- **UIAssets.__init__(asset_loader)**: Inicializa gestor de assets de UI
+- **UIAssets.get_ui_button(button_name, state)**: Carga botones con estados
+- **UIAssets.load_animation_frames(ruta, max_frames)**: Carga frames desde ruta específica
+- **UIAssets.cargar_botones_ui(button_name, suffix)**: Método legacy para botones
+
+#### AssetManager (src/utils/asset_manager.py) - 114 líneas (FACHADA)
+- **AssetManager.__init__(base_path)**: Fachada que integra AssetLoader + CharacterAssets + UIAssets
+- **AssetManager.load_image()**: Delegado a AssetLoader
+- **AssetManager.get_character_sprite()**: Delegado a CharacterAssets
+- **AssetManager.get_ui_button()**: Delegado a UIAssets
+- **AssetManager.clear_cache()**: Delegado a AssetLoader
+- **AssetManager.cargar_imagen()**: Método legacy mantenido
+- **AssetManager.cache**: Propiedad de compatibilidad
+- **AssetManager.animation_config**: Propiedad de compatibilidad
+
 ### 🗄️ Funciones Pendientes de Documentar
 **ACTUALIZAR cuando se dividan SaveManager, ConfigManager, etc.**
 

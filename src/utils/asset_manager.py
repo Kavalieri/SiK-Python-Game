@@ -1,543 +1,142 @@
 """
-Asset Manager
-============
+Asset Manager - Fachada Unificada de Gestión de Assets
+======================================================
 
 Autor: SiK Team
-Fecha: 2024
-Descripción: Gestión centralizada de assets del juego con sistema de caché y fallbacks.
+Fecha: Julio 2025
+Descripción: Gestor centralizado que integra todas las funcionalidades de assets.
+              Mantiene compatibilidad completa con la API original.
 """
 
-import json
 import logging
-import os
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import pygame
 
+from .asset_loader import AssetLoader
+from .character_assets import CharacterAssets
+from .ui_assets import UIAssets
+
 
 class AssetManager:
-    """Gestor centralizado de assets del juego."""
+    """Gestor centralizado de assets del juego (Refactorizado)."""
 
     def __init__(self, base_path: str = "assets"):
         """
-        Inicializa el AssetManager.
+        Inicializa el AssetManager refactorizado.
 
         Args:
             base_path: Ruta base de los assets
         """
-        self.base_path = Path(base_path)
-        self.cache = {}
         self.logger = logging.getLogger(__name__)
-        # Cargar configuración de animaciones desde config/animations.json
-        self.animation_config = self._load_animation_config()
 
-        self.logger.info("AssetManager inicializado")
+        # Inicializar módulos especializados
+        self.asset_loader = AssetLoader(base_path)
+        self.character_assets = CharacterAssets(self.asset_loader)
+        self.ui_assets = UIAssets(self.asset_loader)
 
-    def _load_animation_config(self):
-        config_path = Path("config/animations.json")
-        if config_path.exists():
-            try:
-                with open(config_path, "r", encoding="utf-8") as f:
-                    return json.load(f)
-            except json.JSONDecodeError as e:
-                self.logger.error(
-                    "Error de decodificación JSON en config/animations.json: %s", e
-                )
-            except OSError as e:
-                self.logger.error(
-                    "Error de E/S al cargar config/animations.json: %s", e
-                )
-        # Fallback: estructura vacía
-        self.logger.warning(
-            "No se pudo cargar config/animations.json, usando configuración vacía."
-        )
-        return {"characters": {}, "sprite_paths": []}
+        self.logger.info("AssetManager refactorizado inicializado")
+
+    # ========================================
+    # API PÚBLICA - COMPATIBILIDAD COMPLETA
+    # ========================================
 
     def load_image(self, path: str, scale: float = 1.0) -> Optional[pygame.Surface]:
-        """
-        Carga una imagen con caché.
-
-        Args:
-            path: Ruta de la imagen
-            scale: Factor de escala
-
-        Returns:
-            Superficie de pygame o None si falla
-        """
-        cache_key = f"{path}_{scale}"
-
-        if cache_key in self.cache:
-            return self.cache[cache_key]
-
-        full_path = self.base_path / path
-
-        try:
-            if full_path.exists():
-                image = pygame.image.load(str(full_path)).convert_alpha()
-                if scale != 1.0:
-                    new_size = (
-                        int(image.get_width() * scale),
-                        int(image.get_height() * scale),
-                    )
-                    image = pygame.transform.scale(image, new_size)
-
-                self.cache[cache_key] = image
-                self.logger.debug("Imagen cargada: %s", path)
-                return image
-            else:
-                self.logger.warning("Imagen no encontrada: %s", path)
-                return self._create_placeholder(64, 64, scale)
-        except Exception as e:
-            self.logger.error("Error cargando imagen %s: %s", path, e)
-            return self._create_placeholder(64, 64, scale)
+        """Delegado a AssetLoader.load_image()"""
+        return self.asset_loader.load_image(path, scale)
 
     def load_image_direct(self, path: str) -> Optional[pygame.Surface]:
-        """
-        Carga una imagen directamente sin caché.
-
-        Args:
-            path: Ruta de la imagen
-
-        Returns:
-            Superficie de pygame o None si falla
-        """
-        try:
-            if os.path.exists(path):
-                image = pygame.image.load(path).convert_alpha()
-                self.logger.debug("Imagen cargada directamente: %s", path)
-                return image
-            else:
-                self.logger.warning("Imagen no encontrada: %s", path)
-                return self._create_placeholder(64, 64, 1.0)
-        except OSError as e:
-            self.logger.error("Error cargando imagen %s: %s", path, e)
-            return self._create_placeholder(64, 64, 1.0)
+        """Delegado a AssetLoader.load_image_direct()"""
+        return self.asset_loader.load_image_direct(path)
 
     def get_character_sprite(
         self, character_name: str, animation: str, frame: int = 1, scale: float = 1.0
     ) -> Optional[pygame.Surface]:
-        """
-        Obtiene un sprite de personaje específico.
-
-        Args:
-            character_name: Nombre del personaje
-            animation: Tipo de animación
-            frame: Número de frame
-            scale: Factor de escala
-
-        Returns:
-            Superficie del sprite o None si falla
-        """
-        # Verificar si el personaje existe en la configuración
-        if character_name not in self.animation_config["characters"]:
-            self.logger.warning(
-                "Personaje no encontrado en configuración: %s", character_name
-            )
-            return self._create_placeholder(64, 64, scale)
-
-        # Leer escala personalizada si no se ha especificado un scale explícito
-        if scale == 1.0:
-            char_config = self.animation_config["characters"][character_name]
-            scale = char_config.get("escala_sprite", 1.0)
-
-        # Verificar si la animación existe para este personaje
-        available_animations = self.animation_config["characters"][character_name][
-            "animations"
-        ]
-        if animation not in available_animations:
-            self.logger.warning(
-                "Animación '%s' no disponible para %s. Disponibles: %s",
-                animation,
-                character_name,
-                available_animations,
-            )
-            return self._create_placeholder(64, 64, scale)
-
-        # Usar rutas desde config
-        sprite_paths = self.animation_config.get(
-            "sprite_paths",
-            [
-                "characters/used/{character}/{animation}_{frame}_.png",
-                "characters/used/{character}/{animation}_{frame}.png",
-                "characters/{character}/{animation}_{frame}_.png",
-                "characters/{character}/{animation}_{frame}.png",
-            ],
+        """Delegado a CharacterAssets.get_character_sprite()"""
+        return self.character_assets.get_character_sprite(
+            character_name, animation, frame, scale
         )
-        animation_capitalized = animation.capitalize()
-        possible_paths = [
-            path.format(
-                character=character_name, animation=animation_capitalized, frame=frame
-            )
-            for path in sprite_paths
-        ]
-
-        for path in possible_paths:
-            sprite = self.load_image(path, scale)
-            if sprite and not self._is_placeholder_sprite(sprite):
-                return sprite
-
-        self.logger.warning(
-            "Sprite no encontrado: %s/%s_%d, creando placeholder",
-            character_name,
-            animation_capitalized,
-            frame,
-        )
-        return self._create_placeholder(64, 64, scale)
 
     def get_character_animation_frames(
         self, character_name: str, animation: str, max_frames: Optional[int] = None
     ) -> List[pygame.Surface]:
-        """
-        Obtiene todos los frames de una animación específica.
-
-        Args:
-            character_name: Nombre del personaje
-            animation: Tipo de animación
-            max_frames: Número máximo de frames a cargar
-
-        Returns:
-            Lista de superficies de pygame
-        """
-        frames = []
-        frame = 1
-
-        # Verificar si el personaje existe en la configuración
-        if character_name not in self.animation_config["characters"]:
-            self.logger.warning(
-                f"Personaje no encontrado en configuración: {character_name}"
-            )
-            return frames
-
-        # Verificar si la animación existe para este personaje
-        available_animations = self.animation_config["characters"][character_name][
-            "animations"
-        ]
-        if animation not in available_animations:
-            self.logger.warning(
-                f"Animación '{animation}' no disponible para {character_name}. Disponibles: {available_animations}"
-            )
-            return frames
-
-        # Obtener el número máximo de frames desde la configuración
-        if max_frames is None:
-            max_frames = self.animation_config["characters"][character_name].get(
-                "total_frames", 10
-            )
-
-        # Cargar frames hasta encontrar uno que no exista o alcanzar el máximo
-        if max_frames is not None:
-            while frame <= max_frames:
-                sprite = self.get_character_sprite(character_name, animation, frame)
-
-                if sprite and not self._is_placeholder_sprite(sprite):
-                    frames.append(sprite)
-                    frame += 1
-                else:
-                    # Si encontramos un placeholder, asumimos que no hay más frames
-                    break
-
-        self.logger.info(
-            f"Cargados {len(frames)} frames para {character_name}/{animation}"
+        """Delegado a CharacterAssets.get_character_animation_frames()"""
+        return self.character_assets.get_character_animation_frames(
+            character_name, animation, max_frames
         )
-        return frames
 
     def get_character_animation_info(self, character_name: str) -> Dict[str, Any]:
-        """
-        Obtiene información completa de las animaciones de un personaje.
-
-        Args:
-            character_name: Nombre del personaje
-
-        Returns:
-            Diccionario con información de animaciones
-        """
-        if character_name not in self.animation_config["characters"]:
-            return {}
-
-        char_config = self.animation_config["characters"][character_name]
-        animation_info = {}
-
-        for animation in char_config["animations"]:
-            frames = self.get_character_animation_frames(character_name, animation)
-            animation_info[animation] = {
-                "frame_count": len(frames),
-                "frames": frames,
-                "fps": self._calculate_optimal_fps(len(frames), animation),
-            }
-
-        return animation_info
-
-    def _calculate_optimal_fps(self, frame_count: int, anim_type: str) -> int:
-        """
-        Calcula el FPS óptimo para una animación.
-
-        Args:
-            frame_count: Número de frames
-            anim_type: Tipo de animación
-
-        Returns:
-            FPS óptimo
-        """
-        # FPS base por tipo de animación
-        base_fps = {
-            "Idle": 12,
-            "Walk": 15,
-            "Run": 18,
-            "Attack": 20,
-            "Dead": 10,
-            "Shoot": 16,
-            "Jump": 14,
-            "Melee": 18,
-            "Slide": 16,
-            "JumpMelee": 16,
-            "JumpShoot": 16,
-            "RunShoot": 18,
-            "JumpAttack": 15,
-        }
-
-        fps = base_fps.get(anim_type, 15)
-
-        # Ajustar según el número de frames
-        if frame_count <= 4:
-            return max(8, fps // 2)
-        elif frame_count <= 8:
-            return max(10, int(fps * 0.8))
-        elif frame_count <= 12:
-            return fps
-        else:
-            return min(30, int(fps * 1.2))
-
-    def _is_placeholder_sprite(self, sprite: pygame.Surface) -> bool:
-        """
-        Verifica si un sprite es un placeholder.
-
-        Args:
-            sprite: Superficie de pygame
-
-        Returns:
-            True si es un placeholder
-        """
-        if sprite.get_width() == 64 and sprite.get_height() == 64:
-            colors = set()
-            for x in range(0, 64, 8):
-                for y in range(0, 64, 8):
-                    color = sprite.get_at((x, y))
-                    colors.add((color.r, color.g, color.b, color.a))
-            if len(colors) <= 3:
-                return True
-        return False
-
-    def _create_placeholder(
-        self, width: int, height: int, scale: float = 1.0
-    ) -> pygame.Surface:
-        """
-        Crea un sprite placeholder.
-
-        Args:
-            width: Ancho del placeholder
-            height: Alto del placeholder
-            scale: Factor de escala
-
-        Returns:
-            Superficie del placeholder
-        """
-        placeholder = pygame.Surface((width, height), pygame.SRCALPHA)
-        placeholder.fill((255, 0, 255, 128))  # Magenta semi-transparente
-
-        return placeholder
-
-    def clear_cache(self):
-        """Limpia la caché de imágenes."""
-        self.cache.clear()
-        self.logger.info("Caché de imágenes limpiada")
-
-    def get_cache_info(self) -> Dict[str, Any]:
-        """
-        Obtiene información sobre la caché.
-
-        Returns:
-            Información de la caché
-        """
-        return {"cache_size": len(self.cache), "cached_items": list(self.cache.keys())}
+        """Delegado a CharacterAssets.get_character_animation_info()"""
+        return self.character_assets.get_character_animation_info(character_name)
 
     def get_ui_button(
         self, button_name: str, state: str = "normal"
     ) -> Optional[pygame.Surface]:
-        """
-        Carga un botón de UI.
-
-        Args:
-            button_name: Nombre del botón (ej: 'arrow_r', 'arrow_l')
-            state: Estado del botón ('normal', 'pressed', 'hover')
-
-        Returns:
-            Superficie del botón o None si falla
-        """
-        # Mapeo de estados a sufijos
-        state_suffixes = {
-            "normal": "_n",
-            "pressed": "_p",
-            "hover": "_h",
-            "left": "_l",
-            "right": "_r",
-        }
-
-        suffix = state_suffixes.get(state, "_n")
-
-        # Rutas posibles para botones
-        possible_paths = [
-            f"ui/Buttons/botonescuadrados/slategrey/{button_name}{suffix}.png",
-            f"ui/Buttons/botonescuadrados/slategrey/{button_name}.png",
-            f"ui/Buttons/botonescuadrados/slategrey/{button_name}_n.png",
-            f"ui/Buttons/botonescuadrados/slategrey/{button_name}_p.png",
-            f"ui/Buttons/botonescuadrados/slategrey/{button_name}_h.png",
-            f"ui/Buttons/Blue/{button_name}{suffix}.png",
-            f"ui/Buttons/Green/{button_name}{suffix}.png",
-            f"ui/Buttons/Red/{button_name}{suffix}.png",
-        ]
-
-        for path in possible_paths:
-            button = self.load_image(path)
-            if button:
-                return button
-
-        # Fallback: crear placeholder
-        self.logger.warning(f"Botón UI no encontrado: {button_name}{suffix}")
-        return self._create_placeholder(64, 64, 1.0)
+        """Delegado a UIAssets.get_ui_button()"""
+        return self.ui_assets.get_ui_button(button_name, state)
 
     def load_animation_frames(
         self, ruta: str, max_frames: Optional[int] = None
     ) -> List[pygame.Surface]:
-        """
-        Carga los frames de animación desde una ruta específica.
+        """Delegado a UIAssets.load_animation_frames()"""
+        return self.ui_assets.load_animation_frames(ruta, max_frames)
 
-        Args:
-            ruta: Ruta relativa dentro de la carpeta de assets
-            max_frames: Número máximo de frames a cargar (opcional)
+    def clear_cache(self):
+        """Delegado a AssetLoader.clear_cache()"""
+        self.asset_loader.clear_cache()
 
-        Returns:
-            Una lista de superficies de Pygame representando los frames de animación
+    def get_cache_info(self) -> Dict[str, Any]:
+        """Delegado a AssetLoader.get_cache_info()"""
+        return self.asset_loader.get_cache_info()
 
-        Raises:
-            FileNotFoundError: Si la ruta no existe o no contiene imágenes
-        """
-        ruta_completa = self.base_path / ruta
-        if not ruta_completa.exists():
-            raise FileNotFoundError(f"La ruta {ruta_completa} no existe.")
+    def create_placeholder(
+        self, width: int, height: int, scale: float = 1.0
+    ) -> pygame.Surface:
+        """Delegado a AssetLoader.create_placeholder()"""
+        return self.asset_loader.create_placeholder(width, height, scale)
 
-        frames = []
-        for archivo in sorted(ruta_completa.glob("*.png")):
-            frame = pygame.image.load(archivo).convert_alpha()
-            frames.append(frame)
-
-        if max_frames is not None:
-            frames = frames[:max_frames]
-
-        if not frames:
-            raise FileNotFoundError(f"No se encontraron imágenes en {ruta_completa}.")
-
-        return frames
-
-    def create_placeholder(self, width: int, height: int) -> pygame.Surface:
-        """Crear un placeholder con transparencia."""
-        try:
-            placeholder = pygame.Surface((width, height), flags=pygame.SRCALPHA)
-            placeholder.fill((0, 0, 0, 0))  # Transparente
-            return placeholder
-        except AttributeError:
-            self.logger.error("Error al crear placeholder: SRCALPHA no soportado.")
-            return pygame.Surface((width, height))
+    # ========================================
+    # MÉTODOS LEGACY - MANTENIDOS PARA COMPATIBILIDAD
+    # ========================================
 
     def cargar_imagen(self, path: str) -> Optional[pygame.Surface]:
-        """Carga una imagen desde el disco o la caché."""
-        try:
-            if path in self.cache:
-                self.logger.debug("Imagen cargada desde caché: %s", path)
-                return self.cache[path]
-
-            full_path = self.base_path / path
-            if not full_path.exists():
-                self.logger.warning("Imagen no encontrada: %s", path)
-                return None
-
-            image = pygame.image.load(full_path)
-            self.cache[path] = image
-            self.logger.debug("Imagen cargada directamente: %s", path)
-            return image
-        except pygame.error as e:
-            self.logger.error("Error cargando imagen %s: %s", path, e)
-            return None
+        """Método legacy - Delegado a load_image()"""
+        return self.load_image(path)
 
     def cargar_animacion(
         self, character_name: str, animation: str
     ) -> Optional[List[pygame.Surface]]:
-        """Carga una animación completa para un personaje."""
-        try:
-            frames = []
-            for frame in range(1, 10):  # Ejemplo: 10 frames
-                frame_path = f"{character_name}/{animation}_{frame}.png"
-                frame_surface = self.cargar_imagen(frame_path)
-                if frame_surface:
-                    frames.append(frame_surface)
-                else:
-                    self.logger.warning(
-                        "Frame no encontrado: %s para animación %s",
-                        frame_path,
-                        animation,
-                    )
-            if not frames:
-                self.logger.error(
-                    "No se pudieron cargar frames para %s/%s", character_name, animation
-                )
-            return frames
-        except OSError as e:
-            self.logger.error(
-                "Error de E/S al cargar animación %s/%s: %s",
-                character_name,
-                animation,
-                e,
-            )
-            return None
+        """Método legacy - Delegado a get_character_animation_frames()"""
+        frames = self.get_character_animation_frames(character_name, animation)
+        return frames if frames else None
 
     def cargar_botones_ui(
         self, button_name: str, suffix: str = ""
     ) -> Optional[pygame.Surface]:
-        """Carga un botón de la interfaz de usuario."""
-        try:
-            button_path = f"ui/{button_name}{suffix}.png"
-            button_surface = self.cargar_imagen(button_path)
-            if not button_surface:
-                self.logger.warning("Botón UI no encontrado: %s%s", button_name, suffix)
-            return button_surface
-        except OSError as e:
-            self.logger.error(
-                "Error de E/S al cargar botón UI %s%s: %s", button_name, suffix, e
-            )
-            return None
+        """Método legacy - Delegado a UIAssets.cargar_botones_ui()"""
+        return self.ui_assets.cargar_botones_ui(button_name, suffix)
 
     def cargar_frames(
         self, character_name: str, animation: str
     ) -> List[pygame.Surface]:
-        """Carga los frames de una animación específica."""
-        frames = []
-        for frame in range(1, 11):  # Ejemplo: 10 frames
-            frame_path = f"{character_name}/{animation}_{frame}.png"
-            try:
-                frame_surface = self.cargar_imagen(frame_path)
-                if frame_surface:
-                    frames.append(frame_surface)
-                else:
-                    self.logger.warning(
-                        "Frame no encontrado: %s para animación %s",
-                        frame_path,
-                        animation,
-                    )
-            except OSError as e:
-                self.logger.error(
-                    "Error de E/S al cargar frame %s para animación %s: %s",
-                    frame_path,
-                    animation,
-                    e,
-                )
-        return frames
+        """Método legacy - Delegado a get_character_animation_frames()"""
+        return self.get_character_animation_frames(character_name, animation)
+
+    # ========================================
+    # PROPIEDADES DE COMPATIBILIDAD
+    # ========================================
+
+    @property
+    def cache(self):
+        """Acceso al caché del AssetLoader para compatibilidad"""
+        return self.asset_loader.cache
+
+    @property
+    def base_path(self):
+        """Acceso al base_path del AssetLoader para compatibilidad"""
+        return self.asset_loader.base_path
+
+    @property
+    def animation_config(self):
+        """Acceso a la configuración de animaciones para compatibilidad"""
+        return self.character_assets.animation_config
