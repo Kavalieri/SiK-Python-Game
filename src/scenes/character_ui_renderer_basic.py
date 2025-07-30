@@ -1,7 +1,9 @@
 """Character UI Renderer Basic - Renderizado Básico de Personajes"""
 
 import logging
+
 import pygame
+
 from .character_data import CharacterData
 
 

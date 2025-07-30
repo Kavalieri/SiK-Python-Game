@@ -107,11 +107,12 @@
 3. **powerup.py** vs **powerup_new.py** (161 vs 161 líneas)
 4. **config_manager.py** vs **config_manager_modular.py** (181 vs 179 líneas)
 
-### 🗄️ Configuración vs Código (Duplicaciones Críticas)
-1. **config/characters.json** ↔ **src/entities/character_data.py**
-2. **config/enemies.json** ↔ **src/entities/enemy_types.py**
-3. **config/powerups.json** ↔ **src/entities/powerup.py**
-4. **config/gameplay.json** ↔ Múltiples archivos de escenas
+### 🗄️ Configuración vs Código (Duplicaciones Críticas) - SISTEMA MIXTO
+1. **config/characters.json** ↔ **src/entities/character_data.py** → **MIGRAR A SQLite**
+2. **config/enemies.json** ↔ **src/entities/enemy_types.py** → **MIGRAR A SQLite**
+3. **config/powerups.json** ↔ **src/entities/powerup.py** → **SEPARAR**: JSON config + Python lógica
+4. **config/gameplay.json** ↔ Múltiples archivos de escenas → **MANTENER JSON**, eliminar hardcodeo
+5. **config/audio.json** ↔ Módulos de audio → **MANTENER JSON**, usar configuración
 
 ## 🎯 Plan de Acción Priorizado
 
@@ -141,8 +142,9 @@
 
 ### FASE 3: Migración SQLite (Paralela a optimización)
 1. **Continuar con PLAN_MIGRACION_SQLITE.md**
-2. **Resolver duplicaciones config/src mediante SQLite**
-3. **Integrar sistema unificado de configuración**
+2. **Implementar sistema mixto inteligente**: SQLite para datos complejos, JSON para configuración
+3. **Resolver duplicaciones config/src mediante sistema híbrido**
+4. **Integrar sistema unificado de configuración**
 
 ## 📋 Metodología de Optimización Comprobada
 

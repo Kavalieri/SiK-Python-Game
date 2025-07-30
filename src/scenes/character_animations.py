@@ -9,7 +9,9 @@ Descripción: Módulo que maneja las animaciones de personajes en la selección.
 
 import logging
 from typing import Dict, Optional
+
 import pygame
+
 from src.utils.asset_manager import AssetManager
 
 

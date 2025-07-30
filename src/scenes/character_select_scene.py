@@ -1,6 +1,7 @@
 """Character Select Scene - Selección de Personaje (Refactorizada V2)"""
 
 import pygame
+
 from ..core.scene_manager import Scene
 from ..utils.logger import get_logger
 from .character_animations import CharacterAnimations

@@ -1,10 +1,26 @@
 # Plan de Migración a SQLite - SiK Python Game
 
-## � Referencias Cruzadas
-- **Documento Central**: [`docs/refactorizacion_progreso.md`](./refactorizacion_progreso.md) - Estado y checklist de refactorización
+## 🔗 Referencias Cruzadas Actualizadas
+- **Documento Central**: [`docs/REFACTORIZACION_ESTADO_ACTUAL.md`](./REFACTORIZACION_ESTADO_ACTUAL.md) - Estado actualizado sin redundancias
 - **Funciones Catalogadas**: [`docs/FUNCIONES_DOCUMENTADAS.md`](./FUNCIONES_DOCUMENTADAS.md) - Funciones por módulo
-- **Índice Rápido**: [`docs/INDICE_MIGRACION_SQLITE.md`](./INDICE_MIGRACION_SQLITE.md) - Vista general del progreso
+- **Proyecto SQLite**: [`docs/PROYECTO_MIGRACION_SQLITE.md`](./PROYECTO_MIGRACION_SQLITE.md) - Plan ejecutivo del proyecto
 - **Instrucciones Base**: [`.github/copilot-instructions.md`](../.github/copilot-instructions.md) - Reglas del proyecto
+
+## 🎯 CAMBIO DE PRIORIDAD: SQLite y Eliminación de Hardcodeo
+
+### 🚨 Problema Crítico Identificado
+El proyecto tiene **duplicaciones masivas** entre configuración JSON y código hardcodeado que requieren un **sistema mixto inteligente**:
+- **characters.json** (189 líneas, 4,875 caracteres) ↔ **character_data.py** (152 líneas) → **MIGRAR A SQLite**
+- **enemies.json** (73 líneas, 1,901 caracteres) ↔ **enemy_types.py** (230 líneas) → **MIGRAR A SQLite**
+- **powerups.json** (106 líneas, 2,780 caracteres) ↔ **powerup.py** (161 líneas) → **SEPARAR**: config JSON + lógica Python
+- **gameplay.json** (34 líneas, 769 caracteres) ↔ Múltiples archivos de escenas → **MANTENER JSON**, eliminar hardcodeo
+- **audio.json** (32 líneas, 969 caracteres) ↔ Módulos de audio → **MANTENER JSON**, usar configuración
+
+### ⚡ Nueva Estrategia: Sistema Mixto Inteligente
+1. **SQLite para datos complejos**: Partidas, personajes, enemigos, estadísticas
+2. **Archivos JSON para configuración**: Variables modificables, configuración de usuario
+3. **Eliminar hardcodeo**: Separar lógica de configuración completamente
+4. **Optimización posterior**: Solo después de funcionalidad operativa
 
 ## �📋 Estado Actual de Persistencia
 
@@ -118,57 +134,69 @@ CREATE TABLE configuracion_gameplay (
 
 ## 🔄 Plan de Migración en Fases - CHECKLIST
 
-### ✅ FASE 1: Preparación e Infraestructura (COMPLETADA + CORREGIDA ✅)
-**Objetivo**: Crear base SQLite sin romper sistema actual
-**📋 Referencia**: [Progreso Refactorización - Fase 1](./refactorizacion_progreso.md#fase-1---urgente)
+### ✅ FASE 1: Infraestructura SQLite (COMPLETADA ✅)
+**Objetivo**: Base SQLite funcional sin romper sistema actual
+**Estado**: Sistema modular implementado y funcional
 
-- [x] **Crear DatabaseManager** (194 líneas - **REQUIERE CORRECCIÓN** ⚠️)
-  - [x] Conexión SQLite con connection pooling
-  - [x] Métodos base: conectar, desconectar, ejecutar_query
-  - [x] Manejo de transacciones
-  - [x] Logging de operaciones
-  - [x] Documentar en [FUNCIONES_DOCUMENTADAS.md](./FUNCIONES_DOCUMENTADAS.md)
+#### Componentes Implementados:
+- [x] **DatabaseManager** (169 líneas) - Gestor principal ✅
+- [x] **SchemaManager** (169 líneas) - Manager de esquemas ✅
+- [x] **SchemaCore** (164 líneas) - Núcleo del sistema ✅
+- [x] **SchemaTables** (160 líneas) - Definiciones de tablas ✅
+- [x] **SchemaMigrations** (171 líneas) - Sistema de migraciones ✅
 
-- [x] **Crear SchemaManager refactorizado** (Sistema modular ≤150 líneas c/u ✅)
-  - [x] **SchemaManager** (135 líneas) - Manager principal ✅
-  - [x] **SchemaCore** (131 líneas) - Núcleo del sistema ✅
-  - [x] **SchemaTables** (135 líneas) - Definiciones de tablas ✅
-  - [x] **SchemaMigrations** (173 líneas) - Sistema de migraciones ⚠️
-  - [x] Creación automática de tablas ✅
-  - [x] Migraciones de esquema ✅
-  - [x] Validación de integridad ✅
-  - [x] Backup automático antes de cambios ✅
-  - [x] Documentar en [FUNCIONES_DOCUMENTADAS.md](./FUNCIONES_DOCUMENTADAS.md)
+#### Funcionalidades Operativas:
+- [x] Connection pooling SQLite optimizado
+- [x] Sistema completo de tablas definido
+- [x] Migraciones automáticas de esquema
+- [x] Validación de integridad
+- [x] Backup automático antes de cambios
+- [x] Testing básico completado (`scripts/test_simple_sqlite.py`)
 
-- [x] **Testing paralelo**
-  - [x] Base de datos de pruebas (`scripts/test_simple_sqlite.py`)
-  - [x] Validación de funcionamiento básico ✅
-  - [x] Tests de integridad de datos ✅
-  - [x] **Sistema modular funcionando correctamente** ✅
-  - [x] Actualizar [refactorizacion_progreso.md](./refactorizacion_progreso.md)
+**📊 RESULTADO**: Infraestructura SQLite lista para migración de datos
 
-### 🔥 FASE 2: Migración del ConfigManager (Dividir + Migrar)
-**Objetivo**: Mover configuraciones JSON a SQLite
-**📋 Referencia**: [Progreso Refactorización - Fase 2](./refactorizacion_progreso.md#fase-2---alta-prioridad)
+### 🔥 FASE 2: Migración de Configuraciones (EN PROCESO)
+**Objetivo**: Migrar JSON hardcodeado a SQLite como fuente única
+**Prioridad**: CRÍTICA - Eliminar duplicaciones masivas
 
-- [ ] **Dividir ConfigManager** en módulos:
-  - [ ] `config_loader.py` (máximo 150 líneas) - Carga desde archivos
-  - [ ] `config_database.py` (máximo 150 líneas) - Interfaz SQLite
-  - [ ] `config_validator.py` (máximo 150 líneas) - Validaciones
-  - [ ] Actualizar [FUNCIONES_DOCUMENTADAS.md](./FUNCIONES_DOCUMENTADAS.md)
+#### 📊 Duplicaciones Identificadas:
+1. **characters.json** (189 líneas) ↔ **character_data.py** (152 líneas)
+   - **Problema**: Datos idénticos en dos formatos diferentes
+   - **Solución**: SQLite como fuente única, eliminar character_data.py
+   - **Impacto**: 4,875 caracteres de configuración vs código hardcodeado
 
-- [ ] **Migración de datos**:
-  - [ ] characters.json → tabla personajes
-  - [ ] enemies.json → tabla enemigos
-  - [ ] gameplay.json → tabla configuracion_gameplay
-  - [ ] audio.json, display.json, etc. → tabla configuraciones
-  - [ ] Proceso automático: `migrar_configuraciones_a_sqlite()`
+2. **enemies.json** (73 líneas) ↔ **enemy_types.py** (230 líneas)
+   - **Problema**: Inconsistencias críticas entre JSON y código
+   - **Solución**: Migrar a tabla `enemigos`, usar solo SQLite
+   - **Impacto**: 1,901 caracteres JSON vs 230 líneas Python
 
-- [ ] **Compatibilidad dual**:
-  - [ ] Leer desde SQLite primero
-  - [ ] Fallback a JSON si falla
-  - [ ] Modo de migración progresiva
-  - [ ] Actualizar [refactorizacion_progreso.md](./refactorizacion_progreso.md)
+3. **powerups.json** (106 líneas) ↔ **powerup.py** (161 líneas)
+   - **Problema**: Duplicación parcial con lógica mezclada
+   - **Solución**: Separar configuración (SQLite) de lógica (Python)
+   - **Impacto**: 2,780 caracteres de configuración
+
+#### ⚡ Plan de Implementación Inmediata:
+
+##### PASO 1: Sistema Mixto Inteligente (INMEDIATO)
+- [ ] **Implementar ConfigDatabase** - Nueva interfaz SQLite para datos complejos
+- [ ] **Migrar characters.json → tabla personajes** (eliminar character_data.py hardcodeado)
+- [ ] **Migrar enemies.json → tabla enemigos** (eliminar enemy_types.py hardcodeado)
+- [ ] **Mantener powerups.json** como configuración, eliminar hardcodeo en powerup.py
+- [ ] **Mantener gameplay.json** como configuración, eliminar valores hardcodeados en escenas
+- [ ] **Sistema de compatibilidad** durante la transición
+
+##### PASO 2: Eliminación de Hardcodeo (1-2 días)
+- [ ] **Modificar character_data.py** - Leer desde SQLite en lugar de diccionario hardcodeado
+- [ ] **Refactorizar enemy_types.py** - Usar tabla SQLite enemigos
+- [ ] **Actualizar powerup.py** - Separar completamente lógica de configuración JSON
+- [ ] **Actualizar escenas de juego** - Usar gameplay.json en lugar de valores hardcodeados
+- [ ] **Testing completo** - Verificar funcionalidad idéntica con nuevo sistema
+
+##### PASO 3: Sistema Unificado (2-3 días)
+- [ ] **API híbrida de configuración** - ConfigManager que use SQLite + JSON según corresponda
+- [ ] **Documentación de criterios** - Cuándo usar SQLite vs JSON
+- [ ] **Optimización del sistema** - Caché inteligente y performance
+- [ ] **Documentación actualizada** - Nuevas funciones en FUNCIONES_DOCUMENTADAS.md
 
 ### 📊 FASE 3: Migración del SaveManager (Dividir + Migrar)
 **Objetivo**: Reemplazar pickle con SQLite manteniendo encriptación
@@ -209,26 +237,29 @@ CREATE TABLE configuracion_gameplay (
   - [ ] Sincronización automática
   - [ ] Finalizar actualización [refactorizacion_progreso.md](./refactorizacion_progreso.md)
 
-## 📊 Elementos a Migrar Identificados
+## 📊 Elementos del Sistema Mixto
 
-### Desde SaveManager (pickle → SQLite)
-- **Datos de partida**: nivel, puntuación, vidas, tiempo
-- **Estado del jugador**: posición, inventario, mejoras
-- **Configuraciones de partida**: dificultad, personaje seleccionado
-- **Metadata**: timestamp, descripción, slot
+### 🗄️ Migrar a SQLite
+- **Partidas guardadas**: nivel, puntuación, vidas, tiempo (reemplaza pickle)
+- **Datos de personajes**: stats, ataques, animaciones (reemplaza character_data.py hardcodeado)
+- **Configuración de enemigos**: tipos, comportamientos, stats (reemplaza enemy_types.py hardcodeado)
+- **Estadísticas de juego**: enemigos eliminados, disparos, tiempo por sesión
+- **Metadata de partidas**: timestamp, descripción, slot
 
-### Desde ConfigManager (JSON → SQLite)
-- **Personajes**: stats, ataques, animaciones (characters.json)
-- **Enemigos**: tipos, comportamientos, stats (enemies.json)
-- **Gameplay**: niveles, combate, powerups (gameplay.json)
-- **Audio**: volúmenes, efectos (audio.json)
-- **Display**: resolución, fullscreen (display.json)
-- **Input**: controles, sensibilidad (input.json)
+### 📄 Mantener en JSON
+- **Configuración de usuario**: volúmenes, efectos (audio.json)
+- **Configuración de pantalla**: resolución, fullscreen (display.json)
+- **Configuración de controles**: teclas, sensibilidad (input.json)
+- **Balance de gameplay**: timers, multiplicadores, probabilidades (gameplay.json)
+- **Configuración de powerups**: duraciones, efectos, spawn rates (powerups.json)
+- **Configuración de UI**: colores, dimensiones, fuentes (ui.json)
 
-### Desde GameState (memoria → SQLite + memoria)
-- **Estado temporal**: score actual, vidas actuales
-- **Estadísticas**: enemigos eliminados, disparos, tiempo
-- **Referencias**: entidades activas (no persistir)
+### ❌ Eliminar Hardcodeo de
+- **character_data.py**: Diccionario CHARACTER_DATA → usar SQLite
+- **enemy_types.py**: Clases hardcodeadas → usar SQLite + lógica separada
+- **Escenas de juego**: Valores hardcodeados → usar gameplay.json
+- **Módulos de audio**: Configuración hardcodeada → usar audio.json
+- **Sistemas de powerup**: Stats hardcodeados → usar powerups.json
 
 ## 🔧 Herramientas de Migración
 

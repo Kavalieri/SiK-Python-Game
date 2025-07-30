@@ -2,7 +2,9 @@
 
 import logging
 from typing import Any, Dict
+
 import pygame
+
 from .character_data import CharacterData
 
 

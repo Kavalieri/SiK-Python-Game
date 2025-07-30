@@ -3,6 +3,7 @@
 import os
 import random
 from typing import List
+
 import pygame
 
 from ..core.scene_manager import Scene

@@ -36,9 +36,11 @@
 - **Sin efectos**: No cambia tamaño ventana
 
 ### 🗄️ **Migración SQLite** (Fase 1 ✅ - Fase 2-4 pendiente)
+- **Sistema mixto inteligente**: SQLite para datos complejos, JSON para configuración
 - **DatabaseManager**: Modularizado y funcional
 - **SchemaManager**: Sistema completo de tablas
 - **Próximo**: ConfigManager (264→3x150 líneas) + SaveManager (365→4x150 líneas)
+- **Eliminar hardcodeo**: Separar lógica de configuración completamente
 
 ## 📋 **REGLAS FUNDAMENTALES**
 
