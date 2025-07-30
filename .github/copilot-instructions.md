@@ -20,29 +20,9 @@
 2. **Si toca persistencia**: revisar [`docs/PLAN_MIGRACION_SQLITE.md`](../docs/PLAN_MIGRACION_SQLITE.md)
 3. **DURANTE cualquier edición**: actualizar [`docs/FUNCIONES_DOCUMENTADAS.md`](../docs/FUNCIONES_DOCUMENTADAS.md)
 4. **DESPUÉS de cualquier cambio**: actualizar progreso en documentos correspondientes
-5. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede GitHub Copilot - SiK Python Game
+5. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede
 
-## � PRIORIDAD MÁXIMA: REFACTORIZACIÓN EN CURSO
-
-### Estado Crítico del Proyecto
-- **23 archivos CRÍTICOS** exceden límite de 150 líneas
-- **11 archivos >300 líneas** requieren división URGENTE
-- **Refactorización OBLIGATORIA** antes de nuevas features
-- **Documentación automática** de todas las funciones es MANDATORIA
-
-### Archivos de Seguimiento CRÍTICOS (revisar SIEMPRE)
-- `docs/refactorizacion_progreso.md` - **ESTADO ACTUAL** de división de archivos
-- `docs/FUNCIONES_DOCUMENTADAS.md` - **CATÁLOGO COMPLETO** de funciones
-- `CHANGELOG.md` - **REGISTRO** de cambios importantes
-- Este archivo - **BASE** de reglas del proyecto
-
-### Protocolo de Trabajo OBLIGATORIO
-1. **ANTES de cualquier cambio**: consultar `docs/refactorizacion_progreso.md`
-2. **DURANTE cualquier edición**: actualizar `docs/FUNCIONES_DOCUMENTADAS.md`
-3. **DESPUÉS de cualquier cambio**: actualizar ambos archivos de seguimiento
-4. **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir si se excede
-
-## �📋 Automantenimiento y Documentación Crítica
+## 📋 Automantenimiento y Documentación Crítica
 
 ### Responsabilidades Primarias
 - **PRIORIDAD 1**: Consultar y actualizar `docs/refactorizacion_progreso.md` en CADA operación
