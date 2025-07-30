@@ -1,63 +1,24 @@
-"""
-Character UI Configuration - Configuración de Interfaz de Usuario
-===============================================================
-
-Autor: SiK Team
-Fecha: 2025-07-30
-Descripción: Módulo especializado para la configuración de UI (fuentes, colores, dimensiones)
-             y inicialización de componentes de la interfaz de selección de personajes.
-"""
+"""Character UI Configuration - Configuración de Interfaz de Usuario"""
 
 import logging
 from typing import Dict
-
 import pygame
 
 
 class CharacterUIConfiguration:
-    """
-    Gestiona la configuración de la interfaz de usuario para personajes.
-
-    Responsabilidades:
-    - Configuración de fuentes según configuración del juego
-    - Configuración de colores desde config manager
-    - Inicialización de dimensiones y márgenes
-    - Gestión de configuración UI centralizada
-
-    Ejemplo de uso:
-        >>> config = CharacterUIConfiguration(screen_width, screen_height, config_manager)
-        >>> fonts = config.get_fonts()
-        >>> colors = config.get_colors()
-    """
+    """Gestiona la configuración de la interfaz de usuario para personajes."""
 
     def __init__(self, screen_width: int, screen_height: int, config_manager):
-        """
-        Inicializa la configuración de UI.
-
-        Args:
-            screen_width: Ancho de la pantalla
-            screen_height: Alto de la pantalla
-            config_manager: Gestor de configuración del juego
-        """
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.config_manager = config_manager
         self.logger = logging.getLogger(__name__)
-
-        # Inicializar configuración UI
         self.fonts = {}
         self.colors = {}
         self.dimensions = {}
-
         self._init_fonts()
         self._init_colors()
         self._init_dimensions()
-
-        self.logger.info(
-            "CharacterUIConfiguration inicializada - Pantalla: %dx%d",
-            screen_width,
-            screen_height,
-        )
 
     def _init_fonts(self):
         """Inicializa las fuentes desde la configuración."""
@@ -76,10 +37,8 @@ class CharacterUIConfiguration:
                     None, self.config_manager.get_ui_font_size("pequeña")
                 ),
             }
-            self.logger.debug("Fuentes UI inicializadas correctamente")
         except (KeyError, ValueError, TypeError) as e:
             self.logger.error("Error al inicializar fuentes UI: %s", e)
-            # Fallback a fuentes por defecto
             self._init_fallback_fonts()
 
     def _init_fallback_fonts(self):
@@ -90,9 +49,6 @@ class CharacterUIConfiguration:
             "normal": pygame.font.Font(None, 24),
             "small": pygame.font.Font(None, 18),
         }
-        self.logger.warning(
-            "Usando fuentes por defecto debido a error de configuración"
-        )
 
     def _init_colors(self):
         """Inicializa los colores desde la configuración."""
@@ -114,10 +70,8 @@ class CharacterUIConfiguration:
                     "tarjeta_borde_seleccionada"
                 ),
             }
-            self.logger.debug("Colores UI inicializados correctamente")
         except (KeyError, ValueError, TypeError) as e:
             self.logger.error("Error al inicializar colores UI: %s", e)
-            # Fallback a colores por defecto
             self._init_fallback_colors()
 
     def _init_fallback_colors(self):
@@ -135,9 +89,6 @@ class CharacterUIConfiguration:
             "card_selected": (100, 150, 100),
             "card_border_selected": (150, 255, 150),
         }
-        self.logger.warning(
-            "Usando colores por defecto debido a error de configuración"
-        )
 
     def _init_dimensions(self):
         """Inicializa las dimensiones desde la configuración."""
@@ -153,10 +104,8 @@ class CharacterUIConfiguration:
                 "nav_width": 60,
                 "nav_height": 40,
             }
-            self.logger.debug("Dimensiones UI inicializadas correctamente")
         except (KeyError, ValueError, TypeError) as e:
             self.logger.error("Error al inicializar dimensiones UI: %s", e)
-            # Fallback a dimensiones por defecto
             self._init_fallback_dimensions()
 
     def _init_fallback_dimensions(self):
@@ -170,74 +119,30 @@ class CharacterUIConfiguration:
             "nav_width": 60,
             "nav_height": 40,
         }
-        self.logger.warning(
-            "Usando dimensiones por defecto debido a error de configuración"
-        )
 
     def get_fonts(self) -> Dict[str, pygame.font.Font]:
-        """
-        Obtiene el diccionario de fuentes configuradas.
-
-        Returns:
-            Dict[str, pygame.font.Font]: Diccionario de fuentes
-        """
+        """Obtiene el diccionario de fuentes configuradas."""
         return self.fonts
 
     def get_colors(self) -> Dict[str, tuple]:
-        """
-        Obtiene el diccionario de colores configurados.
-
-        Returns:
-            Dict[str, tuple]: Diccionario de colores RGB
-        """
+        """Obtiene el diccionario de colores configurados."""
         return self.colors
 
     def get_dimensions(self) -> Dict[str, int]:
-        """
-        Obtiene el diccionario de dimensiones configuradas.
-
-        Returns:
-            Dict[str, int]: Diccionario de dimensiones en píxeles
-        """
+        """Obtiene el diccionario de dimensiones configuradas."""
         return self.dimensions
 
     def get_font(self, font_name: str) -> pygame.font.Font:
-        """
-        Obtiene una fuente específica.
-
-        Args:
-            font_name: Nombre de la fuente
-
-        Returns:
-            pygame.font.Font: Fuente solicitada o fuente normal por defecto
-        """
+        """Obtiene una fuente específica."""
         font = self.fonts.get(font_name, self.fonts.get("normal"))
         if font is None:
-            # Fallback a fuente pygame por defecto
             font = pygame.font.Font(None, 24)
         return font
 
     def get_color(self, color_name: str) -> tuple:
-        """
-        Obtiene un color específico.
-
-        Args:
-            color_name: Nombre del color
-
-        Returns:
-            tuple: Color RGB o blanco por defecto
-        """
+        """Obtiene un color específico."""
         return self.colors.get(color_name, (255, 255, 255))
 
     def get_dimension(self, dimension_name: str, default: int = 0) -> int:
-        """
-        Obtiene una dimensión específica.
-
-        Args:
-            dimension_name: Nombre de la dimensión
-            default: Valor por defecto si no existe
-
-        Returns:
-            int: Dimensión en píxeles
-        """
+        """Obtiene una dimensión específica."""
         return self.dimensions.get(dimension_name, default)
