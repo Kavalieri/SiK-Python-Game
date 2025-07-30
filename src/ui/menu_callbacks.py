@@ -5,13 +5,14 @@ Delega a: navigation_callbacks, upgrade_callbacks, options_callbacks, save_callb
 """
 
 from typing import Any
+
 from ..core.game_state import GameState
-from ..utils.save_manager import SaveManager
 from ..utils.logger import get_logger
+from ..utils.save_manager import SaveManager
 from .navigation_callbacks import NavigationCallbacks
-from .upgrade_callbacks import UpgradeCallbacks
 from .options_callbacks import OptionsCallbacks
 from .save_callbacks import SaveCallbacks
+from .upgrade_callbacks import UpgradeCallbacks
 
 
 class MenuCallbacks:
