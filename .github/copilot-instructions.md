@@ -1,21 +1,64 @@
-# Instrucciones para GitHub Copilot - SiK Python Game
+# Instrucciones para GitHub Copilot - SiK Python Game---
 
-## 🚨 **FLUJO POST-OPERACIÓN OBLIGATORIO**
+**Base fundamental del proyecto. REFACTORIZACIÓN PRIORITARIA. Mantener actualizado siempre.**
+
+**📚 Referencia completa**: Consultar instrucciones específicas en `.github/instructions/` para detalles por módulo. **PRIORIDAD DE INSTRUCCIONES**
+```
+Prioridad: instrucciones del usuario > instrucciones de repositorio > instrucciones de organización
+```
+
+## 🎯 **INSTRUCCIONES PRINCIPALES**
+
+Estas son las instrucciones principales para el repositorio SiK Python Game. Las instrucciones específicas se encuentran organizadas en módulos separados en `.github/instructions/`.
+
+### �🚨 **FLUJO POST-OPERACIÓN OBLIGATORIO**
 **Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
 ```powershell
 .\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"
 ```
-- **Método validado**: SendKeys (Ctrl+K U) preserva pestañas pinned
-- **Libera**: 272+ MB caché VS Code comprobados
-- **Sin efectos secundarios**: No cambia tamaño ventana
 
-## 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS**
+### 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS**
 - **CONSULTAR PRIMERO**: `docs/REFACTORIZACION_ESTADO_ACTUAL.md` antes de CUALQUIER cambio
 - **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
 - **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
 - **Commits**: Solo `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (método unificado)
-- **Stack preferido**: Español completo, GitHub CLI prioritario, PowerShell shell
-- **Calidad**: 0 errores Ruff + 0 warnings MyPy + 100% cobertura tests
+
+## 📁 **INSTRUCCIONES ESPECÍFICAS**
+
+Las instrucciones detalladas están organizadas en módulos específicos:
+
+### 🔄 **Refactorización y Migración**
+- [📋 Refactorización General](.github/instructions/refactorizacion.instructions.md)
+- [🗄️ Migración SQLite](.github/instructions/migracion-sqlite.instructions.md)
+
+### 🛠️ **Herramientas y Desarrollo**
+- [⚡ Sistemas Automatizados](.github/instructions/sistemas-automatizados.instructions.md)
+- [🧹 Limpieza y Optimización](.github/instructions/limpieza-optimizacion.instructions.md)
+- [📝 Control de Versiones](.github/instructions/control-versiones.instructions.md)
+
+### 🎮 **Proyecto Específico**
+- [🎯 Arquitectura y Convenciones](.github/instructions/arquitectura-convenciones.instructions.md)
+- [🎮 Contexto del Juego](.github/instructions/contexto-juego.instructions.md)
+- [🤖 Optimización IA](.github/instructions/optimizacion-ia.instructions.md)
+
+### ⚙️ **Configuración y Reglas**
+- [🔧 Reglas Fundamentales](.github/instructions/reglas-fundamentales.instructions.md)
+- [🏗️ Stack y Herramientas](.github/instructions/stack-herramientas.instructions.md)
+- [🧪 Testing y Calidad](.github/instructions/testing-calidad.instructions.md)
+
+## 🎯 **CONTEXTO DEL PROYECTO**
+
+**Videojuego 2D bullet hell** - Pygame-ce + Python 3.11+ + Poetry
+Desarrollo **100% IA** en Windows 11 + VS Code + GitHub CLI
+
+**Estado actual**: 29 archivos críticos requieren refactorización (>150 líneas)
+**Prioridad**: Sistema mixto SQLite + eliminación de duplicaciones JSON ↔ Python
+
+---
+
+**Base fundamental del proyecto. REFACTORIZACIÓN PRIORITARIA. Mantener actualizado siempre.**
+
+**📚 Referencia completa**: Consultar instrucciones específicas en `.github/instructions/` para detalles por módulo.
 
 ## � **PRIORIDADES CRÍTICAS** (Consultar PRIMERO)
 

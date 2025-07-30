@@ -1,102 +1,105 @@
-# Refinamiento del Sistema de Instrucciones y Limpieza Raíz
+# Sistema de Instrucciones Jerárquico para GitHub Copilot
 
 ## 📅 Fecha
-**30 de Julio de 2025** - Refinamiento completo del sistema de instrucciones y limpieza de la raíz del proyecto
+**30 de Julio de 2025** - Implementación del nuevo estándar de instrucciones jerárquico
 
 ## 🎯 Objetivos Completados
 
-### 1. ✅ Refinamiento de Instrucciones para Agentes IA
+### 1. ✅ Nuevo Estándar de Instrucciones Implementado
 
-#### **Eliminación de OJO.instructions.md**
-- ❌ Eliminado `.github/OJO.instructions.md`
-- ✅ **Integrado** en `copilot-instructions.md` principal
-
-#### **Instrucciones Unificadas**
-- 🚨 **Flujo post-operación** destacado al inicio
-- 🎯 **Directrices críticas** inmediatas consolidadas
-- 🔄 **Eliminación de duplicación** en secciones de limpieza
-
-#### **Estructura Final `.github/`:**
+#### **Estructura Jerárquica Organizada**
 ```
 .github/
-└── copilot-instructions.md    ✅ (único archivo - instrucciones completas)
+├── copilot-instructions.md           # Archivo principal con referencias
+└── instructions/                     # Directorio de módulos específicos
+    ├── refactorizacion.instructions.md
+    ├── migracion-sqlite.instructions.md
+    ├── sistemas-automatizados.instructions.md
+    ├── limpieza-optimizacion.instructions.md
+    ├── control-versiones.instructions.md
+    ├── arquitectura-convenciones.instructions.md
+    ├── contexto-juego.instructions.md
+    ├── optimizacion-ia.instructions.md
+    ├── reglas-fundamentales.instructions.md
+    ├── stack-herramientas.instructions.md
+    └── testing-calidad.instructions.md
 ```
 
-### 2. ✅ Limpieza de Archivos Raíz
-
-#### **Archivos Eliminados:**
-- ❌ `commit_message.txt` (temporal)
-- ❌ `cleanup_temp_20250729/` (directorio temporal)
-
-#### **Archivos Mantenidos (Indispensables):**
-- ✅ **Configuración proyecto**: `pyproject.toml`, `requirements.txt`, `README.md`, `LICENSE`, `CHANGELOG.md`, `VERSION.txt`
-- ✅ **Configuración Git**: `.gitignore`, `.gitattributes`, `.gitmessage`, `.pre-commit-config.yaml`
-- ✅ **Configuración específica**: `config.json`, `package_config.json`, `.env.example`
-- ✅ **Archivos de cobertura**: `coverage.xml` (generado por testing)
-
-### 3. ✅ Actualización de .gitignore
-
-#### **Nueva Estructura Organizada:**
-```gitignore
-# === CONFIGURACIÓN ESPECÍFICA DEL PROYECTO SiK-Python-Game ===
-# Directorios del juego + estructura dev-tools/ + temporales
-
-# === CONFIGURACIÓN ESTÁNDAR PYTHON ===
-# Configuración estándar de Python actualizada
+#### **Prioridad de Instrucciones Establecida**
+```
+Prioridad: instrucciones del usuario > instrucciones de repositorio > instrucciones de organización
 ```
 
-#### **Mejoras Implementadas:**
-- 📁 **Exclusiones específicas** para `dev-tools/testing/fixtures/temp/`
-- 🧹 **Temporales del proyecto**: `cleanup_*/`, `backup_*/`, `commit_message.txt`
-- 🎯 **Configuración editores**: Mantener solo `.vscode/settings.json`
-- 📦 **Empaquetado**: Exclusiones completas para distribución
+### 2. ✅ Sistema de Referencias Internas
 
-#### **Exclusiones Optimizadas:**
-```gitignore
-# Estructura de herramientas de desarrollo unificada
-dev-tools/testing/fixtures/temp/
-dev-tools/archive/temp/
-dev-tools/debugging/temp/
+#### **Archivo Principal Optimizado:**
+- 🎯 **Directrices críticas** inmediatas al inicio
+- 📁 **Referencias organizadas** por categorías temáticas
+- � **Flujo post-operación** destacado prominentemente
+- 📚 **Memoria viva** con enlaces a instrucciones específicas
 
-# Archivos temporales del proyecto
-cleanup_*/
-backup_*/
-commit_message.txt
-```
+#### **Módulos Especializados:**
+- **🔄 Refactorización y Migración**: 2 archivos especializados
+- **🛠️ Herramientas y Desarrollo**: 3 archivos de metodología
+- **🎮 Proyecto Específico**: 3 archivos de contexto
+- **⚙️ Configuración y Reglas**: 3 archivos de estándares
+
+### 3. ✅ Sistema de Mantenimiento Vivo
+
+#### **Características Implementadas:**
+- 📝 **Referencias cruzadas** entre módulos
+- 🔄 **Contenido modular** fácil de actualizar
+- 🎯 **Jerarquía clara** de prioridades
+- 📚 **Memoria persistente** del proyecto
+
+#### **Beneficios del Nuevo Sistema:**
+- ✅ **Organización modular** por temas específicos
+- ✅ **Mantenimiento simplificado** de cada área
+- ✅ **Referencias precisas** a documentación relacionada
+- ✅ **Escalabilidad** para futuras instrucciones
+- ✅ **Jerarquía clara** de prioridades siempre presente
+
+- ✅ **Escalabilidad** para futuras instrucciones
+- ✅ **Jerarquía clara** de prioridades siempre presente
 
 ## 📊 Resultado Final
 
-### **Raíz del Proyecto (Limpia):**
+### **Sistema de Instrucciones (.github/):**
 ```
-SiK-Python-Game/
-├── .github/                    ✅ (1 archivo - instrucciones unificadas)
-├── assets/, config/, src/      ✅ (directorios esenciales)
-├── dev-tools/                  ✅ (estructura unificada)
-├── docs/                       ✅ (documentación)
-├── pyproject.toml              ✅ (configuración principal)
-├── requirements.txt            ✅ (dependencias)
-├── .gitignore                  ✅ (actualizado para nueva estructura)
-└── [otros archivos esenciales] ✅
+.github/
+├── copilot-instructions.md           ✅ (archivo principal con referencias)
+└── instructions/                     ✅ (11 módulos especializados)
+    ├── refactorizacion.instructions.md
+    ├── migracion-sqlite.instructions.md
+    ├── sistemas-automatizados.instructions.md
+    ├── limpieza-optimizacion.instructions.md
+    ├── control-versiones.instructions.md
+    ├── arquitectura-convenciones.instructions.md
+    ├── contexto-juego.instructions.md
+    ├── optimizacion-ia.instructions.md
+    ├── reglas-fundamentales.instructions.md
+    ├── stack-herramientas.instructions.md
+    └── testing-calidad.instructions.md
 ```
 
-### **Sistema de Instrucciones:**
-- 🎯 **1 archivo único** con todas las instrucciones para agentes IA
-- 🚨 **Flujo post-operación** prominente al inicio
-- 🔄 **Referencias actualizadas** a `dev-tools/scripts/`
-- ✅ **Eliminación completa** de duplicaciones
+### **Prioridad de Instrucciones Implementada:**
+1. **🥇 Instrucciones del usuario** (máxima prioridad)
+2. **🥈 Instrucciones de repositorio** (este sistema)
+3. **🥉 Instrucciones de organización** (configuración global)
 
-### **Control de Versiones:**
-- 📝 **gitignore optimizado** para nueva estructura
-- 🧹 **Exclusiones específicas** para archivos temporales
-- 🎯 **Configuración limpia** para desarrollo
+### **Sistema de Referencias Cruzadas:**
+- 🔗 **Enlaces bidireccionales** entre archivo principal y módulos
+- 📚 **Referencias a documentación** central del proyecto
+- 🎯 **Rutas relativas** correctas desde `.github/instructions/`
 
 ## 🚀 Beneficios Obtenidos
 
-1. **Sistema de instrucciones unificado** y sin redundancias
-2. **Raíz del proyecto limpia** sin archivos temporales
-3. **Control de versiones optimizado** para la nueva estructura
-4. **Configuración consistente** con `dev-tools/` unificado
-5. **Mantenimiento simplificado** del proyecto
+1. **Sistema de instrucciones modular** y fácil de mantener
+2. **Jerarquía clara de prioridades** siempre presente
+3. **Organización temática** de las directrices
+4. **Escalabilidad** para futuras instrucciones específicas
+5. **Memoria viva del proyecto** con referencias actualizadas
+6. **Mantenimiento independiente** de cada área temática
 
 ---
-**Proyecto con sistema de instrucciones y estructura completamente optimizados** ✨
+**Proyecto con sistema de instrucciones jerárquico completamente implementado** ✨
