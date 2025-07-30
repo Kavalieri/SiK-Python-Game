@@ -13,14 +13,14 @@ MIGRACIÓN COMPLETADA:
 - Implementado sistema mixto inteligente
 """
 
-import random
 import logging
-from typing import Optional, List, Dict, Any
-from enum import Enum
+import random
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from ..utils.database_manager import DatabaseManager
 from ..utils.config_database import ConfigDatabase
+from ..utils.database_manager import DatabaseManager
 
 
 class EnemyRarity(Enum):

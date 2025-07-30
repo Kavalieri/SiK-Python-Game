@@ -4,8 +4,9 @@ Sky Renderer - Sistema de renderizado del cielo del desierto.
 Módulo especializado extraído de atmospheric_effects.py (optimización de líneas).
 """
 
-import pygame
 from typing import Tuple
+
+import pygame
 
 
 class SkyRenderer:

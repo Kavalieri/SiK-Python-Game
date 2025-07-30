@@ -4,9 +4,10 @@ Wind Effects - Sistema de efectos visuales del viento.
 Módulo especializado extraído de atmospheric_effects.py (optimización de líneas).
 """
 
-import pygame
 import math
 import random
+
+import pygame
 
 
 class WindEffects:
