@@ -1,6 +1,6 @@
 # Instrucciones para GitHub Copilot - SiK Python Game---
 
-**Base fundamental del proyecto. REFACTORIZACIÓN PRIORITARIA. Mantener actualizado siempre.**
+**Base fundamental del proyecto. Mantener actualizado siempre.**
 
 **📚 Referencia completa**: Consultar instrucciones específicas en `.github/instructions/` para detalles por módulo. **PRIORIDAD DE INSTRUCCIONES**
 ```
@@ -19,7 +19,7 @@ Estas son las instrucciones principales para el repositorio SiK Python Game. Las
 
 ### 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS**
 - **CONSULTAR PRIMERO**: `docs/REFACTORIZACION_ESTADO_ACTUAL.md` antes de CUALQUIER cambio
-- **LÍMITE ABSOLUTO**: 150 líneas por archivo - dividir INMEDIATAMENTE si se excede
+- **LÍMITE ABSOLUTO**: 250 líneas por archivo - dividir INMEDIATAMENTE si se excede
 - **ACTUALIZAR SIEMPRE**: `docs/FUNCIONES_DOCUMENTADAS.md` con cada función nueva
 - **Commits**: Solo `.\dev-tools\scripts\simple_commit.ps1 "mensaje"` (método unificado)
 
