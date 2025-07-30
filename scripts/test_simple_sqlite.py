@@ -41,7 +41,7 @@ def test_simple():
 
     # Leer dato
     data = db_manager.execute_query(
-        "SELECT * FROM configuraciones WHERE categoria = ?", ("test",), fetch_one=True
+        "SELECT * FROM configuraciones WHERE categoria = ?", ("test",)
     )
     print(f"✅ Lectura: {data}")
 

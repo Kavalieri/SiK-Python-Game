@@ -1,97 +1,69 @@
 """
 DatabaseManager - Gestor de conexiones y operaciones SQLite
-===========================================================
 
-Módulo para gestionar conexiones SQLite con pooling, transacciones y logging.
-Parte de la migración del sistema de persistencia de pickle a SQLite.
-
-Fase 1 de migración SQLite - Infraestructura base
-Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
+Gestiona conexiones SQLite con pooling, transacciones y logging.
+Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 """
 
 import logging
 import sqlite3
 import threading
 from contextlib import contextmanager
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 class DatabaseManager:
-    """
-    Gestor centralizado de conexiones SQLite con pooling y transacciones.
-
-    Características:
-    - Connection pooling para evitar bloqueos
-    - Manejo de transacciones automático
-    - Logging detallado de operaciones
-    - Validación de integridad de datos
-    - Soporte para backup automático
-    """
+    """Gestor centralizado de conexiones SQLite con pooling y transacciones."""
 
     def __init__(self, db_path: str = "saves/game_database.db", pool_size: int = 5):
-        """
-        Inicializa el gestor de base de datos.
-
-        Args:
-            db_path: Ruta al archivo de base de datos SQLite
-            pool_size: Número máximo de conexiones en el pool
-        """
         self.db_path = Path(db_path)
         self.pool_size = pool_size
         self._pool: List[sqlite3.Connection] = []
         self._pool_lock = threading.Lock()
         self._logger = logging.getLogger("DatabaseManager")
 
-        # Crear directorio si no existe
+        # Crear directorio y pool
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Inicializar pool de conexiones
         self._initialize_pool()
-
-        self._logger.info(f"DatabaseManager inicializado: {self.db_path}")
+        self._logger.info("DatabaseManager inicializado: %s", self.db_path)
 
     def _initialize_pool(self) -> None:
         """Inicializa el pool de conexiones SQLite."""
         try:
             for _ in range(self.pool_size):
-                conn = self._create_connection()
-                self._pool.append(conn)
-            self._logger.info(f"Pool de conexiones creado: {self.pool_size} conexiones")
-        except Exception as e:
-            self._logger.error(f"Error inicializando pool: {e}")
-            raise
+                self._pool.append(self._create_connection())
+            self._logger.info("Pool creado: %d conexiones", self.pool_size)
+        except sqlite3.Error as e:
+            self._logger.error("Error inicializando pool: %s", e)
+            raise RuntimeError(f"Error inicializando pool: {e}") from e
 
     def _create_connection(self) -> sqlite3.Connection:
-        """
-        Crea una nueva conexión SQLite optimizada.
+        """Crea una nueva conexión SQLite optimizada."""
+        try:
+            conn = sqlite3.connect(
+                str(self.db_path), timeout=30.0, check_same_thread=False
+            )
+            conn.row_factory = sqlite3.Row
 
-        Returns:
-            Conexión SQLite configurada
-        """
-        conn = sqlite3.connect(str(self.db_path), check_same_thread=False, timeout=10.0)
+            # Configuraciones optimizadas
+            for pragma in [
+                "PRAGMA journal_mode=WAL",
+                "PRAGMA foreign_keys=ON",
+                "PRAGMA synchronous=NORMAL",
+                "PRAGMA cache_size=10000",
+                "PRAGMA temp_store=MEMORY",
+            ]:
+                conn.execute(pragma)
 
-        # Configuraciones de rendimiento
-        conn.execute("PRAGMA foreign_keys = ON")
-        conn.execute("PRAGMA journal_mode = WAL")
-        conn.execute("PRAGMA synchronous = NORMAL")
-        conn.execute("PRAGMA cache_size = 10000")
-        conn.execute("PRAGMA busy_timeout = 30000")  # 30 segundos timeout
-
-        # Row factory para retornar diccionarios
-        conn.row_factory = sqlite3.Row
-
-        return conn
+            return conn
+        except sqlite3.Error as e:
+            self._logger.error("Error creando conexión: %s", e)
+            raise RuntimeError(f"Error creando conexión: {e}") from e
 
     @contextmanager
     def get_connection(self):
-        """
-        Context manager para obtener conexión del pool.
-
-        Yields:
-            Conexión SQLite del pool
-        """
+        """Context manager para obtener conexión del pool."""
         conn = None
         try:
             with self._pool_lock:
@@ -102,11 +74,11 @@ class DatabaseManager:
 
             yield conn
 
-        except Exception as e:
+        except sqlite3.Error as e:
+            self._logger.error("Error de conexión: %s", e)
             if conn:
                 conn.rollback()
-            self._logger.error(f"Error en conexión: {e}")
-            raise
+            raise RuntimeError(f"Error de base de datos: {e}") from e
         finally:
             if conn:
                 with self._pool_lock:
@@ -116,116 +88,88 @@ class DatabaseManager:
                         conn.close()
 
     def execute_query(
-        self,
-        query: str,
-        params: Optional[Tuple] = None,
-        fetch_one: bool = False,
-        fetch_all: bool = True,
-    ) -> Optional[Union[Dict, List[Dict]]]:
-        """
-        Ejecuta una consulta SQL con logging y manejo de errores.
-
-        Args:
-            query: Consulta SQL a ejecutar
-            params: Parámetros para la consulta
-            fetch_one: Si retornar solo un resultado
-            fetch_all: Si retornar todos los resultados
-
-        Returns:
-            Resultados de la consulta o None
-        """
-        start_time = datetime.now()
-
-        try:
-            with self.get_connection() as conn:
+        self, query: str, params: Optional[tuple] = None, fetch_all: bool = False
+    ) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
+        """Ejecuta query SQL y retorna resultados."""
+        with self.get_connection() as conn:
+            try:
                 cursor = conn.cursor()
+                cursor.execute(query, params or ())
 
-                if params:
-                    cursor.execute(query, params)
-                else:
-                    cursor.execute(query)
-
-                # Procesar resultados según el tipo de query
-                if query.strip().upper().startswith("SELECT"):
-                    if fetch_one:
-                        result = cursor.fetchone()
-                        return dict(result) if result else None
-                    elif fetch_all:
-                        results = cursor.fetchall()
-                        return [dict(row) for row in results]
-                else:
+                if query.strip().upper().startswith(("INSERT", "UPDATE", "DELETE")):
                     conn.commit()
                     return {
                         "rows_affected": cursor.rowcount,
                         "last_row_id": cursor.lastrowid,
                     }
 
-        except Exception as e:
-            execution_time = (datetime.now() - start_time).total_seconds()
-            self._logger.error(
-                f"Error ejecutando query: {e} (tiempo: {execution_time:.3f}s)"
-            )
-            self._logger.error(f"Query: {query}")
-            self._logger.error(f"Params: {params}")
-            raise
+                if fetch_all:
+                    rows = cursor.fetchall()
+                    return [dict(row) for row in rows] if rows else []
+                else:
+                    row = cursor.fetchone()
+                    return dict(row) if row else None
 
-        execution_time = (datetime.now() - start_time).total_seconds()
-        self._logger.debug(f"Query ejecutada en {execution_time:.3f}s")
-        return None
+            except sqlite3.Error as e:
+                self._logger.error("Error ejecutando query: %s", e)
+                conn.rollback()
+                raise RuntimeError(f"Error ejecutando query: {e}") from e
 
     @contextmanager
     def transaction(self):
-        """
-        Context manager para transacciones manuales.
-
-        Yields:
-            Conexión en transacción
-        """
+        """Context manager para transacciones."""
         with self.get_connection() as conn:
             try:
                 yield conn
                 conn.commit()
-                self._logger.debug("Transacción completada exitosamente")
+                self._logger.debug("Transacción completada")
             except Exception as e:
                 conn.rollback()
-                self._logger.error(f"Transacción fallida, rollback realizado: {e}")
+                self._logger.error("Transacción fallida: %s", e)
                 raise
 
     def close_all_connections(self) -> None:
         """Cierra todas las conexiones del pool."""
         with self._pool_lock:
-            for conn in self._pool:
-                conn.close()
-            self._pool.clear()
+            while self._pool:
+                try:
+                    self._pool.pop().close()
+                except sqlite3.Error:
+                    pass
         self._logger.info("Todas las conexiones cerradas")
 
-    def get_database_info(self) -> Dict[str, Any]:
-        """
-        Obtiene información de la base de datos.
-
-        Returns:
-            Diccionario con información de la BD
-        """
-        try:
-            info = {
+    def get_connection_info(self) -> Dict[str, Any]:
+        """Obtiene información del estado de conexiones."""
+        with self._pool_lock:
+            return {
                 "db_path": str(self.db_path),
-                "exists": self.db_path.exists(),
-                "size_bytes": self.db_path.stat().st_size
-                if self.db_path.exists()
-                else 0,
-                "pool_size": len(self._pool),
-                "created_at": datetime.now().isoformat(),
+                "pool_size": self.pool_size,
+                "available_connections": len(self._pool),
+                "db_exists": self.db_path.exists(),
             }
 
-            # Información adicional si la BD existe
-            if self.db_path.exists():
-                tables = self.execute_query(
-                    "SELECT name FROM sqlite_master WHERE type='table'", fetch_all=True
-                )
-                info["tables"] = [table["name"] for table in tables] if tables else []
+    def backup_database(self, backup_path: str) -> bool:
+        """Crea backup de la base de datos."""
+        try:
+            backup_file = Path(backup_path)
+            backup_file.parent.mkdir(parents=True, exist_ok=True)
+            with self.get_connection() as source_conn:
+                backup_conn = sqlite3.connect(str(backup_file))
+                source_conn.backup(backup_conn)
+                backup_conn.close()
+            self._logger.info("Backup creado: %s", backup_path)
+            return True
+        except (sqlite3.Error, OSError) as e:
+            self._logger.error("Error creando backup: %s", e)
+            return False
 
-            return info
-
-        except Exception as e:
-            self._logger.error(f"Error obteniendo info de BD: {e}")
-            return {"error": str(e)}
+    def vacuum_database(self) -> bool:
+        """Optimiza la base de datos (VACUUM)."""
+        try:
+            with self.get_connection() as conn:
+                conn.execute("VACUUM")
+            self._logger.info("VACUUM completado")
+            return True
+        except sqlite3.Error as e:
+            self._logger.error("Error en VACUUM: %s", e)
+            return False
