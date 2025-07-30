@@ -1,43 +1,26 @@
-"""
-Menu Creators - Lógica de Creación de Menús Específicos
-======================================================
-
-Autor: SiK Team
-Fecha: 2024-12-19
-Descripción: Módulo para creación de menús específicos del juego.
-"""
+"""Menu Creators - Lógica de Creación de Menús Específicos"""
 
 import pygame
 import pygame_menu
-
 from ..utils.logger import get_logger
 from .menu_configuration import MenuConfiguration
 from .menu_theme import MenuTheme
 
 
 class MenuCreators:
-    """
-    Creador de menús específicos del juego.
-    """
+    """Creador de menús específicos del juego."""
 
     def __init__(self, screen: pygame.Surface, config_manager, save_manager, callbacks):
-        """Inicializa el creador de menús."""
         self.screen = screen
         self.config = config_manager
         self.save_manager = save_manager
         self.callbacks = callbacks
         self.logger = get_logger("SiK_Game")
-
-        # Módulos auxiliares
         self.theme_manager = MenuTheme(screen, config_manager)
         self.config_helper = MenuConfiguration(config_manager, save_manager)
-
-        # Configuración base
         self.screen_width, self.screen_height = self.theme_manager.get_menu_dimensions()
         self.theme = self.theme_manager.create_default_theme()
         self.font_sizes = self.theme_manager.get_font_sizes()
-
-        # Referencias a elementos de feedback
         self._main_menu_feedback_label = None
         self._save_menu_feedback_label = None
 
@@ -50,12 +33,10 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         self._main_menu_feedback_label = menu.add.label(
             "", font_size=self.font_sizes["option"]
         )
 
-        # Botones principales con tamaños de fuente configurables
         buttons = [
             ("Inicio", self.callbacks.on_new_game),
             ("Continuar", self.callbacks.on_continue_game),
@@ -63,11 +44,9 @@ class MenuCreators:
             ("Opciones", self.callbacks.on_options),
             ("Salir", self.callbacks.on_exit),
         ]
-
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["button"])
             menu.add.vertical_margin(10)
-
         return menu
 
     def create_pause_menu(self) -> pygame_menu.Menu:
@@ -79,17 +58,14 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         buttons = [
             ("Reanudar", self.callbacks.on_resume_game),
             ("Guardar", self.callbacks.on_save_game),
             ("Menú Principal", self.callbacks.on_main_menu),
         ]
-
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["button"])
             menu.add.vertical_margin(10)
-
         return menu
 
     def create_upgrade_menu(self) -> pygame_menu.Menu:
@@ -101,12 +77,10 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         menu.add.label(
             "Puntos de Mejora Disponibles:", font_size=self.font_sizes["option"]
         )
         menu.add.vertical_margin(20)
-
         self.config_helper.add_upgrade_buttons(menu, self._create_upgrade_callback())
         menu.add.vertical_margin(20)
         menu.add.button(
@@ -125,10 +99,8 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         menu.add.label("Elige tu personaje:", font_size=self.font_sizes["button"])
         menu.add.vertical_margin(20)
-
         self.config_helper.add_character_buttons(
             menu, self.callbacks.on_select_character
         )
@@ -150,7 +122,6 @@ class MenuCreators:
             enabled=False,
         )
 
-        # Configuración usando helpers
         self.config_helper.configure_resolution_selector(
             menu, self.callbacks.on_resolution_change
         )
@@ -170,14 +141,12 @@ class MenuCreators:
             menu, "Efectos", audio_volumes["sfx"], self.callbacks.on_sfx_volume_change
         )
 
-        # Botones adicionales compactos
         menu.add.vertical_margin(20)
         buttons = [
             ("Configurar Controles", self.callbacks.on_configure_controls),
             ("Guardar Opciones", self.callbacks.on_save_options),
             ("Volver", self.callbacks.on_back_to_previous),
         ]
-
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["label"])
             menu.add.vertical_margin(10)
@@ -192,7 +161,6 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         menu.add.label("Equipación:", font_size=self.font_sizes["button"])
         menu.add.vertical_margin(20)
 
@@ -201,7 +169,6 @@ class MenuCreators:
             ("Equipar Armadura", self.callbacks.on_equip_armor),
             ("Equipar Accesorio", self.callbacks.on_equip_accessory),
         ]
-
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["option"])
             menu.add.vertical_margin(5)
@@ -223,7 +190,6 @@ class MenuCreators:
             theme=self.theme,
             enabled=False,
         )
-
         self._save_menu_feedback_label = menu.add.label(
             "", font_size=self.font_sizes["option"]
         )
@@ -237,7 +203,6 @@ class MenuCreators:
             ("Vaciar Slot", lambda: self.callbacks.on_clear_slot(1)),
             ("Volver", self.callbacks.on_back_to_main_from_slots),
         ]
-
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["option"])
             menu.add.vertical_margin(5)
@@ -253,7 +218,6 @@ class MenuCreators:
                 "vida": self.callbacks.on_upgrade_health,
                 "escudo": self.callbacks.on_upgrade_shield,
             }
-
             if upgrade_type in callbacks_map:
                 callbacks_map[upgrade_type]()
             else:

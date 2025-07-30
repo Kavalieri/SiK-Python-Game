@@ -9,26 +9,15 @@ Descripción: Módulo que maneja las animaciones de personajes en la selección.
 
 import logging
 from typing import Dict, Optional
-
 import pygame
-
 from src.utils.asset_manager import AssetManager
 
 
 class CharacterAnimations:
-    """
-    Gestiona las animaciones de personajes en la selección.
-
-    Ejemplo de uso:
-        >>> animaciones = CharacterAnimations()
-        >>> animaciones.update(delta_time=0.016)
-        >>> imagen = animaciones.get_character_image("guerrero")
-    """
+    """Gestiona las animaciones de personajes en la selección."""
 
     def __init__(self):
-        """
-        Inicializa el gestor de animaciones de personajes.
-        """
+        """Inicializa el gestor de animaciones de personajes."""
         self.asset_manager = AssetManager()
         self.logger = logging.getLogger(__name__)
 
@@ -42,32 +31,14 @@ class CharacterAnimations:
         self._load_animation_frames()
 
     def _load_animation_frames(self):
-        """
-        Carga los frames de animación para todos los personajes.
-
-        Ejemplo:
-            >>> animaciones._load_animation_frames()
-        """
+        """Carga los frames de animación para todos los personajes."""
         characters = ["guerrero", "adventureguirl", "robot"]
-
         for character in characters:
             self.animation_frames[character] = self._load_character_frames(character)
-
-        self.logger.info(f"Animaciones cargadas para {len(characters)} personajes")
+        self.logger.info("Animaciones cargadas para %d personajes", len(characters))
 
     def _load_character_frames(self, character_key: str) -> list:
-        """
-        Carga los frames de animación para un personaje específico.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            list: Lista de frames de animación
-
-        Ejemplo:
-            >>> frames = animaciones._load_character_frames("guerrero")
-        """
+        """Carga los frames de animación para un personaje específico."""
         frames = []
         possible_paths = self._get_possible_paths(character_key)
 
@@ -76,30 +47,22 @@ class CharacterAnimations:
                 frames = self.asset_manager.load_animation_frames(path)
                 if frames:
                     self.logger.debug(
-                        f"Frames cargados para {character_key} desde {path}"
+                        "Frames cargados para %s desde %s", character_key, path
                     )
                     break
             except FileNotFoundError:
-                self.logger.warning(f"Frames no encontrados en {path}")
+                self.logger.warning("Frames no encontrados en %s", path)
             except ValueError as e:
-                self.logger.error(f"Error cargando frames desde {path}: {e}")
+                self.logger.error("Error cargando frames desde %s: %s", path, e)
 
         if not frames:
             frames = [self._create_character_placeholder(character_key)]
-            self.logger.warning(f"Usando placeholder para {character_key}")
+            self.logger.warning("Usando placeholder para %s", character_key)
 
         return frames
 
     def _get_possible_paths(self, character_key: str) -> list:
-        """
-        Genera las rutas posibles para buscar frames de un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            list: Lista de rutas posibles
-        """
+        """Genera las rutas posibles para buscar frames de un personaje."""
         base_paths = ["characters", "characters/used"]
         subfolders = ["idle", "Idle"]
         return [
@@ -107,18 +70,7 @@ class CharacterAnimations:
         ]
 
     def _create_character_placeholder(self, character_key: str) -> pygame.Surface:
-        """
-        Crea un sprite placeholder para un personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            pygame.Surface: Superficie placeholder
-
-        Ejemplo:
-            >>> placeholder = animaciones._create_character_placeholder("guerrero")
-        """
+        """Crea un sprite placeholder para un personaje."""
         placeholder = pygame.Surface((120, 120))
         char_data = self._get_character_data(character_key)
 
@@ -155,29 +107,17 @@ class CharacterAnimations:
         pygame.draw.rect(surface, (255, 255, 255), (0, 0, 120, 120), 3)
 
     def _add_placeholder_symbol(self, surface: pygame.Surface, symbol: str):
-        """
-        Añade un símbolo al placeholder.
-
-        Args:
-            surface: Superficie del placeholder
-            symbol: Símbolo a renderizar
-        """
+        """Añade un símbolo al placeholder."""
         try:
             font = pygame.font.Font(None, 48)
             text = font.render(symbol, True, (255, 255, 255))
             text_rect = text.get_rect(center=(60, 60))
             surface.blit(text, text_rect)
-        except Exception as e:
-            self.logger.warning(f"Error al renderizar símbolo: {e}")
-            pass
+        except OSError as e:
+            self.logger.warning("Error al renderizar símbolo: %s", e)
 
     def update(self, delta_time: float):
-        """
-        Actualiza las animaciones.
-
-        Args:
-            delta_time: Tiempo transcurrido desde el último frame
-        """
+        """Actualiza las animaciones."""
         # Actualizar timer de animación
         self.frame_timer += delta_time * 1000  # Convertir a milisegundos
 
@@ -186,12 +126,7 @@ class CharacterAnimations:
             self.frame_timer = 0
 
     def _get_max_frames(self) -> int:
-        """
-        Obtiene el número máximo de frames disponibles.
-
-        Returns:
-            Número máximo de frames
-        """
+        """Obtiene el número máximo de frames disponibles."""
         max_frames = 1
         for frames in self.animation_frames.values():
             if frames:
@@ -199,15 +134,7 @@ class CharacterAnimations:
         return max_frames
 
     def get_character_image(self, character_key: str) -> Optional[pygame.Surface]:
-        """
-        Obtiene la imagen actual del personaje.
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Superficie del personaje o None si no existe
-        """
+        """Obtiene la imagen actual del personaje."""
         try:
             if character_key in self.animation_frames:
                 frames = self.animation_frames[character_key]
@@ -219,22 +146,14 @@ class CharacterAnimations:
             # Fallback: crear placeholder
             return self._create_character_placeholder(character_key)
 
-        except Exception as e:
-            self.logger.error(f"Error obteniendo imagen de {character_key}: {e}")
+        except (KeyError, IndexError, ValueError) as e:
+            self.logger.error("Error obteniendo imagen de %s: %s", character_key, e)
             return self._create_character_placeholder(character_key)
 
     def get_character_image_static(
         self, character_key: str
     ) -> Optional[pygame.Surface]:
-        """
-        Obtiene la imagen estática del personaje (sin animación).
-
-        Args:
-            character_key: Clave del personaje
-
-        Returns:
-            Superficie estática del personaje
-        """
+        """Obtiene la imagen estática del personaje (sin animación)."""
         try:
             if character_key in self.animation_frames:
                 frames = self.animation_frames[character_key]
@@ -244,19 +163,14 @@ class CharacterAnimations:
             # Fallback: crear placeholder
             return self._create_character_placeholder(character_key)
 
-        except Exception as e:
+        except (KeyError, IndexError, ValueError) as e:
             self.logger.error(
-                f"Error obteniendo imagen estática de {character_key}: {e}"
+                "Error obteniendo imagen estática de %s: %s", character_key, e
             )
             return self._create_character_placeholder(character_key)
 
     def set_animation_speed(self, frame_delay: int):
-        """
-        Establece la velocidad de animación.
-
-        Args:
-            frame_delay: Tiempo entre frames en milisegundos
-        """
+        """Establece la velocidad de animación."""
         self.frame_delay = max(50, frame_delay)  # Mínimo 50ms
 
     def reset_animation(self):
@@ -265,32 +179,10 @@ class CharacterAnimations:
         self.frame_timer = 0
 
     def get_animation_info(self) -> Dict[str, object]:
-        """
-        Obtiene información sobre las animaciones.
-
-        Returns:
-            Dict[str, object]: Diccionario con información de animaciones
-        """
+        """Obtiene información sobre las animaciones."""
         return {
             "current_frame": self.current_frame,
             "frame_delay": self.frame_delay,
             "characters_loaded": len(self.animation_frames),
             "max_frames": self._get_max_frames(),
         }
-
-    def load_animation(self):
-        character_key = "personaje_ejemplo"  # Definición de ejemplo
-        path = "ruta/a/animaciones"  # Definición de ejemplo
-
-        try:
-            frames = self.asset_manager.load_animation_frames(path)
-            self.logger.debug(
-                "Frames cargados para %s desde %s: %d frames",
-                character_key,
-                path,
-                len(frames),
-            )
-        except FileNotFoundError as e:
-            self.logger.warning("Error cargando frames desde %s: %s", path, e)
-        except ValueError as e:
-            self.logger.error("Error cargando frames para %s: %s", character_key, e)
