@@ -32,7 +32,9 @@ class PlayerEffects:
             powerup_effect: Efecto del powerup a aplicar
             current_time: Tiempo actual del juego
         """
-        effect_type = powerup_effect.effect_type
+        effect_type = (
+            powerup_effect.type
+        )  # Corregido: usar 'type' en lugar de 'effect_type'
         duration = powerup_effect.duration
         value = powerup_effect.value
 

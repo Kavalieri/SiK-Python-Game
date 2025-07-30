@@ -39,8 +39,12 @@ class GameScenePowerups:
             y = random.randint(100, 4900)
             powerup = Powerup.create_random(x, y)
             self.scene.powerups.append(powerup)
+            # Corregir acceso a atributo - asegurar que powerup_type existe
+            powerup_name = getattr(
+                powerup.powerup_type, "value", str(powerup.powerup_type)
+            )
             self.scene.logger.debug(
-                f"Powerup {powerup.powerup_type.value} generado en ({x}, {y})"
+                "Powerup %s generado en (%s, %s)", powerup_name, x, y
             )
         except AttributeError as e:
             self.scene.logger.error(f"Error al generar powerup: {e}")
@@ -68,9 +72,11 @@ class GameScenePowerups:
                     powerup_effect = powerup.get_effect()
                     player.apply_powerup(powerup_effect)
                     self.scene.powerups.remove(powerup)
-                    self.scene.logger.debug(
-                        f"Powerup {powerup_effect.type.value} recolectado"
+                    # Corregir acceso a atributo - usar lazy logging
+                    effect_name = getattr(
+                        powerup_effect.type, "value", str(powerup_effect.type)
                     )
+                    self.scene.logger.debug("Powerup %s recolectado", effect_name)
 
     def _is_out_of_bounds(self, powerup):
         """
