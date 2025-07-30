@@ -3,7 +3,17 @@
 <div align="center">
 
 [![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![Poetry](https://img.shields.io/badge/poetry-1.5+-orange.svg)](https://python-poetry.org)
+[![Poetry](https:/│   └── ⚙️ utils/              # Utilidades y sistemas
+├── 🎨 assets/                 # Recursos del juego (6 categorías) → README.md
+├── ⚙️ config/                 # Configuración modular (10 archivos JSON) → README.md
+├── 📚 docs/                   # Documentación técnica (5 docs activos) → README.md
+├── 🛠️ dev-tools/              # Herramientas de desarrollo (todas centralizadas) → README.md
+│   ├── 📜 scripts/            # Scripts de producción (commits, limpieza, etc.)
+│   ├── 🧪 testing/            # Tests automatizados (unitarios e integración)
+│   ├── 📦 packaging/          # Herramientas de empaquetado y distribución
+│   ├── 🔄 migration/          # Scripts de migración y refactorización
+│   └── 📁 archive/            # Scripts obsoletos (valor histórico)
+└── 💾 saves/                  # Partidas guardadaslds.io/badge/poetry-1.5+-orange.svg)](https://python-poetry.org)
 [![Pygame-ce](https://img.shields.io/badge/pygame--ce-2.4+-green.svg)](https://pyga.me)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -178,8 +188,9 @@ poetry run python src/main.py --debug
 # Ejecutar el juego
 poetry run python src/main.py
 
-# Ejecutar tests
-poetry run pytest tests/ -v
+# Ejecutar tests (centralizados en dev-tools/testing/)
+python dev-tools\testing\test_unified_system.py
+python dev-tools\testing\test_config_system.py
 
 # Verificar calidad de código
 poetry run ruff check src/
@@ -234,7 +245,7 @@ poetry run ruff format src/
 4. **✅ Verifica** que tu código cumple los estándares:
    ```powershell
    poetry run ruff check src/
-   poetry run pytest tests/
+   python dev-tools\testing\test_unified_system.py
    ```
 5. **� Commit** usando el sistema unificado:
    ```powershell
