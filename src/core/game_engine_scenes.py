@@ -113,55 +113,46 @@ class GameEngineScenes:
             character_select_scene = self.core.scene_manager.scenes["character_select"]
             pause_scene = self.core.scene_manager.scenes["pause"]
 
-            # Menú principal
-            main_menu_scene.menu_manager.callbacks.on_new_game = (
-                lambda: self.core.scene_manager.change_scene("slot_selection")
+            # Menú principal - callbacks condensados
+            main_callbacks = main_menu_scene.menu_manager.callbacks
+            main_callbacks.on_new_game = lambda: self.core.scene_manager.change_scene(
+                "slot_selection"
             )
-            main_menu_scene.menu_manager.callbacks.on_continue_game = (
-                self.events.handle_continue_game
+            main_callbacks.on_continue_game = self.events.handle_continue_game
+            main_callbacks.on_load_game = lambda: self.core.scene_manager.change_scene(
+                "slot_selection"
             )
-            main_menu_scene.menu_manager.callbacks.on_load_game = (
-                lambda: self.core.scene_manager.change_scene("slot_selection")
+            main_callbacks.on_options = lambda: self.core.scene_manager.change_scene(
+                "options"
             )
-            main_menu_scene.menu_manager.callbacks.on_options = (
-                lambda: self.core.scene_manager.change_scene("options")
-            )
-            main_menu_scene.menu_manager.callbacks.on_exit = (
-                self.events.log_and_quit_menu
-            )
+            main_callbacks.on_exit = self.events.log_and_quit_menu
 
-            # Selección de slots
-            slot_selection_scene.menu_manager.callbacks.on_select_slot = (
-                self.events.handle_slot_selection
-            )
-            slot_selection_scene.menu_manager.callbacks.on_clear_slot = (
-                self.events.handle_clear_slot
-            )
-            slot_selection_scene.menu_manager.callbacks.on_back_to_main_from_slots = (
+            # Selección de slots - callbacks condensados
+            slot_callbacks = slot_selection_scene.menu_manager.callbacks
+            slot_callbacks.on_select_slot = self.events.handle_slot_selection
+            slot_callbacks.on_clear_slot = self.events.handle_clear_slot
+            slot_callbacks.on_back_to_main_from_slots = (
                 lambda: self.core.scene_manager.change_scene("main_menu")
             )
 
-            # Opciones
+            # Otros callbacks
             options_scene.menu_manager.callbacks.on_back_to_main = (
                 lambda: self.core.scene_manager.change_scene("main_menu")
             )
-
-            # Selección de personaje
             character_select_scene.menu_manager.callbacks.on_character_selected = (
                 self.events.handle_character_selection
             )
 
-            # Pausa
-            pause_scene.menu_manager.callbacks.on_resume_game = (
+            # Pausa - callbacks condensados
+            pause_callbacks = pause_scene.menu_manager.callbacks
+            pause_callbacks.on_resume_game = (
                 lambda: self.core.scene_manager.change_scene("game")
             )
-            pause_scene.menu_manager.callbacks.on_save_game = (
-                self.events.handle_save_game
+            pause_callbacks.on_save_game = self.events.handle_save_game
+            pause_callbacks.on_main_menu = lambda: self.core.scene_manager.change_scene(
+                "main_menu"
             )
-            pause_scene.menu_manager.callbacks.on_main_menu = (
-                lambda: self.core.scene_manager.change_scene("main_menu")
-            )
-            pause_scene.menu_manager.callbacks.on_exit = self.events.log_and_quit_menu
+            pause_callbacks.on_exit = self.events.log_and_quit_menu
 
             self.logger.info("Transiciones entre escenas configuradas (flujo avanzado)")
         except RuntimeError as e:
