@@ -281,6 +281,18 @@ src/
 - **Uso diario**: `.\scripts\simple_commit.ps1 "mensaje"`
 - **Uso completo**: `.\scripts\unified_commit.ps1 "mensaje" -Type "feat" -Scope "ui" -Push`
 
+### Optimización de Entorno de Trabajo (NUEVO - RECOMENDADO)
+- **Script de limpieza**: `scripts/workspace_cleanup.ps1` para optimizar VS Code y caché
+- **Configuración automática**: `scripts/setup_auto_cleanup.ps1` para integrar limpieza
+- **Niveles de limpieza**: light (diario), deep (semanal), complete (mensual)
+- **Capacidades VS Code**: Cierre automático de pestañas con comandos workbench
+- **Limpieza de caché**: Python (__pycache__), Poetry, Git, VS Code workspaceStorage
+- **Optimización memoria**: Garbage collection .NET y análisis de uso de memoria
+- **Integración commits**: Limpieza automática después de commits exitosos
+- **Atajos de teclado**: Ctrl+K Ctrl+L (light), Ctrl+K Ctrl+T (tabs), Ctrl+K Ctrl+D (deep)
+- **Documentación**: `docs/OPTIMIZACION_ENTORNO_TRABAJO.md` con guía completa
+- **Uso recomendado**: `.\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
+
 ### Gestión de Archivos y Repositorio
 - **GitHub CLI prioritario**: usar `gh` para todas las operaciones de repositorio
 - **Matriz de decisión**: `docs/MATRIZ_DECISIÓN_GH_VS_GIT.md` (consultar SIEMPRE)
