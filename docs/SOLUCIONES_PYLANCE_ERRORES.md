@@ -5,10 +5,41 @@
 **Propósito**: Referencia de soluciones aplicadas a errores comunes de Pylance/Pylint
 
 ### 📊 **Estadísticas de Errores Resueltos**
-- **Total archivos corregidos**: 9 archivos
-- **Errores corregidos**: 22 errores específicos
-- **Archivos limpiados**: 2 archivos duplicados archivados
-- **Patrones identificados**: 6 patrones comunes
+- **Total archivos corregidos**: 10 archivos
+- **Errores corregidos**: 23 errores específicos
+- **Archivos limpiados**: 3 archivos duplicados/legacy archivados
+- **Patrones identificados**: 7 patrones comunes
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN scenes/__init__.py**
+
+### **Error: "GameScene" is unknown import symbol**
+- **Archivo**: `src/scenes/__init__.py`
+- **Línea**: 9
+- **Código de Error**: `reportAttributeAccessIssue`
+- **Descripción**: `"GameScene" is unknown import symbol`
+
+#### **Problema Original**:
+```python
+from .game_scene import GameScene  # ❌ game_scene.py es wrapper vacío
+```
+
+#### **Solución Aplicada**:
+```python
+from .game_scene_core import GameScene  # ✅ Módulo con clase real
+```
+
+#### **Explicación**:
+- **Causa**: Import desde wrapper legacy sin funcionalidad
+- **Investigación**: `game_scene.py` era solo comentarios sin clase GameScene
+- **Solución**: Importar desde `game_scene_core.py` que contiene la clase real
+- **Resultado**: Error de import resuelto y wrapper legacy archivado
+
+#### **Limpieza Realizada**:
+- **Acción**: `game_scene.py` movido a `archivo_legacy_cleanup/game_scene_legacy_wrapper.py`
+- **Motivo**: Wrapper sin funcionalidad que causaba confusión en imports
+- **Documentación**: README.md creado en directorio de archivo
 
 ---
 
@@ -295,7 +326,13 @@ def _update_logic(self, delta_time: float):
 - **Frecuencia**: Común en código con logging extensivo
 - **Prevención**: Configurar linter para detectar automáticamente
 
-### **Patrón 7: Captura de Excepciones Genéricas**
+### **Patrón 7: Imports desde Wrappers Legacy**
+- **Problema**: Imports desde archivos wrapper vacíos o legacy
+- **Solución**: Identificar módulo real con la clase/función y corregir import
+- **Frecuencia**: Común durante refactorizaciones modulares
+- **Prevención**: Eliminar wrappers vacíos y actualizar __init__.py
+
+### **Patrón 8: Captura de Excepciones Genéricas**
 - **Problema**: Import indirecto de constantes de pygame
 - **Solución**: Usar valores numéricos o imports directos
 - **Prevención**: Verificar imports de pygame y usar constantes apropiadas
@@ -317,6 +354,7 @@ get_errors(["ruta/al/archivo.py"])
 
 ### **Archivos Críticos Monitoreados**:
 - `src/main.py` ✅
+- `src/scenes/__init__.py` ✅
 - `src/entities/powerup_new.py` ✅
 - `src/entities/powerup.py` ✅
 - `src/entities/player_integration.py` ✅
