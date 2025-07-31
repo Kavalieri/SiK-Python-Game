@@ -51,7 +51,12 @@
 		"**/.*",
 		"releases/**",
 		"backups*/**",
-		"logs/**"
+		"logs/**",
+		"dev-tools/scripts/test_*.ps1",
+		"dev-tools/scripts/*_test.ps1",
+		"dev-tools/scripts/*_backup.ps1",
+		"dev-tools/scripts/*_old.ps1",
+		"dev-tools/scripts/*_temp.ps1"
 	],
 	// Configuración específica del proyecto
 	"python.defaultInterpreterPath": "./venv/Scripts/python.exe",
@@ -134,6 +139,7 @@
 	"powershell.debugging.createTemporaryIntegratedConsole": false,
 	"powershell.codeFormatting.preset": "OTBS",
 	"powershell.scriptAnalysis.enable": true,
+	"powershell.scriptAnalysis.settingsPath": ".vscode/PSScriptAnalyzerSettings.psd1",
 	"powershell.developer.enableConsoleRepl": false,
 	// Terminal integrado
 	"terminal.integrated.env.windows": {
@@ -150,7 +156,12 @@
 		".mypy_cache": true,
 		".ruff_cache": true,
 		"htmlcov": false,
-		".coverage": false
+		".coverage": false,
+		"**/test_*.ps1": true,
+		"**/*_test.ps1": true,
+		"**/*_backup.ps1": true,
+		"**/*_old.ps1": true,
+		"**/*_temp.ps1": true
 	},
 	// Configuración de búsqueda
 	"search.exclude": {
@@ -159,7 +170,12 @@
 		".pytest_cache": true,
 		".mypy_cache": true,
 		".ruff_cache": true,
-		"htmlcov": true
+		"htmlcov": true,
+		"**/test_*.ps1": true,
+		"**/*_test.ps1": true,
+		"**/*_backup.ps1": true,
+		"**/*_old.ps1": true,
+		"**/*_temp.ps1": true
 	},
 	// Asociaciones de archivos
 	"files.associations": {
