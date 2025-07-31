@@ -9,8 +9,8 @@ from typing import Tuple
 
 import pygame
 
-from .sky_renderer import SkyRenderer
 from .heat_shimmer_effects import HeatShimmerEffects
+from .sky_renderer import SkyRenderer
 from .wind_effects import WindEffects
 
 
