@@ -11,6 +11,14 @@
 - **Sin efectos secundarios**: Preserva pestañas pinned, configuración VS Code
 - **Validación integrada**: Script de prueba disponible para verificar funcionalidad
 
+### 🔒 **Sistema de Cierre de Sesión** (NUEVO - CRÍTICO)
+- **Activación automática**: Cuando usuario indique cierre de sesión ("cerrar sesión", "terminar trabajo", "shutdown", etc.)
+- **Comando**: `.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "shutdown" -Force`
+- **Funcionalidad**: Cierre agresivo VS Code + eliminación archivos no rastreados + limpieza completa
+- **Problema resuelto**: Evita reapertura de pestañas no deseadas y regeneración de archivos eliminados
+- **Documentación completa**: `docs/SISTEMA_CIERRE_SESION.md`
+- **Validado**: ✅ 31 Julio 2025 - Funcional completamente
+
 ### Script de Limpieza Completa (NUEVO - RECOMENDADO)
 - **Script principal**: `.\dev-tools\scripts\comprehensive_cleanup.ps1`
 - **Script de prueba**: `.\dev-tools\scripts\test_comprehensive_cleanup.ps1`

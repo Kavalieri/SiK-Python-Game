@@ -8,6 +8,16 @@
 .\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "complete" -Force
 ```
 
+### 🔒 **CIERRE DE SESIÓN AUTOMÁTICO**
+**ACTIVAR SIEMPRE cuando el usuario indique cierre de sesión**
+**Palabras clave**: "cerrar sesión", "terminar trabajo", "cerrar proyecto", "shutdown", "finalizar", "terminar sesión", "cerrar todo"
+```powershell
+# Script de cierre completo y agresivo (SIN confirmación adicional)
+.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "shutdown" -Force
+```
+**RESULTADO**: VS Code se cierra completamente, elimina archivos no rastreados, limpieza total del workspace
+**DOCUMENTACIÓN**: Ver `docs/SISTEMA_CIERRE_SESION.md` para detalles completos
+
 ### 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS** GitHub Copilot - SiK Python Game---
 
 **Base fundamental del proyecto. Mantener actualizado siempre.**
