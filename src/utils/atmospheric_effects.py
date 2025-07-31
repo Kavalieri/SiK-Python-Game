@@ -5,8 +5,9 @@ Fachada refactorizada que integra SkyRenderer + HeatShimmerEffects + WindEffects
 Archivo optimizado de 249→142 líneas manteniendo 100% compatibilidad.
 """
 
-import pygame
 from typing import Tuple
+
+import pygame
 
 from .sky_renderer import SkyRenderer
 from .heat_shimmer_effects import HeatShimmerEffects

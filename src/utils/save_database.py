@@ -56,7 +56,11 @@ class SaveDatabase:
                 "estado_juego": json.dumps(encrypted_package, ensure_ascii=False),
                 "actualizado_en": datetime.now().isoformat(),
             }
-            query = "INSERT OR REPLACE INTO partidas_guardadas (slot, nombre_jugador, descripcion, nivel_actual, puntuacion, vidas, tiempo_jugado, personaje, estado_juego, actualizado_en, creado_en) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, COALESCE((SELECT creado_en FROM partidas_guardadas WHERE slot = ?), ?))"
+            query = """INSERT OR REPLACE INTO partidas_guardadas
+                (slot, nombre_jugador, descripcion, nivel_actual, puntuacion, vidas,
+                 tiempo_jugado, personaje, estado_juego, actualizado_en, creado_en)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                        COALESCE((SELECT creado_en FROM partidas_guardadas WHERE slot = ?), ?))"""
             params = (
                 save_data["slot"],
                 save_data["nombre_jugador"],

@@ -68,9 +68,9 @@ class MainMenuScene(Scene):
         """
         self.logger.debug("[MainMenuScene] Evento recibido: %s - %s", event.type, event)
         # Procesar eventos de menú aquí
-        if event.type == pg_constants.KEYDOWN:
+        if event.type == pg_constants.KEYDOWN:  # pylint: disable=c-extension-no-member
             self.logger.info("[MainMenuScene] Tecla pulsada: %s", event.key)
-        elif event.type == pg_constants.MOUSEBUTTONDOWN:
+        elif event.type == pg_constants.MOUSEBUTTONDOWN:  # pylint: disable=c-extension-no-member
             self.logger.info(
                 "[MainMenuScene] Click ratón: %s en %s", event.button, event.pos
             )

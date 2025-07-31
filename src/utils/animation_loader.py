@@ -45,7 +45,7 @@ class AnimationLoader:
 
     def load_character_animations(self, character_name: str) -> Dict[str, Dict]:
         """
-        Carga todas las animaciones disponibles para un personaje usando la configuración centralizada.
+        Carga todas las animaciones disponibles para un personaje usando configuración centralizada.
 
         Args:
             character_name: Nombre del personaje

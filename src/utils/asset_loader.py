@@ -107,7 +107,8 @@ class AssetLoader:
         final_width = int(width * scale)
         final_height = int(height * scale)
         placeholder = pygame.Surface(
-            (final_width, final_height), flags=pygame.constants.SRCALPHA
+            (final_width, final_height),
+            flags=pygame.constants.SRCALPHA,  # pylint: disable=c-extension-no-member
         )
         placeholder.fill((255, 0, 255, 128))  # Magenta semi-transparente
         return placeholder

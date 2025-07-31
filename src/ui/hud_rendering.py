@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING, Dict, Optional
 
 import pygame
 
+from .hud_elements import HUDEffectUtils
+
 if TYPE_CHECKING:
     from ..core.game_state import GameState
     from .hud_elements import HUDConfiguration, HUDElement
@@ -170,8 +172,6 @@ class HUDRenderer:
         y_offset = 130
         for effect_type, remaining_time in active_effects.items():
             if remaining_time > 0:
-                from .hud_elements import HUDEffectUtils
-
                 effect_name = HUDEffectUtils.get_effect_name(effect_type)
                 time_text = f"{effect_name}: {remaining_time:.1f}s"
 

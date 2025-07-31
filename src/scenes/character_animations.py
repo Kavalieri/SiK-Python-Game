@@ -13,6 +13,7 @@ from typing import Dict, Optional
 import pygame
 
 from src.utils.asset_manager import AssetManager
+
 from .character_data import CharacterData
 
 

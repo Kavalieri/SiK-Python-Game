@@ -103,7 +103,7 @@ class LoadingSceneCore(Scene):
                 return config
         except FileNotFoundError:
             self.logger.warning(
-                "Archivo de configuración de pantalla de carga no encontrado. Usando valores por defecto."
+                "Archivo de configuración de carga no encontrado. Usando valores por defecto."
             )
         except json.JSONDecodeError as e:
             self.logger.error("Error al decodificar JSON: %s", e)

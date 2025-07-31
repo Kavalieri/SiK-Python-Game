@@ -50,7 +50,7 @@ class GameSceneWaves:
             self.scene.enemies.append(enemy)
             self.scene.enemies_spawned_this_wave += 1
             self.scene.logger.debug(
-                f"Enemigo {enemy_config.name} generado en ({x}, {y}) - Oleada {self.scene.wave_number}"
+                f"Enemigo {enemy_config.name} en ({x}, {y}) - Oleada {self.scene.wave_number}"
             )
         except (ValueError, AttributeError) as e:
             self.scene.logger.error(f"Error al generar enemigo: {e}")
