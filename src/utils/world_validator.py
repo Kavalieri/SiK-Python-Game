@@ -96,8 +96,8 @@ class WorldValidator:
 
             return element
 
-        except Exception as e:
-            self.logger.warning(f"No se pudo cargar sprite {sprite_filename}: {e}")
+        except (FileNotFoundError, AttributeError, ValueError) as e:
+            self.logger.warning("No se pudo cargar sprite %s: %s", sprite_filename, e)
             # Fallback: crear elemento básico
             tile_type = random.choice(list(TileType))
             return Tile(x, y, tile_type)
