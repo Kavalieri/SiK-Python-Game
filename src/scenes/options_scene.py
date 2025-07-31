@@ -72,8 +72,8 @@ class OptionsScene(Scene):
             bool: True si el evento fue manejado, False en caso contrario.
         """
         self.menu_manager.update([event])
-        if event.type == pygame.constants.KEYDOWN:
-            if event.key == pygame.constants.K_ESCAPE:
+        if event.type == pygame.constants.KEYDOWN:  # pylint: disable=c-extension-no-member
+            if event.key == pygame.constants.K_ESCAPE:  # pylint: disable=c-extension-no-member
                 self.logger.info(
                     "[OptionsScene] ESC presionado - volviendo al menú principal"
                 )
