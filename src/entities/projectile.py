@@ -7,9 +7,10 @@ Fecha: 2024
 Descripción: Clase para los proyectiles disparados por el jugador.
 """
 
-import pygame
-import math
 import logging
+import math
+
+import pygame
 
 from .entity import Entity, EntityType, EntityStats
 from ..utils.config_manager import ConfigManager
@@ -74,7 +75,7 @@ class Projectile(Entity):
         self._setup_sprite()
 
         self.logger.debug(
-            f"Proyectil creado en ({x}, {y}) hacia ({target_x}, {target_y})"
+            "Proyectil creado en (%s, %s) hacia (%s, %s)", x, y, target_x, target_y
         )
 
     def _setup_sprite(self):
@@ -84,7 +85,7 @@ class Projectile(Entity):
             sprite_path = "assets/objects/proyectiles/Explosion_1.png"
             self.sprite = pygame.image.load(sprite_path).convert_alpha()
             self.sprite = pygame.transform.scale(self.sprite, (self.width, self.height))
-        except Exception:
+        except (FileNotFoundError, OSError, ValueError):
             # Crear sprite por defecto
             self.sprite = pygame.Surface((self.width, self.height))
             self.sprite.fill((255, 255, 0))  # Amarillo para proyectiles
