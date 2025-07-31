@@ -6,6 +6,37 @@
 
 ---
 
+## 🔧 **ERRORES RESUELTOS EN projectile_system_fixed.py**
+
+### **Error: Import Error - Unable to import 'src.managers.powerup_manager'**
+- **Archivo**: `src/entities/projectile_system_fixed.py`
+- **Línea**: 6
+- **Código de Error**: `import-error`
+- **Descripción**: `Unable to import 'src.managers.powerup_manager'`
+
+#### **Problema Original**:
+```python
+from ..managers.powerup_manager import PowerupType  # ❌ Ruta incorrecta
+```
+
+#### **Solución Aplicada**:
+```python
+from ..entities.powerup import PowerupType  # ✅ Ruta corregida
+```
+
+#### **Explicación**:
+- **Causa**: Import desde una ruta que no existe o no contiene PowerupType
+- **Investigación**: PowerupType está definido en `src/entities/powerup.py`
+- **Solución**: Cambiar el import a la ruta correcta
+- **Resultado**: Archivo sin errores de Pylance
+
+#### **Limpieza de Archivos Duplicados**:
+- **Acción**: Archivos `projectile_system_fixed.py` y `projectile_system_compact.py` movidos a `archivo_projectile_cleanup/`
+- **Motivo**: Archivos redundantes, `projectile_system.py` es la versión funcional principal
+- **Documentación**: README.md creado en el directorio de archivo para referencias futuras
+
+---
+
 ## 🔧 **ERRORES RESUELTOS EN powerup_new.py**
 
 ### **Error 1: Cannot access attribute "debug"**
@@ -130,9 +161,29 @@ get_errors(["ruta/al/archivo.py"])
 - `src/entities/player_movement.py` ✅
 - `src/entities/player_stats.py` ✅
 - `src/entities/entity_types.py` ✅
+- `src/entities/projectile_system.py` ✅
 
 ### **Prevención de Errores Futuros**:
 - **Phantom Files**: Scripts en `dev-tools/scripts/prevent_phantom_files.ps1`
+- **Archivos Duplicados**: Usar directorio `archivo_*_cleanup/` para archivos redundantes
+- **Import Errors**: Verificar rutas de import con estructura actual del proyecto
+
+---
+
+## 📁 **GESTIÓN DE ARCHIVOS DUPLICADOS**
+
+### **Estrategia de Limpieza**:
+1. **Identificar**: Usar `file_search` y `grep_search` para encontrar duplicados
+2. **Analizar**: Comparar funcionalidad y uso real en el proyecto
+3. **Archivar**: Mover archivos redundantes a `archivo_[modulo]_cleanup/`
+4. **Documentar**: Crear README.md en directorio de archivo
+5. **Verificar**: Confirmar que el sistema sigue funcionando
+
+### **Criterios de Archivo**:
+- ✅ **Archivar**: Archivos con errores no críticos y funcionalidad duplicada
+- ✅ **Archivar**: Archivos vacíos o incompletos
+- ❌ **Mantener**: Archivos importados por otros módulos activos
+- ❌ **Mantener**: Archivos con funcionalidad única
 - **Cache Issues**: Configuración VS Code aplicada
 - **Git Integration**: Configurado autofetch y prune
 
