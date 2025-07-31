@@ -12,7 +12,7 @@ import time
 from typing import List
 
 from ..entities.projectile import Projectile
-from ..managers.powerup_manager import PowerupType
+from ..entities.powerup import PowerupType
 from ..utils.config_manager import ConfigManager
 
 
