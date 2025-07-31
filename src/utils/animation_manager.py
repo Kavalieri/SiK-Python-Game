@@ -92,11 +92,22 @@ class IntelligentAnimationManager:
 
     def update_character_animation(self, character_name: str, delta_time: float):
         """Método de compatibilidad - la actualización es automática en AnimationPlayer."""
-        pass
+        # Los AnimationPlayer se actualizan automáticamente, este método se mantiene por compatibilidad
+        _ = delta_time  # Argumento mantenido por compatibilidad de API
+        self.logger.debug(
+            "update_character_animation llamado para %s (automático)", character_name
+        )
 
     def set_animation_state(self, character_name: str, animation_state: str):
         """Método de compatibilidad - usar create_animation_player o player.set_animation."""
-        pass
+        # Implementación básica de compatibilidad que busca o crea un player
+        player_key = f"{character_name}_{animation_state}"
+        if player_key in self.active_players:
+            self.active_players[player_key].set_animation(animation_state)
+        else:
+            self.logger.warning(
+                "Player no encontrado para %s_%s", character_name, animation_state
+            )
 
     # ============================================================================
     # MÉTODOS DE GESTIÓN Y UTILIDAD
