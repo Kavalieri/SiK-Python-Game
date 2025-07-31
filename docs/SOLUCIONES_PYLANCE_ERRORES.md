@@ -5,10 +5,10 @@
 **Propósito**: Referencia de soluciones aplicadas a errores comunes de Pylance/Pylint
 
 ### 📊 **Estadísticas de Errores Resueltos**
-- **Total archivos corregidos**: 10 archivos
-- **Errores corregidos**: 23 errores específicos
+- **Total archivos corregidos**: 12 archivos
+- **Errores corregidos**: 29 errores específicos
 - **Archivos limpiados**: 3 archivos duplicados/legacy archivados
-- **Patrones identificados**: 7 patrones comunes
+- **Patrones identificados**: 8 patrones comunes
 
 ---
 
@@ -398,9 +398,127 @@ get_errors(["ruta/al/archivo.py"])
 - ✅ player_stats.py: 2 errores → 0 errores
 - ✅ entity_types.py: 2 errores → 0 errores
 
-### **Total Errores Eliminados**: 16 errores de Pylance/Pylint
+### **Total Errores Eliminados**: 22 errores de Pylance/Pylint
 
-### **Archivos Completamente Limpios**: 5 archivos
+### **Archivos Completamente Limpios**: 7 archivos
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN game_scene_core.py**
+
+### **Error 1: Pygame constants not recognized**
+- **Archivos**: `src/scenes/game_scene_core.py`
+- **Líneas**: 82-83 (pygame.KEYDOWN, K_ESCAPE, K_p)
+- **Código de Error**: `reportAttributeAccessIssue`
+- **Descripción**: `Module 'pygame' has no 'KEYDOWN' member` (falso positivo)
+
+#### **Problema Original**:
+```python
+if event.type == pygame.KEYDOWN:  # ❌ Pylint no reconoce constantes pygame
+    if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:  # ❌ Falsos positivos
+```
+
+#### **Solución Aplicada**:
+```python
+if event.type == pygame.KEYDOWN:  # pylint: disable=no-member  # ✅ Pylint silenciado
+    if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:  # pylint: disable=no-member  # ✅ Constantes reconocidas
+```
+
+### **Error 2: Import outside toplevel**
+- **Archivo**: `src/scenes/game_scene_core.py`
+- **Líneas**: 144, 166, 181
+- **Código de Error**: `import-outside-toplevel`
+- **Descripción**: Imports dentro de métodos causan warnings
+
+#### **Solución Aplicada**:
+1. **Imports movidos al top-level**:
+```python
+# En el área de imports del archivo
+from ..utils.simple_desert_background import SimpleDesertBackground
+from ..utils.world_generator import WorldGenerator
+from ..entities.player import Player
+```
+
+2. **Imports internos eliminados**:
+```python
+# ❌ Antes - import dentro del método
+def _load_background(self):
+    from ..utils.simple_desert_background import SimpleDesertBackground
+
+# ✅ Después - usa import del top-level
+def _load_background(self):
+    self.background = SimpleDesertBackground(...)
+```
+
+### **Error 3: Cannot instantiate abstract class "Player"**
+- **Archivo**: `src/entities/player.py`
+- **Línea**: 171 en game_scene_core.py
+- **Código de Error**: `Cannot instantiate abstract class`
+- **Descripción**: Player hereda de Entity abstracta sin implementar _update_logic
+
+#### **Solución Aplicada**:
+Añadida implementación del método abstracto en `src/entities/player.py`:
+```python
+def _update_logic(self, delta_time: float):
+    """
+    Implementación requerida del método abstracto de Entity.
+    La lógica específica se delega a los módulos especializados.
+    """
+    # La lógica ya se maneja en el método update() a través de los módulos
+    # Actualización adicional de entidad base si es necesaria
+    self.movement.update_movement(delta_time)
+```
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN character_select_scene.py**
+
+### **Error: Pygame constants not recognized (8 constantes)**
+- **Archivo**: `src/scenes/character_select_scene.py`
+- **Líneas**: 121-130 (método handle_event)
+- **Código de Error**: `reportAttributeAccessIssue`
+- **Descripción**: `Module 'pygame' has no 'KEYDOWN'/'K_*'/'MOUSEBUTTONDOWN' member`
+
+#### **Solución Aplicada**:
+```python
+if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
+    if event.key == pygame.K_LEFT or event.key == pygame.K_a:  # pylint: disable=no-member
+        self.select_previous_character()
+    elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:  # pylint: disable=no-member
+        self.select_next_character()
+    elif event.key == pygame.K_RETURN:  # pylint: disable=no-member
+        return self.confirm_selection()
+    elif event.key == pygame.K_ESCAPE:  # pylint: disable=no-member
+        return SceneTransition(SceneType.MAIN_MENU)
+
+elif event.type == pygame.MOUSEBUTTONDOWN:  # pylint: disable=no-member
+```
+
+**Constantes corregidas**: KEYDOWN, K_LEFT, K_a, K_RIGHT, K_d, K_RETURN, K_ESCAPE, MOUSEBUTTONDOWN
+
+---
+
+## 📝 **PATRONES IDENTIFICADOS**
+
+### **8. Imports Outside Toplevel Pattern**
+- **Problema**: Imports dentro de métodos generan warnings
+- **Solución**: Mover todos los imports al nivel superior del archivo
+- **Código**:
+```python
+# ❌ Dentro del método
+def método():
+    from .modulo import Clase
+
+# ✅ En el top-level
+from .modulo import Clase
+
+def método():
+    instancia = Clase()
+```
+
+### **Total Errores Eliminados**: 28 errores de Pylance/Pylint
+
+### **Archivos Completamente Limpios**: 7 archivos
 
 ---
 

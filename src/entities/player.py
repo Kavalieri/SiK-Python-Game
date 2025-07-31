@@ -190,3 +190,12 @@ class Player(Entity):
         self.core.x, self.core.y = self.x, self.y
         # Actualizar lógica base
         super().update(delta_time)
+
+    def _update_logic(self, delta_time: float):
+        """
+        Implementación requerida del método abstracto de Entity.
+        La lógica específica se delega a los módulos especializados.
+        """
+        # La lógica ya se maneja en el método update() a través de los módulos
+        # Actualización adicional de entidad base si es necesaria
+        self.movement.update_movement(delta_time)

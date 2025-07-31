@@ -118,16 +118,16 @@ class CharacterSelectScene(Scene):
 
     def handle_event(self, event):
         """Maneja eventos de la escena."""
-        if event.type == pygame.KEYDOWN:
-            if event.key in [pygame.K_LEFT, pygame.K_a]:
+        if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
+            if event.key in [pygame.K_LEFT, pygame.K_a]:  # pylint: disable=no-member
                 self._navigate_character(-1)
-            elif event.key in [pygame.K_RIGHT, pygame.K_d]:
+            elif event.key in [pygame.K_RIGHT, pygame.K_d]:  # pylint: disable=no-member
                 self._navigate_character(1)
-            elif event.key == pygame.K_RETURN:
+            elif event.key == pygame.K_RETURN:  # pylint: disable=no-member
                 self._on_start_clicked()
-            elif event.key == pygame.K_ESCAPE:
+            elif event.key == pygame.K_ESCAPE:  # pylint: disable=no-member
                 self._on_back_clicked()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # pylint: disable=no-member
             if event.button == 1:
                 self._handle_click(event.pos)
 

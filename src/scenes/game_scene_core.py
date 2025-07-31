@@ -15,6 +15,9 @@ from ..utils.asset_manager import AssetManager
 from ..utils.camera import Camera
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
+from ..utils.simple_desert_background import SimpleDesertBackground
+from ..utils.world_generator import WorldGenerator
+from ..entities.player import Player
 from .game_scene_collisions import GameSceneCollisions
 from .game_scene_powerups import GameScenePowerups
 from .game_scene_render import GameSceneRender
@@ -79,8 +82,8 @@ class GameScene(Scene):
     def handle_event(self, event: pygame.event.Event):
         """Maneja eventos de entrada del usuario."""
         self.logger.info("[GameScene] Evento recibido: %s - %s", event.type, event)
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
+        if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:  # pylint: disable=no-member
                 self.logger.info("Juego pausado")
                 if hasattr(self, "scene_manager") and self.scene_manager:
                     try:
@@ -141,8 +144,6 @@ class GameScene(Scene):
 
     def _load_background(self):
         try:
-            from ..utils.simple_desert_background import SimpleDesertBackground
-
             self.background = SimpleDesertBackground(
                 screen_width=self.screen.get_width(),
                 screen_height=self.screen.get_height(),
@@ -163,8 +164,6 @@ class GameScene(Scene):
                 sprite_path = f"assets/characters/used/{character_key}/Idle"
             if not os.path.exists(sprite_path):
                 raise FileNotFoundError(f"Sprites no encontrados en {sprite_path}")
-            from ..entities.player import Player
-
             self.player = Player(
                 player_x, player_y, character_key, self.config, self.animation_manager
             )
@@ -178,8 +177,6 @@ class GameScene(Scene):
                 self.screen.get_width() * 4,
                 self.screen.get_height() * 4,
             )
-            from ..utils.world_generator import WorldGenerator
-
             world_generator = WorldGenerator(
                 world_width=world_width,
                 world_height=world_height,
