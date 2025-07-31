@@ -29,7 +29,7 @@ class LoadingScene:
         config: ConfigManager,
         game_state,
         save_manager,
-        on_loading_complete: Callable = None,
+        on_loading_complete: Callable | None = None,
     ):
         """
         Inicializa la escena de carga.
