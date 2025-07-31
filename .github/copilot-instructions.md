@@ -1,4 +1,14 @@
-# Instrucciones para GitHub Copilot - SiK Python Game---
+# Instruccion### 🚨 **FLUJO POST-OPERACIÓN OBLIGATORIO**
+**Ejecutar SIEMPRE tras**: commits, pruebas, errores, objetivos completados
+```powershell
+# Script completo de limpieza (reemplaza vscode_cleanup_sendkeys.ps1)
+.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "light"
+
+# Para limpieza completa antes de cierre de proyecto:
+.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "complete" -Force
+```
+
+### 🎯 **DIRECTRICES CRÍTICAS INMEDIATAS** GitHub Copilot - SiK Python Game---
 
 **Base fundamental del proyecto. Mantener actualizado siempre.**
 

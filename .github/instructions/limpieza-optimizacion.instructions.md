@@ -1,23 +1,39 @@
 # Limpieza y Optimización
 
+# Limpieza y Optimización
+
 ## 🧹 **Limpieza Post-Operación**
-**RECORDATORIO**: Usar `.\dev-tools\scripts\vscode_cleanup_sendkeys.ps1 -Level "light"` tras operaciones importantes.
+**ACTUALIZADO**: Usar `.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "light"` tras operaciones importantes.
 
-- **Método validado**: SendKeys (Ctrl+K U) preserva pestañas pinned
-- **Libera**: 272+ MB caché VS Code comprobados
-- **Sin efectos secundarios**: No cambia tamaño ventana
+- **Script mejorado**: comprehensive_cleanup.ps1 (reemplaza vscode_cleanup_sendkeys.ps1)
+- **Limpieza completa**: Python caches, VS Code, herramientas dev, logs, git optimization
+- **4 niveles**: light (diario), deep (semanal), complete (mensual), shutdown (cierre proyecto)
+- **Sin efectos secundarios**: Preserva pestañas pinned, configuración VS Code
+- **Validación integrada**: Script de prueba disponible para verificar funcionalidad
 
-### Optimización de Entorno de Trabajo (NUEVO - RECOMENDADO)
-- **Script de limpieza**: `.\dev-tools\scripts\workspace_cleanup.ps1` para optimizar VS Code y caché
-- **Configuración automática**: `.\dev-tools\scripts\setup_auto_cleanup.ps1` para integrar limpieza
-- **Niveles de limpieza**: light (diario), deep (semanal), complete (mensual)
-- **Capacidades VS Code**: Cierre automático de pestañas con comandos workbench
-- **Limpieza de caché**: Python (__pycache__), Poetry, Git, VS Code workspaceStorage
-- **Optimización memoria**: Garbage collection .NET y análisis de uso de memoria
-- **Integración commits**: Limpieza automática después de commits exitosos
-- **Atajos de teclado**: Ctrl+K Ctrl+L (light), Ctrl+K Ctrl+T (tabs), Ctrl+K Ctrl+D (deep)
-- **Documentación**: `docs/OPTIMIZACION_ENTORNO_TRABAJO.md` con guía completa
-- **Uso recomendado**: `.\dev-tools\scripts\workspace_cleanup.ps1 -Level "light"` después de cada commit
+### Script de Limpieza Completa (NUEVO - RECOMENDADO)
+- **Script principal**: `.\dev-tools\scripts\comprehensive_cleanup.ps1`
+- **Script de prueba**: `.\dev-tools\scripts\test_comprehensive_cleanup.ps1`
+- **Niveles disponibles**:
+  - `light`: Cachés Python y herramientas básicas
+  - `deep`: + VS Code caches y archivos temporales
+  - `complete`: + optimización Git y logs antiguos
+  - `shutdown`: + cierre completo VS Code (para cierre proyecto)
+- **Uso diario**: `.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "light"`
+- **Uso forzado**: `.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "complete" -Force`
+- **Pre-shutdown**: `.\dev-tools\scripts\comprehensive_cleanup.ps1 -Level "shutdown" -PreShutdown`
+- **Validación**: `.\dev-tools\scripts\test_comprehensive_cleanup.ps1 -Mode test`
+
+### Capacidades del Script Completo
+- **Limpieza Python**: __pycache__, .pytest_cache recursivos
+- **Herramientas dev**: .mypy_cache, .ruff_cache, .coverage, htmlcov
+- **VS Code**: .vscode\workspaceStorage, .vscode\logs
+- **Archivos temporales**: *.tmp, *.temp, *~, .DS_Store, Thumbs.db
+- **Optimización Git**: gc --prune, reflog expire
+- **Logs del proyecto**: Rotación automática (mantiene últimos 5)
+- **Integración SendKeys**: Usa vscode_cleanup_sendkeys.ps1 si VS Code está abierto
+- **Logging completo**: logs/cleanup_TIMESTAMP.log para auditoría
+- **Resumen final**: Estado post-limpieza y validaciones
 
 ### Configuración Terminal VS Code (CRÍTICO)
 - **Terminal optimizado**: Ver `docs/CONFIGURACION_TERMINAL_OPTIMIZADA.md` para configuración completa

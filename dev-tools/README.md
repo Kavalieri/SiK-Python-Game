@@ -44,6 +44,8 @@ Conjunto comple### � coverage/ - Reportes de Cobertura
 - `terminal_safe_commit.ps1` - Commit compatible con terminal
 
 **Limpieza y Mantenimiento:**
+- `comprehensive_cleanup.ps1` - **NUEVO**: Script completo de limpieza (4 niveles)
+- `test_comprehensive_cleanup.ps1` - **NUEVO**: Validación del script de limpieza
 - `workspace_cleanup.ps1` - Limpieza de VS Code y caché
 - `vscode_cleanup_sendkeys.ps1` - Cierre automático de pestañas
 - `cleanup_project_v2.py` - Limpieza completa del proyecto
