@@ -136,6 +136,8 @@ class Player(Entity):
 
         # Crear objeto con atributos x e y para compatibilidad
         class VelocityVector:
+            """Vector de velocidad con atributos x e y para compatibilidad."""
+
             def __init__(self, x, y):
                 self.x, self.y = x, y
 

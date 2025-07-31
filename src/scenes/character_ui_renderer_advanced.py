@@ -39,7 +39,7 @@ class CharacterUIRendererAdvanced:
             # Estadísticas
             current_y = y + 25
             for stat_name, stat_value in stats.items():
-                stat_text = "%s: %s" % (stat_name.title(), stat_value)
+                stat_text = f"{stat_name.title()}: {stat_value}"
                 stat_surface = self.fonts["small"].render(
                     stat_text, True, self.colors["text_primary"]
                 )
@@ -76,7 +76,7 @@ class CharacterUIRendererAdvanced:
                     else skill.get("name", "Desconocida")
                 )
                 skill_surface = self.fonts["small"].render(
-                    "• %s" % skill_name, True, self.colors["text_primary"]
+                    f"• {skill_name}", True, self.colors["text_primary"]
                 )
                 screen.blit(skill_surface, (x, current_y))
                 current_y += 18

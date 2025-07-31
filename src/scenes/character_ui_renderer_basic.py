@@ -64,7 +64,7 @@ class CharacterUIRendererBasic:
         try:
             char_data = CharacterData.get_character_data(character_key)
             if char_data is None:
-                raise KeyError("No data found for character: %s" % character_key)
+                raise KeyError(f"No data found for character: {character_key}")
             image_path = char_data.get("image_path")
             if image_path:
                 image = pygame.image.load(image_path)
@@ -88,7 +88,7 @@ class CharacterUIRendererBasic:
         try:
             char_data = CharacterData.get_character_data(character_key)
             if char_data is None:
-                raise KeyError("No data found for character: %s" % character_key)
+                raise KeyError(f"No data found for character: {character_key}")
             name = char_data.get("name", character_key.title())
         except (KeyError, AttributeError):
             name = character_key.title()

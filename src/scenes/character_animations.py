@@ -13,6 +13,7 @@ from typing import Dict, Optional
 import pygame
 
 from src.utils.asset_manager import AssetManager
+from .character_data import CharacterData
 
 
 class CharacterAnimations:
@@ -95,8 +96,6 @@ class CharacterAnimations:
         Returns:
             dict: Datos del personaje
         """
-        from .character_data import CharacterData
-
         return CharacterData.get_character_data(character_key) or {}
 
     def _add_placeholder_border(self, surface: pygame.Surface):
