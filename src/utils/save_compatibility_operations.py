@@ -11,6 +11,8 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from .save_compatibility_core import SaveCompatibilityCore
+from .save_compatibility_migration import SaveCompatibilityMigration
+from .save_compatibility_pickle import SaveCompatibilityPickle
 
 
 class SaveCompatibilityOperations:
@@ -43,7 +45,7 @@ class SaveCompatibilityOperations:
             True si se guardó correctamente
         """
         # Intentar SQLite primero si está disponible
-        if self.core.is_sqlite_available():
+        if self.core.is_sqlite_available() and self.core.database is not None:
             try:
                 if self.core.database.save_game_to_database(
                     slot, game_state, additional_data or {}
@@ -58,8 +60,6 @@ class SaveCompatibilityOperations:
                 self.logger.error("Error guardando en SQLite slot %d: %s", slot, e)
 
         # Fallback a sistema pickle tradicional
-        from .save_compatibility_pickle import SaveCompatibilityPickle
-
         pickle_handler = SaveCompatibilityPickle(self.core)
         success = pickle_handler.save_game_pickle(
             slot, game_state, additional_data or {}
@@ -78,7 +78,7 @@ class SaveCompatibilityOperations:
             Datos del juego o None si hay error
         """
         # Intentar SQLite primero si está disponible
-        if self.core.is_sqlite_available():
+        if self.core.is_sqlite_available() and self.core.database is not None:
             try:
                 sqlite_data = self.core.database.load_game_from_database(slot)
                 if sqlite_data:
@@ -101,8 +101,6 @@ class SaveCompatibilityOperations:
 
             # Migrar automáticamente a SQLite si es posible
             if self.core.should_auto_migrate():
-                from .save_compatibility_migration import SaveCompatibilityMigration
-
                 migration_handler = SaveCompatibilityMigration(self.core)
                 if migration_handler.migrate_pickle_to_sqlite(slot, pickle_data):
                     self.logger.info(
@@ -123,7 +121,7 @@ class SaveCompatibilityOperations:
         saves_info = []
 
         # Obtener información de SQLite si está disponible
-        if self.core.is_sqlite_available():
+        if self.core.is_sqlite_available() and self.core.database is not None:
             try:
                 sqlite_saves = self.core.database.get_all_saves_info()
                 saves_info.extend(sqlite_saves)
@@ -168,7 +166,7 @@ class SaveCompatibilityOperations:
         success_pickle = True
 
         # Eliminar de SQLite si está disponible
-        if self.core.is_sqlite_available():
+        if self.core.is_sqlite_available() and self.core.database is not None:
             try:
                 success_sqlite = self.core.database.delete_save_from_database(slot)
                 if success_sqlite:
@@ -180,8 +178,6 @@ class SaveCompatibilityOperations:
                 success_sqlite = False
 
         # Eliminar archivos pickle
-        from .save_compatibility_pickle import SaveCompatibilityPickle
-
         pickle_handler = SaveCompatibilityPickle(self.core)
         success_pickle = pickle_handler.delete_pickle_files(slot)
 

@@ -95,7 +95,8 @@ class SandParticle:
 
         # Crear superficie con alpha
         particle_surface = pygame.Surface(
-            (int(self.size * 2), int(self.size * 2)), pygame.SRCALPHA
+            (int(self.size * 2), int(self.size * 2)),
+            pygame.SRCALPHA,  # pylint: disable=no-member
         )
 
         # Color con alpha

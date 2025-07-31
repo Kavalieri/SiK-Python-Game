@@ -11,6 +11,7 @@ from typing import Dict
 
 import pygame
 import pygame_menu
+from pygame_menu import themes  # Import directo de themes para evitar pylint error
 
 from ..utils.logger import get_logger
 
@@ -38,7 +39,7 @@ class MenuTheme:
 
     def create_default_theme(self):
         """Crea el tema visual por defecto para los menús."""
-        theme = pygame_menu.themes.THEME_DEFAULT.copy()
+        theme = themes.THEME_DEFAULT.copy()
         theme.background_color = (0, 0, 0, 180)
         theme.title_font_color = (255, 255, 255)
         theme.widget_font_color = (255, 255, 255)
@@ -47,7 +48,7 @@ class MenuTheme:
 
     def create_dark_theme(self):
         """Crea tema oscuro alternativo."""
-        theme = pygame_menu.themes.THEME_DARK.copy()
+        theme = themes.THEME_DARK.copy()
         theme.background_color = (20, 20, 30, 200)
         theme.title_font_color = (220, 220, 220)
         theme.widget_font_color = (200, 200, 200)
@@ -56,7 +57,7 @@ class MenuTheme:
 
     def create_game_theme(self):
         """Crea tema personalizado del juego."""
-        theme = pygame_menu.themes.THEME_SOLARIZED.copy()
+        theme = themes.THEME_SOLARIZED.copy()
         theme.background_color = (40, 40, 60, 190)
         theme.title_font_color = (255, 215, 0)  # Dorado
         theme.widget_font_color = (245, 245, 245)
@@ -73,14 +74,14 @@ class MenuTheme:
         Returns:
             Tema solicitado o default si no existe
         """
-        themes = {
+        theme_options = {
             "default": self.create_default_theme,
             "dark": self.create_dark_theme,
             "game": self.create_game_theme,
         }
 
-        if theme_name in themes:
-            return themes[theme_name]()
+        if theme_name in theme_options:
+            return theme_options[theme_name]()
         else:
             self.logger.warning("Tema '%s' no encontrado, usando default", theme_name)
             return self.create_default_theme()

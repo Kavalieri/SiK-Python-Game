@@ -94,7 +94,7 @@ class SaveEncryption:
         try:
             decrypted_data = self.decrypt_data(encrypted_data)
             return original_data == decrypted_data
-        except Exception as e:
+        except (ValueError, TypeError) as e:
             self.logger.error("Error validando integridad de encriptación: %s", e)
             return False
 
@@ -180,11 +180,11 @@ class SaveEncryption:
             return decrypted_data
 
         except KeyError as e:
-            raise ValueError(f"Paquete encriptado inválido - falta campo: {e}")
+            raise ValueError(f"Paquete encriptado inválido - falta campo: {e}") from e
         except Exception as e:
-            raise ValueError(f"Error extrayendo paquete encriptado: {e}")
+            raise ValueError(f"Error extrayendo paquete encriptado: {e}") from e
 
-    def get_encryption_info(self) -> Dict[str, str]:
+    def get_encryption_info(self) -> Dict[str, Any]:
         """
         Obtiene información sobre el sistema de encriptación actual.
 

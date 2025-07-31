@@ -39,7 +39,7 @@ class SaveCompatibilityMigration:
         Returns:
             True si la migración fue exitosa
         """
-        if not self.core.is_sqlite_available():
+        if not self.core.is_sqlite_available() or self.core.database is None:
             self.logger.error("SQLite no disponible para migración")
             return False
 
@@ -106,7 +106,7 @@ class SaveCompatibilityMigration:
         Returns:
             True si la migración es válida
         """
-        if not self.core.is_sqlite_available():
+        if not self.core.is_sqlite_available() or self.core.database is None:
             return False
 
         try:
@@ -156,11 +156,11 @@ class SaveCompatibilityMigration:
             save_files = self.core.loader.load_save_files_info()
             pickle_count = len([s for s in save_files if s["exists"]])
             status["pickle_files_count"] = pickle_count
-        except Exception:
-            self.logger.warning("No se pudo contar archivos pickle")
+        except (OSError, IOError) as e:
+            self.logger.warning("No se pudo contar archivos pickle: %s", e)
 
         # Contar saves en SQLite
-        if self.core.is_sqlite_available():
+        if self.core.is_sqlite_available() and self.core.database is not None:
             try:
                 sqlite_saves = self.core.database.get_all_saves_info()
                 status["sqlite_saves_count"] = len(sqlite_saves)
@@ -174,7 +174,7 @@ class SaveCompatibilityMigration:
                     ):
                         status["pending_migrations"].append(save_info["file_number"])
 
-            except Exception:
-                self.logger.warning("No se pudo contar saves en SQLite")
+            except (ConnectionError, OSError) as e:
+                self.logger.warning("No se pudo contar saves en SQLite: %s", e)
 
         return status

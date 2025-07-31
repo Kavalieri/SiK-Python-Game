@@ -11,9 +11,9 @@ import math
 import time
 from typing import List
 
-from ..entities.projectile import Projectile
-from ..entities.powerup import PowerupType
-from ..utils.config_manager import ConfigManager
+from src.entities.projectile import Projectile
+from src.entities.powerup import PowerupType
+from src.utils.config_manager import ConfigManager
 
 
 class ProjectileSystem:

@@ -8,7 +8,6 @@ Descripción: Escena para seleccionar slots de guardado con gestión de slots ac
 """
 
 import pygame
-import pygame.constants as pg_constants
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -51,14 +50,14 @@ class SlotSelectionScene(Scene):
         self.logger.debug(
             "[SlotSelectionScene] Evento recibido: %s - %s", event.type, event
         )
-        if event.type == pg_constants.KEYDOWN:
+        if event.type == 768:  # pygame.KEYDOWN
             self.logger.info("[SlotSelectionScene] Tecla pulsada: %s", event.key)
-            if event.key == pg_constants.K_ESCAPE:
+            if event.key == 27:  # pygame.K_ESCAPE
                 self.logger.info(
                     "[SlotSelectionScene] ESC presionado - volviendo al menú principal"
                 )
                 self.game_state.scene_manager.change_scene("main_menu")
-        elif event.type == pg_constants.MOUSEBUTTONDOWN:
+        elif event.type == 1025:  # pygame.MOUSEBUTTONDOWN
             self.logger.info(
                 "[SlotSelectionScene] Click ratón: %s en %s", event.button, event.pos
             )

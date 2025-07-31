@@ -46,12 +46,14 @@ class PlayerEffects:
             new_value = max(existing_value, value)
             new_end_time = max(existing_end_time, current_time + duration)
             self.active_effects[effect_type] = (new_end_time, new_value)
-            self.logger.debug(f"Efecto {effect_type} extendido hasta {new_end_time}")
+            self.logger.debug("Efecto %s extendido hasta %s", effect_type, new_end_time)
         else:
             # Nuevo efecto
             end_time = current_time + duration
             self.active_effects[effect_type] = (end_time, value)
-            self.logger.debug(f"Nuevo efecto {effect_type} aplicado hasta {end_time}")
+            self.logger.debug(
+                "Nuevo efecto %s aplicado hasta %s", effect_type, end_time
+            )
 
     def update_effects(self, current_time: float) -> Dict[PowerupType, float]:
         """
@@ -69,7 +71,7 @@ class PlayerEffects:
         for effect_type, (end_time, value) in self.active_effects.items():
             if current_time >= end_time:
                 expired_effects.append(effect_type)
-                self.logger.debug(f"Efecto {effect_type} expirado")
+                self.logger.debug("Efecto %s expirado", effect_type)
             else:
                 active_values[effect_type] = value
 
@@ -174,7 +176,7 @@ class PlayerEffects:
             return "Sin efectos activos"
 
         summary_parts = []
-        for effect_type, (end_time, value) in self.active_effects.items():
+        for effect_type, (end_time, _) in self.active_effects.items():
             remaining_time = max(0.0, end_time - current_time)
             description = self.get_effect_description(effect_type)
             summary_parts.append(f"{description}: {remaining_time:.1f}s")

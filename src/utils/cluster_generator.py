@@ -14,6 +14,7 @@ from typing import List, Optional
 
 from ..entities.tile import Tile, TileType
 from .world_core import WorldCore
+from .world_validator import WorldValidator
 
 
 class ClusterGenerator:
@@ -69,15 +70,16 @@ class ClusterGenerator:
             x, y = self.world_core.clamp_to_world(x, y)
 
             # Crear elemento
-            from .world_validator import WorldValidator
-
             validator = WorldValidator(self.world_core)
             element = validator.create_element_with_sprite(x, y)
             if element:
                 elements.append(element)
 
         self.logger.debug(
-            f"Cluster generado en ({center_x}, {center_y}) con {len(elements)} elementos"
+            "Cluster generado en (%s, %s) con %s elementos",
+            center_x,
+            center_y,
+            len(elements),
         )
         return elements
 
@@ -97,7 +99,7 @@ class ClusterGenerator:
             )
             oasis_elements.extend(cluster_elements)
 
-        self.logger.info(f"Oasis generado con {len(oasis_elements)} elementos")
+        self.logger.info("Oasis generado con %s elementos", len(oasis_elements))
         return oasis_elements
 
     def generate_rock_formation(
@@ -110,7 +112,7 @@ class ClusterGenerator:
             center_x, center_y, radius, num_elements, rock_types
         )
         self.logger.info(
-            f"Formación de rocas generada con {len(rock_elements)} elementos"
+            "Formación de rocas generada con %s elementos", len(rock_elements)
         )
         return rock_elements
 
@@ -124,7 +126,7 @@ class ClusterGenerator:
             center_x, center_y, radius, num_elements, cactus_types
         )
         self.logger.info(
-            f"Campo de cactus generado con {len(cactus_elements)} elementos"
+            "Campo de cactus generado con %s elementos", len(cactus_elements)
         )
         return cactus_elements
 
@@ -137,5 +139,5 @@ class ClusterGenerator:
         ruin_elements = self.generate_cluster(
             center_x, center_y, radius, num_elements, ruin_types
         )
-        self.logger.info(f"Ruinas generadas con {len(ruin_elements)} elementos")
+        self.logger.info("Ruinas generadas con %s elementos", len(ruin_elements))
         return ruin_elements

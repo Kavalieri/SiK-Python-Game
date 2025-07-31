@@ -12,7 +12,7 @@ Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
 import logging
 import shutil
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from .database_manager import DatabaseManager
 from .schema_migrations import SchemaMigrations
@@ -89,7 +89,7 @@ class SchemaCore:
             self._logger.info("✅ Todas las tablas creadas exitosamente")
             return True
 
-        except Exception as e:
+        except (ValueError, RuntimeError, OSError) as e:
             self._logger.error("Error creando tablas: %s", e)
             return False
 
@@ -110,10 +110,10 @@ class SchemaCore:
         Returns:
             Versión del esquema actual o versión por defecto
         """
-        version = self.migrations.get_current_version()
-        return version if version else self.SCHEMA_VERSION
+        version = self.migrations.get_schema_version()
+        return version or self.SCHEMA_VERSION
 
-    def create_backup(self, backup_path: str = None) -> bool:
+    def create_backup(self, backup_path: Optional[str] = None) -> bool:
         """
         Crea backup de la base de datos antes de cambios importantes.
 
@@ -130,7 +130,7 @@ class SchemaCore:
             backup_path = f"saves/backup_db_{timestamp}.db"
 
         try:
-            db_info = self.db_manager.get_database_info()
+            db_info = self.db_manager.get_connection_info()
             source_path = db_info["db_path"]
 
             # Crear directorio de backup si no existe
@@ -143,7 +143,7 @@ class SchemaCore:
             self._logger.info("✅ Backup creado: %s", backup_path)
             return True
 
-        except Exception as e:
+        except (OSError, ValueError, RuntimeError) as e:
             self._logger.error("Error creando backup: %s", e)
             return False
 
@@ -157,7 +157,7 @@ class SchemaCore:
         info = {
             "version": self.get_current_version(),
             "tables_defined": get_table_list(),
-            "database_info": self.db_manager.get_database_info(),
+            "database_info": self.db_manager.get_connection_info(),
             "validation": self.validate_schema(),
         }
 

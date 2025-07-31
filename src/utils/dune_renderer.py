@@ -108,7 +108,7 @@ class DuneRenderer:
 
         # Crear dunas en el fondo
         num_dunes = random.randint(3, 6)
-        for i in range(num_dunes):
+        for _ in range(num_dunes):
             x = random.uniform(-50, self.screen_width - 100)
             y = random.uniform(self.screen_height * 0.6, self.screen_height * 0.9)
             width = random.uniform(150, 300)
@@ -149,7 +149,7 @@ class DuneRenderer:
                 )
 
                 # Crear superficie para el brillo con transparencia
-                highlight_surface = pygame.Surface((20, 5), pygame.SRCALPHA)
+                highlight_surface = pygame.Surface((20, 5), pygame.SRCALPHA)  # pylint: disable=no-member
                 pygame.draw.ellipse(
                     highlight_surface, (*highlight_color, 100), (0, 0, 20, 5)
                 )

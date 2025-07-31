@@ -97,8 +97,9 @@ class ConfigManager:
         self.config[section][key] = value
         self.logger.debug("Configuración actualizada: %s.%s = %s", section, key, value)
 
-        # Guardar también en base de datos
-        self.database.save_config_to_db(section, key, value)
+        # Guardar también en base de datos (si el método está disponible)
+        if hasattr(self.database, "save_config_to_db"):
+            self.database.save_config_to_db(section, key, value)  # type: ignore
 
     def get_section(self, section: str) -> Dict[str, Any]:
         """

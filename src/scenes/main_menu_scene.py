@@ -8,9 +8,10 @@ Descripción: Escena del menú principal del juego.
 """
 
 import logging
+import sys
 
 import pygame
-import pygame.constants as pg_constants
+import pygame.constants as pg_constants  # pylint: disable=no-member
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -131,7 +132,5 @@ class MainMenuScene(Scene):
         self.logger.info("[MainMenuScene] Acción: Salir - cerrando juego")
         self.menu_manager.hide_current_menu()
         pygame.display.quit()
-        pygame.quit()
-        import sys
-
+        pygame.quit()  # pylint: disable=no-member
         sys.exit()

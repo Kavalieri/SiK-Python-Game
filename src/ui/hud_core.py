@@ -76,11 +76,11 @@ class HUDCore:
 
             self.logger.debug("Fuentes del HUD inicializadas")
 
-        except (pygame.error, FileNotFoundError) as e:
+        except (pygame.error, FileNotFoundError) as e:  # pylint: disable=no-member
             self.logger.error("Error inicializando fuentes: %s", e)
             # Fallback a fuente por defecto
             default_font = pygame.font.Font(None, 24)
-            for size_name in self.hud_config.font_sizes.keys():
+            for size_name in self.hud_config.font_sizes:
                 self.fonts[size_name] = default_font
 
     def update(self, delta_time: float):
@@ -158,7 +158,8 @@ class HUDCore:
         debug_info = [
             f"HUD Elements: {len(self.hud_elements)}",
             f"Screen: {self.screen_width}x{self.screen_height}",
-            f"Visible: {sum(1 for e in self.hud_elements.values() if e.visible)}/{len(self.hud_elements)}",
+            f"Visible: {sum(1 for e in self.hud_elements.values() if e.visible)}"
+            f"/{len(self.hud_elements)}",
         ]
 
         y_offset = 5

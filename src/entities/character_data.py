@@ -42,8 +42,8 @@ class CharacterDataManager:
                 db_manager = DatabaseManager()
                 self._config_db = ConfigDatabase(db_manager)
                 self.logger.info("CharacterDataManager inicializado con ConfigDatabase")
-            except Exception as e:
-                self.logger.error(f"Error inicializando CharacterDataManager: {e}")
+            except (ImportError, ValueError, OSError) as e:
+                self.logger.error("Error inicializando CharacterDataManager: %s", e)
                 # Fallback temporal hasta completar migración
                 self._config_db = None
 
@@ -60,8 +60,8 @@ class CharacterDataManager:
         if self._config_db:
             try:
                 return self._config_db.get_character_data(character_name)
-            except Exception as e:
-                self.logger.error(f"Error obteniendo datos de {character_name}: {e}")
+            except (ValueError, KeyError, RuntimeError) as e:
+                self.logger.error("Error obteniendo datos de %s: %s", character_name, e)
                 return None
         else:
             # Fallback temporal con datos hardcodeados
@@ -82,8 +82,8 @@ class CharacterDataManager:
                 return [
                     char_data.get("nombre", "unknown") for char_data in all_chars_data
                 ]
-            except Exception as e:
-                self.logger.error(f"Error obteniendo lista de personajes: {e}")
+            except (ValueError, KeyError, RuntimeError) as e:
+                self.logger.error("Error obteniendo lista de personajes: %s", e)
                 return list(self._get_fallback_data().keys())
         else:
             return list(self._get_fallback_data().keys())

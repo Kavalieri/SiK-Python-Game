@@ -154,7 +154,7 @@ class LoadingSceneRenderer:
             color = (255, 255, 255, alpha)
 
             # Crear superficie con alpha
-            dot_surface = pygame.Surface((8, 8), pygame.SRCALPHA)
+            dot_surface = pygame.Surface((8, 8), 32)  # 32 = SRCALPHA
             pygame.draw.circle(dot_surface, color, (4, 4), 4)
             self.core.screen.blit(dot_surface, (x, y))
 

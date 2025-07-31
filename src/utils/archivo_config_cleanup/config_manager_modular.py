@@ -13,9 +13,9 @@ import logging
 from pathlib import Path
 from typing import Any, Dict
 
-from .config_database import ConfigDatabase
-from .config_loader import ConfigLoader
-from .database_manager import DatabaseManager
+from src.utils.config_database import ConfigDatabase
+from src.utils.config_loader import ConfigLoader
+from src.utils.database_manager import DatabaseManager
 
 
 class ConfigManager:
@@ -76,7 +76,8 @@ class ConfigManager:
         """
         # Intentar desde BD si está disponible
         if self.use_database and self.db_config:
-            db_value = self.db_config.get_config_from_db(section, key)
+            # pylint: disable=no-member
+            db_value = self.db_config.get_config_from_db(section, key)  # type: ignore
             if db_value is not None:
                 return db_value
 
@@ -96,13 +97,15 @@ class ConfigManager:
 
         # Actualizar en BD si está disponible
         if self.use_database and self.db_config:
-            self.db_config.save_config_to_db(section, key, value)
+            # pylint: disable=no-member
+            self.db_config.save_config_to_db(section, key, value)  # type: ignore
 
     def get_section(self, section: str) -> Dict[str, Any]:
         """Obtiene una sección completa con fallback híbrido."""
         # Intentar desde BD si está disponible
         if self.use_database and self.db_config:
-            db_section = self.db_config.get_section_from_db(section)
+            # pylint: disable=no-member
+            db_section = self.db_config.get_section_from_db(section)  # type: ignore
             if db_section:
                 return db_section
 
@@ -120,57 +123,73 @@ class ConfigManager:
     # === MÉTODOS DE COMPATIBILIDAD API ===
 
     def get_music_volume(self) -> float:
+        """Obtiene el volumen de música."""
         return self.get("audio", "music_volume", 0.7)
 
     def get_sfx_volume(self) -> float:
+        """Obtiene el volumen de efectos de sonido."""
         return self.get("audio", "sfx_volume", 0.8)
 
     def get_master_volume(self) -> float:
+        """Obtiene el volumen maestro."""
         return self.get("audio", "master_volume", 1.0)
 
     def get_audio_enabled(self) -> bool:
+        """Obtiene si el audio está habilitado."""
         return self.get("audio", "enabled", True)
 
     def get_audio_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de audio."""
         return self.get_section("audio")
 
     def get_characters_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de personajes."""
         return self.get_section("characters")
 
     def get_enemies_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de enemigos."""
         return self.get_section("enemies")
 
     def get_gameplay_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de gameplay."""
         return self.get_section("gameplay")
 
     def get_powerups_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de powerups."""
         return self.get_section("powerups")
 
     def get_ui_config(self) -> Dict[str, Any]:
+        """Obtiene la configuración completa de UI."""
         return self.get_section("ui")
 
     def get_character_data(self, character_name: str) -> Dict[str, Any]:
+        """Obtiene los datos de un personaje específico."""
         characters = self.get_characters_config().get("characters", {})
         return characters.get(character_name, {})
 
     def get_enemy_data(self, enemy_type: str) -> Dict[str, Any]:
+        """Obtiene los datos de un tipo de enemigo específico."""
         enemies = self.get_enemies_config()
         return enemies.get("tipos_enemigos", {}).get(enemy_type, {})
 
     def get_powerup_data(self, powerup_type: str) -> Dict[str, Any]:
+        """Obtiene los datos de un tipo de powerup específico."""
         powerups = self.get_powerups_config()
         return powerups.get("tipos_powerups", {}).get(powerup_type, {})
 
     def get_resolution(self) -> tuple:
+        """Obtiene la resolución de pantalla configurada."""
         display_config = self.get_section("display")
         resolution = display_config.get("resolución", {})
         return (resolution.get("ancho", 1280), resolution.get("alto", 720))
 
     def get_fps(self) -> int:
+        """Obtiene los FPS configurados."""
         display_config = self.get_section("display")
         return display_config.get("resolución", {}).get("fps", 60)
 
     def get_key_binding(self, action: str) -> str:
+        """Obtiene la tecla asignada a una acción específica."""
         input_config = self.get_section("input")
         keyboard = input_config.get("teclado", {})
         for section in ["movimiento", "acciones", "ataques"]:

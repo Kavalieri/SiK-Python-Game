@@ -8,8 +8,8 @@ Descripción: Escena de pausa del juego.
 """
 
 import sys
+
 import pygame
-import pygame.constants as pg_constants  # pylint: disable=no-member
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -66,13 +66,13 @@ class PauseScene(Scene):
             event: Evento de Pygame a procesar.
         """
         self.logger.info("[PauseScene] Evento recibido: %s - %s", event.type, event)
-        if event.type == pg_constants.KEYDOWN:
+        if event.type == 768:  # pygame.KEYDOWN
             self.logger.info("[PauseScene] Tecla pulsada: %s", event.key)
-        elif event.type == pg_constants.MOUSEBUTTONDOWN:
+        elif event.type == 1025:  # pygame.MOUSEBUTTONDOWN
             self.logger.info(
                 "[PauseScene] Click ratón: %s en %s", event.button, event.pos
             )
-        if event.type == pg_constants.KEYDOWN and event.key == pg_constants.K_ESCAPE:
+        if event.type == 768 and event.key == 27:  # KEYDOWN and K_ESCAPE
             # Reanudar juego con ESC
             self._on_resume_game()
         else:

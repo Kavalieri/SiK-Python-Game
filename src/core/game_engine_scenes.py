@@ -7,6 +7,13 @@ Fecha: 2024
 Descripción: Configuración de escenas del juego y sus transiciones.
 """
 
+from ..scenes.character_select_scene import CharacterSelectScene
+from ..scenes.game_scene_core import GameScene
+from ..scenes.loading_scene import LoadingScene
+from ..scenes.main_menu_scene import MainMenuScene
+from ..scenes.options_scene import OptionsScene
+from ..scenes.pause_scene import PauseScene
+from ..scenes.slot_selection_scene import SlotSelectionScene
 from ..utils.logger import get_logger
 
 
@@ -26,16 +33,11 @@ class GameEngineScenes:
         self.logger = get_logger("SiK_Game")
 
     def setup_scenes(self):
-        """Configura las escenas iniciales del juego y documenta el flujo avanzado de menús y guardado."""
+        """
+        Configura las escenas iniciales del juego y documenta el flujo
+        avanzado de menús y guardado.
+        """
         try:
-            from ..scenes.character_select_scene import CharacterSelectScene
-            from ..scenes.game_scene_core import GameScene
-            from ..scenes.loading_scene import LoadingScene
-            from ..scenes.main_menu_scene import MainMenuScene
-            from ..scenes.options_scene import OptionsScene
-            from ..scenes.pause_scene import PauseScene
-            from ..scenes.slot_selection_scene import SlotSelectionScene
-
             # Crear todas las escenas
             loading_scene = LoadingScene(
                 self.core.screen,
@@ -105,7 +107,10 @@ class GameEngineScenes:
             raise
 
     def setup_scene_transitions(self):
-        """Configura las transiciones entre escenas y documenta la diferenciación de botón Salir y cierre de ventana."""
+        """
+        Configura las transiciones entre escenas y documenta la diferenciación
+        de botón Salir y cierre de ventana.
+        """
         try:
             main_menu_scene = self.core.scene_manager.scenes["main_menu"]
             slot_selection_scene = self.core.scene_manager.scenes["slot_selection"]

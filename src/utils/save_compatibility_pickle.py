@@ -65,7 +65,15 @@ class SaveCompatibilityPickle:
             compressed_data = zlib.compress(serialized_data)
 
             # Cifrar datos
-            encrypted_data = self.core.encryption_handler.encrypt_data(compressed_data)
+            if self.core.encryption_handler is not None:
+                encrypted_data = self.core.encryption_handler.encrypt_data(
+                    compressed_data
+                )
+            else:
+                self.logger.warning(
+                    "No hay handler de encriptación, guardando sin cifrar"
+                )
+                encrypted_data = compressed_data
 
             # Guardar archivo cifrado
             saves_path = Path(self.core.config.get("paths", "saves", "saves"))

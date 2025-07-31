@@ -30,14 +30,17 @@ class Enemy:
     # Propiedades delegadas para compatibilidad
     @property
     def x(self) -> float:
+        """Obtiene la posición X del enemigo."""
         return self.core.x
 
     @property
     def y(self) -> float:
+        """Obtiene la posición Y del enemigo."""
         return self.core.y
 
     @property
     def is_dead(self) -> bool:
+        """Verifica si el enemigo está muerto."""
         return self.core.is_dead
 
     def take_damage(self, damage: int):

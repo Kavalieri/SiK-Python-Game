@@ -130,7 +130,7 @@ class Tile(Entity):
         # Configurar sprite
         self._setup_sprite()
 
-        self.logger.debug(f"Tile {tile_type.value} creado en ({x}, {y})")
+        self.logger.debug("Tile %s creado en (%s, %s)", tile_type.value, x, y)
 
     def _setup_sprite(self):
         """Configura el sprite del tile."""
@@ -148,8 +148,8 @@ class Tile(Entity):
             # Añadir símbolo
             self._add_symbol()
 
-        except Exception as e:
-            self.logger.error(f"Error al crear sprite de tile: {e}")
+        except (OSError, IOError, ValueError) as e:
+            self.logger.error("Error al crear sprite de tile: %s", e)
             # Sprite por defecto
             self.sprite = pygame.Surface((self.width, self.height))
             self.sprite.fill((128, 128, 128))
@@ -164,13 +164,16 @@ class Tile(Entity):
             # Centrar el símbolo
             text_rect = text.get_rect(center=(self.width // 2, self.height // 2))
             self.sprite.blit(text, text_rect)
-        except Exception as e:
-            self.logger.warning(f"No se pudo añadir símbolo al tile: {e}")
+        except (OSError, IOError, ValueError) as e:
+            self.logger.warning("No se pudo añadir símbolo al tile: %s", e)
 
     def _update_logic(self, delta_time: float):
-        """Actualiza la lógica específica del tile."""
-        # Los tiles son estáticos, no necesitan lógica de actualización
-        pass
+        """
+        Actualiza la lógica específica del tile.
+
+        Los tiles son estáticos y no necesitan lógica de actualización.
+        """
+        # Método vacío intencionalmente - tiles son elementos estáticos
 
     def has_collision(self) -> bool:
         """

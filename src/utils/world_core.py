@@ -51,8 +51,10 @@ class WorldCore:
         self.available_sprites = self._load_available_sprites()
 
         self.logger.info(
-            f"WorldCore inicializado: {world_width}x{world_height}, "
-            f"sprites: {len(self.available_sprites)}"
+            "WorldCore inicializado: %sx%s, sprites: %s",
+            world_width,
+            world_height,
+            len(self.available_sprites),
         )
 
     def _load_available_sprites(self) -> List[str]:
@@ -70,11 +72,11 @@ class WorldCore:
                 for filename in os.listdir(elements_path):
                     if filename.lower().endswith((".png", ".jpg", ".jpeg")):
                         sprites.append(filename)
-                self.logger.info(f"Cargados {len(sprites)} sprites de elementos")
+                self.logger.info("Cargados %s sprites de elementos", len(sprites))
             else:
-                self.logger.warning(f"Directorio {elements_path} no encontrado")
-        except Exception as e:
-            self.logger.error(f"Error al cargar sprites: {e}")
+                self.logger.warning("Directorio %s no encontrado", elements_path)
+        except (OSError, IOError, PermissionError) as e:
+            self.logger.error("Error al cargar sprites: %s", e)
 
         return sprites
 

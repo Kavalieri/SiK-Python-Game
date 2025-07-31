@@ -138,7 +138,7 @@ class SchemaManager:
         Returns:
             Diccionario con información de la base de datos
         """
-        return self.db_manager.get_database_info()
+        return self.db_manager.get_connection_info()
 
     def is_schema_initialized(self) -> bool:
         """
@@ -151,7 +151,9 @@ class SchemaManager:
         tables_found = len(validation.get("tables_found", []))
 
         # Verificar que tenemos al menos las 6 tablas principales
-        expected_table_count = 6  # partidas_guardadas, configuraciones, personajes, enemigos, estadisticas_juego, configuracion_gameplay
+        # partidas_guardadas, configuraciones, personajes, enemigos,
+        # estadisticas_juego, configuracion_gameplay
+        expected_table_count = 6
 
         is_initialized = (
             validation["valid"]

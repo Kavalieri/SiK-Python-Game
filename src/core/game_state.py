@@ -9,7 +9,7 @@ Descripción: Gestiona el estado global del juego, puntuaciones, vidas, etc.
 
 import logging
 from enum import Enum
-from typing import Dict, Any
+from typing import Any, Dict, Optional
 
 
 class GameStatus(Enum):
@@ -36,7 +36,7 @@ class GameState:
         self.level = 1
         self.high_score = 0
         self.player_name = "Player"
-        self.selected_character = None
+        self.selected_character: Optional[str] = None
         self.current_player = None  # Referencia al jugador actual para el HUD
         self.scene_manager = None  # Se establecerá desde el GameEngine
 
@@ -67,12 +67,12 @@ class GameState:
         self.score += points
         if self.score > self.high_score:
             self.high_score = self.score
-            self.logger.info(f"Nuevo récord: {self.high_score}")
+            self.logger.info("Nuevo récord: %s", self.high_score)
 
     def lose_life(self):
         """Reduce una vida del jugador."""
         self.lives -= 1
-        self.logger.info(f"Vida perdida. Vidas restantes: {self.lives}")
+        self.logger.info("Vida perdida. Vidas restantes: %s", self.lives)
 
         if self.lives <= 0:
             self.status = GameStatus.GAME_OVER
@@ -81,7 +81,7 @@ class GameState:
     def next_level(self):
         """Avanza al siguiente nivel."""
         self.level += 1
-        self.logger.info(f"Nivel {self.level} iniciado")
+        self.logger.info("Nivel %s iniciado", self.level)
 
     def set_status(self, status: GameStatus):
         """
@@ -91,7 +91,7 @@ class GameState:
                 status: Nuevo estado del juego
         """
         self.status = status
-        self.logger.info(f"Estado del juego cambiado a: {status.value}")
+        self.logger.info("Estado del juego cambiado a: %s", status.value)
 
     def get_state_dict(self) -> Dict[str, Any]:
         """
@@ -118,12 +118,13 @@ class GameState:
         Args:
                 scene_name: Nombre de la escena
         """
-        self.logger.info(f"Cambiando a escena: {scene_name}")
+        self.logger.info("Cambiando a escena: %s", scene_name)
         if self.scene_manager:
             self.scene_manager.change_scene(scene_name)
         else:
             self.logger.warning(
-                f"No se puede cambiar a escena {scene_name}: scene_manager no disponible"
+                "No se puede cambiar a escena %s: scene_manager no disponible",
+                scene_name,
             )
 
     def load_state(self, state_dict: Dict[str, Any]):
