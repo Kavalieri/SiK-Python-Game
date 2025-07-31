@@ -155,6 +155,7 @@ class Entity(ABC):
     def render(
         self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
     ):
+        """Renderiza la entidad en pantalla con offset de cámara."""
         self.rendering_system.render(screen, camera_offset)
 
     def get_data(self) -> Dict[str, Any]:
@@ -181,6 +182,7 @@ class Entity(ABC):
         return data
 
     def load_data(self, data: Dict[str, Any]):
+        """Carga datos desde diccionario para deserialización."""
         self.x = data.get("x", self.x)
         self.y = data.get("y", self.y)
         self.width = data.get("width", self.width)

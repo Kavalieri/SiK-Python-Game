@@ -18,7 +18,7 @@ class AttackConfig:
     def __init__(self, data: Dict[str, Any]):
         self.nombre = data.get("nombre", "")
         self.tipo = data.get("tipo", "melee")
-        self.daño = data.get("daño", 0)
+        self.damage = data.get("daño", 0)  # Mantener compatibilidad con JSON español
         self.alcance = data.get("alcance", 0)
         self.cooldown = data.get("cooldown", 1.0)
         self.animacion = data.get("animacion", "Attack")
