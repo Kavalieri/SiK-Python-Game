@@ -182,11 +182,30 @@ class PlayerCombat:
         Returns:
             Lista de resultados del ataque (proyectiles u otros efectos)
         """
-        # Por ahora, simplemente crear proyectiles
-        # TODO: Implementar lógica específica según el tipo de ataque y enemigos
-        _ = enemies  # Evitar warning de argumento no usado
+        # Implementar lógica específica según el tipo de ataque y enemigos cercanos
         player_pos = (player_core.x, player_core.y)
-        return self.shoot(player_pos, target_pos, current_time)
+
+        # Si hay múltiples enemigos cercanos, crear ataques adicionales
+        if enemies and len(enemies) > 1:
+            # Crear proyectil principal hacia el objetivo
+            main_projectiles = self.shoot(player_pos, target_pos, current_time)
+
+            # Crear proyectiles adicionales hacia enemigos cercanos (máximo 2 adicionales)
+            additional_projectiles = []
+            max_additional = min(2, len(enemies) - 1)
+
+            for enemy in enemies[:max_additional]:
+                if hasattr(enemy, "x") and hasattr(enemy, "y"):
+                    enemy_pos = (enemy.x, enemy.y)
+                    # Reducir daño de proyectiles adicionales
+                    additional_projectiles.extend(
+                        self.shoot(player_pos, enemy_pos, current_time)
+                    )
+
+            return main_projectiles + additional_projectiles
+        else:
+            # Ataque normal hacia la posición objetivo
+            return self.shoot(player_pos, target_pos, current_time)
 
     def get_combat_stats(self) -> dict:
         """
