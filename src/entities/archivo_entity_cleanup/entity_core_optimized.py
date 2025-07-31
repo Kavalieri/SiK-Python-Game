@@ -6,9 +6,9 @@ from typing import Any, Dict, Optional, Tuple
 
 import pygame
 
-from .entity_effects import EntityEffectsSystem
-from .entity_rendering import EntityRenderingSystem
-from .entity_types import EntityState, EntityStats, EntityType
+from src.entities.entity_effects import EntityEffectsSystem
+from src.entities.entity_rendering import EntityRenderingSystem
+from src.entities.entity_types import EntityState, EntityStats, EntityType
 
 
 class Entity(ABC):
@@ -91,7 +91,7 @@ class Entity(ABC):
 
     def move(self, direction: pygame.math.Vector2, speed: Optional[float] = None):
         if speed is None:
-            speed = self.stats.speed
+            speed = self.stats.speed or 0.0
         self.direction = (
             direction.normalize()
             if direction.length() > 0

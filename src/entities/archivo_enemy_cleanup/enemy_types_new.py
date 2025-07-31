@@ -19,8 +19,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from ..utils.config_database import ConfigDatabase
-from ..utils.database_manager import DatabaseManager
+from src.utils.config_database import ConfigDatabase
+from src.utils.database_manager import DatabaseManager
 
 
 class EnemyRarity(Enum):
@@ -82,8 +82,8 @@ class EnemyTypesManager:
                 db_manager = DatabaseManager()
                 self._config_db = ConfigDatabase(db_manager)
                 self.logger.info("EnemyTypesManager inicializado con ConfigDatabase")
-            except Exception as e:
-                self.logger.error(f"Error inicializando EnemyTypesManager: {e}")
+            except (ConnectionError, OSError) as e:
+                self.logger.error("Error inicializando EnemyTypesManager: %s", e)
                 self._config_db = None
 
     def get_enemy_config(self, enemy_type: str) -> Optional[EnemyConfig]:
@@ -102,8 +102,8 @@ class EnemyTypesManager:
                 if enemy_data:
                     return self._convert_to_config(enemy_data)
                 return None
-            except Exception as e:
-                self.logger.error(f"Error obteniendo config de {enemy_type}: {e}")
+            except (ConnectionError, OSError) as e:
+                self.logger.error("Error obteniendo config de %s: %s", enemy_type, e)
                 return self._get_fallback_config(enemy_type)
         else:
             return self._get_fallback_config(enemy_type)
@@ -119,8 +119,8 @@ class EnemyTypesManager:
             try:
                 all_enemies = self._config_db.get_all_enemies()
                 return [enemy.get("tipo", "unknown") for enemy in all_enemies]
-            except Exception as e:
-                self.logger.error(f"Error obteniendo tipos de enemigos: {e}")
+            except (ConnectionError, OSError) as e:
+                self.logger.error("Error obteniendo tipos de enemigos: %s", e)
                 return list(self._get_fallback_data().keys())
         else:
             return list(self._get_fallback_data().keys())
@@ -167,7 +167,7 @@ class EnemyTypesManager:
                     return result
 
         # Fallback al enemigo normal
-        return self._get_fallback_config("zombie_male") or self._create_default_config()
+        return self._get_fallback_config("zombie_male") or self.create_default_config()
 
     def _convert_to_config(self, enemy_data: Dict[str, Any]) -> EnemyConfig:
         """Convierte datos de la base de datos a EnemyConfig."""
@@ -229,7 +229,7 @@ class EnemyTypesManager:
             },
         }
 
-    def _create_default_config(self) -> EnemyConfig:
+    def create_default_config(self) -> EnemyConfig:
         """Crea una configuración por defecto."""
         return EnemyConfig(
             name="zombie_default",
@@ -282,4 +282,4 @@ class EnemyTypes:
         return _enemy_manager.get_random_by_rarity(rarity)
 
     # Configuraciones estáticas para compatibilidad inmediata
-    ZOMBIE_NORMAL = _enemy_manager._create_default_config()
+    ZOMBIE_NORMAL = _enemy_manager.create_default_config()

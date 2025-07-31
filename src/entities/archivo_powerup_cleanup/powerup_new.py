@@ -13,10 +13,10 @@ import random
 
 import pygame
 
-from .entity import Entity, EntityStats, EntityType
-from .powerup_effects import PowerupEffects
-from .powerup_renderer import PowerupRenderer
-from .powerup_types import PowerupConfiguration, PowerupEffect, PowerupType
+from src.entities.entity import Entity, EntityStats, EntityType
+from src.entities.powerup_effects import PowerupEffects
+from src.entities.powerup_renderer import PowerupRenderer
+from src.entities.powerup_types import PowerupConfiguration, PowerupEffect, PowerupType
 
 
 class Powerup(Entity):
