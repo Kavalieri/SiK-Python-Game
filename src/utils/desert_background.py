@@ -212,18 +212,26 @@ class DesertBackground:
         """
         current_metrics = self.get_performance_metrics()
 
+        # Calcular factor de optimización basado en FPS objetivo
+        optimization_factor = max(0.5, min(1.0, target_fps / 60.0))
+
         if current_metrics["performance_level"] == "low":
             # Reducir partículas si el rendimiento es bajo
             current_particles = len(self.particle_system.particles)
-            optimized_particles = max(20, int(current_particles * 0.7))
+            optimized_particles = max(
+                20, int(current_particles * 0.7 * optimization_factor)
+            )
             self.set_particle_count(optimized_particles)
 
-            # Reducir intensidad de efectos
-            self.set_heat_shimmer_intensity(0.3)
+            # Reducir intensidad de efectos basado en FPS objetivo
+            heat_intensity = 0.3 * optimization_factor
+            self.set_heat_shimmer_intensity(heat_intensity)
 
             self.logger.info(
-                "Sistema optimizado para rendimiento: %d partículas",
+                "Sistema optimizado para FPS objetivo %d: %d partículas, intensidad %.2f",
+                target_fps,
                 optimized_particles,
+                heat_intensity,
             )
 
     def reset_to_defaults(self):

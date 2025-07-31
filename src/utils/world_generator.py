@@ -70,7 +70,7 @@ class WorldGenerator:
 
         # Calcular número aproximado de elementos
         num_elements = self.core.calculate_total_elements()
-        self.logger.info(f"Generando {num_elements} elementos...")
+        self.logger.info("Generando %d elementos...", num_elements)
 
         # Generar elementos
         attempts = 0
@@ -95,9 +95,9 @@ class WorldGenerator:
                     elements.append(element)
 
                     if len(elements) % 10 == 0:
-                        self.logger.debug(f"Generados {len(elements)} elementos...")
+                        self.logger.debug("Generados %d elementos...", len(elements))
 
-        self.logger.info(f"Mundo generado con {len(elements)} elementos")
+        self.logger.info("Mundo generado con %d elementos", len(elements))
         return elements
 
     def generate_cluster(
