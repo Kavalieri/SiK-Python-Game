@@ -102,8 +102,17 @@ class UpgradeCallbacks:
         """Callback para equipar arma."""
         try:
             self.logger.info("Equipando arma")
-            # TODO: Implementar sistema de equipación
-            self.logger.warning("Sistema de equipación no implementado")
+            # Implementar sistema básico de equipación de arma
+            if self.game_state.current_player:
+                # Simular equipación de arma (incrementa daño base)
+                current_damage = getattr(
+                    self.game_state.current_player.stats, "damage", 10
+                )
+                new_damage = current_damage + 5  # Bonificación de arma
+                self.game_state.current_player.stats.damage = new_damage
+                self.logger.info("Arma equipada: +5 daño (total: %s)", new_damage)
+            else:
+                self.logger.warning("No hay jugador disponible para equipar arma")
         except (AttributeError, ValueError, OSError) as e:
             self.logger.error("Error equipando arma: %s", str(e))
 
@@ -111,8 +120,24 @@ class UpgradeCallbacks:
         """Callback para equipar armadura."""
         try:
             self.logger.info("Equipando armadura")
-            # TODO: Implementar sistema de equipación
-            self.logger.warning("Sistema de equipación no implementado")
+            # Implementar sistema básico de equipación de armadura
+            if self.game_state.current_player:
+                # Simular equipación de armadura (incrementa vida máxima)
+                current_max_health = getattr(
+                    self.game_state.current_player.stats, "max_health", 100
+                )
+                new_max_health = current_max_health + 20  # Bonificación de armadura
+                self.game_state.current_player.stats.max_health = new_max_health
+                # También aumentar vida actual si no está al máximo
+                if self.game_state.current_player.stats.health < new_max_health:
+                    self.game_state.current_player.stats.health = min(
+                        new_max_health, self.game_state.current_player.stats.health + 20
+                    )
+                self.logger.info(
+                    "Armadura equipada: +20 vida máxima (total: %s)", new_max_health
+                )
+            else:
+                self.logger.warning("No hay jugador disponible para equipar armadura")
         except (AttributeError, ValueError, OSError) as e:
             self.logger.error("Error equipando armadura: %s", str(e))
 
@@ -120,8 +145,19 @@ class UpgradeCallbacks:
         """Callback para equipar accesorio."""
         try:
             self.logger.info("Equipando accesorio")
-            # TODO: Implementar sistema de equipación
-            self.logger.warning("Sistema de equipación no implementado")
+            # Implementar sistema básico de equipación de accesorio
+            if self.game_state.current_player:
+                # Simular equipación de accesorio (incrementa velocidad)
+                current_speed = getattr(
+                    self.game_state.current_player.stats, "speed", 100
+                )
+                new_speed = current_speed + 15  # Bonificación de accesorio
+                self.game_state.current_player.stats.speed = new_speed
+                self.logger.info(
+                    "Accesorio equipado: +15 velocidad (total: %s)", new_speed
+                )
+            else:
+                self.logger.warning("No hay jugador disponible para equipar accesorio")
         except (AttributeError, ValueError, OSError) as e:
             self.logger.error("Error equipando accesorio: %s", str(e))
 
