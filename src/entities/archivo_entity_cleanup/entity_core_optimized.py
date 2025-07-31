@@ -1,5 +1,7 @@
 """Entity Core - Clase Base Refactorizada."""
 
+# pylint: disable=c-extension-no-member  # pygame.math.Vector2 está disponible en runtime
+
 import logging
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Tuple
@@ -50,24 +52,29 @@ class Entity(ABC):
 
     @property
     def position(self) -> Tuple[float, float]:
+        """Obtiene la posición actual de la entidad."""
         return (self.x, self.y)
 
     @property
     def center(self) -> Tuple[float, float]:
+        """Obtiene el centro de la entidad."""
         return (self.x + self.width // 2, self.y + self.height // 2)
 
     @property
     def rect(self) -> pygame.Rect:
+        """Obtiene el rectángulo de colisión actualizado."""
         self.collision_rect.x = int(self.x)
         self.collision_rect.y = int(self.y)
         return self.collision_rect
 
     @property
     def is_alive(self) -> bool:
+        """Verifica si la entidad está viva."""
         return self.stats.health > 0 and self.state != EntityState.DEAD
 
     @property
     def is_invulnerable(self) -> bool:
+        """Verifica si la entidad es invulnerable."""
         return self.effects_system.is_invulnerable
 
     def update(self, delta_time: float):
@@ -78,18 +85,24 @@ class Entity(ABC):
         self._update_logic(delta_time)
 
     def _update_position(self, delta_time: float):
+        """Actualiza la posición basada en la velocidad."""
         self.x += self.velocity.x * delta_time
         self.y += self.velocity.y * delta_time
         self._clamp_position()
 
     def _clamp_position(self):
-        pass
+        """Limita la posición dentro de los límites del mundo."""
+        # Implementación básica - puede ser sobrescrita en subclases
+        self.x = max(0, self.x)
+        self.y = max(0, self.y)
 
     @abstractmethod
     def _update_logic(self, delta_time: float):
-        pass
+        """Lógica específica de actualización (implementar en subclases)."""
+        raise NotImplementedError("Subclases deben implementar _update_logic")
 
     def move(self, direction: pygame.math.Vector2, speed: Optional[float] = None):
+        """Mueve la entidad en una dirección con velocidad específica."""
         if speed is None:
             speed = self.stats.speed or 0.0
         self.direction = (
@@ -103,9 +116,11 @@ class Entity(ABC):
         )
 
     def take_damage(self, damage: float, source: Optional["Entity"] = None) -> bool:
+        """Aplica daño a la entidad."""
         return self.effects_system.take_damage(damage, source)
 
     def heal(self, amount: float):
+        """Cura la entidad con la cantidad especificada."""
         old_health = self.stats.health
         self.stats.health = min(self.stats.max_health, self.stats.health + amount)
         healed_amount = self.stats.health - old_health
@@ -117,6 +132,7 @@ class Entity(ABC):
             )
 
     def die(self):
+        """Mata la entidad y activa comportamientos de muerte."""
         self.stats.health = 0
         self.state = EntityState.DEAD
         self.velocity = pygame.math.Vector2(0, 0)
@@ -124,12 +140,14 @@ class Entity(ABC):
         self._on_death()
 
     def _on_death(self):
-        pass
+        """Hook para comportamiento personalizado al morir."""
 
     def add_effect(self, effect_name: str, effect_data: Dict[str, Any]):
+        """Añade un efecto a la entidad."""
         self.effects_system.add_effect(effect_name, effect_data)
 
     def collides_with(self, other: "Entity") -> bool:
+        """Verifica colisión con otra entidad."""
         if not self.collision_enabled or not other.collision_enabled:
             return False
         return self.rect.colliderect(other.rect)
@@ -140,6 +158,7 @@ class Entity(ABC):
         self.rendering_system.render(screen, camera_offset)
 
     def get_data(self) -> Dict[str, Any]:
+        """Obtiene los datos de la entidad para serialización."""
         data = {
             "entity_type": self.entity_type.value,
             "x": self.x,

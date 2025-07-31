@@ -12,8 +12,8 @@ import math
 
 import pygame
 
-from .entity import Entity, EntityType, EntityStats
 from ..utils.config_manager import ConfigManager
+from .entity import Entity, EntityStats, EntityType
 
 
 class Projectile(Entity):
