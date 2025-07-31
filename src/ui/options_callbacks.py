@@ -30,22 +30,20 @@ class OptionsCallbacks:
         self.save_manager = save_manager
         self.logger = logger
 
-    def on_resolution_change(self, value: Any, resolution: str):
+    def on_resolution_change(self, _value: Any, resolution: str):
         """Callback para cambiar resolución."""
         try:
             self.logger.info("Cambiando resolución a: %s", resolution)
             width, height = map(int, resolution.split("x"))
 
-            # Verificar si existe el método en config
-            if hasattr(self.game_state, "config") and hasattr(
-                self.game_state.config, "set_resolution"
-            ):
-                self.game_state.config.set_resolution(width, height)
+            # Usar config desde save_manager
+            if hasattr(self.save_manager, "config"):
+                self.save_manager.config.set("display", "width", width)
+                self.save_manager.config.set("display", "height", height)
+                self.save_manager.config.save_config()
                 self.logger.info("Resolución cambiada a %dx%d", width, height)
             else:
-                self.logger.warning(
-                    "Método set_resolution no disponible en configuración"
-                )
+                self.logger.warning("ConfigManager no disponible en save_manager")
 
         except (ValueError, AttributeError, TypeError) as e:
             self.logger.error("Error cambiando resolución: %s", str(e))
@@ -55,16 +53,13 @@ class OptionsCallbacks:
         try:
             self.logger.info("Cambiando modo pantalla completa: %s", value)
 
-            # Verificar si existe el método en config
-            if hasattr(self.game_state, "config") and hasattr(
-                self.game_state.config, "set_fullscreen"
-            ):
-                self.game_state.config.set_fullscreen(value)
+            # Usar config desde save_manager
+            if hasattr(self.save_manager, "config"):
+                self.save_manager.config.set("display", "fullscreen", value)
+                self.save_manager.config.save_config()
                 self.logger.info("Modo pantalla completa: %s", value)
             else:
-                self.logger.warning(
-                    "Método set_fullscreen no disponible en configuración"
-                )
+                self.logger.warning("ConfigManager no disponible en save_manager")
 
         except (AttributeError, TypeError) as e:
             self.logger.error("Error cambiando modo pantalla completa: %s", str(e))
@@ -74,16 +69,13 @@ class OptionsCallbacks:
         try:
             self.logger.info("Cambiando volumen de música: %s", value)
 
-            # Verificar si existe el método en config
-            if hasattr(self.game_state, "config") and hasattr(
-                self.game_state.config, "set_music_volume"
-            ):
-                self.game_state.config.set_music_volume(value)
+            # Usar config desde save_manager
+            if hasattr(self.save_manager, "config"):
+                self.save_manager.config.set("audio", "music_volume", value)
+                self.save_manager.config.save_config()
                 self.logger.info("Volumen de música: %s", value)
             else:
-                self.logger.warning(
-                    "Método set_music_volume no disponible en configuración"
-                )
+                self.logger.warning("ConfigManager no disponible en save_manager")
 
         except (AttributeError, TypeError, ValueError) as e:
             self.logger.error("Error cambiando volumen de música: %s", str(e))
@@ -93,16 +85,13 @@ class OptionsCallbacks:
         try:
             self.logger.info("Cambiando volumen de SFX: %s", value)
 
-            # Verificar si existe el método en config
-            if hasattr(self.game_state, "config") and hasattr(
-                self.game_state.config, "set_sfx_volume"
-            ):
-                self.game_state.config.set_sfx_volume(value)
+            # Usar config desde save_manager
+            if hasattr(self.save_manager, "config"):
+                self.save_manager.config.set("audio", "sfx_volume", value)
+                self.save_manager.config.save_config()
                 self.logger.info("Volumen de SFX: %s", value)
             else:
-                self.logger.warning(
-                    "Método set_sfx_volume no disponible en configuración"
-                )
+                self.logger.warning("ConfigManager no disponible en save_manager")
 
         except (AttributeError, TypeError, ValueError) as e:
             self.logger.error("Error cambiando volumen de SFX: %s", str(e))
@@ -111,7 +100,8 @@ class OptionsCallbacks:
         """Callback para configurar controles."""
         try:
             self.logger.info("Abriendo configuración de controles")
-            # TODO: Implementar configuración de controles
+            # FUTURE: Implementar interfaz de configuración de controles
+            # Por ahora se registra la acción sin implementación
             self.logger.warning("Configuración de controles no implementada")
         except (AttributeError, OSError) as e:
             self.logger.error("Error configurando controles: %s", str(e))
@@ -121,14 +111,12 @@ class OptionsCallbacks:
         try:
             self.logger.info("Guardando opciones")
 
-            # Verificar si existe el método en config
-            if hasattr(self.game_state, "config") and hasattr(
-                self.game_state.config, "save_config"
-            ):
-                self.game_state.config.save_config()
+            # Usar config desde save_manager
+            if hasattr(self.save_manager, "config"):
+                self.save_manager.config.save_config()
                 self.logger.info("Opciones guardadas exitosamente")
             else:
-                self.logger.warning("Método save_config no disponible en configuración")
+                self.logger.warning("ConfigManager no disponible en save_manager")
 
         except (AttributeError, OSError, IOError) as e:
             self.logger.error("Error guardando opciones: %s", str(e))

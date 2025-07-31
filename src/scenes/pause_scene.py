@@ -7,8 +7,9 @@ Fecha: 2024
 Descripción: Escena de pausa del juego.
 """
 
+import sys
 import pygame
-import pygame.constants as pg_constants
+import pygame.constants as pg_constants  # pylint: disable=no-member
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -122,7 +123,5 @@ class PauseScene(Scene):
         """
         self.logger.info("Saliendo del juego")
         pygame.display.quit()
-        pygame.quit()
-        import sys
-
+        pygame.quit()  # pylint: disable=no-member
         sys.exit()
