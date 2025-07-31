@@ -5,10 +5,83 @@
 **Propósito**: Referencia de soluciones aplicadas a errores comunes de Pylance/Pylint
 
 ### 📊 **Estadísticas de Errores Resueltos**
-- **Total archivos corregidos**: 8 archivos
-- **Errores corregidos**: 19 errores específicos
+- **Total archivos corregidos**: 9 archivos
+- **Errores corregidos**: 22 errores específicos
 - **Archivos limpiados**: 2 archivos duplicados archivados
-- **Patrones identificados**: 5 patrones comunes
+- **Patrones identificados**: 6 patrones comunes
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN main.py**
+
+### **Error 1: Module 'pygame' has no 'init' member**
+- **Archivo**: `src/main.py`
+- **Línea**: 23
+- **Código de Error**: `E1101:no-member`
+- **Descripción**: `Module 'pygame' has no 'init' member`
+
+#### **Problema Original**:
+```python
+pygame.init()  # ❌ Pylint no reconoce pygame.init
+```
+
+#### **Solución Aplicada**:
+```python
+pygame.init()  # pylint: disable=no-member  # ✅ Desactivar warning específico
+```
+
+#### **Explicación**:
+- **Causa**: Falso positivo de Pylint con pygame (problema conocido)
+- **Solución**: Usar comentario específico para desactivar el warning
+- **Beneficio**: Mantiene la funcionalidad y silencia falso positivo
+
+---
+
+### **Error 2: Catching too general exception Exception**
+- **Archivo**: `src/main.py`
+- **Línea**: 40
+- **Código de Error**: `W0718:broad-exception-caught`
+- **Descripción**: `Catching too general exception Exception`
+
+#### **Problema Original**:
+```python
+except Exception as e:  # ❌ Captura demasiado general
+    print(f"Error loading {mod}: {e}")
+```
+
+#### **Solución Aplicada**:
+```python
+except (ImportError, ModuleNotFoundError) as e:  # ✅ Excepciones específicas
+    print(f"Error loading {mod}: {e}")
+```
+
+#### **Explicación**:
+- **Causa**: Captura genérica de Exception oculta errores específicos
+- **Solución**: Usar excepciones específicas para import de módulos
+- **Beneficio**: Mejor depuración y manejo específico de errores
+
+---
+
+### **Error 3: Use lazy % formatting in logging functions**
+- **Archivo**: `src/main.py`
+- **Línea**: 66
+- **Código de Error**: `W1203:logging-fstring-interpolation`
+- **Descripción**: `Use lazy % formatting in logging functions`
+
+#### **Problema Original**:
+```python
+logger.error(f"Error crítico en el juego: {e}")  # ❌ f-string en logging
+```
+
+#### **Solución Aplicada**:
+```python
+logger.error("Error crítico en el juego: %s", e)  # ✅ Lazy % formatting
+```
+
+#### **Explicación**:
+- **Causa**: f-strings evaluados siempre, % formatting solo cuando necesario
+- **Solución**: Usar % formatting para mejor rendimiento en logging
+- **Beneficio**: Mejora rendimiento y sigue mejores prácticas de logging
 
 ---
 
@@ -210,7 +283,19 @@ def _update_logic(self, delta_time: float):
 - **Frecuencia**: Observado en projectile_system_fixed.py
 - **Prevención**: Usar imports relativos correctos y verificar estructura
 
-### **Patrón 4: Constantes de Pygame**
+### **Patrón 5: Falsos Positivos de Pygame**
+- **Problema**: Pylint no reconoce funciones dinámicas de pygame
+- **Solución**: Usar `# pylint: disable=no-member` para casos específicos
+- **Frecuencia**: Común con pygame.init(), pygame.mixer, etc.
+- **Prevención**: Usar comentarios específicos solo cuando necesario
+
+### **Patrón 6: Logging con F-strings**
+- **Problema**: f-strings en funciones de logging reduce rendimiento
+- **Solución**: Usar % formatting para lazy evaluation
+- **Frecuencia**: Común en código con logging extensivo
+- **Prevención**: Configurar linter para detectar automáticamente
+
+### **Patrón 7: Captura de Excepciones Genéricas**
 - **Problema**: Import indirecto de constantes de pygame
 - **Solución**: Usar valores numéricos o imports directos
 - **Prevención**: Verificar imports de pygame y usar constantes apropiadas
@@ -231,6 +316,7 @@ get_errors(["ruta/al/archivo.py"])
 ```
 
 ### **Archivos Críticos Monitoreados**:
+- `src/main.py` ✅
 - `src/entities/powerup_new.py` ✅
 - `src/entities/powerup.py` ✅
 - `src/entities/player_integration.py` ✅

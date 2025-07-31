@@ -20,7 +20,7 @@ from src.utils.config_manager import ConfigManager
 from src.utils.logger import setup_logger
 
 # Inicializar pygame antes de cualquier uso
-pygame.init()
+pygame.init()  # pylint: disable=no-member
 
 # Añadir el directorio raíz al path para imports
 project_root = Path(__file__).parent.parent
@@ -37,7 +37,7 @@ for mod in ["src.ui.menu_manager", "src.ui.menu_factory", "src.ui.menu_callbacks
     try:
         m = importlib.import_module(mod)
         print(f"{mod} loaded from: {m.__file__}")
-    except Exception as e:
+    except (ImportError, ModuleNotFoundError) as e:
         print(f"Error loading {mod}: {e}")
 
 
@@ -63,7 +63,7 @@ def main():
     except KeyboardInterrupt:
         logger.info("Juego interrumpido por el usuario")
     except Exception as e:
-        logger.error(f"Error crítico en el juego: {e}")
+        logger.error("Error crítico en el juego: %s", e)
         raise
     finally:
         logger.info("Cerrando SiK Python Game...")
