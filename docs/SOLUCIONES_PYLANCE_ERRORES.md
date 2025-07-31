@@ -756,6 +756,46 @@ logger.error("Error en %s: %s", variable, exception)
 
 ---
 
+## 🔧 **ERRORES RESUELTOS EN save_loader.py**
+
+### **Error 1-3: Broad Exception Caught**
+- **Archivo**: `src/utils/save_loader.py`
+- **Líneas**: 74, 126, 180
+- **Patrón**: 2 (Broad Exception Caught)
+
+#### **Problema Original**:
+```python
+except Exception as e:  # ❌ Excepción demasiado general
+```
+
+#### **Solución Aplicada**:
+```python
+except (OSError, json.JSONDecodeError, ValueError) as e:  # ✅ Excepciones específicas para carga JSON
+except (OSError, ValueError, KeyError) as e:  # ✅ Para operaciones de carga de datos
+except (OSError, ValueError) as e:  # ✅ Para operaciones de archivo
+```
+
+### **Error 4-10: Logging F-string Interpolation**
+- **Archivo**: `src/utils/save_loader.py`
+- **Líneas**: 75-77, 97-99, 104, 121-123, 127-129, 175-177, 181
+- **Patrón**: 12 (Logging F-string Interpolation)
+
+#### **Problema Original**:
+```python
+self.logger.error(f"Error al cargar información del archivo {i + 1}: {e}")  # ❌
+self.logger.error(f"El archivo de guardado {save_file_number} no existe")  # ❌
+self.logger.info(f"Archivo de guardado {save_file_number} cargado correctamente")  # ❌
+```
+
+#### **Solución Aplicada**:
+```python
+self.logger.error("Error al cargar información del archivo %d: %s", i + 1, e)  # ✅
+self.logger.error("El archivo de guardado %d no existe", save_file_number)  # ✅
+self.logger.info("Archivo de guardado %d cargado correctamente", save_file_number)  # ✅
+```
+
+---
+
 ## 🔧 **ERRORES RESUELTOS EN config_database.py**
 
 ### **Error 1: Catching too general exception Exception (8 instancias)**
@@ -869,14 +909,22 @@ logger.error("Error en %s: %s", context, exception)
 
 ## 📊 **ESTADÍSTICAS ACTUALIZADAS**
 
-### **Total archivos corregidos**: 16 archivos
-### **Errores corregidos**: 110 errores específicos
-### **Archivos completamente limpios**: 11 archivos
+### **Total archivos corregidos**: 17 archivos
+### **Errores corregidos**: 120 errores específicos
+### **Archivos completamente limpios**: 12 archivos
 ### **Patrones identificados**: 12 patrones comunes
+
+### **save_loader.py**:
+- **Errores resueltos**: 10 errores (3 broad-exception + 7 logging-fstring)
+- **Estado**: ✅ Completamente limpio
 
 ### **config_database.py**:
 - **Errores resueltos**: 25 errores (8 broad-exception + 16 logging + 1 line-too-long)
 - **Estado**: ✅ Completamente limpio
+
+### **Archivos archivados durante limpieza**: 7 archivos duplicados
+- entity_core_optimized.py, powerup_new.py, enemy_types_new.py, enemy_new.py, config_manager_modular.py
+- projectile_system_fixed.py, projectile_system_compact.py (eliminados - ya archivados)
 
 ---
   - Operaciones de backup: `OSError, PermissionError, shutil.Error`

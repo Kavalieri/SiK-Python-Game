@@ -71,9 +71,9 @@ class SaveLoader:
                     with open(save_info_file, "r", encoding="utf-8") as f:
                         info_data = json.load(f)
                         save_info.update(info_data)
-                except Exception as e:
+                except (OSError, json.JSONDecodeError, ValueError) as e:
                     self.logger.error(
-                        f"Error al cargar información del archivo {i + 1}: {e}"
+                        "Error al cargar información del archivo %d: %s", i + 1, e
                     )
 
             save_files.append(save_info)
@@ -95,13 +95,13 @@ class SaveLoader:
         """
         if not 1 <= save_file_number <= self.max_save_files:
             self.logger.error(
-                f"Número de archivo de guardado inválido: {save_file_number}"
+                "Número de archivo de guardado inválido: %d", save_file_number
             )
             return None
 
         save_info = save_files[save_file_number - 1]
         if not save_info["exists"]:
-            self.logger.error(f"El archivo de guardado {save_file_number} no existe")
+            self.logger.error("El archivo de guardado %d no existe", save_file_number)
             return None
 
         try:
@@ -119,13 +119,13 @@ class SaveLoader:
             save_data = pickle.loads(decompressed_data)
 
             self.logger.info(
-                f"Archivo de guardado {save_file_number} cargado correctamente"
+                "Archivo de guardado %d cargado correctamente", save_file_number
             )
             return save_data
 
-        except Exception as e:
+        except (OSError, ValueError, KeyError) as e:
             self.logger.error(
-                f"Error al cargar archivo de guardado {save_file_number}: {e}"
+                "Error al cargar archivo de guardado %d: %s", save_file_number, e
             )
             return None
 
@@ -173,12 +173,14 @@ class SaveLoader:
                 json.dump(save_data, f, indent=4, ensure_ascii=False)
 
             self.logger.info(
-                f"Archivo de guardado {save_file_number} exportado para debug: {output_path}"
+                "Archivo de guardado %d exportado para debug: %s",
+                save_file_number,
+                output_path,
             )
             return True
 
-        except Exception as e:
-            self.logger.error(f"Error al exportar archivo de guardado: {e}")
+        except (OSError, ValueError) as e:
+            self.logger.error("Error al exportar archivo de guardado: %s", e)
             return False
 
     def has_save_file(self, save_files: List[Dict[str, Any]]) -> bool:
