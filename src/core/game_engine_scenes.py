@@ -34,11 +34,14 @@ class GameEngineScenes:
 
     def setup_scenes(self):
         """
-        Configura las escenas iniciales del juego y documenta el flujo
-        avanzado de menús y guardado.
+        Configura las escenas iniciales del juego con carga secuencial para mejor UX.
+        Muestra LoadingScene inmediatamente, luego carga las demás en segundo plano.
         """
         try:
-            # Crear todas las escenas
+            self.logger.info("Iniciando configuración de escenas...")
+
+            # PASO 1: Crear y mostrar SOLO LoadingScene primero
+            self.logger.info("Creando LoadingScene...")
             loading_scene = LoadingScene(
                 self.core.screen,
                 self.core.config,
@@ -46,61 +49,81 @@ class GameEngineScenes:
                 self.core.save_manager,
                 self._on_loading_complete,
             )
-            main_menu_scene = MainMenuScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
-            game_scene = GameScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
-            pause_scene = PauseScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
-            character_select_scene = CharacterSelectScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
-            slot_selection_scene = SlotSelectionScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
-            options_scene = OptionsScene(
-                self.core.screen,
-                self.core.config,
-                self.core.game_state,
-                self.core.save_manager,
-            )
 
-            # Añadir escenas al gestor
+            # Añadir solo LoadingScene y mostrarla inmediatamente
             self.core.scene_manager.add_scene("loading", loading_scene)
-            self.core.scene_manager.add_scene("main_menu", main_menu_scene)
-            self.core.scene_manager.add_scene("game", game_scene)
-            self.core.scene_manager.add_scene("pause", pause_scene)
-            self.core.scene_manager.add_scene(
-                "character_select", character_select_scene
-            )
-            self.core.scene_manager.add_scene("slot_selection", slot_selection_scene)
-            self.core.scene_manager.add_scene("options", options_scene)
+            self.core.scene_manager.change_scene("loading")
 
-            # Configurar callbacks para transiciones entre escenas
+            # IMPORTANTE: Renderizar inmediatamente para que aparezca
+            self.core.screen.fill((0, 0, 0))  # Limpiar pantalla
+            loading_scene.render()
+            import pygame
+
+            pygame.display.flip()  # Mostrar inmediatamente
+
+            self.logger.info(
+                "LoadingScene mostrada - iniciando carga de otras escenas..."
+            )
+
+            # PASO 2: Crear las demás escenas secuencialmente con progreso real
+            scenes_to_create = [
+                ("MainMenuScene", MainMenuScene),
+                ("GameScene", GameScene),
+                ("PauseScene", PauseScene),
+                ("CharacterSelectScene", CharacterSelectScene),
+                ("SlotSelectionScene", SlotSelectionScene),
+                ("OptionsScene", OptionsScene),
+            ]
+
+            created_scenes = {}
+            total_scenes = len(scenes_to_create)
+
+            for i, (scene_name, scene_class) in enumerate(scenes_to_create):
+                self.logger.info("Creando %s...", scene_name)
+
+                # Actualizar progreso en LoadingScene
+                progress = (i + 1) / total_scenes
+                if hasattr(loading_scene, "core") and hasattr(
+                    loading_scene.core, "update_loading_progress"
+                ):
+                    loading_scene.core.update_loading_progress(progress, i + 1)
+
+                # Crear la escena
+                scene = scene_class(
+                    self.core.screen,
+                    self.core.config,
+                    self.core.game_state,
+                    self.core.save_manager,
+                )
+
+                # Añadir al diccionario
+                scene_key = scene_name.lower().replace("scene", "")
+                if scene_key == "mainmenu":
+                    scene_key = "main_menu"
+                elif scene_key == "characterselect":
+                    scene_key = "character_select"
+                elif scene_key == "slotselection":
+                    scene_key = "slot_selection"
+
+                created_scenes[scene_key] = scene
+
+            # PASO 3: Añadir las escenas restantes al gestor
+            self.logger.info("Registrando escenas en SceneManager...")
+            for scene_key, scene in created_scenes.items():
+                self.core.scene_manager.add_scene(scene_key, scene)
+
+            # PASO 4: Configurar callbacks para transiciones entre escenas
+            self.logger.info("Configurando transiciones entre escenas...")
             self.setup_scene_transitions()
 
-            # Establecer escena de carga como inicial
-            self.core.scene_manager.change_scene("loading")
+            # Marcar carga como completa
+            if hasattr(loading_scene, "core") and hasattr(
+                loading_scene.core, "update_loading_progress"
+            ):
+                loading_scene.core.update_loading_progress(1.0, total_scenes)
+
             self.logger.info(
-                "Escenas configuradas correctamente (flujo avanzado de menús y guardado)"
+                "Todas las escenas configuradas correctamente - sistema listo"
             )
         except RuntimeError as e:
             self.logger.error("Error al configurar escenas: %s", e)

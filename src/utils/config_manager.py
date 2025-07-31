@@ -155,6 +155,44 @@ class ConfigManager:
         except (KeyError, ValueError, TypeError):
             return default
 
+    def get_ui_color(self, key: str, default: tuple = (255, 255, 255)) -> tuple:
+        """Obtiene color de UI."""
+        try:
+            color = self.config["ui"]["colores"][key]
+            if isinstance(color, list) and len(color) >= 3:
+                return tuple(color[:3])
+            return default
+        except (KeyError, TypeError):
+            return default
+
+    def get_fullscreen(self) -> bool:
+        """Obtiene configuración de pantalla completa."""
+        try:
+            return bool(self.config["display"]["pantalla_completa"])
+        except (KeyError, TypeError):
+            return False
+
+    def get_audio_config(self) -> Dict[str, Any]:
+        """Obtiene configuración completa de audio."""
+        return self.get_section("audio")
+
+    def get_ui_dimension(self, key: str, default: int = 0) -> int:
+        """Obtiene dimensión de UI."""
+        try:
+            return int(self.config["ui"]["dimensiones"][key])
+        except (KeyError, ValueError, TypeError):
+            return default
+
+    def get_width(self) -> int:
+        """Obtiene ancho de pantalla."""
+        resolution = self.get_resolution()
+        return resolution[0]
+
+    def get_height(self) -> int:
+        """Obtiene alto de pantalla."""
+        resolution = self.get_resolution()
+        return resolution[1]
+
     def get_display_config(self) -> Dict[str, Any]:
         """Obtiene configuración completa de display."""
         return self.get_section("display")

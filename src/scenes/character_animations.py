@@ -67,11 +67,9 @@ class CharacterAnimations:
 
     def _get_possible_paths(self, character_key: str) -> list:
         """Genera las rutas posibles para buscar frames de un personaje."""
-        base_paths = ["characters", "characters/used"]
-        subfolders = ["idle", "Idle"]
-        return [
-            f"{base}/{character_key}/{sub}" for base in base_paths for sub in subfolders
-        ]
+        # Los archivos están directamente en el directorio del personaje, no en subcarpetas
+        base_paths = ["characters/used"]
+        return [f"{base}/{character_key}" for base in base_paths]
 
     def _create_character_placeholder(self, character_key: str) -> pygame.Surface:
         """Crea un sprite placeholder para un personaje."""

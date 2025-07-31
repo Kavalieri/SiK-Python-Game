@@ -11,6 +11,8 @@ import math
 import random
 from typing import List, Optional, Tuple
 
+import pygame
+
 from .enemy_behavior import EnemyBehavior
 from .enemy_core import EnemyCore
 
@@ -43,6 +45,21 @@ class Enemy:
         """Verifica si el enemigo está muerto."""
         return self.core.is_dead
 
+    @property
+    def width(self) -> float:
+        """Obtiene el ancho del enemigo."""
+        return self.core.width
+
+    @property
+    def height(self) -> float:
+        """Obtiene el alto del enemigo."""
+        return self.core.height
+
+    @property
+    def damage(self) -> int:
+        """Obtiene el daño del enemigo."""
+        return self.core.damage
+
     def take_damage(self, damage: int):
         """Delega daño al core."""
         self.core.take_damage(damage)
@@ -54,6 +71,20 @@ class Enemy:
     def get_rect(self):
         """Delega rectángulo de colisión al core."""
         return self.core.get_rect()
+
+    def is_attack_ready(self) -> bool:
+        """Verifica si el enemigo puede atacar."""
+        return self.core.is_attack_ready()
+
+    def reset_attack_state(self):
+        """Resetea el estado de ataque del enemigo."""
+        self.core.reset_attack_state()
+
+    def render(self, screen: pygame.Surface, camera_offset: tuple = (0, 0)):
+        """Renderiza el enemigo."""
+        frame = self.get_current_frame()
+        if frame:
+            screen.blit(frame, (self.x - camera_offset[0], self.y - camera_offset[1]))
 
 
 class EnemyManager:

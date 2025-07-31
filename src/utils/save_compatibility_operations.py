@@ -116,7 +116,7 @@ class SaveCompatibilityOperations:
         Obtiene información de partidas de ambos sistemas.
 
         Returns:
-            Lista consolidada de información de partidas
+            Lista consolidada de información de partidas (siempre 3 slots)
         """
         saves_info = []
 
@@ -147,6 +147,34 @@ class SaveCompatibilityOperations:
 
         except (OSError, IOError) as e:
             self.logger.error("Error obteniendo información pickle: %s", e)
+
+        # IMPORTANTE: Asegurar que SIEMPRE devolvemos 3 slots (1, 2, 3)
+        slots_found = {
+            save.get("file_number", save.get("slot", 0)) for save in saves_info
+        }
+
+        # Completar slots faltantes
+        for slot_num in [1, 2, 3]:
+            if slot_num not in slots_found:
+                empty_slot = {
+                    "file_number": slot_num,
+                    "slot": slot_num,
+                    "exists": False,
+                    "player_name": "",
+                    "level": 1,
+                    "score": 0,
+                    "character": "",
+                    "timestamp": None,
+                }
+                saves_info.append(empty_slot)
+
+        # Ordenar por slot number
+        saves_info.sort(key=lambda x: x.get("file_number", x.get("slot", 0)))
+
+        # Limitar a 3 slots máximo
+        saves_info = saves_info[:3]
+
+        self.logger.info("Devolviendo información de %d slots", len(saves_info))
 
         # Ordenar por número de slot
         saves_info.sort(key=lambda x: x["file_number"])

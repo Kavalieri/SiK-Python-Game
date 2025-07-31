@@ -21,7 +21,7 @@ class CharacterUIRendererBasic:
         """Renderiza el título de la pantalla de selección de personajes."""
         title_text = "Selecciona tu Personaje"
         font = self.fonts["title"]
-        text_surface = font.render(title_text, True, self.colors["text_primary"])
+        text_surface = font.render(title_text, True, self.colors["text"])
         text_rect = text_surface.get_rect(
             centerx=screen.get_width() // 2, y=self.dimensions["margin"] * 2
         )
@@ -94,7 +94,7 @@ class CharacterUIRendererBasic:
             name = character_key.title()
 
         font = self.fonts["normal"]
-        text_surface = font.render(name, True, self.colors["text_primary"])
+        text_surface = font.render(name, True, self.colors["text"])
         text_rect = text_surface.get_rect(
             centerx=x + card_width // 2, y=y + self.dimensions["card_height"] - 40
         )

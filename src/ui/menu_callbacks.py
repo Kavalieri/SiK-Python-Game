@@ -162,6 +162,17 @@ class MenuCallbacks:
         self.logger.info("[MenuCallbacks] Volver desde Slots")
         self.saves.on_back_to_main_from_slots()
 
+    def on_continue_slot(self, slot: int):
+        """Continúa una partida específica del slot indicado."""
+        self.logger.info("[MenuCallbacks] Continuar slot %d", slot)
+        self.saves.on_select_save_file(slot)  # Cargar y continuar el slot específico
+
+    def on_new_game_slot(self, slot: int):
+        """Inicia nueva partida en el slot indicado."""
+        self.logger.info("[MenuCallbacks] Nueva partida en slot %d", slot)
+        # Ir directamente a selección de personajes con el slot seleccionado
+        self.navigation.on_new_game_with_slot(slot)
+
     def get_all_callbacks(self) -> dict:
         """Obtiene todos los callbacks disponibles."""
         all_callbacks = {

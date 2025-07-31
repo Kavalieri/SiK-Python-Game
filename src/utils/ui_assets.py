@@ -95,9 +95,18 @@ class UIAssets:
             raise FileNotFoundError(f"La ruta {ruta_completa} no existe.")
 
         frames = []
-        for archivo in sorted(ruta_completa.glob("*.png")):
-            frame = pygame.image.load(archivo).convert_alpha()
-            frames.append(frame)
+
+        # Buscar archivos con patrón Idle_*.png (para personajes en modo idle)
+        idle_files = sorted(ruta_completa.glob("Idle_*.png"))
+        if idle_files:
+            for archivo in idle_files:
+                frame = pygame.image.load(archivo).convert_alpha()
+                frames.append(frame)
+        else:
+            # Fallback: buscar cualquier archivo .png
+            for archivo in sorted(ruta_completa.glob("*.png")):
+                frame = pygame.image.load(archivo).convert_alpha()
+                frames.append(frame)
 
         if max_frames is not None:
             frames = frames[:max_frames]

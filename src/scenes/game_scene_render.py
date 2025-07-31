@@ -37,7 +37,7 @@ class GameSceneRender:
         else:
             scene.screen.fill((135, 206, 235))
         # Renderizar entidades
-        self._render_entities(scene.enemy_manager, scene.screen, scene.camera)
+        self._render_entities(scene.enemy_manager.enemies, scene.screen, scene.camera)
         self._render_entities(scene.projectiles, scene.screen, scene.camera)
         self._render_entities(scene.powerups, scene.screen, scene.camera)
         self._render_entities(scene.tiles, scene.screen, scene.camera)

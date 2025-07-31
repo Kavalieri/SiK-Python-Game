@@ -9,7 +9,10 @@ Descripción: Gestiona el estado global del juego, puntuaciones, vidas, etc.
 
 import logging
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
+
+if TYPE_CHECKING:
+    from .scene_manager import SceneManager
 
 
 class GameStatus(Enum):
@@ -38,7 +41,18 @@ class GameState:
         self.player_name = "Player"
         self.selected_character: Optional[str] = None
         self.current_player = None  # Referencia al jugador actual para el HUD
+        self.scene_manager: Optional["SceneManager"] = (
+            None  # Referencia al gestor de escenas
+        )
         self.scene_manager = None  # Se establecerá desde el GameEngine
+
+        # Modo de selección de slots: "new_game" o "load_game"
+        self.slot_selection_mode = "load_game"
+
+        # Bandera para solicitar cierre del juego
+        self.should_quit = False
+        self.active_slot = 1  # Slot activo por defecto
+        self.active_slot = 1  # Slot activo para guardar/cargar
 
         # Configuración del juego
         self.settings = {
@@ -144,8 +158,18 @@ class GameState:
 
         self.logger.info("Estado del juego cargado")
 
+    def set_active_slot(self, slot: int):
+        """Establece el slot activo para operaciones de guardado."""
+        self.active_slot = slot
+        self.logger.info("Slot activo establecido: %d", slot)
+
+    def get_active_slot(self) -> int:
+        """Obtiene el slot activo actual."""
+        return getattr(self, "active_slot", 1)
+
     def quit_game(self):
         """Marca el juego para salir."""
         self.logger.info("Solicitando salida del juego")
-        self.status = GameStatus.MENU  # Reset al menú
-        # El GameEngine detectará este estado y cerrará el juego
+        # Establecer una bandera que el GameEngine pueda detectar
+        self.should_quit = True
+        self.status = GameStatus.MENU

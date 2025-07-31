@@ -34,6 +34,7 @@ class NavigationCallbacks:
         """Callback para iniciar un nuevo juego."""
         try:
             self.logger.info("Iniciando nuevo juego")
+            self.game_state.slot_selection_mode = "new_game"
             self.game_state.set_scene("slot_selection")
         except (AttributeError, ValueError) as e:
             self.logger.error("Error iniciando nuevo juego: %s", str(e))
@@ -79,7 +80,8 @@ class NavigationCallbacks:
         """Callback para cargar un juego específico."""
         try:
             self.logger.info("Navegando a selección de guardado")
-            self.game_state.set_scene("save_menu")
+            self.game_state.slot_selection_mode = "load_game"
+            self.game_state.set_scene("slot_selection")
         except (AttributeError, ValueError, OSError) as e:
             self.logger.error("Error navegando a carga: %s", str(e))
 
@@ -153,3 +155,19 @@ class NavigationCallbacks:
             self.game_state.set_scene("main_menu")
         except (AttributeError, ValueError, OSError) as e:
             self.logger.error("Error volviendo a escena anterior: %s", str(e))
+
+    def on_new_game_with_slot(self, slot: int):
+        """Callback para nueva partida en slot específico - ir a selección de personajes."""
+        try:
+            self.logger.info(
+                "Nueva partida en slot %d - ir a selección de personajes", slot
+            )
+            # Establecer el slot activo
+            if hasattr(self.game_state, "set_active_slot"):
+                self.game_state.set_active_slot(slot)
+            # Ir directamente a selección de personajes
+            self.game_state.set_scene("character_select")
+        except (AttributeError, ValueError, OSError) as e:
+            self.logger.error(
+                "Error iniciando nueva partida en slot %d: %s", slot, str(e)
+            )

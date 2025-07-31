@@ -124,6 +124,11 @@ class SaveManager:
             self.logger.error("Error eliminando save slot %d: %s", save_file_number, e)
             return False
 
+    def clear_slot(self, slot: int) -> bool:
+        """Limpia un slot de guardado (alias para delete_save)."""
+        self.logger.info("Limpiando slot %d", slot)
+        return self.delete_save(slot)
+
     def backup_saves(self) -> bool:
         """Crea backup de todas las partidas guardadas."""
         try:

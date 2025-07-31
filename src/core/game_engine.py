@@ -8,11 +8,12 @@ Descripción: Fachada que integra todos los componentes del motor del juego.
 """
 
 import pygame
-from .game_engine_core import GameEngineCore
-from .game_engine_scenes import GameEngineScenes
-from .game_engine_events import GameEngineEvents
+
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
+from .game_engine_core import GameEngineCore
+from .game_engine_events import GameEngineEvents
+from .game_engine_scenes import GameEngineScenes
 
 
 class GameEngine:
@@ -92,6 +93,16 @@ class GameEngine:
 
         try:
             while self.running:
+                # Verificar si el GameState solicita cerrar el juego
+                if (
+                    self.core.game_state
+                    and hasattr(self.core.game_state, "should_quit")
+                    and self.core.game_state.should_quit
+                ):
+                    self.logger.info("Cerrando juego por solicitud del GameState")
+                    self.running = False
+                    break
+
                 self.events.handle_events()
                 self._update()
                 self._render()

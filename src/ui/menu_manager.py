@@ -7,16 +7,17 @@ Fecha: 2024-12-19
 Descripción: Gestor principal de menús que coordina la fábrica y callbacks.
 """
 
+from typing import Callable, Dict, Optional
+
 import pygame
 import pygame_menu
-from typing import Dict, Optional, Callable
 
-from ..utils.config_manager import ConfigManager
 from ..core.game_state import GameState
-from ..utils.save_manager import SaveManager
-from .menu_factory import MenuFactory
-from .menu_callbacks import MenuCallbacks
+from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
+from ..utils.save_manager import SaveManager
+from .menu_callbacks import MenuCallbacks
+from .menu_factory import MenuFactory
 
 
 class MenuManager:
@@ -108,7 +109,9 @@ class MenuManager:
         """
         if self.current_menu:
             for event in events:
-                self.logger.info(f"[MenuManager] Evento procesado en menú: {event}")
+                # Solo registrar eventos importantes, no movimiento del ratón
+                if event.type != pygame.MOUSEMOTION:  # pylint: disable=no-member
+                    self.logger.info(f"[MenuManager] Evento procesado en menú: {event}")
             self.current_menu.update(events)
         else:
             self.logger.warning("MenuManager: No hay menú actual para actualizar")

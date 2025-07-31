@@ -41,7 +41,13 @@ class LoadingSceneEvents:
         Args:
             event: Evento de pygame
         """
-        self.logger.info("[LoadingScene] Evento recibido: %s - %s", event.type, event)
+        # Filtrar MouseMotion para reducir spam en logs (mover a DEBUG)
+        if event.type != pygame.MOUSEMOTION:
+            self.logger.info(
+                "[LoadingScene] Evento recibido: %s - %s", event.type, event
+            )
+        else:
+            self.logger.debug("[LoadingScene] MouseMotion: %s", event)
 
         # Manejo de eventos de sistema
         if self._handle_system_events(event):

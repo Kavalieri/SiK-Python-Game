@@ -44,8 +44,15 @@ class PlayerIntegration:
         # Inicializar sistemas modulares
         self.effects = PlayerEffects()
 
-        # Cargar ataques desde config
-        char_data = config.get_character_data(player_core.character_name)
+        # Cargar ataques desde character data
+        from .character_data import get_character_data
+
+        char_data = get_character_data(player_core.character_name)
+        if char_data is None:
+            self.logger.warning(
+                "No se encontraron datos para %s", player_core.character_name
+            )
+            char_data = {}
         self.attack_configs = [AttackConfig(a) for a in char_data.get("ataques", [])]
         self.combat = PlayerCombat(player_core.stats, self.effects, self.attack_configs)
 

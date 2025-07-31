@@ -95,8 +95,8 @@ class GameEngineCore:
             # Inicializar gestor de escenas
             self.scene_manager = SceneManager(self.screen, self.config)
 
-            # Configurar referencias entre componentes (si scene_manager tiene setter)
-            # self.game_state.scene_manager = self.scene_manager
+            # Configurar referencias entre componentes
+            self.game_state.scene_manager = self.scene_manager
 
             self.logger.info("Componentes del juego inicializados")
 

@@ -69,6 +69,11 @@ class Player(Entity):
         """Configuración del juego."""
         return self.core.config
 
+    @config.setter
+    def config(self, value):
+        """Establece la configuración del juego."""
+        self.core.config = value
+
     @property
     def animation_manager(self):
         """Gestor de animaciones."""
@@ -114,6 +119,11 @@ class Player(Entity):
         """Estadísticas del jugador."""
         return self.core.stats
 
+    @stats.setter
+    def stats(self, value):
+        """Establece las estadísticas del jugador."""
+        self.core.stats = value
+
     @property
     def effects(self):
         """Efectos activos del jugador."""
@@ -142,6 +152,18 @@ class Player(Entity):
                 self.x, self.y = x, y
 
         return VelocityVector(vel_x, vel_y)
+
+    @velocity.setter
+    def velocity(self, value):
+        """Establece el vector de velocidad (compatibilidad con Entity)."""
+        if hasattr(value, "x") and hasattr(value, "y"):
+            self.movement.set_velocity(value.x, value.y)
+        elif isinstance(value, (tuple, list)) and len(value) >= 2:
+            self.movement.set_velocity(value[0], value[1])
+        else:
+            raise ValueError(
+                "velocity debe tener atributos x, y o ser una tupla/lista de 2 elementos"
+            )
 
     def handle_input(
         self,
@@ -192,6 +214,10 @@ class Player(Entity):
         self.core.x, self.core.y = self.x, self.y
         # Actualizar lógica base
         super().update(delta_time)
+
+    def clamp_position(self):
+        """Mantiene al jugador dentro de los límites del mundo."""
+        self.core.clamp_position()
 
     def _update_logic(self, delta_time: float):
         """

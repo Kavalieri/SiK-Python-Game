@@ -35,6 +35,17 @@ class SlotSelectionScene(Scene):
 
     def enter(self):
         super().enter()
+        # Actualizar título según el modo
+        mode = getattr(self.game_state, "slot_selection_mode", "load_game")
+        if mode == "new_game":
+            self.logger.info(
+                "[SlotSelectionScene] Modo: Nuevo Juego - Seleccionar slot"
+            )
+        else:
+            self.logger.info(
+                "[SlotSelectionScene] Modo: Cargar Juego - Seleccionar slot"
+            )
+
         self.menu_manager.show_menu("save")
         self.logger.info(
             "[SlotSelectionScene] Entrando en escena de selección de slots"

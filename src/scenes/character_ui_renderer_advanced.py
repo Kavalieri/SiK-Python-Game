@@ -41,7 +41,7 @@ class CharacterUIRendererAdvanced:
             for stat_name, stat_value in stats.items():
                 stat_text = f"{stat_name.title()}: {stat_value}"
                 stat_surface = self.fonts["small"].render(
-                    stat_text, True, self.colors["text_primary"]
+                    stat_text, True, self.colors["text"]
                 )
                 screen.blit(stat_surface, (x, current_y))
                 current_y += 20
@@ -76,7 +76,7 @@ class CharacterUIRendererAdvanced:
                     else skill.get("name", "Desconocida")
                 )
                 skill_surface = self.fonts["small"].render(
-                    f"• {skill_name}", True, self.colors["text_primary"]
+                    f"• {skill_name}", True, self.colors["text"]
                 )
                 screen.blit(skill_surface, (x, current_y))
                 current_y += 18
@@ -106,7 +106,7 @@ class CharacterUIRendererAdvanced:
 
             for word in words:
                 test_line = current_line + (" " if current_line else "") + word
-                test_surface = font.render(test_line, True, self.colors["text_primary"])
+                test_surface = font.render(test_line, True, self.colors["text"])
                 if test_surface.get_width() <= max_width:
                     current_line = test_line
                 else:
@@ -119,7 +119,7 @@ class CharacterUIRendererAdvanced:
             # Renderizar líneas
             current_y = y
             for line in lines:
-                line_surface = font.render(line, True, self.colors["text_primary"])
+                line_surface = font.render(line, True, self.colors["text"])
                 screen.blit(line_surface, (x, current_y))
                 current_y += 16
         except (KeyError, AttributeError) as e:

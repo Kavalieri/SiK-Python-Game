@@ -3,6 +3,7 @@
 import pygame
 
 from ..core.scene_manager import Scene
+from ..ui.menu_manager import MenuManager
 from ..utils.logger import get_logger
 from .character_animations import CharacterAnimations
 from .character_data import CharacterData
@@ -26,6 +27,9 @@ class CharacterSelectScene(Scene):
         self.selected_key = self.character_keys[0] if self.character_keys else None
         self.mouse_pos = (0, 0)
         self.logger = get_logger("SiK_Game")
+
+        # Inicializar menú (requerido por game_engine_scenes)
+        self.menu_manager = MenuManager(screen, config, game_state, save_manager)
 
     def update(self):
         """Actualiza la escena."""

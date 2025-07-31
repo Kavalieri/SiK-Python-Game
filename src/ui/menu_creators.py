@@ -38,16 +38,45 @@ class MenuCreators:
             "", font_size=self.font_sizes["option"]
         )
 
-        buttons = [
-            ("Inicio", self.callbacks.on_new_game),
-            ("Continuar", self.callbacks.on_continue_game),
-            ("Cargar Juego", self.callbacks.on_load_game),
-            ("Opciones", self.callbacks.on_options),
-            ("Salir", self.callbacks.on_exit),
-        ]
-        for label, callback in buttons:
-            menu.add.button(label, callback, font_size=self.font_sizes["button"])
-            menu.add.vertical_margin(10)
+        # Verificar si hay partidas guardadas para mostrar estado
+        has_saves = False
+        try:
+            if self.save_manager:
+                saves_info = self.save_manager.get_save_files_info()
+                has_saves = any(save.get("exists", False) for save in saves_info)
+        except Exception as e:
+            self.logger.warning("Error verificando partidas guardadas: %s", e)
+
+        # Crear botón "Continuar" con título dinámico
+        if has_saves:
+            continue_title = "Continuar"
+            continue_callback = self.callbacks.on_continue_game
+        else:
+            continue_title = "Continuar (No hay partidas)"
+            continue_callback = self._no_saves_callback
+
+        menu.add.button(
+            continue_title,
+            continue_callback,
+            font_size=self.font_sizes["button"],
+        )
+
+        menu.add.vertical_margin(10)
+
+        menu.add.button(
+            "Iniciar", self.callbacks.on_load_game, font_size=self.font_sizes["button"]
+        )
+        menu.add.vertical_margin(10)
+
+        menu.add.button(
+            "Opciones", self.callbacks.on_options, font_size=self.font_sizes["button"]
+        )
+        menu.add.vertical_margin(10)
+
+        menu.add.button(
+            "Salir", self.callbacks.on_exit, font_size=self.font_sizes["button"]
+        )
+        menu.add.vertical_margin(10)
         return menu
 
     def create_pause_menu(self) -> pygame_menu.Menu:
@@ -103,7 +132,7 @@ class MenuCreators:
         menu.add.label("Elige tu personaje:", font_size=self.font_sizes["button"])
         menu.add.vertical_margin(20)
         self.config_helper.add_character_buttons(
-            menu, self.callbacks.on_select_character
+            menu, self.callbacks.on_character_selected
         )
         menu.add.vertical_margin(20)
         menu.add.button(
@@ -183,9 +212,9 @@ class MenuCreators:
         return menu
 
     def create_save_menu(self) -> pygame_menu.Menu:
-        """Crea el menú de selección de slots de guardado avanzado."""
+        """Crea el menú de selección de partidas para iniciar."""
         menu = pygame_menu.Menu(
-            "Gestión de Guardado",
+            "Seleccionar Partida",
             self.screen_width,
             self.screen_height,
             theme=self.theme,
@@ -194,15 +223,17 @@ class MenuCreators:
         self._save_menu_feedback_label = menu.add.label(
             "", font_size=self.font_sizes["option"]
         )
-        menu.add.label("Archivos de Guardado:", font_size=self.font_sizes["button"])
+        menu.add.label(
+            "Elige un slot para iniciar partida:", font_size=self.font_sizes["button"]
+        )
         menu.add.vertical_margin(20)
 
-        self.config_helper.add_save_slot_buttons(menu, self.callbacks.on_select_slot)
+        # En lugar de gestión compleja, slots simples para iniciar
+        self.config_helper.add_start_game_slot_buttons(menu, self.callbacks)
         menu.add.vertical_margin(10)
 
         buttons = [
-            ("Vaciar Slot", lambda: self.callbacks.on_clear_slot(1)),
-            ("Volver", self.callbacks.on_back_to_main_from_slots),
+            ("Volver al Menú Principal", self.callbacks.on_back_to_main_from_slots),
         ]
         for label, callback in buttons:
             menu.add.button(label, callback, font_size=self.font_sizes["option"])
@@ -225,6 +256,10 @@ class MenuCreators:
                 self.logger.warning("Tipo de mejora desconocido: %s", upgrade_type)
 
         return upgrade_callback
+
+    def _no_saves_callback(self):
+        """Callback vacío para cuando no hay partidas guardadas."""
+        self.logger.info("No hay partidas guardadas disponibles para continuar")
 
     def show_main_menu_feedback(self, message: str) -> None:
         """Muestra mensaje de feedback en el menú principal."""

@@ -52,6 +52,12 @@ class LoadingScene:
         # Iniciar carga automáticamente
         self.start_background_loading()
 
+    def enter(self):
+        """
+        Se ejecuta cuando se entra en la escena de carga.
+        """
+        self.start_background_loading()
+
     def start_background_loading(self):
         """Inicia la carga en segundo plano."""
         self.logic.start_background_loading()
@@ -124,3 +130,12 @@ class LoadingScene:
     def is_loading_active(self) -> bool:
         """Verifica si la carga está activa."""
         return self.logic.is_loading_active()
+
+    def exit(self):
+        """
+        Se llama cuando se sale de la escena.
+        Limpia recursos y detiene procesos de carga si están activos.
+        """
+        if self.logic.is_loading_active():
+            self.logic.stop_loading()
+        # Limpieza adicional si es necesaria
