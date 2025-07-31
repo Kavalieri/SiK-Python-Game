@@ -7,6 +7,8 @@ Fecha: 2025-07-30
 Descripción: Manejo de eventos y transiciones de la escena de carga.
 """
 
+# pylint: disable=no-member  # pygame members are valid but not detected by pylint
+
 from typing import TYPE_CHECKING
 
 import pygame
@@ -62,7 +64,6 @@ class LoadingSceneEvents:
             self.logger.info("Evento QUIT recibido - cerrando aplicación")
             pygame.quit()
             exit()
-            return True
 
         return False
 
@@ -137,7 +138,7 @@ class LoadingSceneEvents:
         return {
             "can_advance": self.core.can_advance(),
             "loading_complete": self.core.loading_complete,
-            "has_advanced": self.core._has_advanced,
+            "has_advanced": self.core.has_advanced(),
             "callback_available": self.core.on_loading_complete is not None,
         }
 

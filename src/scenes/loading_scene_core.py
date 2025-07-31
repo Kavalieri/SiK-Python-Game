@@ -158,6 +158,15 @@ class LoadingSceneCore(Scene):
         """
         return self.loading_complete and not self._has_advanced
 
+    def has_advanced(self) -> bool:
+        """
+        Verifica si ya se ha avanzado desde la pantalla de carga.
+
+        Returns:
+            True si ya se ha avanzado
+        """
+        return self._has_advanced
+
     def update(self):
         """Actualiza la lógica del núcleo."""
         # Actualizar timer de mensajes
