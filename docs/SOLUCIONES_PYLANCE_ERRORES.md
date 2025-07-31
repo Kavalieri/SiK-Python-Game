@@ -5,10 +5,10 @@
 **Propósito**: Referencia de soluciones aplicadas a errores comunes de Pylance/Pylint
 
 ### 📊 **Estadísticas de Errores Resueltos**
-- **Total archivos corregidos**: 13 archivos
-- **Errores corregidos**: 62 errores específicos
-- **Archivos limpiados**: 3 archivos duplicados/legacy archivados
-- **Patrones identificados**: 9 patrones comunes
+- **Total archivos corregidos**: 15 archivos
+- **Errores corregidos**: 85 errores específicos
+- **Archivos completamente limpios**: 10 archivos
+- **Patrones identificados**: 11 patrones comunes
 
 ---
 
@@ -584,9 +584,184 @@ def metodo_publico(self):
     return self.operacion()
 ```
 
-### **Total Errores Eliminados**: 61 errores de Pylance/Pylint
+---
 
-### **Archivos Completamente Limpios**: 8 archivos
+## 🔧 **ERRORES RESUELTOS EN save_manager.py**
+
+### **Error 1: Catching too general exception Exception**
+- **Archivo**: `src/utils/save_manager.py`
+- **Líneas**: 37, 87, 114, 141, 166
+- **Código de Error**: `W0718:broad-exception-caught`
+- **Descripción**: `Catching too general exception Exception`
+
+#### **Problema Original**:
+```python
+except Exception as e:  # ❌ Captura demasiado general
+    self.logger.error("Error: %s", e)
+```
+
+#### **Solución Aplicada**:
+```python
+except (ImportError, OSError) as e:  # ✅ Excepciones específicas
+    self.logger.error("Error: %s", e)
+```
+
+#### **Explicación**:
+- **Causa**: Captura genérica de Exception oculta errores específicos
+- **Solución**: Usar excepciones específicas según el contexto:
+  - `ImportError, OSError` para operaciones de módulos y archivos
+  - `OSError, PermissionError, ValueError` para operaciones de guardado
+  - `OSError, PermissionError` para operaciones de eliminación
+  - `OSError, PermissionError, shutil.Error` para operaciones de backup
+  - `OSError, ValueError, KeyError` para validación de saves
+- **Beneficio**: Mejor depuración y manejo específico de errores
+
+---
+
+### **Error 2: Import outside toplevel**
+- **Archivo**: `src/utils/save_manager.py`
+- **Líneas**: 28, 75, 76, 77, 100, 120, 121, 122
+- **Código de Error**: `C0415:import-outside-toplevel`
+- **Descripción**: `Import outside toplevel`
+
+#### **Problema Original**:
+```python
+def some_method(self):
+    import json  # ❌ Import dentro de método sin justificación
+    from datetime import datetime
+```
+
+#### **Solución Aplicada**:
+```python
+def some_method(self):
+    # Imports locales para funcionalidad específica
+    import json  # pylint: disable=import-outside-toplevel
+    from datetime import datetime  # pylint: disable=import-outside-toplevel
+```
+
+#### **Explicación**:
+- **Causa**: Imports locales para evitar dependencias circulares o imports opcionales
+- **Solución**: Agregar comentarios explicativos con `pylint: disable=import-outside-toplevel`
+- **Justificación**: Imports locales necesarios para:
+  - Evitar dependencias circulares (`database_manager`)
+  - Operaciones específicas de archivo (`json`, `datetime`, `pathlib`, `shutil`)
+- **Beneficio**: Mantiene claridad del código y justifica el patrón
+
+---
+
+### **Error 3: Missing function or method docstring**
+- **Archivo**: `src/utils/save_manager.py`
+- **Líneas**: 47, 50, 56, 59, 93, 118, 145, 148, 157
+- **Código de Error**: `C0116:missing-function-docstring`
+- **Descripción**: `Missing function or method docstring`
+
+#### **Problema Original**:
+```python
+def get_save_files_info(self) -> List[Dict[str, Any]]:  # ❌ Sin docstring
+    return self.compatibility.get_saves_info_unified()
+```
+
+#### **Solución Aplicada**:
+```python
+def get_save_files_info(self) -> List[Dict[str, Any]]:
+    """Obtiene información de todos los archivos de guardado."""  # ✅ Con docstring
+    return self.compatibility.get_saves_info_unified()
+```
+
+#### **Explicación**:
+- **Causa**: Métodos públicos sin documentación
+- **Solución**: Agregar docstrings descriptivos en español
+- **Categorías de docstrings agregados**:
+  - Métodos de información: `get_save_files_info`, `get_system_info`
+  - Métodos de guardado: `save_game`, `load_save`, `create_new_save`
+  - Métodos de mantenimiento: `delete_save`, `backup_saves`
+  - Métodos de migración: `migrate_to_sqlite`
+  - Métodos de validación: `validate_saves_integrity`
+- **Beneficio**: Mejor documentación y cumplimiento de estándares
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN entity_core.py**
+
+### **Error 1: Module 'pygame.math' has no 'Vector2' member**
+- **Archivo**: `src/entities/entity_core.py`
+- **Líneas**: 34, 35, 91, 97, 121
+- **Código de Error**: `I1101:c-extension-no-member`
+- **Descripción**: `Module 'pygame.math' has no 'Vector2' member`
+
+#### **Problema Original**:
+```python
+self.direction = pygame.math.Vector2(0, 0)  # ❌ Pylint no reconoce pygame.math.Vector2
+```
+
+#### **Solución Aplicada**:
+```python
+self.direction = pygame.math.Vector2(0, 0)  # pylint: disable=c-extension-no-member  # ✅ Desactivar warning específico
+```
+
+#### **Explicación**:
+- **Causa**: Falso positivo de Pylint con pygame (problema conocido)
+- **Solución**: Usar comentario específico para desactivar el warning
+- **Beneficio**: Mantiene la funcionalidad y silencia falso positivo
+
+---
+
+### **Error 2: Missing function or method docstring**
+- **Archivo**: `src/entities/entity_core.py`
+- **Líneas**: 51, 55, 59, 65, 69, 91, 104, 107, 118, 128, 131, 136, 141, 163
+- **Código de Error**: `C0116:missing-function-docstring`
+- **Descripción**: `Missing function or method docstring`
+
+#### **Problema Original**:
+```python
+@property
+def position(self) -> Tuple[float, float]:  # ❌ Sin docstring
+    return (self.x, self.y)
+```
+
+#### **Solución Aplicada**:
+```python
+@property
+def position(self) -> Tuple[float, float]:
+    """Obtiene la posición (x, y) de la entidad."""  # ✅ Con docstring
+    return (self.x, self.y)
+```
+
+#### **Explicación**:
+- **Causa**: Propiedades y métodos públicos sin documentación
+- **Solución**: Agregar docstrings descriptivos en español
+- **Categorías de docstrings agregados**:
+  - Propiedades: `position`, `center`, `rect`, `is_alive`, `is_invulnerable`
+  - Métodos de movimiento: `move`, `_update_position`, `_clamp_position`
+  - Métodos de combate: `take_damage`, `heal`, `die`, `_on_death`
+  - Métodos de sistema: `add_effect`, `collides_with`, `render`
+  - Métodos de datos: `get_data`, `load_data`
+- **Beneficio**: Mejor documentación del sistema de entidades
+
+---
+
+## 📋 **PATRONES DE SOLUCIÓN IDENTIFICADOS**
+
+### **Patrón 10: Broad Exception Caught**
+- **Error**: `W0718:broad-exception-caught`
+- **Solución**: Reemplazar `except Exception:` con excepciones específicas
+- **Contextos**:
+  - Operaciones de archivo: `OSError, PermissionError, ValueError`
+  - Imports opcionales: `ImportError, ModuleNotFoundError`
+  - Operaciones de backup: `OSError, PermissionError, shutil.Error`
+  - Validación de datos: `OSError, ValueError, KeyError`
+
+### **Patrón 11: C-Extension No Member (pygame)**
+- **Error**: `I1101:c-extension-no-member`
+- **Solución**: Agregar `# pylint: disable=c-extension-no-member` para pygame
+- **Contextos**:
+  - `pygame.math.Vector2`
+  - Otros miembros de extensiones C de pygame
+- **Justificación**: Falsos positivos conocidos de Pylint con extensiones C
+
+### **Total Errores Eliminados**: 85 errores de Pylance/Pylint
+
+### **Archivos Completamente Limpios**: 10 archivos
 
 ---
 
