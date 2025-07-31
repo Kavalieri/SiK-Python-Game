@@ -7,8 +7,12 @@ Fecha: 30 Julio 2025
 Descripción: Interfaz SQLite para datos complejos en sistema mixto.
 Sistema mixto inteligente: SQLite para datos complejos, JSON para configuración simple.
 
-Gestiona:
-- Datos de personajes (characters.json → SQLite)
+Gestiona:            self.logger.info("Migrados %s enemigos desde enemies.json", migrated_count)
+            return migrated_count > 0
+
+        except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+            self.logger.error("Error migrando enemigos desde JSON: %s", e)
+            return Falseos de personajes (characters.json → SQLite)
 - Configuración de enemigos (enemies.json → SQLite)
 - Estadísticas y datos que requieren consultas complejas
 
@@ -20,6 +24,7 @@ NO gestiona:
 
 import json
 import logging
+import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -58,8 +63,8 @@ class ConfigDatabase:
                         "Tablas de configuración incompletas, verificando SchemaManager..."
                     )
 
-        except Exception as e:
-            self.logger.error(f"Error verificando tablas de configuración: {e}")
+        except (sqlite3.Error, AttributeError, ValueError) as e:
+            self.logger.error("Error verificando tablas de configuración: %s", e)
 
     # === MÉTODOS PARA PERSONAJES ===
 
@@ -88,7 +93,7 @@ class ConfigDatabase:
 
                 row = cursor.fetchone()
                 if not row:
-                    self.logger.warning(f"Personaje '{character_name}' no encontrado")
+                    self.logger.warning("Personaje '%s' no encontrado", character_name)
                     return None
 
                 return {
@@ -101,9 +106,9 @@ class ConfigDatabase:
                     "sprite_config": json.loads(row[6]) if row[6] else {},
                 }
 
-        except Exception as e:
+        except (sqlite3.Error, json.JSONDecodeError, ValueError) as e:
             self.logger.error(
-                f"Error obteniendo datos del personaje '{character_name}': {e}"
+                "Error obteniendo datos del personaje '%s': %s", character_name, e
             )
             return None
 
@@ -136,8 +141,8 @@ class ConfigDatabase:
 
                 return characters
 
-        except Exception as e:
-            self.logger.error(f"Error obteniendo lista de personajes: {e}")
+        except (sqlite3.Error, json.JSONDecodeError) as e:
+            self.logger.error("Error obteniendo lista de personajes: %s", e)
             return []
 
     def save_character_data(self, character_data: Dict[str, Any]) -> bool:
@@ -148,7 +153,8 @@ class ConfigDatabase:
                 cursor.execute(
                     """
                     INSERT OR REPLACE INTO personajes
-                    (nombre, nombre_mostrar, tipo, descripcion, stats, ataques, sprite_config, activo)
+                    (nombre, nombre_mostrar, tipo, descripcion, stats,
+                     ataques, sprite_config, activo)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                     (
@@ -164,12 +170,12 @@ class ConfigDatabase:
                 )
 
                 self.logger.info(
-                    f"Personaje '{character_data.get('nombre')}' guardado exitosamente"
+                    "Personaje '%s' guardado exitosamente", character_data.get("nombre")
                 )
                 return True
 
-        except Exception as e:
-            self.logger.error(f"Error guardando personaje: {e}")
+        except (sqlite3.Error, json.JSONDecodeError, KeyError) as e:
+            self.logger.error("Error guardando personaje: %s", e)
             return False
 
     # === MÉTODOS PARA ENEMIGOS ===
@@ -191,7 +197,7 @@ class ConfigDatabase:
 
                 row = cursor.fetchone()
                 if not row:
-                    self.logger.warning(f"Enemigo '{enemy_type}' no encontrado")
+                    self.logger.warning("Enemigo '%s' no encontrado", enemy_type)
                     return None
 
                 return {
@@ -203,8 +209,10 @@ class ConfigDatabase:
                     "variantes": json.loads(row[5]) if row[5] else {},
                 }
 
-        except Exception as e:
-            self.logger.error(f"Error obteniendo datos del enemigo '{enemy_type}': {e}")
+        except (sqlite3.Error, json.JSONDecodeError, ValueError) as e:
+            self.logger.error(
+                "Error obteniendo datos del enemigo '%s': %s", enemy_type, e
+            )
             return None
 
     def get_all_enemies(self) -> List[Dict[str, Any]]:
@@ -235,8 +243,8 @@ class ConfigDatabase:
 
                 return enemies
 
-        except Exception as e:
-            self.logger.error(f"Error obteniendo lista de enemigos: {e}")
+        except (sqlite3.Error, json.JSONDecodeError) as e:
+            self.logger.error("Error obteniendo lista de enemigos: %s", e)
             return []
 
     def save_enemy_data(self, enemy_data: Dict[str, Any]) -> bool:
@@ -262,12 +270,12 @@ class ConfigDatabase:
                 )
 
                 self.logger.info(
-                    f"Enemigo '{enemy_data.get('tipo')}' guardado exitosamente"
+                    "Enemigo '%s' guardado exitosamente", enemy_data.get("tipo")
                 )
                 return True
 
-        except Exception as e:
-            self.logger.error(f"Error guardando enemigo: {e}")
+        except (sqlite3.Error, json.JSONDecodeError, KeyError) as e:
+            self.logger.error("Error guardando enemigo: %s", e)
             return False
 
     # === MÉTODOS DE MIGRACIÓN DESDE JSON ===
@@ -278,7 +286,7 @@ class ConfigDatabase:
             json_path = Path(json_file_path)
             if not json_path.exists():
                 self.logger.error(
-                    f"Archivo characters.json no encontrado: {json_file_path}"
+                    "Archivo characters.json no encontrado: %s", json_file_path
                 )
                 return False
 
@@ -304,12 +312,12 @@ class ConfigDatabase:
                     migrated_count += 1
 
             self.logger.info(
-                f"Migrados {migrated_count} personajes desde characters.json"
+                "Migrados %s personajes desde characters.json", migrated_count
             )
             return migrated_count > 0
 
-        except Exception as e:
-            self.logger.error(f"Error migrando personajes desde JSON: {e}")
+        except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+            self.logger.error("Error migrando personajes desde JSON: %s", e)
             return False
 
     def migrate_enemies_from_json(self, json_file_path: str) -> bool:
@@ -318,7 +326,7 @@ class ConfigDatabase:
             json_path = Path(json_file_path)
             if not json_path.exists():
                 self.logger.error(
-                    f"Archivo enemies.json no encontrado: {json_file_path}"
+                    "Archivo enemies.json no encontrado: %s", json_file_path
                 )
                 return False
 
@@ -342,9 +350,9 @@ class ConfigDatabase:
                 if self.save_enemy_data(enemy_record):
                     migrated_count += 1
 
-            self.logger.info(f"Migrados {migrated_count} enemigos desde enemies.json")
+            self.logger.info("Migrados %s enemigos desde enemies.json", migrated_count)
             return migrated_count > 0
 
-        except Exception as e:
-            self.logger.error(f"Error migrando enemigos desde JSON: {e}")
+        except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+            self.logger.error("Error migrando enemigos desde JSON: %s", e)
             return False

@@ -26,7 +26,9 @@ class SaveManager:
             if self.config.get("save_system", "use_sqlite", False):
                 try:
                     # Import local para evitar dependencia circular
-                    from .database_manager import DatabaseManager  # pylint: disable=import-outside-toplevel
+                    from .database_manager import (
+                        DatabaseManager,  # pylint: disable=import-outside-toplevel
+                    )
 
                     db_manager = DatabaseManager()
                     self.database = SaveDatabase(db_manager, self.encryption_handler)

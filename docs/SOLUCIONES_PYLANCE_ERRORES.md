@@ -742,12 +742,143 @@ def position(self) -> Tuple[float, float]:
 
 ## 📋 **PATRONES DE SOLUCIÓN IDENTIFICADOS**
 
-### **Patrón 10: Broad Exception Caught**
+### **Patrón 12: Logging F-string Interpolation**
+- **Error**: `W1203:logging-fstring-interpolation`
+- **Solución**: Reemplazar f-strings con % formatting en logging
+- **Código**:
+```python
+# ❌ Antes - f-string en logging
+logger.error(f"Error en {variable}: {exception}")
+
+# ✅ Después - % formatting
+logger.error("Error en %s: %s", variable, exception)
+```
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN config_database.py**
+
+### **Error 1: Catching too general exception Exception (8 instancias)**
+- **Archivo**: `src/utils/config_database.py`
+- **Líneas**: 61, 104, 139, 171, 206, 238, 269, 311, 348
+- **Código de Error**: `W0718:broad-exception-caught`
+- **Descripción**: `Catching too general exception Exception`
+
+#### **Problema Original**:
+```python
+except Exception as e:  # ❌ Captura demasiado general
+    self.logger.error(f"Error verificando tablas: {e}")
+```
+
+#### **Solución Aplicada**:
+```python
+except (sqlite3.Error, AttributeError, ValueError) as e:  # ✅ Excepciones específicas
+    self.logger.error("Error verificando tablas: %s", e)
+```
+
+#### **Explicación**:
+- **Causa**: Captura genérica de Exception oculta errores específicos
+- **Solución**: Usar excepciones específicas según el contexto:
+  - `sqlite3.Error, AttributeError, ValueError` para operaciones de verificación
+  - `sqlite3.Error, json.JSONDecodeError, ValueError` para consultas de datos
+  - `sqlite3.Error, json.JSONDecodeError` para operaciones de listado
+  - `sqlite3.Error, json.JSONDecodeError, KeyError` para operaciones de guardado
+  - `FileNotFoundError, json.JSONDecodeError, KeyError` para migración desde JSON
+- **Beneficio**: Mejor depuración y manejo específico de errores de base de datos
+
+---
+
+### **Error 2: Use lazy % formatting in logging functions (16 instancias)**
+- **Archivo**: `src/utils/config_database.py`
+- **Líneas**: 62, 91, 105-107, 140, 166-168, 172, 194, 207, 239, 264-266, 270, 280-282, 306-308, 312, 320-322, 345, 349
+- **Código de Error**: `W1203:logging-fstring-interpolation`
+- **Descripción**: `Use lazy % formatting in logging functions`
+
+#### **Problema Original**:
+```python
+self.logger.warning(f"Personaje '{character_name}' no encontrado")  # ❌ f-string
+self.logger.error(f"Error obteniendo datos del personaje '{character_name}': {e}")  # ❌ f-string
+```
+
+#### **Solución Aplicada**:
+```python
+self.logger.warning("Personaje '%s' no encontrado", character_name)  # ✅ % formatting
+self.logger.error("Error obteniendo datos del personaje '%s': %s", character_name, e)  # ✅ % formatting
+```
+
+#### **Explicación**:
+- **Causa**: F-strings en logging se evalúan siempre, % formatting solo cuando necesario
+- **Solución**: Reemplazar todas las f-strings con % formatting en llamadas de logging
+- **Tipos de logging corregidos**:
+  - `logger.warning()` con variables dinámicas
+  - `logger.error()` con contexto y excepciones
+  - `logger.info()` con mensajes de confirmación
+  - Logging multi-línea corregido con formato consistente
+- **Beneficio**: Mejor rendimiento y cumplimiento de mejores prácticas de logging
+
+---
+
+### **Error 3: Line too long (1 instancia)**
+- **Archivo**: `src/utils/config_database.py`
+- **Línea**: 151
+- **Código de Error**: `C0301:line-too-long`
+- **Descripción**: `Line too long (102/100)`
+
+#### **Problema Original**:
+```python
+(nombre, nombre_mostrar, tipo, descripcion, stats, ataques, sprite_config, activo)  # ❌ 102 chars
+```
+
+#### **Solución Aplicada**:
+```python
+(nombre, nombre_mostrar, tipo, descripcion, stats,
+ ataques, sprite_config, activo)  # ✅ Línea dividida
+```
+
+#### **Explicación**:
+- **Causa**: Línea SQL con muchos campos excede límite de 100 caracteres
+- **Solución**: Dividir línea manteniendo legibilidad y estructura SQL
+- **Beneficio**: Cumple estándares de longitud de línea
+
+---
+
+## 📝 **PATRONES ACTUALIZADOS**
+
+### **Patrón 10 (Ampliado): Broad Exception Caught**
 - **Error**: `W0718:broad-exception-caught`
-- **Solución**: Reemplazar `except Exception:` con excepciones específicas
-- **Contextos**:
-  - Operaciones de archivo: `OSError, PermissionError, ValueError`
-  - Imports opcionales: `ImportError, ModuleNotFoundError`
+- **Contextos Database-Specific**:
+  - **Operaciones SQLite**: `sqlite3.Error, json.JSONDecodeError, ValueError`
+  - **Verificación de esquemas**: `sqlite3.Error, AttributeError, ValueError`
+  - **Guardado de datos**: `sqlite3.Error, json.JSONDecodeError, KeyError`
+  - **Migración desde JSON**: `FileNotFoundError, json.JSONDecodeError, KeyError`
+  - **Consultas complejas**: `sqlite3.Error, json.JSONDecodeError`
+
+### **Patrón 12: Logging F-string Interpolation**
+- **Error**: `W1203:logging-fstring-interpolation`
+- **Solución**: Usar % formatting en lugar de f-strings
+- **Código**:
+```python
+# ❌ F-string en logging
+logger.error(f"Error en {context}: {exception}")
+
+# ✅ % formatting
+logger.error("Error en %s: %s", context, exception)
+```
+
+---
+
+## 📊 **ESTADÍSTICAS ACTUALIZADAS**
+
+### **Total archivos corregidos**: 16 archivos
+### **Errores corregidos**: 110 errores específicos
+### **Archivos completamente limpios**: 11 archivos
+### **Patrones identificados**: 12 patrones comunes
+
+### **config_database.py**:
+- **Errores resueltos**: 25 errores (8 broad-exception + 16 logging + 1 line-too-long)
+- **Estado**: ✅ Completamente limpio
+
+---
   - Operaciones de backup: `OSError, PermissionError, shutil.Error`
   - Validación de datos: `OSError, ValueError, KeyError`
 

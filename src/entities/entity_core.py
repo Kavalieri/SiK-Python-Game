@@ -3,11 +3,12 @@
 import logging
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Tuple
+
 import pygame
 
-from .entity_types import EntityType, EntityState, EntityStats
 from .entity_effects import EntityEffectsSystem
 from .entity_rendering import EntityRenderingSystem
+from .entity_types import EntityState, EntityStats, EntityType
 
 
 class Entity(ABC):
