@@ -92,7 +92,7 @@ class IntelligentAnimationManager:
 
     def update_character_animation(self, character_name: str, delta_time: float):
         """Método de compatibilidad - la actualización es automática en AnimationPlayer."""
-        # Los AnimationPlayer se actualizan automáticamente, este método se mantiene por compatibilidad
+        # Los AnimationPlayer se actualizan automáticamente, este método por compatibilidad
         _ = delta_time  # Argumento mantenido por compatibilidad de API
         self.logger.debug("update_character_animation llamado para %s", character_name)
 
