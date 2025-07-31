@@ -68,6 +68,9 @@ class Powerup(Entity):
         self.float_offset = 0
         self.float_speed = 2.0
 
+        # Debug flag para renderizado de información adicional
+        self.debug = False
+
     def update(self, delta_time: float):
         """Actualiza el powerup."""
         super().update(delta_time)
@@ -80,8 +83,8 @@ class Powerup(Entity):
 
     def _update_logic(self, delta_time: float):
         """Actualiza la lógica específica del powerup."""
-        # Los powerups no tienen lógica de movimiento específica
-        pass
+        # Actualizar animación mediante el renderer
+        self.renderer.update_animation(delta_time)
 
     def render(self, screen: pygame.Surface, camera_offset: tuple = (0, 0)):
         """Renderiza el powerup con efecto de flotación."""

@@ -4,6 +4,12 @@
 **Fecha**: 31 de Julio, 2025
 **Propósito**: Referencia de soluciones aplicadas a errores comunes de Pylance/Pylint
 
+### 📊 **Estadísticas de Errores Resueltos**
+- **Total archivos corregidos**: 8 archivos
+- **Errores corregidos**: 19 errores específicos
+- **Archivos limpiados**: 2 archivos duplicados archivados
+- **Patrones identificados**: 5 patrones comunes
+
 ---
 
 ## 🔧 **ERRORES RESUELTOS EN projectile_system_fixed.py**
@@ -34,6 +40,67 @@ from ..entities.powerup import PowerupType  # ✅ Ruta corregida
 - **Acción**: Archivos `projectile_system_fixed.py` y `projectile_system_compact.py` movidos a `archivo_projectile_cleanup/`
 - **Motivo**: Archivos redundantes, `projectile_system.py` es la versión funcional principal
 - **Documentación**: README.md creado en el directorio de archivo para referencias futuras
+
+---
+
+## 🔧 **ERRORES RESUELTOS EN powerup.py**
+
+### **Error 1: Cannot access attribute "debug"**
+- **Archivo**: `src/entities/powerup.py`
+- **Línea**: 95
+- **Código de Error**: `reportAttributeAccessIssue` / `E1101:no-member`
+- **Descripción**: `Instance of 'Powerup' has no 'debug' member`
+
+#### **Problema Original**:
+```python
+# Debug si está habilitado
+if hasattr(self, "debug") and self.debug:  # ❌ self.debug no definido
+    self.renderer.render_debug(screen, self.x, self.y, camera_offset)
+```
+
+#### **Solución Aplicada**:
+```python
+# En el constructor __init__
+def __init__(self, x: float, y: float, powerup_type: PowerupType):
+    # ... código existente ...
+
+    # Debug flag para renderizado de información adicional
+    self.debug = False  # ✅ Atributo definido explícitamente
+```
+
+#### **Explicación**:
+- **Causa**: El atributo `self.debug` se usaba sin estar definido en el constructor
+- **Solución**: Añadir `self.debug = False` en el constructor
+- **Beneficio**: Permite control explícito del modo debug para renderizado
+
+---
+
+### **Error 2: Unnecessary pass statement**
+- **Archivo**: `src/entities/powerup.py`
+- **Línea**: 84
+- **Código de Error**: `W0107:unnecessary-pass`
+- **Descripción**: `Unnecessary pass statement`
+
+#### **Problema Original**:
+```python
+def _update_logic(self, delta_time: float):
+    """Actualiza la lógica específica del powerup."""
+    # Los powerups no tienen lógica de movimiento específica
+    pass  # ❌ Pass innecesario
+```
+
+#### **Solución Aplicada**:
+```python
+def _update_logic(self, delta_time: float):
+    """Actualiza la lógica específica del powerup."""
+    # Actualizar animación mediante el renderer
+    self.renderer.update_animation(delta_time)  # ✅ Código funcional
+```
+
+#### **Explicación**:
+- **Causa**: Uso de `pass` cuando hay funcionalidad real que implementar
+- **Solución**: Reemplazar con código funcional que delega al renderer
+- **Beneficio**: Mejora la funcionalidad y elimina el warning
 
 ---
 
@@ -125,17 +192,25 @@ def _update_logic(self, delta_time: float):
 
 ## 📝 **PATRONES DE SOLUCIÓN IDENTIFICADOS**
 
-### **Patrón 1: Atributos Faltantes**
-- **Problema**: Uso de `self.atributo` sin definir en constructor
-- **Solución**: Definir explícitamente en `__init__`
-- **Prevención**: Revisar todos los usos de `self.` en métodos
+### **Patrón 1: Atributos Debug Faltantes**
+- **Problema**: Uso de `self.debug` sin definir en constructor
+- **Solución**: Añadir `self.debug = False` en `__init__`
+- **Frecuencia**: Observado en powerup.py y powerup_new.py
+- **Prevención**: Definir todos los atributos de clase en el constructor
 
-### **Patrón 2: Statements Innecesarios**
-- **Problema**: `pass` en métodos que podrían tener funcionalidad
-- **Solución**: Reemplazar con código útil o eliminar si no es necesario
-- **Prevención**: Revisar métodos con solo `pass`
+### **Patrón 2: Statements Pass Innecesarios**
+- **Problema**: `pass` en métodos que podrían tener funcionalidad real
+- **Solución**: Reemplazar con código funcional o eliminar si no es necesario
+- **Frecuencia**: Común en métodos `_update_logic` y similares
+- **Prevención**: Implementar funcionalidad mínima útil en lugar de `pass`
 
-### **Patrón 3: Constantes de Pygame**
+### **Patrón 3: Errores de Import**
+- **Problema**: Imports desde rutas incorrectas o inexistentes
+- **Solución**: Verificar estructura de proyecto y corregir rutas
+- **Frecuencia**: Observado en projectile_system_fixed.py
+- **Prevención**: Usar imports relativos correctos y verificar estructura
+
+### **Patrón 4: Constantes de Pygame**
 - **Problema**: Import indirecto de constantes de pygame
 - **Solución**: Usar valores numéricos o imports directos
 - **Prevención**: Verificar imports de pygame y usar constantes apropiadas
@@ -157,6 +232,7 @@ get_errors(["ruta/al/archivo.py"])
 
 ### **Archivos Críticos Monitoreados**:
 - `src/entities/powerup_new.py` ✅
+- `src/entities/powerup.py` ✅
 - `src/entities/player_integration.py` ✅
 - `src/entities/player_movement.py` ✅
 - `src/entities/player_stats.py` ✅
