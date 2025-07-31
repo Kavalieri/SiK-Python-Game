@@ -104,7 +104,7 @@ class PlayerCore:
                 )
             else:
                 self.logger.warning(
-                    "Datos de personaje '%s' son None o no válidos, usando estadísticas por defecto",
+                    "Datos de personaje '%s' no válidos, usando estadísticas por defecto",
                     character_name,
                 )
         else:
