@@ -27,25 +27,30 @@ class GameSceneRender:
         self.scene = scene  # Referencia al núcleo GameScene
 
     def render_scene(self):
-        """
-        Renderiza fondo, entidades, proyectiles, powerups, tiles y HUD.
-        """
-        scene = self.scene
-        # Renderizar fondo
-        if scene.background:
-            scene.background.render(scene.screen)
-        else:
-            scene.screen.fill((135, 206, 235))
+        """Renderiza todos los elementos de la escena del juego."""
+        print("--- Iniciando render_scene ---")
+        # Renderizar el fondo
+        if self.scene.background:
+            self.scene.background.render(self.scene.screen, self.scene.camera)
+            print("Fondo renderizado.")
+
         # Renderizar entidades
-        self._render_entities(scene.enemy_manager.enemies, scene.screen, scene.camera)
-        self._render_entities(scene.projectiles, scene.screen, scene.camera)
-        self._render_entities(scene.powerups, scene.screen, scene.camera)
-        self._render_entities(scene.tiles, scene.screen, scene.camera)
+        self._render_entities(self.scene.tiles, self.scene.screen, self.scene.camera)
+        self._render_entities(self.scene.enemy_manager.enemies, self.scene.screen, self.scene.camera)
+        self._render_entities(self.scene.projectiles, self.scene.screen, self.scene.camera)
+        self._render_entities(self.scene.powerups, self.scene.screen, self.scene.camera)
+
         # Renderizar jugador
-        if scene.player:
-            self._render_entity(scene.player, scene.screen, scene.camera)
+        if self.scene.player:
+            self._render_entity(self.scene.player, self.scene.screen, self.scene.camera)
+
         # Renderizar HUD
-        scene.hud.render()
+        if self.scene.hud:
+            self.scene.hud.render(self.scene.screen)
+            print("HUD renderizado.")
+        
+        print(f"Posición de la cámara: {self.scene.camera.x}, {self.scene.camera.y}")
+        print("--- render_scene completado ---")
 
     def _render_entities(self, entities, screen, camera):
         """

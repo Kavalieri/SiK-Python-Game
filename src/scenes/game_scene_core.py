@@ -172,22 +172,30 @@ class GameScene(Scene):
             self.logger.error("Error al inicializar jugador")
 
     def _generate_world(self):
+        print("--- Iniciando _generate_world ---")
         try:
             world_width, world_height = (
                 self.screen.get_width() * 4,
                 self.screen.get_height() * 4,
             )
+            print(f"Dimensiones del mundo: {world_width}x{world_height}")
             world_generator = WorldGenerator(
                 world_width=world_width,
                 world_height=world_height,
                 screen_width=self.screen.get_width(),
                 screen_height=self.screen.get_height(),
             )
+            print("Generador del mundo creado.")
             self.tiles = world_generator.generate_world()
+            print(f"Generados {len(self.tiles)} tiles base.")
             self.tiles.extend(world_generator.generate_desert_oasis(1000, 1000, 300))
+            print(f"Añadido oasis. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_rock_formation(4000, 1000, 250))
+            print(f"Añadida formación rocosa. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_cactus_field(1000, 4000, 200))
+            print(f"Añadido campo de cactus. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_ruins(4000, 4000, 280))
+            print(f"Añadidas ruinas. Total tiles: {len(self.tiles)}")
             if self.camera:
                 self.camera.world_width, self.camera.world_height = (
                     world_width,
@@ -199,6 +207,8 @@ class GameScene(Scene):
                 world_width,
                 world_height,
             )
+            print("--- _generate_world completado ---")
         except ImportError:
             self.logger.error("Error al generar mundo")
+            print("!!! Error al generar mundo !!!")
             self.tiles = []

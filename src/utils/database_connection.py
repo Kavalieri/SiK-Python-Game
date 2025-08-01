@@ -2,7 +2,6 @@
 DatabaseConnection - Gestor de conexiones SQLite con pooling
 
 Gestiona el pool de conexiones, configuración y conexiones básicas.
-Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 """
 
 import logging

@@ -125,6 +125,11 @@ class GameEngineScenes:
             self.logger.info(
                 "Todas las escenas configuradas correctamente - sistema listo"
             )
+            # Forzar la transición a main_menu y un renderizado inicial
+            self.core.scene_manager.change_scene("main_menu")
+            self.core.scene_manager.update()
+            self.core.scene_manager.render()
+            pygame.display.flip()
         except RuntimeError as e:
             self.logger.error("Error al configurar escenas: %s", e)
             raise

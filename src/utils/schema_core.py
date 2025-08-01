@@ -6,7 +6,6 @@ Módulo principal que orquesta la creación de tablas y gestión de esquemas.
 Mantiene la funcionalidad principal del SchemaManager original en <150 líneas.
 
 Fase 1 de migración SQLite - Núcleo del sistema
-Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
 """
 
 import logging

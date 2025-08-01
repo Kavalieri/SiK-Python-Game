@@ -7,7 +7,6 @@ Refactorizado para mantener límite de 150 líneas delegando funcionalidad
 a módulos especializados.
 
 Fase 1 de migración SQLite - Manager principal
-Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
 """
 
 import logging

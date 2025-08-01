@@ -2,7 +2,6 @@
 Schema Migrations - Sistema de migraciones SQLite
 
 Gestiona migraciones de esquema, validación de integridad y registro de cambios.
-Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 """
 
 import hashlib

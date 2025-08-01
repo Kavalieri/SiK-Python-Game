@@ -12,6 +12,7 @@ import sys
 
 import pygame
 import pygame.constants as pg_constants  # pylint: disable=no-member
+import pygame_gui
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -40,6 +41,10 @@ class MainMenuScene(Scene):
         self.save_manager = save_manager
         self.logger = logging.getLogger(__name__)
 
+        # Inicializar pygame-gui
+        self.ui_manager = pygame_gui.UIManager(screen.get_size())
+        self.setup_pygame_gui_elements()
+
         # Inicializar menú
         self.menu_manager = MenuManager(screen, config, game_state, save_manager)
         self.menu_manager.show_menu("main")
@@ -67,6 +72,22 @@ class MainMenuScene(Scene):
             event: Evento de Pygame a procesar.
         """
         self.logger.debug("[MainMenuScene] Evento recibido: %s - %s", event.type, event)
+        
+        # Procesar eventos de pygame-gui primero
+        self.ui_manager.process_events(event)
+        
+        # Manejar eventos de botones pygame-gui
+        if event.type == pygame.USEREVENT:
+            if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.new_game_button:
+                    self._on_new_game()
+                elif event.ui_element == self.continue_button:
+                    self._on_continue_game()
+                elif event.ui_element == self.options_button:
+                    self._on_options()
+                elif event.ui_element == self.exit_button:
+                    self._on_exit()
+        
         # Procesar eventos de menú aquí
         if event.type == pg_constants.KEYDOWN:  # pylint: disable=c-extension-no-member
             self.logger.info("[MainMenuScene] Tecla pulsada: %s", event.key)
@@ -76,10 +97,43 @@ class MainMenuScene(Scene):
             )
         self.menu_manager.update([event])
 
+    def setup_pygame_gui_elements(self):
+        """Configura los elementos de la interfaz con pygame-gui"""
+        screen_size = self.screen.get_size()
+        
+        # Botón principal mejorado
+        self.new_game_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 200, 200, 50),
+            text='Nuevo Juego',
+            manager=self.ui_manager
+        )
+        
+        self.continue_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 270, 200, 50),
+            text='Continuar',
+            manager=self.ui_manager
+        )
+        
+        self.options_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 340, 200, 50),
+            text='Opciones',
+            manager=self.ui_manager
+        )
+        
+        self.exit_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 410, 200, 50),
+            text='Salir',
+            manager=self.ui_manager
+        )
+
     def update(self):
         """
         Actualiza la lógica de la escena.
         """
+        # Actualizar pygame-gui
+        time_delta = pygame.time.Clock().tick(60) / 1000.0
+        self.ui_manager.update(time_delta)
+        
         # Método vacío, pero necesario para la estructura.
         return
 
@@ -88,8 +142,11 @@ class MainMenuScene(Scene):
         # Fondo negro
         self.screen.fill((0, 0, 0))
 
-        # Renderizar menú
-        self.menu_manager.render()
+        # Comentar el menú tradicional para evitar superposición
+        # self.menu_manager.render()
+        
+        # Solo renderizar elementos pygame-gui
+        self.ui_manager.draw_ui(self.screen)
 
     def _on_new_game(self):
         """Callback para nuevo juego."""

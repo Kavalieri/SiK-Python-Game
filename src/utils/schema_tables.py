@@ -6,7 +6,6 @@ Módulo que contiene todas las definiciones de esquemas de tablas para el sistem
 de migración SQLite. Separado de SchemaManager para mantener límite de 150 líneas.
 
 Fase 1 de migración SQLite - Definiciones de esquemas
-Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
 """
 
 from typing import Dict

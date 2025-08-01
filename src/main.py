@@ -9,11 +9,14 @@ Descripción: Punto de entrada principal del videojuego 2D desarrollado con Pyth
              Inicializa el motor del juego, carga la configuración y ejecuta el bucle principal.
 """
 
-import importlib
 import sys
 from pathlib import Path
 
 import pygame
+
+# Añadir el directorio raíz al path para imports
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
 from src.core.game_engine import GameEngine
 from src.utils.config_manager import ConfigManager
@@ -22,23 +25,10 @@ from src.utils.logger import setup_logger
 # Inicializar pygame antes de cualquier uso
 pygame.init()  # pylint: disable=no-member
 
-# Añadir el directorio raíz al path para imports
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-
-# Configurar logger ANTES de cualquier import de módulos del juego
+# Configurar logger DESPUÉS de añadir el path
 logger = setup_logger()
 
 logger.info("Logger centralizado inicializado antes de imports de juego")
-
-print("PYTHONPATH:", sys.path)
-
-for mod in ["src.ui.menu_manager", "src.ui.menu_factory", "src.ui.menu_callbacks"]:
-    try:
-        m = importlib.import_module(mod)
-        print(f"{mod} loaded from: {m.__file__}")
-    except (ImportError, ModuleNotFoundError) as e:
-        print(f"Error loading {mod}: {e}")
 
 
 def main():

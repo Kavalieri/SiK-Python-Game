@@ -2,7 +2,6 @@
 DatabaseManager - Fachada unificada del sistema de base de datos SQLite
 
 Mantiene API completa delegando a DatabaseConnection y DatabaseOperations.
-Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 """
 
 import logging

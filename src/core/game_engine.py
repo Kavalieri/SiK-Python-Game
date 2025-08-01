@@ -8,6 +8,7 @@ Descripción: Fachada que integra todos los componentes del motor del juego.
 """
 
 import pygame
+import sys
 
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
@@ -22,23 +23,19 @@ class GameEngine:
     """
 
     def __init__(self, config: ConfigManager):
-        """
-        Inicializa el motor del juego.
+        """Inicializa el motor del juego.
 
         Args:
-            config: Gestor de configuración del juego
+            config (ConfigManager): Instancia del gestor de configuración.
         """
         self.logger = get_logger("SiK_Game")
+        self.logger.info("Inicializando GameEngine...")
 
-        # Inicializar componentes
         self.core = GameEngineCore(config)
         self.events = GameEngineEvents(self.core)
         self.scenes = GameEngineScenes(self.core, self.events)
 
-        # Configurar escenas
-        self.scenes.setup_scenes()
-
-        self.logger.info("GameEngine completamente inicializado")
+        self.logger.info("GameEngine inicializado.")
 
     @property
     def running(self) -> bool:
@@ -87,33 +84,23 @@ class GameEngine:
         return self.core.menu_manager
 
     def run(self):
-        """Ejecuta el bucle principal del juego."""
-        self.running = True
-        self.logger.info("Iniciando bucle principal del juego...")
+        """Bucle principal del juego."""
+        self.logger.info("Iniciando bucle principal del motor del juego.")
 
-        try:
-            while self.running:
-                # Verificar si el GameState solicita cerrar el juego
-                if (
-                    self.core.game_state
-                    and hasattr(self.core.game_state, "should_quit")
-                    and self.core.game_state.should_quit
-                ):
-                    self.logger.info("Cerrando juego por solicitud del GameState")
-                    self.running = False
-                    break
+        # Asegurar que la escena inicial se configure y renderice antes del bucle principal
+        self.scenes.setup_scenes()
+        self._update()  # Forzar una actualización inicial para procesar cambios de escena
+        self._render()  # Forzar un renderizado inicial para mostrar la escena
 
-                self.events.handle_events()
-                self._update()
-                self._render()
-                if self.clock:
-                    self.clock.tick(self.config.get_fps())
-
-        except RuntimeError as e:
-            self.logger.error("Error en el bucle principal: %s", e)
-            raise
-        finally:
-            self._cleanup()
+        while self.core.running:
+            self.events.handle_events()
+            self._update()
+            self._render()
+            self.core.clock.tick(self.core.get_fps())
+        
+        self.logger.info("Saliendo del bucle principal. Limpiando y cerrando...")
+        pygame.quit()
+        sys.exit()
 
     def _update(self):
         """Actualiza la lógica del juego."""

@@ -1,0 +1,80 @@
+{
+    "button": {
+        "colours": {
+            "normal_bg": "#1a1a2e",
+            "hovered_bg": "#16213e",
+            "disabled_bg": "#25252d",
+            "selected_bg": "#0f3460",
+            "normal_border": "#e94560",
+            "hovered_border": "#ff6b87",
+            "disabled_border": "#555555",
+            "selected_border": "#ff6b87",
+            "normal_text": "#ffffff",
+            "hovered_text": "#ffffff",
+            "selected_text": "#ffffff",
+            "disabled_text": "#666666"
+        },
+        "font": {
+            "name": "arial",
+            "size": "16",
+            "bold": "1"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "0",
+            "shape_corner_radius": "4"
+        }
+    },
+    "label": {
+        "colours": {
+            "normal_text": "#ffffff",
+            "normal_bg": "#00000000"
+        },
+        "font": {
+            "name": "arial",
+            "size": "14"
+        }
+    },
+    "window": {
+        "colours": {
+            "normal_bg": "#1a1a2e",
+            "normal_border": "#e94560"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "15",
+            "shape_corner_radius": "4"
+        }
+    },
+    "text_entry_line": {
+        "colours": {
+            "normal_bg": "#2d2d3a",
+            "normal_border": "#e94560",
+            "normal_text": "#ffffff"
+        },
+        "font": {
+            "name": "arial",
+            "size": "14"
+        },
+        "misc": {
+            "border_width": "2",
+            "shape_corner_radius": "4"
+        }
+    },
+    "horizontal_slider": {
+        "colours": {
+            "normal_bg": "#2d2d3a",
+            "hovered_bg": "#16213e",
+            "disabled_bg": "#25252d",
+            "selected_bg": "#0f3460",
+            "normal_border": "#e94560",
+            "hovered_border": "#ff6b87",
+            "disabled_border": "#555555"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "0",
+            "shape_corner_radius": "4"
+        }
+    }
+}

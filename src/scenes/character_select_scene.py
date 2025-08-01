@@ -1,6 +1,7 @@
 """Character Select Scene - Selección de Personaje (Refactorizada V2)"""
 
 import pygame
+import pygame_gui
 
 from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
@@ -28,24 +29,96 @@ class CharacterSelectScene(Scene):
         self.mouse_pos = (0, 0)
         self.logger = get_logger("SiK_Game")
 
+        # Configurar pygame-gui
+        self.ui_manager = pygame_gui.UIManager(
+            (self.screen_width, self.screen_height),
+            theme_path="assets/ui/theme.json"
+        )
+        
         # Inicializar menú (requerido por game_engine_scenes)
         self.menu_manager = MenuManager(screen, config, game_state, save_manager)
+        
+        # Configurar elementos pygame-gui
+        self._setup_pygame_gui_elements()
+    
+    def _setup_pygame_gui_elements(self):
+        """Configura los elementos de pygame-gui para la selección de personajes."""
+        
+        # Título
+        self.titulo_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(
+                (self.screen_width // 2 - 150, 20), (300, 50)
+            ),
+            text="SELECCIONAR PERSONAJE",
+            manager=self.ui_manager
+        )
+        
+        # Información del personaje seleccionado
+        self.character_info_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(
+                (self.screen_width // 2 - 200, 350), (400, 30)
+            ),
+            text="",
+            manager=self.ui_manager
+        )
+        
+        # Botones de navegación
+        self.prev_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (50, self.screen_height // 2 - 25), (80, 50)
+            ),
+            text="< Anterior",
+            manager=self.ui_manager
+        )
+        
+        self.next_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (self.screen_width - 130, self.screen_height // 2 - 25), (80, 50)
+            ),
+            text="Siguiente >",
+            manager=self.ui_manager
+        )
+        
+        # Botones de acción
+        self.back_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (50, self.screen_height - 80), (120, 50)
+            ),
+            text="Volver",
+            manager=self.ui_manager
+        )
+        
+        self.start_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (self.screen_width - 170, self.screen_height - 80), (120, 50)
+            ),
+            text="Iniciar",
+            manager=self.ui_manager
+        )
+        
+        # Actualizar información inicial
+        self._update_character_info()
 
     def update(self):
         """Actualiza la escena."""
+        time_delta = pygame.time.Clock().tick(60) / 1000.0
+        self.ui_manager.update(time_delta)
         self.character_animations.update(0.016)
         self.mouse_pos = pygame.mouse.get_pos()
 
     def render(self):
         """Renderiza la escena."""
         self.screen.fill((20, 20, 40))
-        self.character_ui.render_title(self.screen)
+        # Comentar UI original para evitar superposición
+        # self.character_ui.render_title(self.screen)
         if self.selected_key:
             self._render_selected_character()
-        self.character_ui.render_buttons(self.screen, self.mouse_pos)
-        self.character_ui.render_navigation_indicator(
-            self.screen, self.current_character_index, len(self.character_keys)
-        )
+        # self.character_ui.render_buttons(self.screen, self.mouse_pos)
+        # self.character_ui.render_navigation_indicator(
+        #     self.screen, self.current_character_index, len(self.character_keys)
+        # )
+        # Renderizar UI de pygame-gui
+        self.ui_manager.draw_ui(self.screen)
 
     def _navigate_character(self, direction: int):
         """Navega entre los personajes disponibles."""
@@ -54,6 +127,15 @@ class CharacterSelectScene(Scene):
                 self.current_character_index + direction
             ) % len(self.character_keys)
             self.selected_key = self.character_keys[self.current_character_index]
+            self._update_character_info()
+    
+    def _update_character_info(self):
+        """Actualiza la información del personaje seleccionado."""
+        if self.selected_key:
+            char_data = CharacterData.get_character_data(self.selected_key)
+            if char_data:
+                info_text = f"Personaje: {char_data.get('name', 'Sin nombre')} | Clase: {char_data.get('class', 'Guerrero')}"
+                self.character_info_label.set_text(info_text)
 
     def _render_selected_character(self):
         """Renderiza el personaje seleccionado."""
@@ -122,6 +204,25 @@ class CharacterSelectScene(Scene):
 
     def handle_event(self, event):
         """Maneja eventos de la escena."""
+        # Procesar eventos de pygame-gui primero
+        self.ui_manager.process_events(event)
+        
+        # Eventos específicos de pygame-gui
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == self.prev_button:
+                self._navigate_character(-1)
+                return True
+            elif event.ui_element == self.next_button:
+                self._navigate_character(1)
+                return True
+            elif event.ui_element == self.back_button:
+                self._on_back_clicked()
+                return True
+            elif event.ui_element == self.start_button:
+                self._on_start_clicked()
+                return True
+        
+        # Eventos de teclado
         if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
             if event.key in [pygame.K_LEFT, pygame.K_a]:  # pylint: disable=no-member
                 self._navigate_character(-1)

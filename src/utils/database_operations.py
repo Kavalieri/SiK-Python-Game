@@ -2,7 +2,6 @@
 DatabaseOperations - Operaciones SQLite avanzadas
 
 Gestiona queries, transacciones, backup y mantenimiento de BD.
-Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 """
 
 import logging

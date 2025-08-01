@@ -55,7 +55,7 @@ class CharacterUIRendererAdvanced:
     ):
         """Renderiza las habilidades de un personaje."""
         try:
-            if not char_data:
+            if not char_data or not isinstance(char_data, dict):
                 return
             skills = char_data.get("skills", [])
             if not skills:
