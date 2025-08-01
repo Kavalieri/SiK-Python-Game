@@ -102,6 +102,7 @@ class ConfigLoader:
             "powerups.json",
             "ui.json",
             "animations.json",
+            "save_system.json",
         ]
 
         for config_file in config_files:

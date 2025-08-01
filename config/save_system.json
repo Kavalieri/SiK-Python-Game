@@ -1,0 +1,16 @@
+{
+	"save_system": {
+		"use_sqlite": true,
+		"auto_migrate": true,
+		"database_path": "data/game.db",
+		"backup_enabled": true,
+		"backup_interval": 300,
+		"compression_enabled": true
+	},
+	"database": {
+		"pool_size": 5,
+		"timeout": 30,
+		"journal_mode": "WAL",
+		"synchronous": "NORMAL"
+	}
+}
