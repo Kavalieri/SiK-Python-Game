@@ -1,8 +1,0 @@
-# Test Terminal Safe Script - Final Validation
-
-Este archivo es para validar el funcionamiento completo del script terminal-safe
-creado como parte del banco de pruebas para commits controlados.
-
-Timestamp: 2025-07-30 10:38:30
-Objetivo: Probar commit completo con script ASCII-only
-Estado: Validación final del sistema de commits
