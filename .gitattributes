@@ -1,2 +1,42 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Configuración de line endings para el proyecto SiK Python Game
+# Todos los archivos de texto usan LF, sin conversiones automáticas
+
+# Archivos Python
+*.py text eol=lf
+*.pyi text eol=lf
+
+# Archivos de configuración  
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+
+# Documentación
+*.md text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+
+# Scripts
+*.ps1 text eol=lf
+*.sh text eol=lf
+*.bat text eol=lf
+
+# Archivos de proyecto
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
+
+# Archivos binarios (no convertir)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.db binary
+*.sqlite binary
+*.ttf binary
+*.otf binary
