@@ -72,10 +72,10 @@ class MainMenuScene(Scene):
             event: Evento de Pygame a procesar.
         """
         self.logger.debug("[MainMenuScene] Evento recibido: %s - %s", event.type, event)
-        
+
         # Procesar eventos de pygame-gui primero
         self.ui_manager.process_events(event)
-        
+
         # Manejar eventos de botones pygame-gui
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
@@ -87,7 +87,7 @@ class MainMenuScene(Scene):
                     self._on_options()
                 elif event.ui_element == self.exit_button:
                     self._on_exit()
-        
+
         # Procesar eventos de menú aquí
         if event.type == pg_constants.KEYDOWN:  # pylint: disable=c-extension-no-member
             self.logger.info("[MainMenuScene] Tecla pulsada: %s", event.key)
@@ -100,30 +100,30 @@ class MainMenuScene(Scene):
     def setup_pygame_gui_elements(self):
         """Configura los elementos de la interfaz con pygame-gui"""
         screen_size = self.screen.get_size()
-        
+
         # Botón principal mejorado
         self.new_game_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 200, 200, 50),
-            text='Nuevo Juego',
-            manager=self.ui_manager
+            relative_rect=pygame.Rect(screen_size[0] // 2 - 100, 200, 200, 50),
+            text="Nuevo Juego",
+            manager=self.ui_manager,
         )
-        
+
         self.continue_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 270, 200, 50),
-            text='Continuar',
-            manager=self.ui_manager
+            relative_rect=pygame.Rect(screen_size[0] // 2 - 100, 270, 200, 50),
+            text="Continuar",
+            manager=self.ui_manager,
         )
-        
+
         self.options_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 340, 200, 50),
-            text='Opciones',
-            manager=self.ui_manager
+            relative_rect=pygame.Rect(screen_size[0] // 2 - 100, 340, 200, 50),
+            text="Opciones",
+            manager=self.ui_manager,
         )
-        
+
         self.exit_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(screen_size[0]//2 - 100, 410, 200, 50),
-            text='Salir',
-            manager=self.ui_manager
+            relative_rect=pygame.Rect(screen_size[0] // 2 - 100, 410, 200, 50),
+            text="Salir",
+            manager=self.ui_manager,
         )
 
     def update(self):
@@ -133,7 +133,7 @@ class MainMenuScene(Scene):
         # Actualizar pygame-gui
         time_delta = pygame.time.Clock().tick(60) / 1000.0
         self.ui_manager.update(time_delta)
-        
+
         # Método vacío, pero necesario para la estructura.
         return
 
@@ -144,43 +144,63 @@ class MainMenuScene(Scene):
 
         # Comentar el menú tradicional para evitar superposición
         # self.menu_manager.render()
-        
+
         # Solo renderizar elementos pygame-gui
         self.ui_manager.draw_ui(self.screen)
 
     def _on_new_game(self):
         """Callback para nuevo juego."""
         self.logger.info(
-            "[MainMenuScene] Acción: Nuevo Juego - mostrando menú de guardado para nueva partida"
+            "[MainMenuScene] Acción: Nuevo Juego - navegando a selección de personaje"
         )
-        self.menu_manager.show_menu("save")
+        try:
+            # Usar el sistema de escenas apropiado
+            if hasattr(self, "game_state") and self.game_state:
+                self.game_state.set_scene("character_select")
+            else:
+                self.logger.error("game_state no disponible en MainMenuScene")
+        except (AttributeError, ValueError, RuntimeError) as e:
+            self.logger.error("Error iniciando nuevo juego: %s", e)
 
     def _on_continue_game(self):
         """Callback para continuar juego."""
         self.logger.info(
-            "[MainMenuScene] Acción: Continuar Juego - mostrando menú de guardado para continuar"
+            "[MainMenuScene] Acción: Continuar Juego - navegando a selección de slot"
         )
-        self.menu_manager.show_menu("save")
+        try:
+            # Usar el sistema de escenas apropiado
+            if hasattr(self, "game_state") and self.game_state:
+                self.game_state.set_scene("slot_selection")
+            else:
+                self.logger.error("game_state no disponible en MainMenuScene")
+        except (AttributeError, ValueError, RuntimeError) as e:
+            self.logger.error("Error continuando juego: %s", e)
 
     def _on_load_game(self):
-        """
-        Callback para cargar partida.
-
-        Nota:
-            Este método aún no está implementado.
-        """
-        self.logger.warning("[MainMenuScene] Acción: Cargar Juego - NO IMPLEMENTADO")
-        # El menú sigue operativo
+        """Callback para cargar partida."""
+        self.logger.info(
+            "[MainMenuScene] Acción: Cargar Juego - navegando a selección de slot"
+        )
+        try:
+            # Usar el sistema de escenas apropiado
+            if hasattr(self, "game_state") and self.game_state:
+                self.game_state.set_scene("slot_selection")
+            else:
+                self.logger.error("game_state no disponible en MainMenuScene")
+        except (AttributeError, ValueError, RuntimeError) as e:
+            self.logger.error("Error cargando juego: %s", e)
 
     def _on_options(self):
-        """
-        Callback para opciones.
-
-        Nota:
-            Este método aún no está implementado.
-        """
-        self.logger.warning("[MainMenuScene] Acción: Opciones - NO IMPLEMENTADO")
-        # El menú sigue operativo
+        """Callback para opciones."""
+        self.logger.info("[MainMenuScene] Acción: Opciones - navegando a opciones")
+        try:
+            # Usar el sistema de escenas apropiado
+            if hasattr(self, "game_state") and self.game_state:
+                self.game_state.set_scene("options")
+            else:
+                self.logger.error("game_state no disponible en MainMenuScene")
+        except (AttributeError, ValueError, RuntimeError) as e:
+            self.logger.error("Error accediendo a opciones: %s", e)
 
     def _on_exit(self):
         """

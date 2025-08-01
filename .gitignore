@@ -181,14 +181,56 @@ cython_debug/
 .cursorindexingignore
 .cursor
 
+# === ESPECÍFICO PYGAME Y JUEGOS ===
+
+# Archivos de guardado de juego (datos de usuario)
+saves/
+save_*.json
+save_*.dat
+*.save
+
+# Capturas de pantalla y recordings
+screenshots/
+recordings/
+*.png.temp
+*.jpg.temp
+
+# Configuración de usuario local
+user_config.json
+player_settings.json
+keybindings.json
+
+# Logs específicos del juego
+game.log*
+*.log
+*.log.*
+
 # === CONFIGURACIÓN ESPECÍFICA DEL PROYECTO SiK-Python-Game ===
 
-# Directorios de datos generados por el juego
+# Datos y archivos generados automáticamente por el juego
+data/
 saves/
 logs/
 
+# Documentación generada automáticamente
+docs/
+
 # Releases y distribución
 releases/
+
+# Scripts de utilidad temporal (generados dinámicamente)
+normalize_encoding.ps1
+fix_database.py
+init_database.py
+check_db.py
+
+# Archivos de base de datos SQLite (datos de usuario)
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.db-journal
 
 # === ESTRUCTURA CENTRALIZADA DEV-TOOLS ===
 # Los directorios base se mantienen, pero excluir contenido temporal/generado
@@ -223,9 +265,12 @@ dev-tools/packaging/releases/
 dev-tools/scripts/temp/
 
 # === ARCHIVOS TEMPORALES Y BACKUP ===
+
 # Archivos temporales del proyecto
 cleanup_*/
 backup_*/
+temp/
+tmp/
 *.temp
 *.tmp
 *.bak
@@ -233,33 +278,70 @@ backup_*/
 *.orig
 *_backup.*
 *_original.*
+*_temp.*
 commit_message.txt
 
-# === ARCHIVOS DE EMPAQUETADO Y DISTRIBUCIÓN ===
+# Archivos de configuración temporal/local
+config.local.json
+.env.local
+.env.development.local
+
+# Archivos de testeo temporal
+test_*.temp
+debug_*.temp
+diagnostico*.py
+
+# === EMPAQUETADO Y DISTRIBUCIÓN ===
+
+# Archivos compilados/ejecutables
 *.exe
 *.zip
 *.tar.gz
 *.tar.bz2
 *.7z
 *.rar
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+
+# Directorios de distribución
 dist/
 build/
+releases/
 *.spec
 
-# === CONFIGURACIÓN DE EDITORES ===
-# VS Code
+# PyInstaller específico
+*.manifest
+
+# === CONFIGURACIÓN DE EDITORES Y HERRAMIENTAS ===
+
+# VS Code - excluir todo excepto configuración esencial
 .vscode/
 !.vscode/settings.json
 !.vscode/launch.json
 !.vscode/tasks.json
+!.vscode/extensions.json
 
 # PyCharm/IntelliJ
 .idea/
 
-# Cursor AI
+# Cursor AI - excluir completamente
 .cursor/
 .cursorignore
 .cursorindexingignore
+
+# Poetry - mantener lock file para reproducibilidad
+poetry.lock
+
+# Pylint, MyPy, Ruff caches
+.pylint.d/
+.mypy_cache/
+.ruff_cache/
+
+# Pre-commit hooks
+.pre-commit-config.yaml
 
 # === CONFIGURACIÓN DE DESARROLLO ===
 # Configuración personal de desarrollador
