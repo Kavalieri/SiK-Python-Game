@@ -9,7 +9,7 @@ Descripción: Definiciones de tipos, estados y estadísticas para entidades.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict
+from typing import Any
 
 
 class EntityType(Enum):
@@ -46,7 +46,7 @@ class EntityStats:
     attack_speed: float = 1.0
     attack_range: float = 50.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convierte las estadísticas a diccionario para guardado."""
         return {
             "health": self.health,
@@ -59,7 +59,7 @@ class EntityStats:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EntityStats":
+    def from_dict(cls, data: dict[str, Any]) -> "EntityStats":
         """Crea estadísticas desde diccionario."""
         return cls(
             health=data.get("health", 100.0),

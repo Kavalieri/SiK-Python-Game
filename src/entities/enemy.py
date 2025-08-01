@@ -8,8 +8,8 @@ Descripción: Fachada que mantiene API original del sistema de enemigos.
 """
 
 # Imports para compatibilidad
-from .enemy_core import EnemyCore
 from .enemy_behavior import EnemyBehavior
+from .enemy_core import EnemyCore
 from .enemy_manager import Enemy, EnemyManager
 
 # Re-exportar clases principales para mantener compatibilidad

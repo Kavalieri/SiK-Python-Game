@@ -2,7 +2,6 @@
 
 import os
 import random
-from typing import List
 
 import pygame
 
@@ -42,7 +41,7 @@ class GameScene(Scene):
         self.animation_manager = IntelligentAnimationManager(self.asset_manager)
         self.player = None
         self.enemy_manager = EnemyManager(self.animation_manager)
-        self.projectiles: List[Projectile] = []
+        self.projectiles: list[Projectile] = []
         self.powerups = []
         self.tiles = []
         self.hud = HUD(screen, config, game_state)

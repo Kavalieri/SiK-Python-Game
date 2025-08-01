@@ -8,9 +8,10 @@ Descripción: Módulo que contiene todos los callbacks de los menús del juego.
 """
 
 from typing import Any
+
 from ..core.game_state import GameState
-from ..utils.save_manager import SaveManager
 from ..utils.logger import get_logger
+from ..utils.save_manager import SaveManager
 
 
 class MenuCallbacks:

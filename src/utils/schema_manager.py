@@ -10,7 +10,7 @@ Fase 1 de migración SQLite - Manager principal
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 from .schema_core import SchemaCore
@@ -64,7 +64,7 @@ class SchemaManager:
 
         return result
 
-    def validate_schema(self) -> Dict[str, Any]:
+    def validate_schema(self) -> dict[str, Any]:
         """
         Valida la integridad del esquema actual.
 
@@ -81,7 +81,7 @@ class SchemaManager:
 
         return result
 
-    def create_backup(self, backup_path: Optional[str] = None) -> bool:
+    def create_backup(self, backup_path: str | None = None) -> bool:
         """
         Crea backup de la base de datos antes de cambios importantes.
 
@@ -103,7 +103,7 @@ class SchemaManager:
 
         return result
 
-    def get_current_version(self) -> Optional[str]:
+    def get_current_version(self) -> str | None:
         """
         Obtiene la versión actual del esquema desde metadatos.
 
@@ -116,7 +116,7 @@ class SchemaManager:
         self._logger.debug("Versión de esquema actual: %s", version)
         return version
 
-    def get_schema_info(self) -> Dict[str, Any]:
+    def get_schema_info(self) -> dict[str, Any]:
         """
         Obtiene información completa del esquema y estado de la base de datos.
 
@@ -128,7 +128,7 @@ class SchemaManager:
         self._logger.debug("Recopilando información completa del esquema")
         return self.schema_core.get_schema_info()
 
-    def get_database_info(self) -> Dict[str, Any]:
+    def get_database_info(self) -> dict[str, Any]:
         """
         Obtiene información de la base de datos subyacente.
 

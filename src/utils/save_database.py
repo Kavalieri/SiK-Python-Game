@@ -4,7 +4,7 @@ import json
 import logging
 import sqlite3
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 from .save_encryption import SaveEncryption
@@ -21,7 +21,7 @@ class SaveDatabase:
         self.logger = logging.getLogger(__name__)
 
     def save_game_to_database(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """Guarda el estado del juego en la base de datos SQLite encriptado.
 
@@ -86,7 +86,7 @@ class SaveDatabase:
             self.logger.error("Error guardando en base de datos slot %d: %s", slot, e)
             return False
 
-    def load_game_from_database(self, slot: int) -> Optional[Dict[str, Any]]:
+    def load_game_from_database(self, slot: int) -> dict[str, Any] | None:
         """Carga el estado del juego desde la base de datos SQLite.
 
         Args:
@@ -144,7 +144,7 @@ class SaveDatabase:
             self.logger.error("Error cargando desde base de datos slot %d: %s", slot, e)
             return None
 
-    def get_all_saves_info(self) -> List[Dict[str, Any]]:
+    def get_all_saves_info(self) -> list[dict[str, Any]]:
         """Obtiene información de todas las partidas guardadas.
 
         Returns:
@@ -216,7 +216,7 @@ class SaveDatabase:
             return False
 
     def migrate_pickle_to_database(
-        self, pickle_data: Dict[str, Any], slot: int
+        self, pickle_data: dict[str, Any], slot: int
     ) -> bool:
         """Migra datos de pickle a la base de datos SQLite.
 

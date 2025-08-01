@@ -9,7 +9,6 @@ Descripción: Fachada principal que coordina todos los módulos de UI de persona
 """
 
 import logging
-from typing import Dict, Optional, Tuple
 
 import pygame
 
@@ -111,7 +110,7 @@ class CharacterUI:
     # MÉTODOS DE BOTONES Y NAVEGACIÓN (Delegados a módulos especializados)
     # ============================================================================
 
-    def render_buttons(self, screen: pygame.Surface, mouse_pos: Tuple[int, int]):
+    def render_buttons(self, screen: pygame.Surface, mouse_pos: tuple[int, int]):
         """Renderiza los botones de la interfaz."""
         self.ui_buttons.render_main_buttons(screen, mouse_pos)
         self.ui_navigation.render_navigation_buttons(screen, mouse_pos)
@@ -124,7 +123,7 @@ class CharacterUI:
             screen, current_index, total_characters
         )
 
-    def get_clicked_button(self, mouse_pos: Tuple[int, int]) -> Optional[str]:
+    def get_clicked_button(self, mouse_pos: tuple[int, int]) -> str | None:
         """Obtiene el botón clickeado."""
         return self.ui_buttons.get_main_button_clicked(
             mouse_pos
@@ -132,9 +131,9 @@ class CharacterUI:
 
     def get_character_card_clicked(
         self,
-        mouse_pos: Tuple[int, int],
-        character_positions: Dict[str, Tuple[int, int]],
-    ) -> Optional[str]:
+        mouse_pos: tuple[int, int],
+        character_positions: dict[str, tuple[int, int]],
+    ) -> str | None:
         """Obtiene la tarjeta de personaje clickeada."""
         return self.ui_navigation.get_character_card_clicked(
             mouse_pos, character_positions
@@ -156,13 +155,13 @@ class CharacterUI:
             "button_count": len(self.buttons),
         }
 
-    def is_button_hovered(self, button_name: str, mouse_pos: Tuple[int, int]) -> bool:
+    def is_button_hovered(self, button_name: str, mouse_pos: tuple[int, int]) -> bool:
         """Verifica si un botón específico está siendo hover."""
         return self.ui_buttons.is_main_button_hovered(
             button_name, mouse_pos
         ) or self.ui_navigation.is_navigation_hovered(button_name, mouse_pos)
 
-    def get_button_rect(self, button_name: str) -> Optional[pygame.Rect]:
+    def get_button_rect(self, button_name: str) -> pygame.Rect | None:
         """Obtiene el rectángulo de un botón específico."""
         return self.ui_buttons.get_main_button_rect(
             button_name

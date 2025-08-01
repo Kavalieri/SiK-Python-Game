@@ -9,7 +9,6 @@ Descripción: Sistema de enemigos con animaciones y volteo.
 
 import math
 import random
-from typing import List, Optional, Tuple
 
 import pygame
 
@@ -79,7 +78,7 @@ class Enemy:
             self.speed = 90.0  # Velocidad ajustada
             self.attack_range = 45
 
-    def update(self, dt: float, player_pos: Optional[Tuple[float, float]] = None):
+    def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """
         Actualiza el estado del enemigo.
 
@@ -103,14 +102,14 @@ class Enemy:
         # Actualizar volteo basado en la dirección del movimiento
         self._update_facing_direction()
 
-    def _is_player_in_range(self, player_pos: Tuple[float, float]) -> bool:
+    def _is_player_in_range(self, player_pos: tuple[float, float]) -> bool:
         """Verifica si el jugador está en rango de detección."""
         distance = math.sqrt(
             (player_pos[0] - self.x) ** 2 + (player_pos[1] - self.y) ** 2
         )
         return distance < 300  # Rango de detección aumentado
 
-    def _chase_player(self, player_pos: Tuple[float, float], dt: float):
+    def _chase_player(self, player_pos: tuple[float, float], dt: float):
         """Persigue al jugador."""
         # Calcular dirección hacia el jugador
         dx = player_pos[0] - self.x
@@ -215,7 +214,7 @@ class Enemy:
             self.is_dead = True
             self.current_animation = "Dead"
 
-    def get_current_frame(self) -> Optional[pygame.Surface]:
+    def get_current_frame(self) -> pygame.Surface | None:
         """Obtiene el frame actual de la animación."""
         frame = self.animation_player.get_current_frame()
         if frame:
@@ -255,12 +254,12 @@ class EnemyManager:
             animation_manager: Gestor de animaciones
         """
         self.animation_manager = animation_manager
-        self.enemies: List[Enemy] = []
+        self.enemies: list[Enemy] = []
         self.spawn_timer = 0
         self.spawn_delay = 1500  # milisegundos (más rápido)
         self.max_enemies = 8
 
-    def update(self, dt: float, player_pos: Optional[Tuple[float, float]] = None):
+    def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """
         Actualiza todos los enemigos.
 
@@ -321,7 +320,7 @@ class EnemyManager:
         self.enemies.append(enemy)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """
         Renderiza todos los enemigos.
@@ -340,8 +339,8 @@ class EnemyManager:
                 screen.blit(frame, (render_x, render_y))
 
     def get_enemies_in_range(
-        self, pos: Tuple[float, float], range: float
-    ) -> List[Enemy]:
+        self, pos: tuple[float, float], range: float
+    ) -> list[Enemy]:
         """
         Obtiene enemigos en un rango específico.
 

@@ -8,7 +8,7 @@ import logging
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from .database_connection import DatabaseConnection
 
@@ -23,9 +23,9 @@ class DatabaseOperations:
     def execute_query(
         self,
         query: str,
-        params: Optional[Union[tuple, Dict[str, Any]]] = None,
+        params: tuple | dict[str, Any] | None = None,
         fetch_results: bool = True,
-    ) -> Optional[List[Dict[str, Any]]]:
+    ) -> list[dict[str, Any]] | None:
         """Ejecuta query SQL con parámetros opcionales."""
         try:
             with self.connection.get_connection() as conn:

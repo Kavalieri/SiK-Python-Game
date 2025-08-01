@@ -1,7 +1,7 @@
 """Save Manager - Sistema de Guardado Refactorizado"""
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config_manager import ConfigManager
 from .save_compatibility import SaveCompatibility
@@ -46,18 +46,18 @@ class SaveManager:
             self.logger.error("Error inicializando SaveManager: %s", e)
             raise
 
-    def get_save_files_info(self) -> List[Dict[str, Any]]:
+    def get_save_files_info(self) -> list[dict[str, Any]]:
         """Obtiene información de todos los archivos de guardado."""
         return self.compatibility.get_saves_info_unified()
 
     def save_game(
-        self, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """Guarda el estado del juego actual."""
         slot = getattr(game_state, "active_slot", 1)
         return self.compatibility.save_game_unified(slot, game_state, additional_data)
 
-    def load_save(self, save_file_number: int) -> Optional[Dict[str, Any]]:
+    def load_save(self, save_file_number: int) -> dict[str, Any] | None:
         """Carga una partida guardada específica."""
         return self.compatibility.load_game_unified(save_file_number)
 
@@ -158,11 +158,11 @@ class SaveManager:
             self.logger.error("Error creando backup: %s", e)
             return False
 
-    def migrate_to_sqlite(self) -> Dict[str, bool]:
+    def migrate_to_sqlite(self) -> dict[str, bool]:
         """Migra partidas desde pickle a SQLite."""
         return self.compatibility.migrate_all_pickle_to_sqlite()
 
-    def get_system_info(self) -> Dict[str, Any]:
+    def get_system_info(self) -> dict[str, Any]:
         """Obtiene información del sistema de guardado."""
         return {
             "sqlite_available": self.database is not None,
@@ -172,7 +172,7 @@ class SaveManager:
             "total_saves": len(self.get_save_files_info()),
         }
 
-    def validate_saves_integrity(self) -> Dict[str, bool]:
+    def validate_saves_integrity(self) -> dict[str, bool]:
         """Valida la integridad de todas las partidas guardadas."""
         results = {}
         save_files = self.get_save_files_info()

@@ -8,7 +8,6 @@ Descripción: Módulo que maneja la interfaz de usuario para la selección de pe
 """
 
 import logging
-from typing import Dict, Optional, Tuple
 
 import pygame
 
@@ -318,7 +317,7 @@ class CharacterUI:
             screen.blit(skill_surface, (x, y + y_offset))
             y_offset += 20
 
-    def render_buttons(self, screen: pygame.Surface, mouse_pos: Tuple[int, int]):
+    def render_buttons(self, screen: pygame.Surface, mouse_pos: tuple[int, int]):
         """
         Renderiza los botones de la interfaz.
 
@@ -378,7 +377,7 @@ class CharacterUI:
             )
             pygame.draw.circle(screen, color, (x, y), dot_size)
 
-    def get_clicked_button(self, mouse_pos: Tuple[int, int]) -> Optional[str]:
+    def get_clicked_button(self, mouse_pos: tuple[int, int]) -> str | None:
         """
         Obtiene el botón clickeado.
 
@@ -395,9 +394,9 @@ class CharacterUI:
 
     def get_character_card_clicked(
         self,
-        mouse_pos: Tuple[int, int],
-        character_positions: Dict[str, Tuple[int, int]],
-    ) -> Optional[str]:
+        mouse_pos: tuple[int, int],
+        character_positions: dict[str, tuple[int, int]],
+    ) -> str | None:
         """
         Obtiene la tarjeta de personaje clickeada.
 

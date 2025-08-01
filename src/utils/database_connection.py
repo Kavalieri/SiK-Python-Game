@@ -9,7 +9,7 @@ import sqlite3
 import threading
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 
 class DatabaseConnection:
@@ -18,7 +18,7 @@ class DatabaseConnection:
     def __init__(self, db_path: str = "saves/game_database.db", pool_size: int = 5):
         self.db_path = Path(db_path)
         self.pool_size = pool_size
-        self._pool: List[sqlite3.Connection] = []
+        self._pool: list[sqlite3.Connection] = []
         self._pool_lock = threading.Lock()
         self._logger = logging.getLogger("DatabaseConnection")
 
@@ -102,7 +102,7 @@ class DatabaseConnection:
         except sqlite3.Error as e:
             self._logger.error("Error cerrando conexiones: %s", e)
 
-    def get_connection_info(self) -> Dict[str, Any]:
+    def get_connection_info(self) -> dict[str, Any]:
         """Obtiene información del estado de conexiones."""
         with self._pool_lock:
             return {

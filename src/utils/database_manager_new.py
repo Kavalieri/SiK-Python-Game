@@ -5,7 +5,7 @@ Mantiene API completa delegando a DatabaseConnection y DatabaseOperations.
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from .database_connection import DatabaseConnection
 from .database_operations import DatabaseOperations
@@ -30,7 +30,7 @@ class DatabaseManager:
         """Cierra todas las conexiones del pool."""
         return self._connection.close_all_connections()
 
-    def get_connection_info(self) -> Dict[str, Any]:
+    def get_connection_info(self) -> dict[str, Any]:
         """Obtiene información del estado de conexiones."""
         return self._connection.get_connection_info()
 
@@ -39,9 +39,9 @@ class DatabaseManager:
     def execute_query(
         self,
         query: str,
-        params: Optional[Union[tuple, Dict[str, Any]]] = None,
+        params: tuple | dict[str, Any] | None = None,
         fetch_results: bool = True,
-    ) -> Optional[List[Dict[str, Any]]]:
+    ) -> list[dict[str, Any]] | None:
         """Ejecuta query SQL con parámetros opcionales."""
         return self._operations.execute_query(query, params, fetch_results)
 

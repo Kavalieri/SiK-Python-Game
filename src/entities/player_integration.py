@@ -9,7 +9,7 @@ Descripción: Integración del jugador con stats, effects, combat y otros sistem
 
 import logging
 import time
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import pygame
 import pygame.mixer
@@ -56,7 +56,7 @@ class PlayerIntegration:
         self.attack_configs = [AttackConfig(a) for a in char_data.get("ataques", [])]
         self.combat = PlayerCombat(player_core.stats, self.effects, self.attack_configs)
 
-    def attack(self, target_pos: Tuple[int, int], enemies: List[Any]):
+    def attack(self, target_pos: tuple[int, int], enemies: list[Any]):
         """
         Ejecuta el ataque actual según el tipo (melee, ranged, area).
         Reproduce animación y sonido si están definidos en el ataque.
@@ -171,7 +171,7 @@ class PlayerIntegration:
         current_time = time.time()
         self.effects.update_effects(current_time)
 
-    def get_integration_data(self) -> Dict[str, Any]:
+    def get_integration_data(self) -> dict[str, Any]:
         """Obtiene datos de integración para guardado."""
         return {
             "effects": self.effects.get_active_effects(),
@@ -180,7 +180,7 @@ class PlayerIntegration:
             "stats": self.player_core.stats.to_dict(),
         }
 
-    def load_integration_data(self, data: Dict[str, Any]):
+    def load_integration_data(self, data: dict[str, Any]):
         """Carga datos de integración desde guardado."""
         # Cargar estadísticas
         if "stats" in data:

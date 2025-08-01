@@ -19,7 +19,6 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Tuple
 
 
 class IntelligentCommitSystem:
@@ -31,7 +30,7 @@ class IntelligentCommitSystem:
 
     def run_command_with_timeout(
         self, cmd: list, timeout_seconds: int = 120, capture_output: bool = True
-    ) -> Tuple[bool, str, str]:
+    ) -> tuple[bool, str, str]:
         """
         Ejecuta comando con timeout y sin bloqueos de entrada.
 

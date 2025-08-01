@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Wind Effects - Sistema de efectos visuales del viento.
 Módulo especializado extraído de atmospheric_effects.py (optimización de líneas).

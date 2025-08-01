@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Heat Shimmer Effects - Sistema de efectos de ondas de calor.
 Módulo especializado extraído de atmospheric_effects.py (optimización de líneas).

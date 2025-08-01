@@ -7,8 +7,6 @@ Fecha: 2024-12-19
 Descripción: Módulo para configuración de temas visuales de menús.
 """
 
-from typing import Dict
-
 import pygame
 import pygame_menu
 from pygame_menu import themes  # Import directo de themes para evitar pylint error
@@ -90,11 +88,11 @@ class MenuTheme:
         """Obtiene dimensiones para menús."""
         return self.screen_width, self.screen_height
 
-    def get_font_sizes(self) -> Dict[str, int]:
+    def get_font_sizes(self) -> dict[str, int]:
         """Obtiene tamaños de fuente estándar."""
         return {"title": 30, "button": 25, "option": 20, "label": 18, "small": 16}
 
-    def get_spacing_config(self) -> Dict[str, int]:
+    def get_spacing_config(self) -> dict[str, int]:
         """Obtiene configuración de espaciado."""
         return {
             "vertical_margin_small": 5,
@@ -127,7 +125,7 @@ class MenuTheme:
         except (AttributeError, ValueError) as e:
             self.logger.error("Error aplicando tema '%s': %s", theme_name, str(e))
 
-    def get_color_palette(self) -> Dict[str, tuple]:
+    def get_color_palette(self) -> dict[str, tuple]:
         """Obtiene paleta de colores del juego."""
         return {
             "primary": (255, 165, 0),  # Naranja principal

@@ -9,7 +9,6 @@ Descripción: Valida posiciones y crea elementos con sprites del mundo.
 
 import logging
 import random
-from typing import List, Optional
 
 import pygame
 
@@ -33,7 +32,7 @@ class WorldValidator:
         self.logger = logging.getLogger(__name__)
 
     def is_valid_position(
-        self, x: float, y: float, existing_elements: List[Tile]
+        self, x: float, y: float, existing_elements: list[Tile]
     ) -> bool:
         """
         Verifica si una posición es válida para colocar un elemento.
@@ -52,7 +51,7 @@ class WorldValidator:
                 return False
         return True
 
-    def create_element_with_sprite(self, x: float, y: float) -> Optional[Tile]:
+    def create_element_with_sprite(self, x: float, y: float) -> Tile | None:
         """
         Crea un elemento usando sprites reales de assets/objects/elementos/.
 
@@ -102,7 +101,7 @@ class WorldValidator:
             tile_type = random.choice(list(TileType))
             return Tile(x, y, tile_type)
 
-    def validate_world_bounds(self, elements: List[Tile]) -> List[Tile]:
+    def validate_world_bounds(self, elements: list[Tile]) -> list[Tile]:
         """Valida que todos los elementos estén dentro de los límites del mundo."""
         valid_elements = []
 
@@ -115,11 +114,11 @@ class WorldValidator:
 
         return valid_elements
 
-    def validate_safe_zone(self, elements: List[Tile]) -> List[Tile]:
+    def validate_safe_zone(self, elements: list[Tile]) -> list[Tile]:
         """Valida que ningún elemento esté en la zona segura."""
         return [e for e in elements if not self.world_core.is_in_safe_zone(e.x, e.y)]
 
-    def validate_minimum_distance(self, elements: List[Tile]) -> List[Tile]:
+    def validate_minimum_distance(self, elements: list[Tile]) -> list[Tile]:
         """Valida que todos los elementos mantengan distancia mínima entre sí."""
         valid_elements = []
 

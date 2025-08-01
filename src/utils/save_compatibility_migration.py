@@ -8,7 +8,7 @@ Descripción: Sistema de migración entre pickle y SQLite.
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from .save_compatibility_core import SaveCompatibilityCore
 
@@ -28,7 +28,7 @@ class SaveCompatibilityMigration:
         self.core = core
         self.logger = logging.getLogger(__name__)
 
-    def migrate_pickle_to_sqlite(self, slot: int, pickle_data: Dict[str, Any]) -> bool:
+    def migrate_pickle_to_sqlite(self, slot: int, pickle_data: dict[str, Any]) -> bool:
         """
         Migra datos pickle específicos a SQLite.
 
@@ -61,7 +61,7 @@ class SaveCompatibilityMigration:
             )
             return False
 
-    def migrate_all_pickle_to_sqlite(self) -> Dict[str, bool]:
+    def migrate_all_pickle_to_sqlite(self) -> dict[str, bool]:
         """
         Migra todas las partidas pickle a SQLite.
 
@@ -136,7 +136,7 @@ class SaveCompatibilityMigration:
             )
             return False
 
-    def get_migration_status(self) -> Dict[str, Any]:
+    def get_migration_status(self) -> dict[str, Any]:
         """
         Obtiene el estado de migración del sistema.
 
@@ -156,7 +156,7 @@ class SaveCompatibilityMigration:
             save_files = self.core.loader.load_save_files_info()
             pickle_count = len([s for s in save_files if s["exists"]])
             status["pickle_files_count"] = pickle_count
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.warning("No se pudo contar archivos pickle: %s", e)
 
         # Contar saves en SQLite

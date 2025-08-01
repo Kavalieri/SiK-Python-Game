@@ -10,7 +10,7 @@ Descripción: Gestión de carga de configuración y sprites individuales de pers
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import pygame
 
@@ -33,7 +33,7 @@ class CharacterAssetsLoader:
 
         self.logger.info("CharacterAssetsLoader inicializado")
 
-    def _load_animation_config(self) -> Dict[str, Any]:
+    def _load_animation_config(self) -> dict[str, Any]:
         """
         Carga la configuración de animaciones desde config/animations.json.
 
@@ -43,7 +43,7 @@ class CharacterAssetsLoader:
         config_path = Path("config/animations.json")
 
         try:
-            with open(config_path, "r", encoding="utf-8") as f:
+            with open(config_path, encoding="utf-8") as f:
                 config = json.load(f)
                 self.logger.info("Configuración de animaciones cargada exitosamente")
                 return config
@@ -53,7 +53,7 @@ class CharacterAssetsLoader:
             )
         except json.JSONDecodeError as e:
             self.logger.error("Error al decodificar config/animations.json: %s", e)
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error(
                 "Error de acceso al archivo config/animations.json: %s", e
             )
@@ -66,7 +66,7 @@ class CharacterAssetsLoader:
 
     def get_character_sprite(
         self, character_name: str, animation: str, frame: int = 1, scale: float = 1.0
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Obtiene un sprite de personaje específico.
 
@@ -162,7 +162,7 @@ class CharacterAssetsLoader:
 
         return self.animation_config["characters"][character_name].get("animations", [])
 
-    def get_character_config(self, character_name: str) -> Dict[str, Any]:
+    def get_character_config(self, character_name: str) -> dict[str, Any]:
         """
         Obtiene la configuración completa de un personaje.
 

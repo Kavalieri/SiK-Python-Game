@@ -11,7 +11,7 @@ Mantiene API original para compatibilidad con delegación a módulos especializa
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from .config_database import ConfigDatabase
 from .config_loader import ConfigLoader
@@ -101,7 +101,7 @@ class ConfigManager:
         if hasattr(self.database, "save_config_to_db"):
             self.database.save_config_to_db(section, key, value)  # type: ignore
 
-    def get_section(self, section: str) -> Dict[str, Any]:
+    def get_section(self, section: str) -> dict[str, Any]:
         """
         Obtiene una sección completa de configuración.
 
@@ -172,7 +172,7 @@ class ConfigManager:
         except (KeyError, TypeError):
             return False
 
-    def get_audio_config(self) -> Dict[str, Any]:
+    def get_audio_config(self) -> dict[str, Any]:
         """Obtiene configuración completa de audio."""
         return self.get_section("audio")
 
@@ -193,11 +193,11 @@ class ConfigManager:
         resolution = self.get_resolution()
         return resolution[1]
 
-    def get_display_config(self) -> Dict[str, Any]:
+    def get_display_config(self) -> dict[str, Any]:
         """Obtiene configuración completa de display."""
         return self.get_section("display")
 
-    def get_input_config(self) -> Dict[str, Any]:
+    def get_input_config(self) -> dict[str, Any]:
         """Obtiene configuración completa de input."""
         return self.get_section("input")
 

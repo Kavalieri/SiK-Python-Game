@@ -9,7 +9,7 @@ Descripción: Gestión de efectos, invulnerabilidad y estados especiales para en
 
 import logging
 import time
-from typing import Any, Dict
+from typing import Any
 
 import pygame
 
@@ -71,7 +71,7 @@ class EntityEffectsSystem:
                 self.entity.state = EntityState.IDLE
                 self.invulnerable_timer = 0.0
 
-    def add_effect(self, effect_name: str, effect_data: Dict[str, Any]):
+    def add_effect(self, effect_name: str, effect_data: dict[str, Any]):
         """
         Añade un efecto a la entidad.
 
@@ -154,14 +154,14 @@ class EntityEffectsSystem:
             overlay.fill((255, 255, 255))
             screen.blit(overlay, (x, y))
 
-    def get_effects_data(self) -> Dict[str, Any]:
+    def get_effects_data(self) -> dict[str, Any]:
         """Obtiene datos de efectos para guardado."""
         return {
             "effects": self.effects.copy(),
             "invulnerable_timer": self.invulnerable_timer,
         }
 
-    def load_effects_data(self, data: Dict[str, Any]):
+    def load_effects_data(self, data: dict[str, Any]):
         """Carga datos de efectos."""
         self.effects = data.get("effects", {}).copy()
         self.invulnerable_timer = data.get("invulnerable_timer", 0.0)

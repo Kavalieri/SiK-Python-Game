@@ -8,7 +8,7 @@ Descripción: Operaciones unificadas de guardado y carga entre sistemas.
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .save_compatibility_core import SaveCompatibilityCore
 from .save_compatibility_migration import SaveCompatibilityMigration
@@ -31,7 +31,7 @@ class SaveCompatibilityOperations:
         self.logger = logging.getLogger(__name__)
 
     def save_game_unified(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """
         Guarda el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
@@ -67,7 +67,7 @@ class SaveCompatibilityOperations:
         self.core.log_operation_result("save", slot, success, "pickle")
         return success
 
-    def load_game_unified(self, slot: int) -> Optional[Dict[str, Any]]:
+    def load_game_unified(self, slot: int) -> dict[str, Any] | None:
         """
         Carga el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
 
@@ -111,7 +111,7 @@ class SaveCompatibilityOperations:
 
         return pickle_data
 
-    def get_saves_info_unified(self) -> List[Dict[str, Any]]:
+    def get_saves_info_unified(self) -> list[dict[str, Any]]:
         """
         Obtiene información de partidas de ambos sistemas.
 
@@ -145,7 +145,7 @@ class SaveCompatibilityOperations:
                 len([s for s in pickle_saves if s["exists"]]),
             )
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error obteniendo información pickle: %s", e)
 
         # IMPORTANTE: Asegurar que SIEMPRE devolvemos 3 slots (1, 2, 3)

@@ -11,7 +11,7 @@ Mantiene límite de 150 líneas usando delegación modular.
 
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from src.utils.config_database import ConfigDatabase
 from src.utils.config_loader import ConfigLoader
@@ -52,7 +52,7 @@ class ConfigManager:
 
         self.logger.info("ConfigManager inicializado: BD=%s", self.use_database)
 
-    def _load_complete_config(self) -> Dict[str, Any]:
+    def _load_complete_config(self) -> dict[str, Any]:
         """Carga configuración completa usando módulos especializados."""
         # Cargar configuración base
         base_config = self.loader.load_default_config()
@@ -100,7 +100,7 @@ class ConfigManager:
             # pylint: disable=no-member
             self.db_config.save_config_to_db(section, key, value)  # type: ignore
 
-    def get_section(self, section: str) -> Dict[str, Any]:
+    def get_section(self, section: str) -> dict[str, Any]:
         """Obtiene una sección completa con fallback híbrido."""
         # Intentar desde BD si está disponible
         if self.use_database and self.db_config:
@@ -138,41 +138,41 @@ class ConfigManager:
         """Obtiene si el audio está habilitado."""
         return self.get("audio", "enabled", True)
 
-    def get_audio_config(self) -> Dict[str, Any]:
+    def get_audio_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de audio."""
         return self.get_section("audio")
 
-    def get_characters_config(self) -> Dict[str, Any]:
+    def get_characters_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de personajes."""
         return self.get_section("characters")
 
-    def get_enemies_config(self) -> Dict[str, Any]:
+    def get_enemies_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de enemigos."""
         return self.get_section("enemies")
 
-    def get_gameplay_config(self) -> Dict[str, Any]:
+    def get_gameplay_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de gameplay."""
         return self.get_section("gameplay")
 
-    def get_powerups_config(self) -> Dict[str, Any]:
+    def get_powerups_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de powerups."""
         return self.get_section("powerups")
 
-    def get_ui_config(self) -> Dict[str, Any]:
+    def get_ui_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de UI."""
         return self.get_section("ui")
 
-    def get_character_data(self, character_name: str) -> Dict[str, Any]:
+    def get_character_data(self, character_name: str) -> dict[str, Any]:
         """Obtiene los datos de un personaje específico."""
         characters = self.get_characters_config().get("characters", {})
         return characters.get(character_name, {})
 
-    def get_enemy_data(self, enemy_type: str) -> Dict[str, Any]:
+    def get_enemy_data(self, enemy_type: str) -> dict[str, Any]:
         """Obtiene los datos de un tipo de enemigo específico."""
         enemies = self.get_enemies_config()
         return enemies.get("tipos_enemigos", {}).get(enemy_type, {})
 
-    def get_powerup_data(self, powerup_type: str) -> Dict[str, Any]:
+    def get_powerup_data(self, powerup_type: str) -> dict[str, Any]:
         """Obtiene los datos de un tipo de powerup específico."""
         powerups = self.get_powerups_config()
         return powerups.get("tipos_powerups", {}).get(powerup_type, {})

@@ -5,7 +5,7 @@
 *.py text eol=lf
 *.pyi text eol=lf
 
-# Archivos de configuración  
+# Archivos de configuración
 *.json text eol=lf
 *.yaml text eol=lf
 *.yml text eol=lf

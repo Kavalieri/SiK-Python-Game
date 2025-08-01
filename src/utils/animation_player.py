@@ -8,7 +8,6 @@ Descripción: Reproductor de animaciones para personajes individuales - versión
 """
 
 import logging
-from typing import Dict, Optional
 
 import pygame
 
@@ -19,7 +18,7 @@ class AnimationPlayer:
     def __init__(
         self,
         character_name: str,
-        animations: Dict[str, Dict],
+        animations: dict[str, dict],
         initial_animation: str = "Idle",
     ):
         """Inicializa el reproductor de animaciones."""
@@ -57,7 +56,7 @@ class AnimationPlayer:
                 "Cambiando animación de %s a: %s", self.character_name, animation_type
             )
 
-    def get_current_frame(self) -> Optional[pygame.Surface]:
+    def get_current_frame(self) -> pygame.Surface | None:
         """Obtiene el frame actual de la animación."""
         if self.current_animation not in self.animations:
             return None
@@ -111,7 +110,7 @@ class AnimationPlayer:
         progress = (elapsed_time % total_duration) / total_duration
         return min(1.0, max(0.0, progress))
 
-    def get_animation_info(self) -> Dict:
+    def get_animation_info(self) -> dict:
         """Obtiene información de la animación actual."""
         if self.current_animation not in self.animations:
             return {"error": "No hay animación activa"}

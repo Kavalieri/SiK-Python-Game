@@ -8,7 +8,6 @@ Descripción: Módulo especializado en cargar y procesar animaciones de personaj
 """
 
 import logging
-from typing import Dict, Optional
 
 import pygame
 
@@ -43,7 +42,7 @@ class AnimationLoader:
 
         self.logger.info("AnimationLoader inicializado con caché")
 
-    def load_character_animations(self, character_name: str) -> Dict[str, Dict]:
+    def load_character_animations(self, character_name: str) -> dict[str, dict]:
         """
         Carga todas las animaciones disponibles para un personaje usando configuración centralizada.
 
@@ -81,7 +80,7 @@ class AnimationLoader:
 
     def _load_single_animation(
         self, character_name: str, anim_type: str
-    ) -> Optional[Dict]:
+    ) -> dict | None:
         """
         Carga una animación específica de un personaje.
 
@@ -156,7 +155,7 @@ class AnimationLoader:
         self.animation_cache.clear()
         self.logger.info("Caché de animaciones limpiado")
 
-    def get_cache_info(self) -> Dict[str, int]:
+    def get_cache_info(self) -> dict[str, int]:
         """
         Obtiene información del caché de animaciones.
 

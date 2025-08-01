@@ -13,7 +13,7 @@ import pickle
 import zlib
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config_manager import ConfigManager
 from .save_database import SaveDatabase
@@ -30,8 +30,8 @@ class SaveCompatibility:
         self,
         config: ConfigManager,
         loader: SaveLoader,
-        database: Optional[SaveDatabase] = None,
-        encryption_handler: Optional[SaveEncryption] = None,
+        database: SaveDatabase | None = None,
+        encryption_handler: SaveEncryption | None = None,
     ):
         """
         Inicializa el sistema de compatibilidad.
@@ -53,7 +53,7 @@ class SaveCompatibility:
         self.auto_migrate = self.config.get("save_system", "auto_migrate", True)
 
     def save_game_unified(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """
         Guarda el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
@@ -86,7 +86,7 @@ class SaveCompatibility:
         # Fallback a sistema pickle tradicional
         return self._save_game_pickle(slot, game_state, additional_data or {})
 
-    def load_game_unified(self, slot: int) -> Optional[Dict[str, Any]]:
+    def load_game_unified(self, slot: int) -> dict[str, Any] | None:
         """
         Carga el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
 
@@ -126,7 +126,7 @@ class SaveCompatibility:
 
         return pickle_data
 
-    def get_saves_info_unified(self) -> List[Dict[str, Any]]:
+    def get_saves_info_unified(self) -> list[dict[str, Any]]:
         """
         Obtiene información de partidas de ambos sistemas.
 
@@ -169,7 +169,7 @@ class SaveCompatibility:
         saves_info.sort(key=lambda x: x["file_number"])
         return saves_info
 
-    def migrate_all_pickle_to_sqlite(self) -> Dict[str, bool]:
+    def migrate_all_pickle_to_sqlite(self) -> dict[str, bool]:
         """
         Migra todas las partidas pickle a SQLite.
 
@@ -205,7 +205,7 @@ class SaveCompatibility:
         return results
 
     def _save_game_pickle(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """
         Guarda el juego usando el sistema pickle tradicional.
@@ -255,7 +255,7 @@ class SaveCompatibility:
             self.logger.error("Error guardando con pickle slot %d: %s", slot, e)
             return False
 
-    def _migrate_pickle_to_sqlite(self, slot: int, pickle_data: Dict[str, Any]) -> bool:
+    def _migrate_pickle_to_sqlite(self, slot: int, pickle_data: dict[str, Any]) -> bool:
         """
         Migra datos pickle específicos a SQLite.
 

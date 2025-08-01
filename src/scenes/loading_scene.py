@@ -7,7 +7,7 @@ Fecha: 2025-07-30
 Descripción: Fachada principal para la escena de carga con todos los componentes integrados.
 """
 
-from typing import Callable
+from collections.abc import Callable
 
 import pygame
 

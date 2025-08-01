@@ -8,7 +8,6 @@ Descripción: Clase principal del HUD que coordina elementos, configuración y r
 """
 
 import logging
-from typing import Dict, Optional
 
 import pygame
 
@@ -49,10 +48,10 @@ class HUDCore:
         self.hud_config = HUDConfiguration(self.screen_width, self.screen_height)
 
         # Elementos del HUD
-        self.hud_elements: Dict[str, HUDElement] = self.hud_config.get_hud_elements()
+        self.hud_elements: dict[str, HUDElement] = self.hud_config.get_hud_elements()
 
         # Sistema de fuentes
-        self.fonts: Dict[str, pygame.font.Font] = {}
+        self.fonts: dict[str, pygame.font.Font] = {}
         self._initialize_fonts()
 
         # Renderizador especializado
@@ -192,7 +191,7 @@ class HUDCore:
             self.hud_elements[element_name].visible = visible
             self.logger.debug("Element '%s' visibility: %s", element_name, visible)
 
-    def get_element_bounds(self, element_name: str) -> Optional[pygame.Rect]:
+    def get_element_bounds(self, element_name: str) -> pygame.Rect | None:
         """
         Obtiene los límites de un elemento del HUD.
 

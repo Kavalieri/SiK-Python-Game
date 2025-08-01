@@ -9,7 +9,7 @@ Descripción: Módulo especializado en encriptación/desencriptación de archivo
 
 import hashlib
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from .config_manager import ConfigManager
 
@@ -124,7 +124,7 @@ class SaveEncryption:
         actual_checksum = self.generate_data_checksum(data)
         return actual_checksum == expected_checksum
 
-    def create_encrypted_package(self, data: bytes) -> Dict[str, Any]:
+    def create_encrypted_package(self, data: bytes) -> dict[str, Any]:
         """
         Crea un paquete encriptado con metadatos de verificación.
 
@@ -150,7 +150,7 @@ class SaveEncryption:
 
         return package
 
-    def extract_encrypted_package(self, package: Dict[str, Any]) -> bytes:
+    def extract_encrypted_package(self, package: dict[str, Any]) -> bytes:
         """
         Extrae y valida datos de un paquete encriptado.
 
@@ -184,7 +184,7 @@ class SaveEncryption:
         except Exception as e:
             raise ValueError(f"Error extrayendo paquete encriptado: {e}") from e
 
-    def get_encryption_info(self) -> Dict[str, Any]:
+    def get_encryption_info(self) -> dict[str, Any]:
         """
         Obtiene información sobre el sistema de encriptación actual.
 

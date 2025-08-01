@@ -9,7 +9,6 @@ Descripción: Sistema especializado para la creación y gestión de proyectiles.
 
 import math
 import time
-from typing import List
 
 from src.entities.powerup import PowerupType
 from src.entities.projectile import Projectile
@@ -45,7 +44,7 @@ class ProjectileSystem:
         target_y: float,
         bullet_damage: int,
         bullet_speed: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """
         Crea proyectiles según las configuraciones y powerups activos.
 
@@ -104,7 +103,7 @@ class ProjectileSystem:
         target_y: float,
         speed: float,
         damage: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo doble."""
         projectiles = []
 
@@ -157,7 +156,7 @@ class ProjectileSystem:
         target_y: float,
         speed: float,
         damage: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo en abanico."""
         projectiles = []
 

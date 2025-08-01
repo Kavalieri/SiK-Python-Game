@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Test rápido de AtmosphericEffects refactorizado.
 Verifica que la API se mantiene compatible.

@@ -10,7 +10,7 @@ Descripción: Gestión especializada de sprites y animaciones de personajes.
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pygame
 
@@ -32,12 +32,12 @@ class CharacterAssets:
         self.animation_config = self._load_animation_config()
         self.logger.info("CharacterAssets inicializado")
 
-    def _load_animation_config(self) -> Dict[str, Any]:
+    def _load_animation_config(self) -> dict[str, Any]:
         """Carga configuración de animaciones desde config/animations.json."""
         config_path = Path("config/animations.json")
         if config_path.exists():
             try:
-                with open(config_path, "r", encoding="utf-8") as f:
+                with open(config_path, encoding="utf-8") as f:
                     return json.load(f)
             except json.JSONDecodeError as e:
                 self.logger.error(
@@ -56,7 +56,7 @@ class CharacterAssets:
 
     def get_character_sprite(
         self, character_name: str, animation: str, frame: int = 1, scale: float = 1.0
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Obtiene un sprite de personaje específico.
 
@@ -126,8 +126,8 @@ class CharacterAssets:
         return self.asset_loader.create_placeholder(64, 64, scale)
 
     def get_character_animation_frames(
-        self, character_name: str, animation: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, character_name: str, animation: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """
         Obtiene todos los frames de una animación específica.
 
@@ -185,7 +185,7 @@ class CharacterAssets:
         )
         return frames
 
-    def get_character_animation_info(self, character_name: str) -> Dict[str, Any]:
+    def get_character_animation_info(self, character_name: str) -> dict[str, Any]:
         """
         Obtiene información completa de las animaciones de un personaje.
 

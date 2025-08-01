@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Atmospheric Effects - Sistema coordinado de efectos atmosféricos del desierto.
 Fachada refactorizada que integra SkyRenderer + HeatShimmerEffects + WindEffects.
 Archivo optimizado de 249→142 líneas manteniendo 100% compatibilidad.
 """
-
-from typing import Tuple
 
 import pygame
 
@@ -45,7 +42,7 @@ class AtmosphericEffects:
         self.wind_effects.render_wind_effect(screen)
 
     def render_dust_clouds(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza nubes de polvo en el horizonte."""
         self.wind_effects.render_dust_clouds(screen, camera_offset)
@@ -58,7 +55,7 @@ class AtmosphericEffects:
         """Configura la intensidad del efecto de calor."""
         self.heat_shimmer.set_heat_shimmer_strength(strength)
 
-    def get_wind_data(self) -> Tuple[float, float]:
+    def get_wind_data(self) -> tuple[float, float]:
         """Obtiene los datos actuales del viento."""
         return self.wind_effects.get_wind_data()
 

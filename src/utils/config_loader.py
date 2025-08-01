@@ -11,7 +11,7 @@ Parte del sistema modular ConfigManager dividido para cumplir límite de 150 lí
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 
 class ConfigLoader:
@@ -23,7 +23,7 @@ class ConfigLoader:
         """Inicializa el cargador de configuraciones."""
         self.logger = logging.getLogger(__name__)
 
-    def load_default_config(self) -> Dict[str, Any]:
+    def load_default_config(self) -> dict[str, Any]:
         """
         Carga la configuración por defecto.
 
@@ -56,7 +56,7 @@ class ConfigLoader:
             },
         }
 
-    def load_main_config(self, config_file: Path) -> Dict[str, Any]:
+    def load_main_config(self, config_file: Path) -> dict[str, Any]:
         """
         Carga configuración principal desde archivo.
 
@@ -73,7 +73,7 @@ class ConfigLoader:
             return {}
 
         try:
-            with open(config_file, "r", encoding="utf-8") as f:
+            with open(config_file, encoding="utf-8") as f:
                 config_data = json.load(f)
             self.logger.info("Configuración cargada desde %s", config_file)
             return config_data
@@ -81,7 +81,7 @@ class ConfigLoader:
             self.logger.error("Error cargando %s: %s", config_file, e)
             return {}
 
-    def load_specific_configs(self) -> Dict[str, Dict[str, Any]]:
+    def load_specific_configs(self) -> dict[str, dict[str, Any]]:
         """
         Carga configuraciones específicas desde directorio config/.
 
@@ -109,7 +109,7 @@ class ConfigLoader:
             file_path = config_dir / config_file
             if file_path.exists():
                 try:
-                    with open(file_path, "r", encoding="utf-8") as f:
+                    with open(file_path, encoding="utf-8") as f:
                         config_data = json.load(f)
 
                     # Usar nombre del archivo sin extensión como clave
@@ -132,7 +132,7 @@ class ConfigLoader:
         )
         return specific_configs
 
-    def save_config_to_file(self, config: Dict[str, Any], config_file: Path) -> bool:
+    def save_config_to_file(self, config: dict[str, Any], config_file: Path) -> bool:
         """
         Guarda configuración en archivo JSON.
 
@@ -158,8 +158,8 @@ class ConfigLoader:
             return False
 
     def merge_configs(
-        self, base_config: Dict[str, Any], file_config: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, base_config: dict[str, Any], file_config: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Combina configuración base con configuración de archivo.
 

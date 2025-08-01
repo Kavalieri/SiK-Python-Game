@@ -8,7 +8,6 @@ Descripción: Gestión especializada de elementos de interfaz (botones, iconos, 
 """
 
 import logging
-from typing import List, Optional
 
 import pygame
 
@@ -31,7 +30,7 @@ class UIAssets:
 
     def get_ui_button(
         self, button_name: str, state: str = "normal"
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Carga un botón de UI.
 
@@ -75,8 +74,8 @@ class UIAssets:
         return self.asset_loader.create_placeholder(64, 64, 1.0)
 
     def load_animation_frames(
-        self, ruta: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, ruta: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """
         Carga los frames de animación desde una ruta específica.
 
@@ -118,7 +117,7 @@ class UIAssets:
 
     def cargar_botones_ui(
         self, button_name: str, suffix: str = ""
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Carga un botón de la interfaz de usuario.
 

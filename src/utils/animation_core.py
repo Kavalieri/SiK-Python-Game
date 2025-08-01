@@ -8,7 +8,6 @@ Descripción: Núcleo de configuración y cálculos de FPS para animaciones.
 """
 
 import logging
-from typing import Dict
 
 
 class AnimationCore:
@@ -132,7 +131,7 @@ class AnimationCore:
         """
         return 1000.0 / fps if fps > 0 else 1000.0
 
-    def get_animation_config_summary(self) -> Dict[str, float]:
+    def get_animation_config_summary(self) -> dict[str, float]:
         """
         Obtiene un resumen de la configuración de animaciones.
 

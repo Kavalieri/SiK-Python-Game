@@ -8,7 +8,6 @@ Descripción: Módulo que maneja los efectos activos y powerups del jugador.
 """
 
 import logging
-from typing import Dict, Tuple
 
 from ..entities.powerup import PowerupEffect, PowerupType
 
@@ -20,8 +19,8 @@ class PlayerEffects:
 
     def __init__(self):
         """Inicializa el gestor de efectos."""
-        self.active_effects: Dict[
-            PowerupType, Tuple[float, float]
+        self.active_effects: dict[
+            PowerupType, tuple[float, float]
         ] = {}  # {PowerupType: (end_time, value)}
         self.logger = logging.getLogger(__name__)
 
@@ -55,7 +54,7 @@ class PlayerEffects:
                 "Nuevo efecto %s aplicado hasta %s", effect_type, end_time
             )
 
-    def update_effects(self, current_time: float) -> Dict[PowerupType, float]:
+    def update_effects(self, current_time: float) -> dict[PowerupType, float]:
         """
         Actualiza los efectos activos y elimina los expirados.
 
@@ -126,7 +125,7 @@ class PlayerEffects:
             return max(0.0, remaining)
         return 0.0
 
-    def get_active_effects(self) -> Dict[PowerupType, Tuple[float, float]]:
+    def get_active_effects(self) -> dict[PowerupType, tuple[float, float]]:
         """
         Obtiene todos los efectos activos.
 

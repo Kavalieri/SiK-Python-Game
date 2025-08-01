@@ -9,7 +9,7 @@ Descripción: Clase base Entity usando arquitectura modular.
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Optional
 
 import pygame
 
@@ -28,7 +28,7 @@ class Entity(ABC):
         y: float,
         width: int,
         height: int,
-        stats: Optional[EntityStats] = None,
+        stats: EntityStats | None = None,
     ):
         """
         Inicializa una entidad base.
@@ -69,12 +69,12 @@ class Entity(ABC):
         self.config = {"game": {"debug": False}}
 
     @property
-    def position(self) -> Tuple[float, float]:
+    def position(self) -> tuple[float, float]:
         """Obtiene la posición actual de la entidad."""
         return (self.x, self.y)
 
     @property
-    def center(self) -> Tuple[float, float]:
+    def center(self) -> tuple[float, float]:
         """Obtiene el centro de la entidad."""
         return (self.x + self.width // 2, self.y + self.height // 2)
 
@@ -133,7 +133,7 @@ class Entity(ABC):
         """
         pass
 
-    def move(self, direction: pygame.math.Vector2, speed: Optional[float] = None):
+    def move(self, direction: pygame.math.Vector2, speed: float | None = None):
         """
         Mueve la entidad en una dirección específica.
 
@@ -200,7 +200,7 @@ class Entity(ABC):
         """Método llamado cuando la entidad muere. Se puede sobrescribir."""
         pass
 
-    def add_effect(self, effect_name: str, effect_data: Dict[str, Any]):
+    def add_effect(self, effect_name: str, effect_data: dict[str, Any]):
         """Añade un efecto a la entidad (delegado al sistema de efectos)."""
         self.effects_system.add_effect(effect_name, effect_data)
 
@@ -220,12 +220,12 @@ class Entity(ABC):
         return self.rect.colliderect(other.rect)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza la entidad (delegado al sistema de renderizado)."""
         self.rendering_system.render(screen, camera_offset)
 
-    def get_data(self) -> Dict[str, Any]:
+    def get_data(self) -> dict[str, Any]:
         """
         Obtiene los datos de la entidad para guardado.
 
@@ -256,7 +256,7 @@ class Entity(ABC):
 
         return data
 
-    def load_data(self, data: Dict[str, Any]):
+    def load_data(self, data: dict[str, Any]):
         """
         Carga datos en la entidad.
 

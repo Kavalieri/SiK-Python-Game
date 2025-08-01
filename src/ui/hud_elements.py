@@ -8,7 +8,6 @@ Descripción: Elementos UI, configuración y estructuras de datos para el sistem
 """
 
 from dataclasses import dataclass
-from typing import Dict, Tuple
 
 from ..entities.powerup import PowerupType
 
@@ -50,7 +49,7 @@ class HUDConfiguration:
         # Configuración de fuentes
         self.font_sizes = {"small": 14, "medium": 18, "large": 24, "huge": 32}
 
-    def get_hud_elements(self) -> Dict[str, HUDElement]:
+    def get_hud_elements(self) -> dict[str, HUDElement]:
         """Inicializa y retorna todos los elementos del HUD con sus posiciones."""
         elements = {}
 
@@ -123,7 +122,7 @@ class HUDEffectUtils:
         return names.get(effect_type, effect_type.value)
 
     @staticmethod
-    def get_effect_color(effect_type: PowerupType) -> Tuple[int, int, int]:
+    def get_effect_color(effect_type: PowerupType) -> tuple[int, int, int]:
         """Obtiene el color para el tipo de efecto."""
         colors = {
             PowerupType.SPEED: (0, 255, 0),  # Verde

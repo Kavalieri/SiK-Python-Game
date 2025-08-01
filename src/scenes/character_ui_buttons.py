@@ -9,7 +9,6 @@ Descripción: Módulo especializado para la gestión de botones principales
 """
 
 import logging
-from typing import Optional, Tuple
 
 import pygame
 
@@ -80,7 +79,7 @@ class CharacterUIButtons:
             "Botones principales inicializados: %s", list(self.main_buttons.keys())
         )
 
-    def render_main_buttons(self, screen: pygame.Surface, mouse_pos: Tuple[int, int]):
+    def render_main_buttons(self, screen: pygame.Surface, mouse_pos: tuple[int, int]):
         """
         Renderiza los botones principales con efectos hover.
 
@@ -100,7 +99,7 @@ class CharacterUIButtons:
         screen: pygame.Surface,
         button_rect: pygame.Rect,
         button_text: str,
-        mouse_pos: Tuple[int, int],
+        mouse_pos: tuple[int, int],
     ):
         """
         Renderiza un botón principal individual.
@@ -129,7 +128,7 @@ class CharacterUIButtons:
         text_rect = text_surface.get_rect(center=button_rect.center)
         screen.blit(text_surface, text_rect)
 
-    def get_main_button_clicked(self, mouse_pos: Tuple[int, int]) -> Optional[str]:
+    def get_main_button_clicked(self, mouse_pos: tuple[int, int]) -> str | None:
         """
         Detecta qué botón principal fue clickeado.
 
@@ -145,7 +144,7 @@ class CharacterUIButtons:
                 return button_name
         return None
 
-    def get_main_button_rect(self, button_name: str) -> Optional[pygame.Rect]:
+    def get_main_button_rect(self, button_name: str) -> pygame.Rect | None:
         """
         Obtiene el rectángulo de un botón principal específico.
 
@@ -158,7 +157,7 @@ class CharacterUIButtons:
         return self.main_buttons.get(button_name)
 
     def is_main_button_hovered(
-        self, button_name: str, mouse_pos: Tuple[int, int]
+        self, button_name: str, mouse_pos: tuple[int, int]
     ) -> bool:
         """
         Verifica si un botón principal específico está siendo hover.

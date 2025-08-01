@@ -6,7 +6,7 @@ Gestiona migraciones de esquema, validación de integridad y registro de cambios
 
 import hashlib
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 
@@ -34,7 +34,7 @@ class SchemaMigrations:
             self._logger.error("Error registrando migración: %s", e)
             raise
 
-    def validate_schema(self, required_tables: list) -> Dict[str, Any]:
+    def validate_schema(self, required_tables: list) -> dict[str, Any]:
         """Valida la integridad del esquema actual."""
         result = {
             "valid": True,
@@ -83,7 +83,7 @@ class SchemaMigrations:
 
         return result
 
-    def get_schema_version(self) -> Optional[str]:
+    def get_schema_version(self) -> str | None:
         """Obtiene la versión actual del esquema."""
         try:
             query_result = self.db_manager.execute_query(
@@ -152,7 +152,7 @@ class SchemaMigrations:
             self._logger.info("Backup creado: %s", backup_path)
             return True
 
-        except (ValueError, RuntimeError, IOError) as e:
+        except (OSError, ValueError, RuntimeError) as e:
             self._logger.error("Error creando backup: %s", e)
             return False
 

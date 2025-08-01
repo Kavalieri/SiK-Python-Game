@@ -9,7 +9,6 @@ Descripción: Fachada principal que coordina el sistema de animaciones modular.
 """
 
 import logging
-from typing import Dict, Optional
 
 import pygame
 
@@ -30,7 +29,7 @@ class IntelligentAnimationManager:
     - AnimationPlayer: Reproducción individual
     """
 
-    def __init__(self, asset_manager: Optional[AssetManager] = None):
+    def __init__(self, asset_manager: AssetManager | None = None):
         """Inicializa el gestor de animaciones."""
         self.logger = logging.getLogger(__name__)
         self.asset_manager = asset_manager if asset_manager else AssetManager()
@@ -52,11 +51,11 @@ class IntelligentAnimationManager:
         """Calcula el FPS óptimo - delegado a AnimationCore."""
         return self.animation_core.get_optimal_fps(animation_type, frame_count)
 
-    def load_character_animations(self, character_name: str) -> Dict[str, Dict]:
+    def load_character_animations(self, character_name: str) -> dict[str, dict]:
         """Carga animaciones de personaje - delegado a AnimationLoader."""
         return self.animation_loader.load_character_animations(character_name)
 
-    def get_all_character_animations(self, character_name: str) -> Dict[str, Dict]:
+    def get_all_character_animations(self, character_name: str) -> dict[str, dict]:
         """Obtiene todas las animaciones - alias para compatibilidad."""
         return self.load_character_animations(character_name)
 
@@ -75,7 +74,7 @@ class IntelligentAnimationManager:
 
     def get_current_sprite(
         self, character_name: str, animation_type: str = "Idle"
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """Obtiene el sprite actual de un personaje."""
         # Buscar reproductor existente o crear uno temporal
         player_key = f"{character_name}_{animation_type}"
@@ -117,7 +116,7 @@ class IntelligentAnimationManager:
         self.active_players.clear()
         self.logger.info("Caché del sistema de animaciones limpiado")
 
-    def get_system_info(self) -> Dict:
+    def get_system_info(self) -> dict:
         """Obtiene información del sistema de animaciones."""
         loader_info = self.animation_loader.get_cache_info()
         core_config = self.animation_core.get_animation_config_summary()
@@ -140,11 +139,11 @@ class IntelligentAnimationManager:
         return self.animation_core.base_fps
 
     @property
-    def animation_speeds(self) -> Dict[str, float]:
+    def animation_speeds(self) -> dict[str, float]:
         """Propiedad de compatibilidad para acceso a velocidades."""
         return self.animation_core.animation_speeds
 
     @property
-    def animation_cache(self) -> Dict:
+    def animation_cache(self) -> dict:
         """Propiedad de compatibilidad para acceso al caché."""
         return self.animation_loader.animation_cache

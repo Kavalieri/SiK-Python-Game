@@ -9,12 +9,12 @@ Descripción: Motor principal que gestiona el bucle del juego, renderizado y eve
 
 import pygame
 
+from ..ui.menu_manager import MenuManager
+from ..utils.config_manager import ConfigManager
+from ..utils.logger import get_logger
+from ..utils.save_manager import SaveManager
 from .game_state import GameState
 from .scene_manager import SceneManager
-from ..utils.config_manager import ConfigManager
-from ..utils.save_manager import SaveManager
-from ..ui.menu_manager import MenuManager
-from ..utils.logger import get_logger
 
 
 class GameEngine:
@@ -102,13 +102,13 @@ class GameEngine:
     def _setup_scenes(self):
         """Configura las escenas iniciales del juego y documenta el flujo avanzado de menús y guardado."""
         try:
-            from ..scenes.main_menu_scene import MainMenuScene
-            from ..scenes.game_scene import GameScene
-            from ..scenes.pause_scene import PauseScene
             from ..scenes.character_select_scene import CharacterSelectScene
+            from ..scenes.game_scene import GameScene
             from ..scenes.loading_scene import LoadingScene
-            from ..scenes.slot_selection_scene import SlotSelectionScene
+            from ..scenes.main_menu_scene import MainMenuScene
             from ..scenes.options_scene import OptionsScene
+            from ..scenes.pause_scene import PauseScene
+            from ..scenes.slot_selection_scene import SlotSelectionScene
 
             # Crear todas las escenas
             loading_scene = LoadingScene(

@@ -1,7 +1,7 @@
 """Character UI Renderer Advanced - Renderizado Avanzado de Personajes"""
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import pygame
 
@@ -51,7 +51,7 @@ class CharacterUIRendererAdvanced:
             )
 
     def render_character_skills(
-        self, screen: pygame.Surface, char_data: Dict[str, Any], x: int, y: int
+        self, screen: pygame.Surface, char_data: dict[str, Any], x: int, y: int
     ):
         """Renderiza las habilidades de un personaje."""
         try:

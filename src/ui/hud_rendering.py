@@ -7,7 +7,7 @@ Fecha: 2024
 Descripción: Métodos especializados para renderizar todos los elementos del HUD.
 """
 
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -25,14 +25,14 @@ class HUDRenderer:
         self,
         screen: pygame.Surface,
         config: "HUDConfiguration",
-        fonts: Dict[str, pygame.font.Font],
+        fonts: dict[str, pygame.font.Font],
     ):
         self.screen = screen
         self.config = config
         self.fonts = fonts
-        self.hud_elements: Dict[str, "HUDElement"] = {}
+        self.hud_elements: dict[str, HUDElement] = {}
 
-    def set_hud_elements(self, elements: Dict[str, "HUDElement"]):
+    def set_hud_elements(self, elements: dict[str, "HUDElement"]):
         """Establece los elementos del HUD a renderizar."""
         self.hud_elements = elements
 
@@ -130,7 +130,7 @@ class HUDRenderer:
             )
             self.screen.blit(high_score_text, (element.x, element.y + 20))
 
-    def render_minimap(self, player_pos: Optional[tuple] = None):
+    def render_minimap(self, player_pos: tuple | None = None):
         """Renderiza un mini-mapa básico."""
         element = self.hud_elements.get("minimap")
         if not element or not element.visible:

@@ -9,7 +9,7 @@ Descripción: Gestor centralizado que integra todas las funcionalidades de asset
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pygame
 
@@ -41,43 +41,43 @@ class AssetManager:
     # API PÚBLICA - COMPATIBILIDAD COMPLETA
     # ========================================
 
-    def load_image(self, path: str, scale: float = 1.0) -> Optional[pygame.Surface]:
+    def load_image(self, path: str, scale: float = 1.0) -> pygame.Surface | None:
         """Delegado a AssetLoader.load_image()"""
         return self.asset_loader.load_image(path, scale)
 
-    def load_image_direct(self, path: str) -> Optional[pygame.Surface]:
+    def load_image_direct(self, path: str) -> pygame.Surface | None:
         """Delegado a AssetLoader.load_image_direct()"""
         return self.asset_loader.load_image_direct(path)
 
     def get_character_sprite(
         self, character_name: str, animation: str, frame: int = 1, scale: float = 1.0
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """Delegado a CharacterAssets.get_character_sprite()"""
         return self.character_assets.get_character_sprite(
             character_name, animation, frame, scale
         )
 
     def get_character_animation_frames(
-        self, character_name: str, animation: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, character_name: str, animation: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """Delegado a CharacterAssets.get_character_animation_frames()"""
         return self.character_assets.get_character_animation_frames(
             character_name, animation, max_frames
         )
 
-    def get_character_animation_info(self, character_name: str) -> Dict[str, Any]:
+    def get_character_animation_info(self, character_name: str) -> dict[str, Any]:
         """Delegado a CharacterAssets.get_character_animation_info()"""
         return self.character_assets.get_character_animation_info(character_name)
 
     def get_ui_button(
         self, button_name: str, state: str = "normal"
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """Delegado a UIAssets.get_ui_button()"""
         return self.ui_assets.get_ui_button(button_name, state)
 
     def load_animation_frames(
-        self, ruta: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, ruta: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """Delegado a UIAssets.load_animation_frames()"""
         return self.ui_assets.load_animation_frames(ruta, max_frames)
 
@@ -85,7 +85,7 @@ class AssetManager:
         """Delegado a AssetLoader.clear_cache()"""
         self.asset_loader.clear_cache()
 
-    def get_cache_info(self) -> Dict[str, Any]:
+    def get_cache_info(self) -> dict[str, Any]:
         """Delegado a AssetLoader.get_cache_info()"""
         return self.asset_loader.get_cache_info()
 
@@ -99,26 +99,26 @@ class AssetManager:
     # MÉTODOS LEGACY - MANTENIDOS PARA COMPATIBILIDAD
     # ========================================
 
-    def cargar_imagen(self, path: str) -> Optional[pygame.Surface]:
+    def cargar_imagen(self, path: str) -> pygame.Surface | None:
         """Método legacy - Delegado a load_image()"""
         return self.load_image(path)
 
     def cargar_animacion(
         self, character_name: str, animation: str
-    ) -> Optional[List[pygame.Surface]]:
+    ) -> list[pygame.Surface] | None:
         """Método legacy - Delegado a get_character_animation_frames()"""
         frames = self.get_character_animation_frames(character_name, animation)
         return frames if frames else None
 
     def cargar_botones_ui(
         self, button_name: str, suffix: str = ""
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """Método legacy - Delegado a UIAssets.cargar_botones_ui()"""
         return self.ui_assets.cargar_botones_ui(button_name, suffix)
 
     def cargar_frames(
         self, character_name: str, animation: str
-    ) -> List[pygame.Surface]:
+    ) -> list[pygame.Surface]:
         """Método legacy - Delegado a get_character_animation_frames()"""
         return self.get_character_animation_frames(character_name, animation)
 

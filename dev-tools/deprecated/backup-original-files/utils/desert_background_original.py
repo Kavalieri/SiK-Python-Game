@@ -7,11 +7,11 @@ Fecha: 2024
 Descripción: Sistema de fondos dinámicos de desierto con efectos visuales.
 """
 
-import pygame
-import random
-import math
-from typing import List, Tuple
 import logging
+import math
+import random
+
+import pygame
 
 
 class SandParticle:
@@ -82,7 +82,7 @@ class SandParticle:
         self.angle = random.uniform(0, 2 * math.pi)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza la partícula de arena."""
         if self.life <= 0:
@@ -138,7 +138,7 @@ class Dune:
             max(0, self.color[2] - 40),  # B más oscuro
         )
 
-    def _generate_dune_points(self) -> List[Tuple[float, float]]:
+    def _generate_dune_points(self) -> list[tuple[float, float]]:
         """Genera puntos para dibujar la duna."""
         points = []
         num_points = 20
@@ -157,7 +157,7 @@ class Dune:
         return points
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza la duna."""
         # Aplicar offset de cámara
@@ -257,7 +257,7 @@ class DesertBackground:
         self.wind_strength = 0.3 + 0.4 * math.sin(self.time * 0.5)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """
         Renderiza el fondo de desierto.
@@ -279,7 +279,7 @@ class DesertBackground:
         self._render_atmospheric_effects(screen, camera_offset)
 
     def _render_sky_gradient(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, camera_offset: tuple[float, float]
     ):
         """Renderiza el gradiente del cielo con más profundidad."""
         sky_height = self.screen_height * 0.7
@@ -307,7 +307,7 @@ class DesertBackground:
                     screen, color, (0, render_y), (self.screen_width, render_y)
                 )
 
-    def _render_dunes(self, screen: pygame.Surface, camera_offset: Tuple[float, float]):
+    def _render_dunes(self, screen: pygame.Surface, camera_offset: tuple[float, float]):
         """Renderiza las dunas de arena con efectos de profundidad."""
         # Renderizar dunas en orden de profundidad (más lejanas primero)
         sorted_dunes = sorted(self.dunes, key=lambda d: d.y, reverse=True)
@@ -319,7 +319,7 @@ class DesertBackground:
             self._render_dune_effects(screen, dune, camera_offset)
 
     def _render_dune_effects(
-        self, screen: pygame.Surface, dune, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, dune, camera_offset: tuple[float, float]
     ):
         """Renderiza efectos adicionales en las dunas."""
         # Aplicar offset de cámara
@@ -343,14 +343,14 @@ class DesertBackground:
                 )
 
     def _render_sand_particles(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, camera_offset: tuple[float, float]
     ):
         """Renderiza las partículas de arena."""
         for particle in self.sand_particles:
             particle.render(screen, camera_offset)
 
     def _render_atmospheric_effects(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, camera_offset: tuple[float, float]
     ):
         """Renderiza efectos atmosféricos adicionales."""
         # Efecto de calor (ondulación)
@@ -375,7 +375,7 @@ class DesertBackground:
         self._render_atmospheric_depth(screen, camera_offset)
 
     def _render_wind_effect(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, camera_offset: tuple[float, float]
     ):
         """Renderiza el efecto del viento en la arena."""
         # Crear líneas de viento que se mueven
@@ -405,7 +405,7 @@ class DesertBackground:
             screen.blit(wind_surface, (start[0], start[1]))
 
     def _render_atmospheric_depth(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float]
+        self, screen: pygame.Surface, camera_offset: tuple[float, float]
     ):
         """Renderiza efectos de profundidad atmosférica."""
         # Crear gradiente de niebla en la distancia
@@ -424,8 +424,8 @@ class DesertBackground:
                 screen.blit(fog_surface, (0, fog_start_y + y))
 
     def _interpolate_color(
-        self, color1: Tuple[int, int, int], color2: Tuple[int, int, int], ratio: float
-    ) -> Tuple[int, int, int]:
+        self, color1: tuple[int, int, int], color2: tuple[int, int, int], ratio: float
+    ) -> tuple[int, int, int]:
         """Interpola entre dos colores."""
         return (
             int(color1[0] + (color2[0] - color1[0]) * ratio),
@@ -435,7 +435,7 @@ class DesertBackground:
 
     def get_parallax_offset(
         self, camera_x: float, camera_y: float, layer: str = "background"
-    ) -> Tuple[float, float]:
+    ) -> tuple[float, float]:
         """
         Obtiene el offset de parallax para diferentes capas.
 

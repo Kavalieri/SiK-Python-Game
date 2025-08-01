@@ -11,7 +11,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pygame
 
@@ -38,7 +38,7 @@ class AssetManager:
         config_path = Path("config/animations.json")
         if config_path.exists():
             try:
-                with open(config_path, "r", encoding="utf-8") as f:
+                with open(config_path, encoding="utf-8") as f:
                     return json.load(f)
             except json.JSONDecodeError as e:
                 self.logger.error(
@@ -54,7 +54,7 @@ class AssetManager:
         )
         return {"characters": {}, "sprite_paths": []}
 
-    def load_image(self, path: str, scale: float = 1.0) -> Optional[pygame.Surface]:
+    def load_image(self, path: str, scale: float = 1.0) -> pygame.Surface | None:
         """
         Carga una imagen con caché.
 
@@ -92,7 +92,7 @@ class AssetManager:
             self.logger.error("Error cargando imagen %s: %s", path, e)
             return self._create_placeholder(64, 64, scale)
 
-    def load_image_direct(self, path: str) -> Optional[pygame.Surface]:
+    def load_image_direct(self, path: str) -> pygame.Surface | None:
         """
         Carga una imagen directamente sin caché.
 
@@ -116,7 +116,7 @@ class AssetManager:
 
     def get_character_sprite(
         self, character_name: str, animation: str, frame: int = 1, scale: float = 1.0
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Obtiene un sprite de personaje específico.
 
@@ -186,8 +186,8 @@ class AssetManager:
         return self._create_placeholder(64, 64, scale)
 
     def get_character_animation_frames(
-        self, character_name: str, animation: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, character_name: str, animation: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """
         Obtiene todos los frames de una animación específica.
 
@@ -242,7 +242,7 @@ class AssetManager:
         )
         return frames
 
-    def get_character_animation_info(self, character_name: str) -> Dict[str, Any]:
+    def get_character_animation_info(self, character_name: str) -> dict[str, Any]:
         """
         Obtiene información completa de las animaciones de un personaje.
 
@@ -352,7 +352,7 @@ class AssetManager:
         self.cache.clear()
         self.logger.info("Caché de imágenes limpiada")
 
-    def get_cache_info(self) -> Dict[str, Any]:
+    def get_cache_info(self) -> dict[str, Any]:
         """
         Obtiene información sobre la caché.
 
@@ -363,7 +363,7 @@ class AssetManager:
 
     def get_ui_button(
         self, button_name: str, state: str = "normal"
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """
         Carga un botón de UI.
 
@@ -407,8 +407,8 @@ class AssetManager:
         return self._create_placeholder(64, 64, 1.0)
 
     def load_animation_frames(
-        self, ruta: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, ruta: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """
         Carga los frames de animación desde una ruta específica.
 
@@ -449,7 +449,7 @@ class AssetManager:
             self.logger.error("Error al crear placeholder: SRCALPHA no soportado.")
             return pygame.Surface((width, height))
 
-    def cargar_imagen(self, path: str) -> Optional[pygame.Surface]:
+    def cargar_imagen(self, path: str) -> pygame.Surface | None:
         """Carga una imagen desde el disco o la caché."""
         try:
             if path in self.cache:
@@ -471,7 +471,7 @@ class AssetManager:
 
     def cargar_animacion(
         self, character_name: str, animation: str
-    ) -> Optional[List[pygame.Surface]]:
+    ) -> list[pygame.Surface] | None:
         """Carga una animación completa para un personaje."""
         try:
             frames = []
@@ -502,7 +502,7 @@ class AssetManager:
 
     def cargar_botones_ui(
         self, button_name: str, suffix: str = ""
-    ) -> Optional[pygame.Surface]:
+    ) -> pygame.Surface | None:
         """Carga un botón de la interfaz de usuario."""
         try:
             button_path = f"ui/{button_name}{suffix}.png"
@@ -518,7 +518,7 @@ class AssetManager:
 
     def cargar_frames(
         self, character_name: str, animation: str
-    ) -> List[pygame.Surface]:
+    ) -> list[pygame.Surface]:
         """Carga los frames de una animación específica."""
         frames = []
         for frame in range(1, 11):  # Ejemplo: 10 frames

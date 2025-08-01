@@ -7,7 +7,7 @@ Fecha: 2024
 Descripción: Gestión de renderizado, animaciones y sprites para entidades.
 """
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 import pygame
 
@@ -42,7 +42,7 @@ class EntityRenderingSystem:
                 self.animation_frames.get(self.entity.state.value, [])
             )
 
-    def get_current_sprite(self) -> Optional[pygame.Surface]:
+    def get_current_sprite(self) -> pygame.Surface | None:
         """Obtiene el sprite actual para renderizar."""
         if not self.animation_frames:
             return self.sprite
@@ -54,7 +54,7 @@ class EntityRenderingSystem:
         return self.sprite
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """
         Renderiza la entidad en pantalla.
@@ -116,7 +116,7 @@ class EntityRenderingSystem:
         """Establece el sprite principal."""
         self.sprite = sprite
 
-    def set_animation_frames(self, animation_frames: Dict[str, list]):
+    def set_animation_frames(self, animation_frames: dict[str, list]):
         """Establece los frames de animación."""
         self.animation_frames = animation_frames
 
@@ -124,7 +124,7 @@ class EntityRenderingSystem:
         """Establece la velocidad de animación."""
         self.animation_speed = speed
 
-    def get_rendering_data(self) -> Dict[str, Any]:
+    def get_rendering_data(self) -> dict[str, Any]:
         """Obtiene datos de renderizado para guardado."""
         return {
             "current_frame": self.current_frame,
@@ -132,7 +132,7 @@ class EntityRenderingSystem:
             "animation_speed": self.animation_speed,
         }
 
-    def load_rendering_data(self, data: Dict[str, Any]):
+    def load_rendering_data(self, data: dict[str, Any]):
         """Carga datos de renderizado."""
         self.current_frame = data.get("current_frame", 0)
         self.animation_timer = data.get("animation_timer", 0.0)

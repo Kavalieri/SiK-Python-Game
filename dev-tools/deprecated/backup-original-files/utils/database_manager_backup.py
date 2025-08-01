@@ -15,7 +15,7 @@ import threading
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 
 class DatabaseManager:
@@ -40,7 +40,7 @@ class DatabaseManager:
         """
         self.db_path = Path(db_path)
         self.pool_size = pool_size
-        self._pool: List[sqlite3.Connection] = []
+        self._pool: list[sqlite3.Connection] = []
         self._pool_lock = threading.Lock()
         self._logger = logging.getLogger("DatabaseManager")
 
@@ -118,10 +118,10 @@ class DatabaseManager:
     def execute_query(
         self,
         query: str,
-        params: Optional[Tuple] = None,
+        params: tuple | None = None,
         fetch_one: bool = False,
         fetch_all: bool = True,
-    ) -> Optional[Union[Dict, List[Dict]]]:
+    ) -> dict | list[dict] | None:
         """
         Ejecuta una consulta SQL con logging y manejo de errores.
 
@@ -199,7 +199,7 @@ class DatabaseManager:
             self._pool.clear()
         self._logger.info("Todas las conexiones cerradas")
 
-    def get_database_info(self) -> Dict[str, Any]:
+    def get_database_info(self) -> dict[str, Any]:
         """
         Obtiene información de la base de datos.
 

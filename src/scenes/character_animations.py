@@ -8,7 +8,6 @@ Descripción: Módulo que maneja las animaciones de personajes en la selección.
 """
 
 import logging
-from typing import Dict, Optional
 
 import pygame
 
@@ -133,7 +132,7 @@ class CharacterAnimations:
                 max_frames = max(max_frames, len(frames))
         return max_frames
 
-    def get_character_image(self, character_key: str) -> Optional[pygame.Surface]:
+    def get_character_image(self, character_key: str) -> pygame.Surface | None:
         """Obtiene la imagen actual del personaje."""
         try:
             if character_key in self.animation_frames:
@@ -150,9 +149,7 @@ class CharacterAnimations:
             self.logger.error("Error obteniendo imagen de %s: %s", character_key, e)
             return self._create_character_placeholder(character_key)
 
-    def get_character_image_static(
-        self, character_key: str
-    ) -> Optional[pygame.Surface]:
+    def get_character_image_static(self, character_key: str) -> pygame.Surface | None:
         """Obtiene la imagen estática del personaje (sin animación)."""
         try:
             if character_key in self.animation_frames:
@@ -178,7 +175,7 @@ class CharacterAnimations:
         self.current_frame = 0
         self.frame_timer = 0
 
-    def get_animation_info(self) -> Dict[str, object]:
+    def get_animation_info(self) -> dict[str, object]:
         """Obtiene información sobre las animaciones."""
         return {
             "current_frame": self.current_frame,

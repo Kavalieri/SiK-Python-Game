@@ -10,7 +10,6 @@ Descripción: Núcleo del sistema de generación de mundo con configuración bas
 import logging
 import os
 import random
-from typing import List
 
 from ..entities.tile import TileType
 
@@ -57,7 +56,7 @@ class WorldCore:
             len(self.available_sprites),
         )
 
-    def _load_available_sprites(self) -> List[str]:
+    def _load_available_sprites(self) -> list[str]:
         """
         Carga los sprites disponibles de assets/objects/elementos/.
 
@@ -75,7 +74,7 @@ class WorldCore:
                 self.logger.info("Cargados %s sprites de elementos", len(sprites))
             else:
                 self.logger.warning("Directorio %s no encontrado", elements_path)
-        except (OSError, IOError, PermissionError) as e:
+        except (OSError, PermissionError) as e:
             self.logger.error("Error al cargar sprites: %s", e)
 
         return sprites

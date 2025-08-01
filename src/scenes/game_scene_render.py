@@ -36,8 +36,12 @@ class GameSceneRender:
 
         # Renderizar entidades
         self._render_entities(self.scene.tiles, self.scene.screen, self.scene.camera)
-        self._render_entities(self.scene.enemy_manager.enemies, self.scene.screen, self.scene.camera)
-        self._render_entities(self.scene.projectiles, self.scene.screen, self.scene.camera)
+        self._render_entities(
+            self.scene.enemy_manager.enemies, self.scene.screen, self.scene.camera
+        )
+        self._render_entities(
+            self.scene.projectiles, self.scene.screen, self.scene.camera
+        )
         self._render_entities(self.scene.powerups, self.scene.screen, self.scene.camera)
 
         # Renderizar jugador
@@ -48,7 +52,7 @@ class GameSceneRender:
         if self.scene.hud:
             self.scene.hud.render(self.scene.screen)
             print("HUD renderizado.")
-        
+
         print(f"Posición de la cámara: {self.scene.camera.x}, {self.scene.camera.y}")
         print("--- render_scene completado ---")
 

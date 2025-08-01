@@ -45,7 +45,7 @@ class GameEngineCore:
         self._initialize_pygame()
         self._initialize_components()
         self.logger.info("Motor del juego inicializado correctamente")
-        self.running = True # Establecer a True después de la inicialización exitosa
+        self.running = True  # Establecer a True después de la inicialización exitosa
 
     def _initialize_pygame(self):
         """Inicializa Pygame y configura la pantalla."""

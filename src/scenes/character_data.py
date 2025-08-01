@@ -7,7 +7,7 @@ Fecha: 2024-12-19
 Descripción: Módulo que contiene todos los datos de personajes jugables.
 """
 
-from typing import Any, Dict
+from typing import Any
 
 
 class CharacterData:
@@ -45,7 +45,7 @@ class CharacterData:
     }
 
     @classmethod
-    def get_character_data(cls, character_key: str) -> Dict[str, Any] | None:
+    def get_character_data(cls, character_key: str) -> dict[str, Any] | None:
         """
         Obtiene los datos de un personaje específico.
 
@@ -79,7 +79,7 @@ class CharacterData:
         return character_key in cls.CHARACTER_DATA
 
     @classmethod
-    def get_character_summary(cls, character_key: str) -> Dict[str, Any]:
+    def get_character_summary(cls, character_key: str) -> dict[str, Any]:
         """
         Obtiene un resumen completo de un personaje.
 

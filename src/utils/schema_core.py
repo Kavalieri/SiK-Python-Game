@@ -11,7 +11,7 @@ Fase 1 de migración SQLite - Núcleo del sistema
 import logging
 import shutil
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 from .schema_migrations import SchemaMigrations
@@ -92,7 +92,7 @@ class SchemaCore:
             self._logger.error("Error creando tablas: %s", e)
             return False
 
-    def validate_schema(self) -> Dict[str, Any]:
+    def validate_schema(self) -> dict[str, Any]:
         """
         Valida la integridad del esquema actual contra las tablas requeridas.
 
@@ -112,7 +112,7 @@ class SchemaCore:
         version = self.migrations.get_schema_version()
         return version or self.SCHEMA_VERSION
 
-    def create_backup(self, backup_path: Optional[str] = None) -> bool:
+    def create_backup(self, backup_path: str | None = None) -> bool:
         """
         Crea backup de la base de datos antes de cambios importantes.
 
@@ -146,7 +146,7 @@ class SchemaCore:
             self._logger.error("Error creando backup: %s", e)
             return False
 
-    def get_schema_info(self) -> Dict[str, Any]:
+    def get_schema_info(self) -> dict[str, Any]:
         """
         Obtiene información completa del esquema actual.
 

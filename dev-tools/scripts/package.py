@@ -1,12 +1,12 @@
 import os
-import sys
-import subprocess
 import shutil
+import subprocess
+import sys
 import zipfile
 
 
 def get_current_version():
-    with open("VERSION.txt", "r") as f:
+    with open("VERSION.txt") as f:
         return f.read().strip()
 
 

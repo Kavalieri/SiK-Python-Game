@@ -10,7 +10,6 @@ Mantiene API original para compatibilidad con delegación a módulos especializa
 
 import logging
 import random
-from typing import List, Optional
 
 from ..entities.tile import Tile, TileType
 from .cluster_generator import ClusterGenerator
@@ -51,9 +50,7 @@ class WorldGenerator:
 
         self.logger.info("WorldGenerator inicializado con sistema modular")
 
-    def generate_world(
-        self, element_types: Optional[List[TileType]] = None
-    ) -> List[Tile]:
+    def generate_world(self, element_types: list[TileType] | None = None) -> list[Tile]:
         """
         Genera el mundo completo con elementos distribuidos.
 
@@ -106,8 +103,8 @@ class WorldGenerator:
         center_y: float,
         radius: float,
         num_elements: int,
-        element_types: Optional[List[TileType]] = None,
-    ) -> List[Tile]:
+        element_types: list[TileType] | None = None,
+    ) -> list[Tile]:
         """
         Genera un cluster de elementos en una zona específica.
 
@@ -127,13 +124,13 @@ class WorldGenerator:
 
     def generate_desert_oasis(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera un oasis en el desierto."""
         return self.cluster_generator.generate_desert_oasis(center_x, center_y, radius)
 
     def generate_rock_formation(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera una formación de rocas."""
         return self.cluster_generator.generate_rock_formation(
             center_x, center_y, radius
@@ -141,28 +138,28 @@ class WorldGenerator:
 
     def generate_cactus_field(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera un campo de cactus."""
         return self.cluster_generator.generate_cactus_field(center_x, center_y, radius)
 
     def generate_ruins(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera ruinas antiguas."""
         return self.cluster_generator.generate_ruins(center_x, center_y, radius)
 
     # Métodos de compatibilidad con API original
-    def _load_available_sprites(self) -> List[str]:
+    def _load_available_sprites(self) -> list[str]:
         """Delegado a WorldCore para compatibilidad."""
         return self.core.available_sprites
 
     def _is_valid_position(
-        self, x: float, y: float, existing_elements: List[Tile]
+        self, x: float, y: float, existing_elements: list[Tile]
     ) -> bool:
         """Delegado a WorldValidator para compatibilidad."""
         return self.validator.is_valid_position(x, y, existing_elements)
 
-    def _create_element_with_sprite(self, x: float, y: float) -> Optional[Tile]:
+    def _create_element_with_sprite(self, x: float, y: float) -> Tile | None:
         """Delegado a WorldValidator para compatibilidad."""
         return self.validator.create_element_with_sprite(x, y)
 

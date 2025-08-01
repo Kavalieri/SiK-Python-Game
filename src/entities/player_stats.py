@@ -8,7 +8,7 @@ Descripción: Módulo que maneja las estadísticas específicas del jugador.
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 from .entity_types import EntityStats
 
@@ -26,7 +26,7 @@ class PlayerStats(EntityStats):
     combo: int = 0  # Combo actual
     max_combo: int = 0  # Combo máximo
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convierte las estadísticas a diccionario para guardado."""
         base_dict = super().to_dict()
         player_dict = {
@@ -43,7 +43,7 @@ class PlayerStats(EntityStats):
         return base_dict
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PlayerStats":
+    def from_dict(cls, data: dict[str, Any]) -> "PlayerStats":
         """Crea estadísticas desde diccionario."""
         base_stats = EntityStats.from_dict(data)
         return cls(

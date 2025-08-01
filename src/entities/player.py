@@ -7,7 +7,7 @@ Fecha: 30 de Julio, 2025
 Descripción: Fachada que mantiene API original delegando a módulos especializados.
 """
 
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import pygame
 
@@ -168,13 +168,13 @@ class Player(Entity):
     def handle_input(
         self,
         keys: pygame.key.ScancodeWrapper,
-        mouse_pos: Tuple[int, int],
-        mouse_buttons: Tuple[bool, bool, bool],
+        mouse_pos: tuple[int, int],
+        mouse_buttons: tuple[bool, bool, bool],
     ):
         """Maneja la entrada del usuario."""
         return self.movement.handle_input(keys, mouse_pos, mouse_buttons, self.effects)
 
-    def attack(self, target_pos: Tuple[int, int], enemies: List[Any]):
+    def attack(self, target_pos: tuple[int, int], enemies: list[Any]):
         """Ejecuta el ataque actual."""
         return self.integration.attack(target_pos, enemies)
 
@@ -190,14 +190,14 @@ class Player(Entity):
         """Aplica un powerup al jugador."""
         self.integration.apply_powerup(powerup_effect)
 
-    def get_data(self) -> Dict[str, Any]:
+    def get_data(self) -> dict[str, Any]:
         """Obtiene datos del jugador para guardado."""
         data = self.core.get_data()
         data.update(self.movement.get_data())
         data.update(self.integration.get_integration_data())
         return data
 
-    def load_data(self, data: Dict[str, Any]):
+    def load_data(self, data: dict[str, Any]):
         """Carga datos del jugador desde guardado."""
         self.core.load_data(data)
         self.movement.load_data(data)

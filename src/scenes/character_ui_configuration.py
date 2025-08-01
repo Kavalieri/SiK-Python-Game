@@ -1,7 +1,6 @@
 """Character UI Configuration - Configuración de Interfaz de Usuario"""
 
 import logging
-from typing import Dict
 
 import pygame
 
@@ -121,15 +120,15 @@ class CharacterUIConfiguration:
             "nav_height": 40,
         }
 
-    def get_fonts(self) -> Dict[str, pygame.font.Font]:
+    def get_fonts(self) -> dict[str, pygame.font.Font]:
         """Obtiene el diccionario de fuentes configuradas."""
         return self.fonts
 
-    def get_colors(self) -> Dict[str, tuple]:
+    def get_colors(self) -> dict[str, tuple]:
         """Obtiene el diccionario de colores configurados."""
         return self.colors
 
-    def get_dimensions(self) -> Dict[str, int]:
+    def get_dimensions(self) -> dict[str, int]:
         """Obtiene el diccionario de dimensiones configuradas."""
         return self.dimensions
 

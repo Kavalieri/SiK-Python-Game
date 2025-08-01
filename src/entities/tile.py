@@ -10,7 +10,6 @@ Descripción: Sistema de tiles para elementos del escenario como árboles, rocas
 import logging
 import random
 from enum import Enum
-from typing import Optional
 
 import pygame
 
@@ -90,7 +89,7 @@ class Tile(Entity):
         x: float,
         y: float,
         tile_type: TileType,
-        sprite_name: Optional[str] = None,
+        sprite_name: str | None = None,
     ):
         """
         Inicializa un tile.
@@ -148,7 +147,7 @@ class Tile(Entity):
             # Añadir símbolo
             self._add_symbol()
 
-        except (OSError, IOError, ValueError) as e:
+        except (OSError, ValueError) as e:
             self.logger.error("Error al crear sprite de tile: %s", e)
             # Sprite por defecto
             self.sprite = pygame.Surface((self.width, self.height))
@@ -164,7 +163,7 @@ class Tile(Entity):
             # Centrar el símbolo
             text_rect = text.get_rect(center=(self.width // 2, self.height // 2))
             self.sprite.blit(text, text_rect)
-        except (OSError, IOError, ValueError) as e:
+        except (OSError, ValueError) as e:
             self.logger.warning("No se pudo añadir símbolo al tile: %s", e)
 
     def _update_logic(self, delta_time: float):

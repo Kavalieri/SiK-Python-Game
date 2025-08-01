@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Migración enemies.json → SQLite - Paso 2
 =========================================
@@ -53,7 +52,7 @@ def migrate_enemies():
             print(f"✗ ERROR: Archivo {json_path} no encontrado")
             return False
 
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             json_data = json.load(f)
             enemy_count = len(json_data.get("tipos_enemigos", {}))
             print(f"✓ Archivo JSON válido con {enemy_count} tipos de enemigos")

@@ -8,18 +8,19 @@ Fecha: 2024
 Descripción: Test del sistema de enemigos con tipos y comportamientos avanzados.
 """
 
-import sys
 import os
-import pygame
+import sys
 import time
+
+import pygame
 
 # Añadir el directorio raíz al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from src.entities.enemy_types import EnemyTypes
 from src.entities.enemy import Enemy
-from src.utils.asset_manager import AssetManager
+from src.entities.enemy_types import EnemyTypes
 from src.utils.animation_manager import AnimationManager
+from src.utils.asset_manager import AssetManager
 from src.utils.config_manager import ConfigManager
 
 

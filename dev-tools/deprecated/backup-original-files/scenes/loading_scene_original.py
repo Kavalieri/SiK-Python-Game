@@ -11,7 +11,7 @@ import json
 import random
 import threading
 import time
-from typing import Callable
+from collections.abc import Callable
 
 import pygame
 
@@ -309,7 +309,7 @@ class LoadingScene(Scene):
             >>> print(config.get("title"))
         """
         try:
-            with open("config/loading_screen.json", "r", encoding="utf-8") as f:
+            with open("config/loading_screen.json", encoding="utf-8") as f:
                 config = json.load(f)
                 self.logger.info(
                     "Configuración de pantalla de carga cargada correctamente."

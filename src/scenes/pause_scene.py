@@ -39,13 +39,12 @@ class PauseScene(Scene):
         self.game_state = game_state
         self.save_manager = save_manager
         self.logger = get_logger("SiK_Game")
-        
+
         # Configurar pygame-gui
         self.ui_manager = pygame_gui.UIManager(
-            (screen.get_width(), screen.get_height()),
-            theme_path="assets/ui/theme.json"
+            (screen.get_width(), screen.get_height()), theme_path="assets/ui/theme.json"
         )
-        
+
         self.logger.info("[PauseScene] Escena de pausa inicializada")
 
         # Inicializar menú
@@ -54,7 +53,7 @@ class PauseScene(Scene):
 
         # Configurar callbacks
         self._configurar_callbacks()
-        
+
         # Configurar elementos pygame-gui
         self._setup_pygame_gui_elements()
 
@@ -65,76 +64,64 @@ class PauseScene(Scene):
         Configura los elementos de pygame-gui para la escena de pausa.
         """
         screen_width, screen_height = self.screen.get_size()
-        
+
         # Panel central de pausa
         panel_width, panel_height = 400, 500
         panel_x = (screen_width - panel_width) // 2
         panel_y = (screen_height - panel_height) // 2
-        
+
         # Ventana/Panel principal
         self.pause_window = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect(panel_x, panel_y, panel_width, panel_height),
-            manager=self.ui_manager
+            manager=self.ui_manager,
         )
-        
+
         # Título
         self.titulo_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(
-                (panel_width // 2 - 50, 20), (100, 50)
-            ),
+            relative_rect=pygame.Rect((panel_width // 2 - 50, 20), (100, 50)),
             text="PAUSA",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
-        
+
         # Botones del menú de pausa
         button_width = 300
         button_height = 50
         button_x = (panel_width - button_width) // 2
-        
+
         self.resume_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (button_x, 100), (button_width, button_height)
-            ),
+            relative_rect=pygame.Rect((button_x, 100), (button_width, button_height)),
             text="Reanudar Juego",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
-        
+
         self.save_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (button_x, 170), (button_width, button_height)
-            ),
+            relative_rect=pygame.Rect((button_x, 170), (button_width, button_height)),
             text="Guardar Partida",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
-        
+
         self.options_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (button_x, 240), (button_width, button_height)
-            ),
+            relative_rect=pygame.Rect((button_x, 240), (button_width, button_height)),
             text="Opciones",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
-        
+
         self.main_menu_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (button_x, 310), (button_width, button_height)
-            ),
+            relative_rect=pygame.Rect((button_x, 310), (button_width, button_height)),
             text="Menú Principal",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
-        
+
         self.exit_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (button_x, 380), (button_width, button_height)
-            ),
+            relative_rect=pygame.Rect((button_x, 380), (button_width, button_height)),
             text="Salir del Juego",
             manager=self.ui_manager,
-            container=self.pause_window
+            container=self.pause_window,
         )
 
     def _configurar_callbacks(self):
@@ -155,7 +142,7 @@ class PauseScene(Scene):
         """
         # Procesar eventos de pygame-gui primero
         self.ui_manager.process_events(event)
-        
+
         # Eventos específicos de pygame-gui
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.resume_button:
@@ -173,7 +160,7 @@ class PauseScene(Scene):
             elif event.ui_element == self.exit_button:
                 self._on_exit()
                 return
-        
+
         self.logger.info("[PauseScene] Evento recibido: %s - %s", event.type, event)
         if event.type == 768:  # pygame.KEYDOWN
             self.logger.info("[PauseScene] Tecla pulsada: %s", event.key)
@@ -206,7 +193,7 @@ class PauseScene(Scene):
 
         # Comentar menú original para evitar superposición
         # self.menu_manager.render()
-        
+
         # Solo renderizar UI de pygame-gui
         self.ui_manager.draw_ui(self.screen)
 

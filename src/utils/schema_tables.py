@@ -8,10 +8,8 @@ de migración SQLite. Separado de SchemaManager para mantener límite de 150 lí
 Fase 1 de migración SQLite - Definiciones de esquemas
 """
 
-from typing import Dict
 
-
-def get_all_table_schemas() -> Dict[str, str]:
+def get_all_table_schemas() -> dict[str, str]:
     """
     Obtiene todos los esquemas de tablas definidos para el sistema de migración.
 

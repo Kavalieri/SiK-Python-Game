@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Sky Renderer - Sistema de renderizado del cielo del desierto.
 Módulo especializado extraído de atmospheric_effects.py (optimización de líneas).
 """
-
-from typing import Tuple
 
 import pygame
 
@@ -50,8 +47,8 @@ class SkyRenderer:
             pygame.draw.line(screen, color, (0, y), (self.screen_width, y))
 
     def _interpolate_color(
-        self, color1: Tuple[int, int, int], color2: Tuple[int, int, int], t: float
-    ) -> Tuple[int, int, int]:
+        self, color1: tuple[int, int, int], color2: tuple[int, int, int], t: float
+    ) -> tuple[int, int, int]:
         """Interpola entre dos colores."""
         t = max(0.0, min(1.0, t))  # Clamp t entre 0 y 1
 

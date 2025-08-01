@@ -4,10 +4,9 @@ Script para analizar el tamaño de archivos Python en el proyecto.
 """
 
 from pathlib import Path
-from typing import List, Tuple
 
 
-def analyze_files() -> List[Tuple[str, int]]:
+def analyze_files() -> list[tuple[str, int]]:
     """
     Analiza todos los archivos Python en el proyecto y devuelve los que superan 150 líneas.
 
@@ -44,7 +43,7 @@ def analyze_files() -> List[Tuple[str, int]]:
 
 
 def _print_summary(
-    files_over_150: List[Tuple[str, int]], all_files: List[Tuple[str, int]]
+    files_over_150: list[tuple[str, int]], all_files: list[tuple[str, int]]
 ):
     """
     Imprime un resumen de los archivos analizados.

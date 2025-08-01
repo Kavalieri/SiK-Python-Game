@@ -9,7 +9,6 @@ Descripción: Sistema especializado para la creación y gestión de proyectiles.
 
 import math
 import time
-from typing import List
 
 from ..entities.powerup import PowerupType
 from ..entities.projectile import Projectile
@@ -38,7 +37,7 @@ class ProjectileSystem:
         target_y: float,
         bullet_damage: int,
         bullet_speed: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea proyectiles según las configuraciones y powerups activos."""
         if not self.can_shoot():
             return []
@@ -83,7 +82,7 @@ class ProjectileSystem:
         target_y: float,
         speed: float,
         damage: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo doble."""
         projectiles = []
         dx = target_x - x
@@ -120,7 +119,7 @@ class ProjectileSystem:
         target_y: float,
         speed: float,
         damage: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo en abanico."""
         projectiles = []
         base_angle = math.atan2(target_y - y, target_x - x)

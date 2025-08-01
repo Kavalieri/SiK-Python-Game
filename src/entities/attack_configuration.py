@@ -7,7 +7,7 @@ Fecha: 30 de Julio, 2025
 Descripción: Configuración y estructuras de datos para ataques del jugador.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 
 class AttackConfig:
@@ -15,7 +15,7 @@ class AttackConfig:
     Configuración de un ataque (melee, ranged, area, etc.)
     """
 
-    def __init__(self, data: Dict[str, Any]):
+    def __init__(self, data: dict[str, Any]):
         self.nombre = data.get("nombre", "")
         self.tipo = data.get("tipo", "melee")
         self.damage = data.get("daño", 0)  # Mantener compatibilidad con JSON español
@@ -34,7 +34,7 @@ class Attack:
     Instancia de un ataque en ejecución.
     """
 
-    def __init__(self, config: AttackConfig, owner, target_pos: Tuple[int, int]):
+    def __init__(self, config: AttackConfig, owner, target_pos: tuple[int, int]):
         self.config = config
         self.owner = owner
         self.target_pos = target_pos
@@ -47,7 +47,7 @@ class AttackManager:
     Gestor de configuraciones de ataque y cooldowns.
     """
 
-    def __init__(self, attack_configs: List[AttackConfig]):
+    def __init__(self, attack_configs: list[AttackConfig]):
         """
         Inicializa el gestor de ataques.
 
@@ -98,11 +98,11 @@ class AttackManager:
         """Obtiene el número total de ataques configurados."""
         return len(self.attack_configs)
 
-    def get_all_attacks(self) -> List[AttackConfig]:
+    def get_all_attacks(self) -> list[AttackConfig]:
         """Obtiene todas las configuraciones de ataque."""
         return self.attack_configs.copy()
 
-    def get_attack_by_name(self, name: str) -> Optional[AttackConfig]:
+    def get_attack_by_name(self, name: str) -> AttackConfig | None:
         """
         Busca un ataque por nombre.
 

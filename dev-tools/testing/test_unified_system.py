@@ -7,11 +7,11 @@ Fecha: 2024
 Descripción: Test unificado que combina todas las funcionalidades principales del sistema.
 """
 
-import sys
-import os
-import pygame
 import logging
-from typing import Dict
+import os
+import sys
+
+import pygame
 
 # Añadir el directorio src al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -233,7 +233,7 @@ class UnifiedTestSystem:
             self.logger.error(f"Error al inicializar pygame: {e}")
             return False
 
-    def test_character_system(self) -> Dict:
+    def test_character_system(self) -> dict:
         """Prueba el sistema de personajes."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -262,7 +262,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_animation_system(self) -> Dict:
+    def test_animation_system(self) -> dict:
         """Prueba el sistema de animación."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -288,7 +288,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_powerup_system(self) -> Dict:
+    def test_powerup_system(self) -> dict:
         """Prueba el sistema de powerups."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -306,7 +306,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_ui_button_system(self) -> Dict:
+    def test_ui_button_system(self) -> dict:
         """Prueba el sistema de botones UI."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -329,7 +329,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_navigation_system(self) -> Dict:
+    def test_navigation_system(self) -> dict:
         """Prueba el sistema de navegación."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -349,7 +349,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_config_system(self) -> Dict:
+    def test_config_system(self) -> dict:
         """Prueba el sistema de configuración."""
         results = {"success": True, "errors": [], "warnings": []}
 
@@ -371,7 +371,7 @@ class UnifiedTestSystem:
 
         return results
 
-    def test_asset_manager_system(self) -> Dict:
+    def test_asset_manager_system(self) -> dict:
         """Prueba el sistema de asset manager."""
         results = {"success": True, "errors": [], "warnings": []}
 

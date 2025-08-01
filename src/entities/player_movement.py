@@ -7,8 +7,6 @@ Fecha: 30 de Julio, 2025
 Descripción: Sistema de movimiento, input handling y animaciones del jugador.
 """
 
-from typing import Tuple
-
 import pygame
 
 from ..entities.powerup import PowerupType
@@ -38,8 +36,8 @@ class PlayerMovement:
     def handle_input(
         self,
         keys: pygame.key.ScancodeWrapper,
-        _mouse_pos: Tuple[int, int],
-        mouse_buttons: Tuple[bool, bool, bool],
+        _mouse_pos: tuple[int, int],
+        mouse_buttons: tuple[bool, bool, bool],
         player_effects,
     ):
         """
@@ -121,7 +119,7 @@ class PlayerMovement:
         else:
             return AnimationState.IDLE
 
-    def get_velocity(self) -> Tuple[float, float]:
+    def get_velocity(self) -> tuple[float, float]:
         """
         Obtiene la velocidad actual del jugador.
 

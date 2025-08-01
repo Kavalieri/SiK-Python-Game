@@ -17,7 +17,6 @@ import subprocess
 import sys
 import zipfile
 from pathlib import Path
-from typing import Dict, List
 
 # Configurar logging
 logging.basicConfig(
@@ -41,7 +40,7 @@ class UniversalPackager:
         self.project_root = Path(project_root).resolve()
         self.config = self._load_config()
 
-    def _load_config(self) -> Dict:
+    def _load_config(self) -> dict:
         """
         Carga la configuración del proyecto.
 
@@ -83,7 +82,7 @@ class UniversalPackager:
         config_file = self.project_root / "package_config.json"
         if config_file.exists():
             try:
-                with open(config_file, "r", encoding="utf-8") as f:
+                with open(config_file, encoding="utf-8") as f:
                     project_config = json.load(f)
                     config.update(project_config)
                 logger.info(f"Configuración cargada desde {config_file}")
@@ -106,7 +105,7 @@ class UniversalPackager:
             pyproject_file = self.project_root / "pyproject.toml"
             if pyproject_file.exists():
                 try:
-                    with open(pyproject_file, "r", encoding="utf-8") as f:
+                    with open(pyproject_file, encoding="utf-8") as f:
                         content = f.read()
                         if 'version = "' in content:
                             start = content.find('version = "') + 10
@@ -119,7 +118,7 @@ class UniversalPackager:
             return "0.1.0"
 
         try:
-            with open(version_file, "r", encoding="utf-8") as f:
+            with open(version_file, encoding="utf-8") as f:
                 return f.read().strip()
         except Exception as e:
             logger.error(f"Error al leer versión: {e}")
@@ -181,7 +180,7 @@ class UniversalPackager:
         logger.info(f"Punto de entrada válido: {entry_point}")
         return True
 
-    def build_pyinstaller_command(self, version: str) -> List[str]:
+    def build_pyinstaller_command(self, version: str) -> list[str]:
         """
         Construye el comando de PyInstaller.
 

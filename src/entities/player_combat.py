@@ -9,7 +9,7 @@ de combate del jugador, simplificado para compatibilidad inmediata.
 """
 
 import logging
-from typing import Any, List, Tuple
+from typing import Any
 
 from ..entities.powerup import PowerupType
 from ..utils.config_manager import ConfigManager
@@ -30,7 +30,7 @@ class PlayerCombat:
         self,
         player_stats: PlayerStats,
         player_effects: PlayerEffects,
-        attack_configs: List[Any],
+        attack_configs: list[Any],
     ):
         """
         Inicializa el sistema de combate.
@@ -73,10 +73,10 @@ class PlayerCombat:
 
     def shoot(
         self,
-        player_pos: Tuple[float, float],
-        target_pos: Tuple[int, int],
+        player_pos: tuple[float, float],
+        target_pos: tuple[int, int],
         current_time: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """
         Crea proyectiles según el tipo de disparo activo.
 
@@ -166,10 +166,10 @@ class PlayerCombat:
     def attack(
         self,
         player_core,
-        target_pos: Tuple[int, int],
+        target_pos: tuple[int, int],
         current_time: float,
-        enemies: List[Any],
-    ) -> List[Any]:
+        enemies: list[Any],
+    ) -> list[Any]:
         """
         Ejecuta un ataque del jugador.
 

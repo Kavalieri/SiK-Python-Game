@@ -9,7 +9,7 @@ Descripción: Gestiona el estado global del juego, puntuaciones, vidas, etc.
 
 import logging
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .scene_manager import SceneManager
@@ -39,9 +39,9 @@ class GameState:
         self.level = 1
         self.high_score = 0
         self.player_name = "Player"
-        self.selected_character: Optional[str] = None
+        self.selected_character: str | None = None
         self.current_player = None  # Referencia al jugador actual para el HUD
-        self.scene_manager: Optional["SceneManager"] = (
+        self.scene_manager: SceneManager | None = (
             None  # Referencia al gestor de escenas
         )
         self.scene_manager = None  # Se establecerá desde el GameEngine
@@ -107,7 +107,7 @@ class GameState:
         self.status = status
         self.logger.info("Estado del juego cambiado a: %s", status.value)
 
-    def get_state_dict(self) -> Dict[str, Any]:
+    def get_state_dict(self) -> dict[str, Any]:
         """
         Obtiene el estado actual como diccionario.
 
@@ -141,7 +141,7 @@ class GameState:
                 scene_name,
             )
 
-    def load_state(self, state_dict: Dict[str, Any]):
+    def load_state(self, state_dict: dict[str, Any]):
         """
         Carga el estado desde un diccionario.
 

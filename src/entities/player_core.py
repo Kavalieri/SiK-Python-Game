@@ -9,7 +9,7 @@ Descripción: Núcleo del sistema de jugador con configuración y estado base.
 
 import logging
 from enum import Enum
-from typing import Any, Dict
+from typing import Any
 
 import pygame
 
@@ -170,7 +170,7 @@ class PlayerCore:
         self.x = max(0, min(self.x, self.world_width - 32))  # 32 = width
         self.y = max(0, min(self.y, self.world_height - 32))  # 32 = height
 
-    def get_data(self) -> Dict[str, Any]:
+    def get_data(self) -> dict[str, Any]:
         """Obtiene datos básicos del núcleo para guardado."""
         return {
             "x": self.x,
@@ -180,7 +180,7 @@ class PlayerCore:
             "current_animation_state": self.current_animation_state.value,
         }
 
-    def load_data(self, data: Dict[str, Any]):
+    def load_data(self, data: dict[str, Any]):
         """Carga datos básicos del núcleo desde guardado."""
         self.x = data.get("x", self.x)
         self.y = data.get("y", self.y)

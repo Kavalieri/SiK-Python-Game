@@ -7,10 +7,10 @@ Fecha: 2024
 Descripción: Gestiona las diferentes escenas del juego (menú, juego, pausa, etc.).
 """
 
-import pygame
 import logging
-from typing import Optional, Dict
 from abc import ABC, abstractmethod
+
+import pygame
 
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
@@ -75,9 +75,9 @@ class SceneManager:
         self.logger = get_logger("SiK_Game")
         self.logger.info("[SceneManager] Gestor de escenas inicializado")
 
-        self.scenes: Dict[str, Scene] = {}
-        self.current_scene: Optional[Scene] = None
-        self.next_scene: Optional[str] = None
+        self.scenes: dict[str, Scene] = {}
+        self.current_scene: Scene | None = None
+        self.next_scene: str | None = None
 
         self.logger.info("Gestor de escenas inicializado")
 

@@ -10,7 +10,7 @@ import sqlite3
 import threading
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 
 class DatabaseManager:
@@ -19,7 +19,7 @@ class DatabaseManager:
     def __init__(self, db_path: str = "saves/game_database.db", pool_size: int = 5):
         self.db_path = Path(db_path)
         self.pool_size = pool_size
-        self._pool: List[sqlite3.Connection] = []
+        self._pool: list[sqlite3.Connection] = []
         self._pool_lock = threading.Lock()
         self._logger = logging.getLogger("DatabaseManager")
 
@@ -88,8 +88,8 @@ class DatabaseManager:
                         conn.close()
 
     def execute_query(
-        self, query: str, params: Optional[tuple] = None, fetch_all: bool = False
-    ) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
+        self, query: str, params: tuple | None = None, fetch_all: bool = False
+    ) -> dict[str, Any] | list[dict[str, Any]] | None:
         """Ejecuta query SQL y retorna resultados."""
         with self.get_connection() as conn:
             try:
@@ -138,7 +138,7 @@ class DatabaseManager:
                     pass
         self._logger.info("Todas las conexiones cerradas")
 
-    def get_connection_info(self) -> Dict[str, Any]:
+    def get_connection_info(self) -> dict[str, Any]:
         """Obtiene información del estado de conexiones."""
         with self._pool_lock:
             return {

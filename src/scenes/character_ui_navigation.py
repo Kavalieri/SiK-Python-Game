@@ -9,7 +9,6 @@ Descripción: Módulo especializado para la navegación entre personajes,
 """
 
 import logging
-from typing import Dict, Optional, Tuple
 
 import pygame
 
@@ -76,7 +75,7 @@ class CharacterUINavigation:
         )
 
     def render_navigation_buttons(
-        self, screen: pygame.Surface, mouse_pos: Tuple[int, int]
+        self, screen: pygame.Surface, mouse_pos: tuple[int, int]
     ):
         """
         Renderiza los botones de navegación con efectos hover.
@@ -97,7 +96,7 @@ class CharacterUINavigation:
         screen: pygame.Surface,
         button_rect: pygame.Rect,
         button_text: str,
-        mouse_pos: Tuple[int, int],
+        mouse_pos: tuple[int, int],
     ):
         """
         Renderiza un botón de navegación individual.
@@ -165,7 +164,7 @@ class CharacterUINavigation:
             total_characters,
         )
 
-    def get_navigation_clicked(self, mouse_pos: Tuple[int, int]) -> Optional[str]:
+    def get_navigation_clicked(self, mouse_pos: tuple[int, int]) -> str | None:
         """
         Detecta qué botón de navegación fue clickeado.
 
@@ -183,9 +182,9 @@ class CharacterUINavigation:
 
     def get_character_card_clicked(
         self,
-        mouse_pos: Tuple[int, int],
-        character_positions: Dict[str, Tuple[int, int]],
-    ) -> Optional[str]:
+        mouse_pos: tuple[int, int],
+        character_positions: dict[str, tuple[int, int]],
+    ) -> str | None:
         """
         Detecta qué tarjeta de personaje fue clickeada.
 
@@ -208,7 +207,7 @@ class CharacterUINavigation:
         return None
 
     def is_navigation_hovered(
-        self, button_name: str, mouse_pos: Tuple[int, int]
+        self, button_name: str, mouse_pos: tuple[int, int]
     ) -> bool:
         """
         Verifica si un botón de navegación específico está siendo hover.

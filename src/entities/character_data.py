@@ -14,7 +14,7 @@ MIGRACIÓN COMPLETADA:
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..utils.config_database import ConfigDatabase
 from ..utils.database_manager import DatabaseManager
@@ -47,7 +47,7 @@ class CharacterDataManager:
                 # Fallback temporal hasta completar migración
                 self._config_db = None
 
-    def get_character_data(self, character_name: str) -> Optional[Dict[str, Any]]:
+    def get_character_data(self, character_name: str) -> dict[str, Any] | None:
         """
         Obtener datos de un personaje específico.
 
@@ -67,7 +67,7 @@ class CharacterDataManager:
             # Fallback temporal con datos hardcodeados
             return self._get_fallback_data().get(character_name)
 
-    def get_all_characters(self) -> List[str]:
+    def get_all_characters(self) -> list[str]:
         """
         Obtener lista de todos los personajes disponibles.
 
@@ -88,7 +88,7 @@ class CharacterDataManager:
         else:
             return list(self._get_fallback_data().keys())
 
-    def _get_fallback_data(self) -> Dict[str, Dict[str, Any]]:
+    def _get_fallback_data(self) -> dict[str, dict[str, Any]]:
         """
         Datos de fallback temporal hasta completar la migración.
         NOTA: Estos datos serán eliminados una vez confirmada la migración.
@@ -162,7 +162,7 @@ _character_manager = CharacterDataManager()
 
 
 # Función de compatibilidad para código existente
-def get_character_data(character_name: str) -> Optional[Dict[str, Any]]:
+def get_character_data(character_name: str) -> dict[str, Any] | None:
     """
     Función de compatibilidad para obtener datos de personaje.
 
@@ -175,7 +175,7 @@ def get_character_data(character_name: str) -> Optional[Dict[str, Any]]:
     return _character_manager.get_character_data(character_name)
 
 
-def get_all_characters() -> List[str]:
+def get_all_characters() -> list[str]:
     """
     Función de compatibilidad para obtener todos los personajes.
 

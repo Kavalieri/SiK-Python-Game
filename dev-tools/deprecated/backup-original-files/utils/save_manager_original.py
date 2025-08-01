@@ -7,16 +7,17 @@ Fecha: 2024
 Descripción: Sistema de guardado con cifrado y gestión de archivos de partida.
 """
 
+import hashlib
 import json
 import logging
-import hashlib
-from pathlib import Path
-from typing import Dict, Any, Optional, List
-from datetime import datetime
 import pickle
 import zlib
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 from .config_manager import ConfigManager
+
 # Importación diferida para evitar importación circular
 # from ..core.game_state import GameState
 
@@ -64,7 +65,7 @@ class SaveManager:
         key_string = f"{game_title}_{version}_save_key"
         return hashlib.sha256(key_string.encode()).hexdigest()[:32]
 
-    def _load_save_files_info(self) -> List[Dict[str, Any]]:
+    def _load_save_files_info(self) -> list[dict[str, Any]]:
         """
         Carga la información de los archivos de guardado existentes.
 
@@ -91,7 +92,7 @@ class SaveManager:
 
             if save_info_file.exists():
                 try:
-                    with open(save_info_file, "r", encoding="utf-8") as f:
+                    with open(save_info_file, encoding="utf-8") as f:
                         info_data = json.load(f)
                         save_info.update(info_data)
                 except Exception as e:
@@ -103,7 +104,7 @@ class SaveManager:
 
         return save_files
 
-    def get_save_files_info(self) -> List[Dict[str, Any]]:
+    def get_save_files_info(self) -> list[dict[str, Any]]:
         """
         Obtiene información de todos los archivos de guardado.
 
@@ -138,7 +139,7 @@ class SaveManager:
         self.logger.info(f"Nuevo archivo de guardado creado: {save_file_number}")
         return True
 
-    def load_save(self, save_file_number: int) -> Optional[Dict[str, Any]]:
+    def load_save(self, save_file_number: int) -> dict[str, Any] | None:
         """
         Carga un archivo de guardado.
 
@@ -186,7 +187,7 @@ class SaveManager:
             )
             return None
 
-    def save_game(self, game_state, additional_data: Dict[str, Any] = None) -> bool:
+    def save_game(self, game_state, additional_data: dict[str, Any] = None) -> bool:
         """
         Guarda el estado del juego.
 
@@ -239,7 +240,7 @@ class SaveManager:
             self.logger.error(f"Error al guardar el juego: {e}")
             return False
 
-    def _update_save_info(self, save_info: Dict[str, Any], game_state):
+    def _update_save_info(self, save_info: dict[str, Any], game_state):
         """
         Actualiza la información del archivo de guardado.
 
@@ -341,7 +342,7 @@ class SaveManager:
         # El cifrado XOR es simétrico, por lo que descifrar es igual que cifrar
         return self._encrypt_data(encrypted_data)
 
-    def get_last_save_file(self) -> Optional[int]:
+    def get_last_save_file(self) -> int | None:
         """
         Obtiene el número del último archivo de guardado utilizado.
 
@@ -359,7 +360,7 @@ class SaveManager:
 
         return last_used
 
-    def auto_save(self, game_state, additional_data: Dict[str, Any] = None) -> bool:
+    def auto_save(self, game_state, additional_data: dict[str, Any] = None) -> bool:
         """
         Guarda automáticamente el juego en el archivo actual o el último usado.
 
@@ -422,7 +423,7 @@ class SaveManager:
                 True si se importó correctamente
         """
         try:
-            with open(input_path, "r", encoding="utf-8") as f:
+            with open(input_path, encoding="utf-8") as f:
                 save_data = json.load(f)
 
             # Crear archivo de guardado desde datos de debug

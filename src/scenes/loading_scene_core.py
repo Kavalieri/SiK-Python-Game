@@ -9,7 +9,8 @@ Descripción: Configuración y estado central de la escena de carga.
 
 import json
 import random
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any
 
 import pygame
 
@@ -87,7 +88,7 @@ class LoadingSceneCore(Scene):
 
         self.logger.info("Escena de carga inicializada")
 
-    def _load_loading_screen_config(self) -> Dict[str, Any]:
+    def _load_loading_screen_config(self) -> dict[str, Any]:
         """
         Carga la configuración de la pantalla de carga desde un archivo JSON.
 
@@ -95,7 +96,7 @@ class LoadingSceneCore(Scene):
             Configuración de la pantalla de carga
         """
         try:
-            with open("config/loading_screen.json", "r", encoding="utf-8") as f:
+            with open("config/loading_screen.json", encoding="utf-8") as f:
                 config = json.load(f)
                 self.logger.info(
                     "Configuración de pantalla de carga cargada correctamente."
@@ -107,11 +108,11 @@ class LoadingSceneCore(Scene):
             )
         except json.JSONDecodeError as e:
             self.logger.error("Error al decodificar JSON: %s", e)
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error inesperado al cargar configuración: %s", e)
         return {}
 
-    def get_loading_state(self) -> Dict[str, Any]:
+    def get_loading_state(self) -> dict[str, Any]:
         """
         Obtiene el estado actual de carga.
 

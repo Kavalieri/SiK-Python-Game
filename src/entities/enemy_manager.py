@@ -9,7 +9,6 @@ Descripción: Gestión y spawning de múltiples enemigos en el juego.
 
 import math
 import random
-from typing import List, Optional, Tuple
 
 import pygame
 
@@ -25,7 +24,7 @@ class Enemy:
         self.core = EnemyCore(x, y, enemy_type, animation_manager)
         self.behavior = EnemyBehavior(self.core)
 
-    def update(self, dt: float, player_pos: Optional[Tuple[float, float]] = None):
+    def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """Actualiza el enemigo usando el sistema de comportamiento."""
         self.behavior.update(dt, player_pos)
 
@@ -98,12 +97,12 @@ class EnemyManager:
             animation_manager: Gestor de animaciones
         """
         self.animation_manager = animation_manager
-        self.enemies: List[Enemy] = []
+        self.enemies: list[Enemy] = []
         self.spawn_timer = 0
         self.spawn_delay = 1500  # milisegundos
         self.max_enemies = 8
 
-    def update(self, dt: float, player_pos: Optional[Tuple[float, float]] = None):
+    def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """
         Actualiza todos los enemigos.
 
@@ -157,7 +156,7 @@ class EnemyManager:
         new_enemy = Enemy(x, y, enemy_type, self.animation_manager)
         self.enemies.append(new_enemy)
 
-    def render(self, screen, camera_offset: Tuple[float, float] = (0, 0)):
+    def render(self, screen, camera_offset: tuple[float, float] = (0, 0)):
         """Renderiza todos los enemigos."""
         for enemy in self.enemies:
             frame = enemy.get_current_frame()
@@ -168,8 +167,8 @@ class EnemyManager:
                 screen.blit(frame, (screen_x, screen_y))
 
     def get_enemies_in_range(
-        self, pos: Tuple[float, float], radius: float
-    ) -> List[Enemy]:
+        self, pos: tuple[float, float], radius: float
+    ) -> list[Enemy]:
         """
         Obtiene enemigos en un rango específico desde una posición.
 

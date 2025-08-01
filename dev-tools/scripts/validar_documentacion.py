@@ -27,7 +27,7 @@ def validar_referencias_cruzadas():
             referencias_rotas.append(f"Documento faltante: {doc}")
             continue
 
-        with open(doc, "r", encoding="utf-8") as f:
+        with open(doc, encoding="utf-8") as f:
             contenido = f.read()
 
         # Buscar enlaces markdown [](./)
@@ -103,7 +103,7 @@ def verificar_estructura_documentos():
             todo_correcto = False
             continue
 
-        with open(doc, "r", encoding="utf-8") as f:
+        with open(doc, encoding="utf-8") as f:
             contenido = f.read()
 
         secciones_faltantes = []

@@ -10,7 +10,6 @@ Descripción: Configuración del sistema de logging para el juego.
 import logging
 import logging.handlers
 from pathlib import Path
-from typing import Optional
 
 
 def setup_logger(
@@ -71,7 +70,7 @@ def setup_logger(
     return logger
 
 
-def get_logger(name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str | None = None) -> logging.Logger:
     """
     Obtiene un logger específico.
 

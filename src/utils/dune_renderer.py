@@ -10,7 +10,6 @@ Descripción: Sistema de renderizado de dunas y terreno del desierto.
 import logging
 import math
 import random
-from typing import List, Tuple
 
 import pygame
 
@@ -42,7 +41,7 @@ class Dune:
             max(0, self.color[2] - 40),  # B más oscuro
         )
 
-    def _generate_dune_points(self) -> List[Tuple[float, float]]:
+    def _generate_dune_points(self) -> list[tuple[float, float]]:
         """Genera puntos para dibujar la duna."""
         points = []
         num_points = 20
@@ -61,7 +60,7 @@ class Dune:
         return points
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza la duna."""
         # Aplicar offset de cámara
@@ -97,7 +96,7 @@ class DuneRenderer:
         """
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.dunes: List[Dune] = []
+        self.dunes: list[Dune] = []
         self.logger = logging.getLogger(__name__)
 
         self._create_dunes()
@@ -121,14 +120,14 @@ class DuneRenderer:
         self.dunes.sort(key=lambda d: d.y, reverse=True)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza todas las dunas."""
         for dune in self.dunes:
             dune.render(screen, camera_offset)
 
     def render_dune_effects(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza efectos adicionales de las dunas."""
         # Añadir brillos en los picos de las dunas

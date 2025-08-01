@@ -8,8 +8,6 @@ Descripción: Fachada unificada para creación y gestión de menús del juego.
 Mantiene 100% compatibilidad con API original.
 """
 
-from typing import Dict
-
 import pygame
 import pygame_menu
 
@@ -94,7 +92,7 @@ class MenuFactory:
         """Crea el menú de selección de slots de guardado avanzado."""
         return self.menu_creator.create_save_menu()
 
-    def create_all_menus(self) -> Dict[str, pygame_menu.Menu]:
+    def create_all_menus(self) -> dict[str, pygame_menu.Menu]:
         """
         Crea todos los menús del juego.
 

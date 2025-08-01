@@ -11,7 +11,6 @@ import logging
 import math
 import os
 import random
-from typing import List, Optional
 
 import pygame
 
@@ -53,7 +52,7 @@ class WorldGenerator:
             f"Generador de mundo inicializado - Mundo: {world_width}x{world_height}, Pantalla: {screen_width}x{screen_height}"
         )
 
-    def _load_available_sprites(self) -> List[str]:
+    def _load_available_sprites(self) -> list[str]:
         """
         Carga los sprites disponibles de assets/objects/elementos/.
 
@@ -76,9 +75,7 @@ class WorldGenerator:
 
         return sprites
 
-    def generate_world(
-        self, element_types: Optional[List[TileType]] = None
-    ) -> List[Tile]:
+    def generate_world(self, element_types: list[TileType] | None = None) -> list[Tile]:
         """
         Genera el mundo completo con elementos distribuidos.
 
@@ -129,7 +126,7 @@ class WorldGenerator:
         return elements
 
     def _is_valid_position(
-        self, x: float, y: float, existing_elements: List[Tile]
+        self, x: float, y: float, existing_elements: list[Tile]
     ) -> bool:
         """
         Verifica si una posición es válida para colocar un elemento.
@@ -148,7 +145,7 @@ class WorldGenerator:
                 return False
         return True
 
-    def _create_element_with_sprite(self, x: float, y: float) -> Optional[Tile]:
+    def _create_element_with_sprite(self, x: float, y: float) -> Tile | None:
         """
         Crea un elemento usando sprites reales de assets/objects/elementos/.
 
@@ -235,8 +232,8 @@ class WorldGenerator:
         center_y: float,
         radius: float,
         num_elements: int,
-        element_types: List[TileType] = None,
-    ) -> List[Tile]:
+        element_types: list[TileType] = None,
+    ) -> list[Tile]:
         """
         Genera un cluster de elementos en una zona específica.
 
@@ -279,7 +276,7 @@ class WorldGenerator:
 
     def generate_desert_oasis(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """
         Genera un oasis en el desierto.
 
@@ -296,7 +293,7 @@ class WorldGenerator:
 
     def generate_rock_formation(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """
         Genera una formación de rocas.
 
@@ -312,7 +309,7 @@ class WorldGenerator:
 
     def generate_cactus_field(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """
         Genera un campo de cactus.
 
@@ -328,7 +325,7 @@ class WorldGenerator:
 
     def generate_ruins(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """
         Genera ruinas antiguas.
 

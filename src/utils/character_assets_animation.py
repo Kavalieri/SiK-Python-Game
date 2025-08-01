@@ -8,7 +8,7 @@ Descripción: Gestión de frames de animación, información y cálculo de FPS.
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pygame
 
@@ -31,8 +31,8 @@ class CharacterAssetsAnimation:
         self.logger.info("CharacterAssetsAnimation inicializado")
 
     def get_character_animation_frames(
-        self, character_name: str, animation: str, max_frames: Optional[int] = None
-    ) -> List[pygame.Surface]:
+        self, character_name: str, animation: str, max_frames: int | None = None
+    ) -> list[pygame.Surface]:
         """
         Obtiene todos los frames de una animación específica.
 
@@ -93,7 +93,7 @@ class CharacterAssetsAnimation:
         )
         return frames
 
-    def get_character_animation_info(self, character_name: str) -> Dict[str, Any]:
+    def get_character_animation_info(self, character_name: str) -> dict[str, Any]:
         """
         Obtiene información completa de las animaciones de un personaje.
 
@@ -163,7 +163,7 @@ class CharacterAssetsAnimation:
 
     def preload_character_animations(
         self, character_name: str
-    ) -> Dict[str, List[pygame.Surface]]:
+    ) -> dict[str, list[pygame.Surface]]:
         """
         Precarga todas las animaciones de un personaje.
 

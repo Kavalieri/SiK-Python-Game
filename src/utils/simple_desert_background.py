@@ -7,8 +7,9 @@ Fecha: 2024
 Descripción: Fondo simple de desierto completamente plano.
 """
 
-import pygame
 import logging
+
+import pygame
 
 
 class SimpleDesertBackground:

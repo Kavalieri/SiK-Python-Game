@@ -8,7 +8,6 @@ Descripción: Fachada del sistema de fondo dinámico de desierto tras refactoriz
 """
 
 import logging
-from typing import Tuple
 
 import pygame
 
@@ -82,7 +81,7 @@ class DesertBackground:
         self.particle_system.update(delta_time)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """
         Renderiza el fondo completo del desierto.

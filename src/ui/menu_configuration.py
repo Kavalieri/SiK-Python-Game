@@ -7,7 +7,8 @@ Fecha: 2024-12-19
 Descripción: Módulo para configuración de widgets y opciones de menús.
 """
 
-from typing import Any, Callable, Dict, List
+from collections.abc import Callable
+from typing import Any
 
 import pygame_menu
 
@@ -34,11 +35,11 @@ class MenuConfiguration:
         self.save_manager = save_manager
         self.logger = get_logger("SiK_Game")
 
-    def get_resolution_options(self) -> List[str]:
+    def get_resolution_options(self) -> list[str]:
         """Obtiene opciones de resolución disponibles."""
         return ["800x600", "1024x768", "1280x720", "1920x1080"]
 
-    def get_character_options(self) -> List[Dict[str, str]]:
+    def get_character_options(self) -> list[dict[str, str]]:
         """Obtiene opciones de personajes disponibles."""
         return [
             {"name": "Guerrero", "id": "guerrero"},
@@ -46,7 +47,7 @@ class MenuConfiguration:
             {"name": "Robot", "id": "robot"},
         ]
 
-    def get_upgrade_options(self) -> List[Dict[str, Any]]:
+    def get_upgrade_options(self) -> list[dict[str, Any]]:
         """Obtiene opciones de mejoras disponibles."""
         return [
             {"name": "Velocidad", "cost": 1},
@@ -55,7 +56,7 @@ class MenuConfiguration:
             {"name": "Escudo", "cost": 1},
         ]
 
-    def get_inventory_categories(self) -> List[str]:
+    def get_inventory_categories(self) -> list[str]:
         """Obtiene categorías de inventario."""
         return ["Armas", "Armaduras", "Accesorios", "Consumibles"]
 
@@ -190,7 +191,7 @@ class MenuConfiguration:
         except (AttributeError, KeyError, ValueError) as e:
             self.logger.error("Error añadiendo botones de slot de guardado: %s", str(e))
 
-    def get_audio_volume_values(self) -> Dict[str, float]:
+    def get_audio_volume_values(self) -> dict[str, float]:
         """Obtiene valores de volumen de audio desde configuración."""
         if not self.config:
             return {"music": 0.7, "sfx": 0.8}
@@ -205,7 +206,7 @@ class MenuConfiguration:
             self.logger.error("Error obteniendo valores de volumen: %s", str(e))
             return {"music": 0.7, "sfx": 0.8}
 
-    def get_display_settings(self) -> Dict[str, Any]:
+    def get_display_settings(self) -> dict[str, Any]:
         """Obtiene configuración de pantalla."""
         if not self.config:
             return {"fullscreen": False, "resolution": "1024x768"}

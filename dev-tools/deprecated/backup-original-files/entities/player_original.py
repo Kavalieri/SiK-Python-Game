@@ -7,19 +7,20 @@ Fecha: 2024-12-19
 Descripción: Clase principal del jugador que coordina todos los sistemas.
 """
 
-import pygame
 import logging
-from typing import Tuple, List, Any
 from enum import Enum
+from typing import Any
 
-from .entity import Entity, EntityType, EntityState
-from .player_stats import PlayerStats
-from .player_effects import PlayerEffects
-from .player_combat import PlayerCombat, AttackConfig
-from ..utils.animation_manager import IntelligentAnimationManager
-from ..utils.config_manager import ConfigManager
+import pygame
+
 from ..entities.character_data import CHARACTER_DATA
 from ..entities.powerup import PowerupEffect, PowerupType
+from ..utils.animation_manager import IntelligentAnimationManager
+from ..utils.config_manager import ConfigManager
+from .entity import Entity, EntityState, EntityType
+from .player_combat import AttackConfig, PlayerCombat
+from .player_effects import PlayerEffects
+from .player_stats import PlayerStats
 
 
 class AnimationState(Enum):
@@ -195,8 +196,8 @@ class Player(Entity):
     def handle_input(
         self,
         keys: pygame.key.ScancodeWrapper,
-        mouse_pos: Tuple[int, int],
-        mouse_buttons: Tuple[bool, bool, bool],
+        mouse_pos: tuple[int, int],
+        mouse_buttons: tuple[bool, bool, bool],
     ):
         """
         Maneja la entrada del usuario.
@@ -234,7 +235,7 @@ class Player(Entity):
         else:
             self.state = EntityState.IDLE
 
-    def attack(self, target_pos: Tuple[int, int], enemies: List[Any]):
+    def attack(self, target_pos: tuple[int, int], enemies: list[Any]):
         """
         Ejecuta el ataque actual según el tipo (melee, ranged, area).
         Reproduce animación y sonido si están definidos en el ataque.

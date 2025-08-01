@@ -13,7 +13,7 @@ import pickle
 import zlib
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .save_compatibility_core import SaveCompatibilityCore
 
@@ -34,7 +34,7 @@ class SaveCompatibilityPickle:
         self.logger = logging.getLogger(__name__)
 
     def save_game_pickle(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """
         Guarda el juego usando el sistema pickle tradicional.
@@ -89,7 +89,7 @@ class SaveCompatibilityPickle:
             self.logger.info("Juego guardado con pickle en slot %d", slot)
             return True
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error(
                 "Error de archivo guardando con pickle slot %d: %s", slot, e
             )
@@ -120,7 +120,7 @@ class SaveCompatibilityPickle:
             with open(info_file, "w", encoding="utf-8") as f:
                 json.dump(save_info, f, indent=4, ensure_ascii=False)
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error actualizando info pickle slot %d: %s", slot, e)
         except (TypeError, ValueError) as e:
             self.logger.error(
@@ -156,7 +156,7 @@ class SaveCompatibilityPickle:
 
             return deleted_count > 0
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error eliminando archivos pickle slot %d: %s", slot, e)
             return False
 
@@ -184,11 +184,11 @@ class SaveCompatibilityPickle:
             self.logger.info("Limpiados archivos pickle de %d slots", cleaned_files)
             return cleaned_files > 0
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error limpiando archivos pickle: %s", e)
             return False
 
-    def get_pickle_files_info(self) -> Dict[str, Any]:
+    def get_pickle_files_info(self) -> dict[str, Any]:
         """Obtiene información de archivos pickle existentes."""
         info = {"total_files": 0, "active_slots": [], "total_size_bytes": 0}
 
@@ -206,7 +206,7 @@ class SaveCompatibilityPickle:
                         save_file.stat().st_size + info_file.stat().st_size
                     )
 
-        except (OSError, IOError) as e:
+        except OSError as e:
             self.logger.error("Error obteniendo información pickle: %s", e)
 
         return info

@@ -118,7 +118,7 @@ class OptionsCallbacks:
             else:
                 self.logger.warning("ConfigManager no disponible en save_manager")
 
-        except (AttributeError, OSError, IOError) as e:
+        except (AttributeError, OSError) as e:
             self.logger.error("Error guardando opciones: %s", str(e))
 
     def get_options_callbacks(self) -> dict:

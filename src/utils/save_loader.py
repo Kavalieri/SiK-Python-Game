@@ -12,7 +12,7 @@ import logging
 import pickle
 import zlib
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config_manager import ConfigManager
 
@@ -41,7 +41,7 @@ class SaveLoader:
         # Crear directorio si no existe
         self.saves_path.mkdir(parents=True, exist_ok=True)
 
-    def load_save_files_info(self) -> List[Dict[str, Any]]:
+    def load_save_files_info(self) -> list[dict[str, Any]]:
         """
         Carga la información de los archivos de guardado existentes.
 
@@ -68,7 +68,7 @@ class SaveLoader:
 
             if save_info_file.exists():
                 try:
-                    with open(save_info_file, "r", encoding="utf-8") as f:
+                    with open(save_info_file, encoding="utf-8") as f:
                         info_data = json.load(f)
                         save_info.update(info_data)
                 except (OSError, json.JSONDecodeError, ValueError) as e:
@@ -81,8 +81,8 @@ class SaveLoader:
         return save_files
 
     def load_save_file(
-        self, save_file_number: int, save_files: List[Dict[str, Any]]
-    ) -> Optional[Dict[str, Any]]:
+        self, save_file_number: int, save_files: list[dict[str, Any]]
+    ) -> dict[str, Any] | None:
         """
         Carga un archivo de guardado específico.
 
@@ -129,7 +129,7 @@ class SaveLoader:
             )
             return None
 
-    def get_last_save_file(self, save_files: List[Dict[str, Any]]) -> Optional[int]:
+    def get_last_save_file(self, save_files: list[dict[str, Any]]) -> int | None:
         """
         Obtiene el número del último archivo de guardado utilizado.
 
@@ -151,7 +151,7 @@ class SaveLoader:
         return last_used
 
     def export_save_debug(
-        self, save_file_number: int, output_path: str, save_files: List[Dict[str, Any]]
+        self, save_file_number: int, output_path: str, save_files: list[dict[str, Any]]
     ) -> bool:
         """
         Exporta un archivo de guardado en formato legible para debug.
@@ -183,7 +183,7 @@ class SaveLoader:
             self.logger.error("Error al exportar archivo de guardado: %s", e)
             return False
 
-    def has_save_file(self, save_files: List[Dict[str, Any]]) -> bool:
+    def has_save_file(self, save_files: list[dict[str, Any]]) -> bool:
         """
         Verifica si existe algún archivo de guardado.
 

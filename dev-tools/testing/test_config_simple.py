@@ -34,7 +34,7 @@ def test_config_files():
 
         if config_path.exists():
             try:
-                with open(config_path, "r", encoding="utf-8") as f:
+                with open(config_path, encoding="utf-8") as f:
                     data = json.load(f)
 
                 print(f"✅ {config_file}: Válido ({len(data)} claves principales)")
@@ -62,7 +62,7 @@ def test_characters_config():
         return False
 
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             data = json.load(f)
 
         characters = data.get("characters", {})
@@ -96,7 +96,7 @@ def test_gameplay_config():
         return False
 
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Verificar niveles
@@ -132,7 +132,7 @@ def test_ui_config():
         return False
 
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Verificar colores

@@ -9,7 +9,6 @@ a distancia y en área.
 """
 
 import math
-from typing import List
 
 import pygame
 
@@ -35,10 +34,10 @@ class CombatActions:
     def execute_melee_attack(
         self,
         player_rect: pygame.Rect,
-        enemies: List,
+        enemies: list,
         damage: int,
         direction: str = "right",
-    ) -> List:
+    ) -> list:
         """
         Ejecuta un ataque cuerpo a cuerpo.
 
@@ -65,8 +64,8 @@ class CombatActions:
         return damaged_enemies
 
     def execute_area_attack(
-        self, player_rect: pygame.Rect, enemies: List, damage: int, powerup_effects=None
-    ) -> List:
+        self, player_rect: pygame.Rect, enemies: list, damage: int, powerup_effects=None
+    ) -> list:
         """
         Ejecuta un ataque en área.
 
@@ -116,7 +115,7 @@ class CombatActions:
         target_y: float,
         damage: int,
         speed: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """
         Ejecuta un ataque a distancia creando proyectiles.
 

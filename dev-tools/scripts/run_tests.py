@@ -7,10 +7,10 @@ Fecha: 2024
 Descripción: Script maestro para ejecutar todos los tests del proyecto.
 """
 
-import os
-import sys
-import subprocess
 import logging
+import os
+import subprocess
+import sys
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)

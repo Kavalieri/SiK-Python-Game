@@ -9,7 +9,6 @@ Descripción: Sistema de interfaz de usuario que muestra información del jugado
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, Tuple
 
 import pygame
 
@@ -57,9 +56,9 @@ class HUD:
         # Configuración del HUD
         self.screen_width = screen.get_width()
         self.screen_height = screen.get_height()
-        self.hud_elements: Dict[str, HUDElement] = {}
-        self.fonts: Dict[str, pygame.font.Font] = {}
-        self.colors: Dict[str, Tuple[int, int, int]] = {
+        self.hud_elements: dict[str, HUDElement] = {}
+        self.fonts: dict[str, pygame.font.Font] = {}
+        self.colors: dict[str, tuple[int, int, int]] = {
             "white": (255, 255, 255),
             "black": (0, 0, 0),
             "red": (255, 0, 0),
@@ -317,7 +316,7 @@ class HUD:
         self,
         element: HUDElement,
         percentage: float,
-        color: Tuple[int, int, int],
+        color: tuple[int, int, int],
         label: str,
     ):
         """
@@ -359,7 +358,7 @@ class HUD:
         self.screen.blit(label_text, (element.x, element.y - 15))
 
     def show_message(
-        self, message: str, duration: float = 3.0, color: Tuple[int, int, int] = None
+        self, message: str, duration: float = 3.0, color: tuple[int, int, int] = None
     ):
         """
         Muestra un mensaje temporal en el HUD.

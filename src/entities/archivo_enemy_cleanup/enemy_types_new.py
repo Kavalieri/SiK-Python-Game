@@ -17,7 +17,7 @@ import logging
 import random
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from src.utils.config_database import ConfigDatabase
 from src.utils.database_manager import DatabaseManager
@@ -86,7 +86,7 @@ class EnemyTypesManager:
                 self.logger.error("Error inicializando EnemyTypesManager: %s", e)
                 self._config_db = None
 
-    def get_enemy_config(self, enemy_type: str) -> Optional[EnemyConfig]:
+    def get_enemy_config(self, enemy_type: str) -> EnemyConfig | None:
         """
         Obtener configuración de un tipo de enemigo específico.
 
@@ -108,7 +108,7 @@ class EnemyTypesManager:
         else:
             return self._get_fallback_config(enemy_type)
 
-    def get_all_enemy_types(self) -> List[str]:
+    def get_all_enemy_types(self) -> list[str]:
         """
         Obtener lista de todos los tipos de enemigos disponibles.
 
@@ -125,7 +125,7 @@ class EnemyTypesManager:
         else:
             return list(self._get_fallback_data().keys())
 
-    def get_random_by_rarity(self, rarity: EnemyRarity) -> Optional[EnemyConfig]:
+    def get_random_by_rarity(self, rarity: EnemyRarity) -> EnemyConfig | None:
         """Obtiene un enemigo aleatorio de una rareza específica."""
         configs = self.get_by_rarity(rarity)
         if configs:
@@ -138,7 +138,7 @@ class EnemyTypesManager:
                     return config
         return None
 
-    def get_by_rarity(self, rarity: EnemyRarity) -> List[EnemyConfig]:
+    def get_by_rarity(self, rarity: EnemyRarity) -> list[EnemyConfig]:
         """Obtiene todos los enemigos de una rareza específica."""
         all_types = self.get_all_enemy_types()
         configs = []
@@ -169,7 +169,7 @@ class EnemyTypesManager:
         # Fallback al enemigo normal
         return self._get_fallback_config("zombie_male") or self.create_default_config()
 
-    def _convert_to_config(self, enemy_data: Dict[str, Any]) -> EnemyConfig:
+    def _convert_to_config(self, enemy_data: dict[str, Any]) -> EnemyConfig:
         """Convierte datos de la base de datos a EnemyConfig."""
         stats = enemy_data.get("stats", {})
         return EnemyConfig(
@@ -187,7 +187,7 @@ class EnemyTypesManager:
             spawn_chance=1.0,  # Por defecto
         )
 
-    def _get_fallback_config(self, enemy_type: str) -> Optional[EnemyConfig]:
+    def _get_fallback_config(self, enemy_type: str) -> EnemyConfig | None:
         """Configuración de fallback temporal."""
         fallback_data = self._get_fallback_data()
         if enemy_type in fallback_data:
@@ -208,7 +208,7 @@ class EnemyTypesManager:
             )
         return None
 
-    def _get_fallback_data(self) -> Dict[str, Dict[str, Any]]:
+    def _get_fallback_data(self) -> dict[str, dict[str, Any]]:
         """Datos de fallback temporal hasta completar la migración."""
         return {
             "zombie_male": {
@@ -252,7 +252,7 @@ _enemy_manager = EnemyTypesManager()
 
 
 # Funciones de compatibilidad para código existente
-def get_enemy_config(enemy_type: str) -> Optional[EnemyConfig]:
+def get_enemy_config(enemy_type: str) -> EnemyConfig | None:
     """Función de compatibilidad para obtener configuración de enemigo."""
     return _enemy_manager.get_enemy_config(enemy_type)
 
@@ -262,7 +262,7 @@ def get_random_enemy() -> EnemyConfig:
     return _enemy_manager.get_random_enemy()
 
 
-def get_random_by_rarity(rarity: EnemyRarity) -> Optional[EnemyConfig]:
+def get_random_by_rarity(rarity: EnemyRarity) -> EnemyConfig | None:
     """Función de compatibilidad para obtener enemigo por rareza."""
     return _enemy_manager.get_random_by_rarity(rarity)
 
@@ -277,7 +277,7 @@ class EnemyTypes:
         return _enemy_manager.get_random_enemy()
 
     @classmethod
-    def get_random_by_rarity(cls, rarity: EnemyRarity) -> Optional[EnemyConfig]:
+    def get_random_by_rarity(cls, rarity: EnemyRarity) -> EnemyConfig | None:
         """Obtiene un enemigo aleatorio de una rareza específica."""
         return _enemy_manager.get_random_by_rarity(rarity)
 

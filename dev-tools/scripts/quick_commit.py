@@ -21,7 +21,7 @@ def run_cmd_quick(cmd: list) -> bool:
 def get_file_lines(file_path: str) -> int:
     """Obtiene el número de líneas de un archivo rápidamente."""
     try:
-        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        with open(file_path, encoding="utf-8", errors="ignore") as f:
             return sum(1 for _ in f)
     except (OSError, UnicodeError):
         return 0

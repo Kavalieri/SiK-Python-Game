@@ -8,7 +8,7 @@ Descripción: Configuración y coordinación central del sistema de compatibilid
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .config_manager import ConfigManager
 from .save_database import SaveDatabase
@@ -25,8 +25,8 @@ class SaveCompatibilityCore:
         self,
         config: ConfigManager,
         loader: SaveLoader,
-        database: Optional[SaveDatabase] = None,
-        encryption_handler: Optional[SaveEncryption] = None,
+        database: SaveDatabase | None = None,
+        encryption_handler: SaveEncryption | None = None,
     ):
         """
         Inicializa el núcleo del sistema de compatibilidad.
@@ -71,7 +71,7 @@ class SaveCompatibilityCore:
         """
         return self.encryption_handler is not None
 
-    def get_save_system_info(self) -> Dict[str, Any]:
+    def get_save_system_info(self) -> dict[str, Any]:
         """
         Obtiene información del sistema de guardado actual.
 

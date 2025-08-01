@@ -10,7 +10,6 @@ Descripción: Sistema de efectos atmosféricos y cielo del desierto.
 import logging
 import math
 import random
-from typing import Tuple
 
 import pygame
 
@@ -157,7 +156,7 @@ class AtmosphericEffects:
                 screen.blit(wind_surface, (start_pos[0] - 10, start_pos[1] - 10))
 
     def render_dust_clouds(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza nubes de polvo en el horizonte."""
         # Crear nubes de polvo sutiles en el horizonte
@@ -198,8 +197,8 @@ class AtmosphericEffects:
                 screen.blit(cloud_surface, (final_x, final_y))
 
     def _interpolate_color(
-        self, color1: Tuple[int, int, int], color2: Tuple[int, int, int], t: float
-    ) -> Tuple[int, int, int]:
+        self, color1: tuple[int, int, int], color2: tuple[int, int, int], t: float
+    ) -> tuple[int, int, int]:
         """
         Interpola entre dos colores.
 
@@ -239,7 +238,7 @@ class AtmosphericEffects:
         """
         self.heat_shimmer_strength = max(0.0, min(1.0, strength))
 
-    def get_wind_data(self) -> Tuple[float, float]:
+    def get_wind_data(self) -> tuple[float, float]:
         """
         Obtiene los datos actuales del viento.
 

@@ -10,7 +10,6 @@ Descripción: Genera clusters específicos de elementos del mundo.
 import logging
 import math
 import random
-from typing import List, Optional
 
 from ..entities.tile import Tile, TileType
 from .world_core import WorldCore
@@ -38,8 +37,8 @@ class ClusterGenerator:
         center_y: float,
         radius: float,
         num_elements: int,
-        element_types: Optional[List[TileType]] = None,
-    ) -> List[Tile]:
+        element_types: list[TileType] | None = None,
+    ) -> list[Tile]:
         """
         Genera un cluster de elementos en una zona específica.
 
@@ -85,7 +84,7 @@ class ClusterGenerator:
 
     def generate_desert_oasis(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera un oasis en el desierto."""
         oasis_elements = []
         oasis_types = [TileType.TREE, TileType.FLOWER, TileType.BUSH]
@@ -104,7 +103,7 @@ class ClusterGenerator:
 
     def generate_rock_formation(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera una formación de rocas."""
         rock_types = [TileType.ROCK, TileType.ALTAR, TileType.CRYSTAL]
         num_elements = random.randint(3, 8)
@@ -118,7 +117,7 @@ class ClusterGenerator:
 
     def generate_cactus_field(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera un campo de cactus."""
         cactus_types = [TileType.TREE]  # Los cactus se mapean como TREE
         num_elements = random.randint(5, 12)
@@ -132,7 +131,7 @@ class ClusterGenerator:
 
     def generate_ruins(
         self, center_x: float, center_y: float, radius: float
-    ) -> List[Tile]:
+    ) -> list[Tile]:
         """Genera ruinas antiguas."""
         ruin_types = [TileType.ALTAR, TileType.CRYSTAL, TileType.ROCK]
         num_elements = random.randint(4, 10)

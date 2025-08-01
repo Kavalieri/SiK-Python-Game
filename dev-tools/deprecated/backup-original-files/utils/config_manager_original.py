@@ -10,7 +10,7 @@ Descripción: Gestiona la configuración del juego desde archivos y valores por 
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 
 class ConfigManager:
@@ -34,7 +34,7 @@ class ConfigManager:
         self._load_specific_configs()
         self.logger.info("Configuración cargada correctamente")
 
-    def _load_default_config(self) -> Dict[str, Any]:
+    def _load_default_config(self) -> dict[str, Any]:
         """
         Carga la configuración por defecto.
 
@@ -68,7 +68,7 @@ class ConfigManager:
         """Carga la configuración principal desde archivo."""
         try:
             if self.config_file.exists():
-                with open(self.config_file, "r", encoding="utf-8") as f:
+                with open(self.config_file, encoding="utf-8") as f:
                     file_config = json.load(f)
                     self._merge_config(file_config)
                     self.logger.info(
@@ -109,7 +109,7 @@ class ConfigManager:
                 file_path = config_dir / filename
                 if file_path.exists():
                     try:
-                        with open(file_path, "r", encoding="utf-8") as f:
+                        with open(file_path, encoding="utf-8") as f:
                             file_config = json.load(f)
                             self.config[section] = file_config
                             self.logger.info(
@@ -127,7 +127,7 @@ class ConfigManager:
         except Exception as e:
             self.logger.error(f"Error al cargar configuraciones específicas: {e}")
 
-    def _merge_config(self, file_config: Dict[str, Any]):
+    def _merge_config(self, file_config: dict[str, Any]):
         """
         Combina la configuración del archivo con la por defecto.
 
@@ -187,7 +187,7 @@ class ConfigManager:
         self.config[section][key] = value
         self.logger.debug(f"Configuración actualizada: {section}.{key} = {value}")
 
-    def get_section(self, section: str) -> Dict[str, Any]:
+    def get_section(self, section: str) -> dict[str, Any]:
         """
         Obtiene una sección completa de configuración.
 
@@ -221,44 +221,44 @@ class ConfigManager:
         return self.get("audio", "enabled", True)
 
     # Métodos para configuraciones específicas
-    def get_audio_config(self) -> Dict[str, Any]:
+    def get_audio_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de audio."""
         return self.config.get("audio", {})
 
-    def get_characters_config(self) -> Dict[str, Any]:
+    def get_characters_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de personajes."""
         return self.config.get("characters", {})
 
-    def get_enemies_config(self) -> Dict[str, Any]:
+    def get_enemies_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de enemigos."""
         return self.config.get("enemies", {})
 
-    def get_gameplay_config(self) -> Dict[str, Any]:
+    def get_gameplay_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de gameplay."""
         return self.config.get("gameplay", {})
 
-    def get_powerups_config(self) -> Dict[str, Any]:
+    def get_powerups_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de powerups."""
         return self.config.get("powerups", {})
 
-    def get_ui_config(self) -> Dict[str, Any]:
+    def get_ui_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de UI."""
         return self.config.get("ui", {})
 
     # Métodos específicos para valores comunes
-    def get_character_data(self, character_name: str) -> Dict[str, Any]:
+    def get_character_data(self, character_name: str) -> dict[str, Any]:
         """
         Devuelve la configuración completa de un personaje, incluyendo ataques.
         """
         characters = self.get_characters_config().get("characters", {})
         return characters.get(character_name, {})
 
-    def get_enemy_data(self, enemy_type: str) -> Dict[str, Any]:
+    def get_enemy_data(self, enemy_type: str) -> dict[str, Any]:
         """Obtiene los datos de un enemigo específico."""
         enemies = self.get_enemies_config()
         return enemies.get("tipos_enemigos", {}).get(enemy_type, {})
 
-    def get_powerup_data(self, powerup_type: str) -> Dict[str, Any]:
+    def get_powerup_data(self, powerup_type: str) -> dict[str, Any]:
         """Obtiene los datos de un powerup específico."""
         powerups = self.get_powerups_config()
         return powerups.get("tipos_powerups", {}).get(powerup_type, {})
@@ -284,11 +284,11 @@ class ConfigManager:
             self.logger.warning(f"Tamaño de fuente UI no encontrado: {key}")
             return default
 
-    def get_display_config(self) -> Dict[str, Any]:
+    def get_display_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de display."""
         return self.config.get("display", {})
 
-    def get_input_config(self) -> Dict[str, Any]:
+    def get_input_config(self) -> dict[str, Any]:
         """Obtiene la configuración completa de input."""
         return self.config.get("input", {})
 

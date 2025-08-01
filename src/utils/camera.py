@@ -8,7 +8,6 @@ Descripción: Sistema de cámara que sigue al jugador y muestra la porción visi
 """
 
 import logging
-from typing import Tuple
 
 
 class Camera:
@@ -80,7 +79,7 @@ class Camera:
         self.x += (self.target_x - self.x) * self.smooth_factor
         self.y += (self.target_y - self.y) * self.smooth_factor
 
-    def world_to_screen(self, world_x: float, world_y: float) -> Tuple[float, float]:
+    def world_to_screen(self, world_x: float, world_y: float) -> tuple[float, float]:
         """
         Convierte coordenadas del mundo a coordenadas de pantalla.
 
@@ -95,7 +94,7 @@ class Camera:
         screen_y = world_y - self.y
         return screen_x, screen_y
 
-    def screen_to_world(self, screen_x: float, screen_y: float) -> Tuple[float, float]:
+    def screen_to_world(self, screen_x: float, screen_y: float) -> tuple[float, float]:
         """
         Convierte coordenadas de pantalla a coordenadas del mundo.
 
@@ -134,7 +133,7 @@ class Camera:
             and screen_y <= self.screen_height
         )
 
-    def get_viewport(self) -> Tuple[float, float, float, float]:
+    def get_viewport(self) -> tuple[float, float, float, float]:
         """
         Obtiene el área visible del mundo.
 
@@ -143,7 +142,7 @@ class Camera:
         """
         return self.x, self.y, self.screen_width, self.screen_height
 
-    def get_position(self) -> Tuple[float, float]:
+    def get_position(self) -> tuple[float, float]:
         """
         Obtiene la posición actual de la cámara.
 

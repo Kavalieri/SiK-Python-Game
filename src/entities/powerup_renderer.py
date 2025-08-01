@@ -9,7 +9,6 @@ Descripción: Renderizado y sprites de powerups.
 
 import logging
 import math
-from typing import Optional
 
 import pygame
 
@@ -39,7 +38,7 @@ class PowerupRenderer:
         self.float_speed = 2.0
 
         # Sprite
-        self.sprite: Optional[pygame.Surface] = None
+        self.sprite: pygame.Surface | None = None
         self._setup_sprite()
 
     def _setup_sprite(self):
@@ -138,7 +137,7 @@ class PowerupRenderer:
         except (AttributeError, TypeError) as e:
             self.logger.debug("Error en renderizado debug: %s", e)
 
-    def get_sprite(self) -> Optional[pygame.Surface]:
+    def get_sprite(self) -> pygame.Surface | None:
         """Obtiene el sprite del powerup."""
         return self.sprite
 

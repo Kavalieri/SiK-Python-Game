@@ -7,7 +7,7 @@ Fecha: 2024-12-19
 Descripción: Gestor principal de menús que coordina la fábrica y callbacks.
 """
 
-from typing import Callable, Dict, Optional
+from collections.abc import Callable
 
 import pygame
 import pygame_menu
@@ -52,8 +52,8 @@ class MenuManager:
         self.factory = MenuFactory(screen, config, save_manager, self.callbacks)
 
         # Menús disponibles
-        self.menus: Dict[str, pygame_menu.Menu] = {}
-        self.current_menu: Optional[pygame_menu.Menu] = None
+        self.menus: dict[str, pygame_menu.Menu] = {}
+        self.current_menu: pygame_menu.Menu | None = None
 
         # Crear todos los menús
         self._initialize_menus()
@@ -163,7 +163,7 @@ class MenuManager:
                 f"Menú de mejoras actualizado con {upgrade_points} puntos"
             )
 
-    def get_current_menu(self) -> Optional[pygame_menu.Menu]:
+    def get_current_menu(self) -> pygame_menu.Menu | None:
         """
         Obtiene el menú actual.
 

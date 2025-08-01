@@ -10,7 +10,6 @@ Descripción: Sistema de partículas de arena para efectos atmosféricos del des
 import logging
 import math
 import random
-from typing import List, Tuple
 
 import pygame
 
@@ -83,7 +82,7 @@ class SandParticle:
         self.angle = random.uniform(0, 2 * math.pi)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza la partícula de arena."""
         if self.life <= 0:
@@ -128,7 +127,7 @@ class SandParticleSystem:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.particle_count = particle_count
-        self.particles: List[SandParticle] = []
+        self.particles: list[SandParticle] = []
         self.logger = logging.getLogger(__name__)
 
         self._create_particles()
@@ -148,7 +147,7 @@ class SandParticleSystem:
             particle.update(delta_time)
 
     def render(
-        self, screen: pygame.Surface, camera_offset: Tuple[float, float] = (0, 0)
+        self, screen: pygame.Surface, camera_offset: tuple[float, float] = (0, 0)
     ):
         """Renderiza todas las partículas del sistema."""
         for particle in self.particles:

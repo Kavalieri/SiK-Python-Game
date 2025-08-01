@@ -7,7 +7,7 @@ Fase 1 de migración SQLite - Referencia: docs/PLAN_MIGRACION_SQLITE.md
 
 import hashlib
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 
@@ -62,7 +62,7 @@ class SchemaMigrations:
             self._logger.error("Error registrando migración: %s", e)
             raise
 
-    def validate_schema(self, required_tables: list) -> Dict[str, Any]:
+    def validate_schema(self, required_tables: list) -> dict[str, Any]:
         """
         Valida la integridad del esquema actual.
 
@@ -137,7 +137,7 @@ class SchemaMigrations:
 
         return validation_result
 
-    def get_current_version(self) -> Optional[str]:
+    def get_current_version(self) -> str | None:
         """
         Obtiene la versión actual del esquema desde metadatos.
 
@@ -155,7 +155,7 @@ class SchemaMigrations:
             self._logger.warning(f"No se pudo obtener versión del esquema: {e}")
             return None
 
-    def _verify_schema_version(self) -> Dict[str, Any]:
+    def _verify_schema_version(self) -> dict[str, Any]:
         """
         Verifica la consistencia de la versión del esquema.
 

@@ -7,10 +7,11 @@ Fecha: 2024
 Descripción: Gestiona las entradas del usuario (teclado, ratón, gamepad).
 """
 
-import pygame
 import logging
-from typing import Dict, Set, Callable
+from collections.abc import Callable
 from enum import Enum
+
+import pygame
 
 
 class InputType(Enum):
@@ -45,13 +46,13 @@ class InputManager:
         self.logger = logging.getLogger(__name__)
 
         # Estados de entrada
-        self.key_states: Dict[int, bool] = {}
-        self.mouse_buttons: Dict[int, bool] = {}
-        self.gamepad_buttons: Dict[int, bool] = {}
-        self.gamepad_axes: Dict[int, float] = {}
+        self.key_states: dict[int, bool] = {}
+        self.mouse_buttons: dict[int, bool] = {}
+        self.gamepad_buttons: dict[int, bool] = {}
+        self.gamepad_axes: dict[int, float] = {}
 
         # Mapeo de acciones
-        self.action_mappings: Dict[InputAction, Set[int]] = {
+        self.action_mappings: dict[InputAction, set[int]] = {
             InputAction.MOVE_UP: {pygame.K_w, pygame.K_UP},
             InputAction.MOVE_DOWN: {pygame.K_s, pygame.K_DOWN},
             InputAction.MOVE_LEFT: {pygame.K_a, pygame.K_LEFT},
@@ -64,8 +65,8 @@ class InputManager:
         }
 
         # Callbacks de eventos
-        self.key_callbacks: Dict[int, Callable] = {}
-        self.action_callbacks: Dict[InputAction, Callable] = {}
+        self.key_callbacks: dict[int, Callable] = {}
+        self.action_callbacks: dict[InputAction, Callable] = {}
 
         # Configuración
         self.enabled = True
@@ -225,7 +226,7 @@ class InputManager:
         """
         self.action_callbacks[action] = callback
 
-    def set_action_mapping(self, action: InputAction, keys: Set[int]):
+    def set_action_mapping(self, action: InputAction, keys: set[int]):
         """
         Establece el mapeo de teclas para una acción.
 

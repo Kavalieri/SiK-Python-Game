@@ -26,7 +26,7 @@ import json
 import logging
 import sqlite3
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 
@@ -68,7 +68,7 @@ class ConfigDatabase:
 
     # === MÉTODOS PARA PERSONAJES ===
 
-    def get_character_data(self, character_name: str) -> Optional[Dict[str, Any]]:
+    def get_character_data(self, character_name: str) -> dict[str, Any] | None:
         """
         Obtiene datos completos de un personaje desde SQLite.
 
@@ -112,7 +112,7 @@ class ConfigDatabase:
             )
             return None
 
-    def get_all_characters(self) -> List[Dict[str, Any]]:
+    def get_all_characters(self) -> list[dict[str, Any]]:
         """Obtiene todos los personajes activos."""
         try:
             with self.db_manager.get_connection() as conn:
@@ -145,7 +145,7 @@ class ConfigDatabase:
             self.logger.error("Error obteniendo lista de personajes: %s", e)
             return []
 
-    def save_character_data(self, character_data: Dict[str, Any]) -> bool:
+    def save_character_data(self, character_data: dict[str, Any]) -> bool:
         """Guarda o actualiza datos de un personaje."""
         try:
             with self.db_manager.transaction() as conn:
@@ -180,7 +180,7 @@ class ConfigDatabase:
 
     # === MÉTODOS PARA ENEMIGOS ===
 
-    def get_enemy_data(self, enemy_type: str) -> Optional[Dict[str, Any]]:
+    def get_enemy_data(self, enemy_type: str) -> dict[str, Any] | None:
         """Obtiene datos de configuración de un enemigo."""
         try:
             with self.db_manager.get_connection() as conn:
@@ -215,7 +215,7 @@ class ConfigDatabase:
             )
             return None
 
-    def get_all_enemies(self) -> List[Dict[str, Any]]:
+    def get_all_enemies(self) -> list[dict[str, Any]]:
         """Obtiene todos los tipos de enemigos activos."""
         try:
             with self.db_manager.get_connection() as conn:
@@ -247,7 +247,7 @@ class ConfigDatabase:
             self.logger.error("Error obteniendo lista de enemigos: %s", e)
             return []
 
-    def save_enemy_data(self, enemy_data: Dict[str, Any]) -> bool:
+    def save_enemy_data(self, enemy_data: dict[str, Any]) -> bool:
         """Guarda o actualiza datos de un enemigo."""
         try:
             with self.db_manager.transaction() as conn:
@@ -290,7 +290,7 @@ class ConfigDatabase:
                 )
                 return False
 
-            with open(json_path, "r", encoding="utf-8") as f:
+            with open(json_path, encoding="utf-8") as f:
                 data = json.load(f)
 
             characters = data.get("characters", {})
@@ -330,7 +330,7 @@ class ConfigDatabase:
                 )
                 return False
 
-            with open(json_path, "r", encoding="utf-8") as f:
+            with open(json_path, encoding="utf-8") as f:
                 data = json.load(f)
 
             enemies = data.get("tipos_enemigos", {})

@@ -11,10 +11,10 @@ Descripción: Segunda pasada de limpieza con límite de 150 líneas por archivo.
 Uso: python scripts/cleanup_project_v2.py
 """
 
-import shutil
 import logging
-from pathlib import Path
+import shutil
 from datetime import datetime
+from pathlib import Path
 
 
 class ProjectCleanerV2:

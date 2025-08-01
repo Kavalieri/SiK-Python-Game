@@ -17,7 +17,6 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import List, Tuple
 
 
 class ProfessionalCommitSystem:
@@ -26,12 +25,12 @@ class ProfessionalCommitSystem:
     def __init__(self):
         self.repo_path = Path.cwd()
         self.encoding = "utf-8"
-        self.errors: List[str] = []
-        self.warnings: List[str] = []
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
 
     def run_command(
-        self, cmd: List[str], capture_output: bool = True, timeout: int = 60
-    ) -> Tuple[bool, str, str]:
+        self, cmd: list[str], capture_output: bool = True, timeout: int = 60
+    ) -> tuple[bool, str, str]:
         """
         Ejecuta un comando de forma segura con manejo robusto de errores.
 

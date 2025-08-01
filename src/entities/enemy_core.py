@@ -7,8 +7,6 @@ Fecha: 2024
 Descripción: Núcleo base para enemigos con configuración y estado.
 """
 
-from typing import Optional
-
 import pygame
 
 
@@ -106,7 +104,7 @@ class EnemyCore:
         """Método público para actualizar animación de muerte."""
         self._update_dead_animation()
 
-    def get_current_frame(self) -> Optional[pygame.Surface]:
+    def get_current_frame(self) -> pygame.Surface | None:
         """Obtiene el frame actual de la animación con escala y volteo."""
         frame = self.animation_player.get_current_frame()
         if frame:

@@ -8,7 +8,7 @@ Descripción: Fachada principal del sistema de compatibilidad entre pickle y SQL
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config_manager import ConfigManager
 from .save_compatibility_core import SaveCompatibilityCore
@@ -29,8 +29,8 @@ class SaveCompatibility:
         self,
         config: ConfigManager,
         loader: SaveLoader,
-        database: Optional[SaveDatabase] = None,
-        encryption_handler: Optional[SaveEncryption] = None,
+        database: SaveDatabase | None = None,
+        encryption_handler: SaveEncryption | None = None,
     ):
         """
         Inicializa el sistema de compatibilidad.
@@ -51,7 +51,7 @@ class SaveCompatibility:
         self.logger.info("SaveCompatibility inicializado correctamente")
 
     def save_game_unified(
-        self, slot: int, game_state, additional_data: Optional[Dict[str, Any]] = None
+        self, slot: int, game_state, additional_data: dict[str, Any] | None = None
     ) -> bool:
         """
         Guarda el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
@@ -66,7 +66,7 @@ class SaveCompatibility:
         """
         return self.operations.save_game_unified(slot, game_state, additional_data)
 
-    def load_game_unified(self, slot: int) -> Optional[Dict[str, Any]]:
+    def load_game_unified(self, slot: int) -> dict[str, Any] | None:
         """
         Carga el juego usando el sistema disponible (SQLite prioritario, fallback a pickle).
 
@@ -78,7 +78,7 @@ class SaveCompatibility:
         """
         return self.operations.load_game_unified(slot)
 
-    def get_saves_info_unified(self) -> List[Dict[str, Any]]:
+    def get_saves_info_unified(self) -> list[dict[str, Any]]:
         """
         Obtiene información de partidas de ambos sistemas.
 
@@ -87,7 +87,7 @@ class SaveCompatibility:
         """
         return self.operations.get_saves_info_unified()
 
-    def migrate_all_pickle_to_sqlite(self) -> Dict[str, bool]:
+    def migrate_all_pickle_to_sqlite(self) -> dict[str, bool]:
         """
         Migra todas las partidas pickle a SQLite.
 
@@ -120,7 +120,7 @@ class SaveCompatibility:
         """
         return self.operations.delete_save_unified(slot)
 
-    def get_system_info(self) -> Dict[str, Any]:
+    def get_system_info(self) -> dict[str, Any]:
         """
         Obtiene información completa del sistema de guardado.
 

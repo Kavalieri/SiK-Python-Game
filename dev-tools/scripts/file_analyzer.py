@@ -5,10 +5,10 @@ Proporciona información instantánea sin comandos externos.
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 
-def analyze_file(file_path: str) -> Dict[str, Any]:
+def analyze_file(file_path: str) -> dict[str, Any]:
     """
     Analiza un archivo Python y devuelve métricas importantes.
 
@@ -20,7 +20,7 @@ def analyze_file(file_path: str) -> Dict[str, Any]:
         if not path.exists():
             return {"error": "Archivo no encontrado"}
 
-        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        with open(path, encoding="utf-8", errors="ignore") as f:
             lines = f.readlines()
 
         total_lines = len(lines)
@@ -59,7 +59,7 @@ def analyze_file(file_path: str) -> Dict[str, Any]:
         return {"error": f"Error leyendo archivo: {e}"}
 
 
-def analyze_critical_files() -> List[Tuple[str, Dict]]:
+def analyze_critical_files() -> list[tuple[str, dict]]:
     """Analiza los archivos más críticos identificados."""
     critical_files = [
         "src/entities/entity.py",

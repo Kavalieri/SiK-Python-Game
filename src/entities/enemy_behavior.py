@@ -9,7 +9,6 @@ Descripción: Sistema de comportamiento e inteligencia artificial para enemigos.
 
 import math
 import random
-from typing import List, Optional, Tuple
 
 import pygame
 
@@ -27,12 +26,12 @@ class EnemyBehavior:
         self.core = enemy_core
 
         # IA y patrullaje
-        self.patrol_points: List[Tuple[float, float]] = []
+        self.patrol_points: list[tuple[float, float]] = []
         self.current_patrol_index = 0
         self.patrol_timer = 0
         self.patrol_delay = 2000  # milisegundos
 
-    def update(self, dt: float, player_pos: Optional[Tuple[float, float]] = None):
+    def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """
         Actualiza el comportamiento del enemigo.
 
@@ -56,14 +55,14 @@ class EnemyBehavior:
         # Actualizar volteo basado en movimiento
         self.core.update_facing_direction()
 
-    def _is_player_in_range(self, player_pos: Tuple[float, float]) -> bool:
+    def _is_player_in_range(self, player_pos: tuple[float, float]) -> bool:
         """Verifica si el jugador está en rango de detección."""
         distance = math.sqrt(
             (player_pos[0] - self.core.x) ** 2 + (player_pos[1] - self.core.y) ** 2
         )
         return distance < 300  # Rango de detección
 
-    def _chase_player(self, player_pos: Tuple[float, float], dt: float):
+    def _chase_player(self, player_pos: tuple[float, float], dt: float):
         """Persigue al jugador calculando dirección y movimiento."""
         dx = player_pos[0] - self.core.x
         dy = player_pos[1] - self.core.y

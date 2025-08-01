@@ -7,8 +7,9 @@ Fecha: 2024
 Descripción: Fachada que integra todos los componentes del motor del juego.
 """
 
-import pygame
 import sys
+
+import pygame
 
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
@@ -97,7 +98,7 @@ class GameEngine:
             self._update()
             self._render()
             self.core.clock.tick(self.core.get_fps())
-        
+
         self.logger.info("Saliendo del bucle principal. Limpiando y cerrando...")
         pygame.quit()
         sys.exit()

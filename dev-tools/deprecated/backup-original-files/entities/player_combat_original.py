@@ -7,14 +7,16 @@ Fecha: 2024-12-19
 Descripción: Módulo que maneja el sistema de combate del jugador (disparos, daño, etc.).
 """
 
-import pygame
 import logging
 import math
-from typing import Tuple, List, Dict, Any
-from .projectile import Projectile
-from .player_stats import PlayerStats
-from .player_effects import PlayerEffects
+from typing import Any
+
+import pygame
+
 from ..entities.powerup import PowerupType
+from .player_effects import PlayerEffects
+from .player_stats import PlayerStats
+from .projectile import Projectile
 
 
 class AttackConfig:
@@ -22,7 +24,7 @@ class AttackConfig:
     Configuración de un ataque (melee, ranged, area, etc.)
     """
 
-    def __init__(self, data: Dict[str, Any]):
+    def __init__(self, data: dict[str, Any]):
         self.nombre = data.get("nombre", "")
         self.tipo = data.get("tipo", "melee")
         self.daño = data.get("daño", 0)
@@ -41,7 +43,7 @@ class Attack:
     Instancia de un ataque en ejecución.
     """
 
-    def __init__(self, config: AttackConfig, owner, target_pos: Tuple[int, int]):
+    def __init__(self, config: AttackConfig, owner, target_pos: tuple[int, int]):
         self.config = config
         self.owner = owner
         self.target_pos = target_pos
@@ -58,7 +60,7 @@ class PlayerCombat:
         self,
         player_stats: PlayerStats,
         player_effects: PlayerEffects,
-        attack_configs: List[AttackConfig],
+        attack_configs: list[AttackConfig],
     ):
         """
         Inicializa el sistema de combate.
@@ -97,10 +99,10 @@ class PlayerCombat:
 
     def shoot(
         self,
-        player_pos: Tuple[float, float],
-        target_pos: Tuple[int, int],
+        player_pos: tuple[float, float],
+        target_pos: tuple[int, int],
         current_time: float,
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """
         Crea proyectiles según el tipo de disparo activo.
 
@@ -173,7 +175,7 @@ class PlayerCombat:
 
     def _create_double_shot(
         self, x: float, y: float, dx: float, dy: float, speed: float, damage: float
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo doble."""
         projectiles = []
 
@@ -202,7 +204,7 @@ class PlayerCombat:
 
     def _create_spread_shot(
         self, x: float, y: float, dx: float, dy: float, speed: float, damage: float
-    ) -> List[Projectile]:
+    ) -> list[Projectile]:
         """Crea un disparo disperso."""
         projectiles = []
         spread_angle = 0.3  # Ángulo de dispersión en radianes
@@ -243,10 +245,10 @@ class PlayerCombat:
     def attack(
         self,
         owner,
-        target_pos: Tuple[int, int],
+        target_pos: tuple[int, int],
         current_time: float,
-        enemies: List[Any],
-    ) -> List[Any]:
+        enemies: list[Any],
+    ) -> list[Any]:
         """
         Ejecuta el ataque actual según el tipo (melee, ranged, area).
         Devuelve lista de entidades afectadas o proyectiles creados.

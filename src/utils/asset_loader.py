@@ -10,7 +10,7 @@ Descripción: Carga básica de archivos con sistema de caché optimizado.
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import pygame
 
@@ -30,7 +30,7 @@ class AssetLoader:
         self.logger = logging.getLogger(__name__)
         self.logger.info("AssetLoader inicializado con base_path: %s", base_path)
 
-    def load_image(self, path: str, scale: float = 1.0) -> Optional[pygame.Surface]:
+    def load_image(self, path: str, scale: float = 1.0) -> pygame.Surface | None:
         """
         Carga una imagen con caché.
 
@@ -68,7 +68,7 @@ class AssetLoader:
             self.logger.error("Error cargando imagen %s: %s", path, e)
             return self.create_placeholder(64, 64, scale)
 
-    def load_image_direct(self, path: str) -> Optional[pygame.Surface]:
+    def load_image_direct(self, path: str) -> pygame.Surface | None:
         """
         Carga una imagen directamente sin caché.
 
@@ -118,7 +118,7 @@ class AssetLoader:
         self.cache.clear()
         self.logger.info("Caché de imágenes limpiada")
 
-    def get_cache_info(self) -> Dict[str, Any]:
+    def get_cache_info(self) -> dict[str, Any]:
         """
         Obtiene información sobre la caché.
 

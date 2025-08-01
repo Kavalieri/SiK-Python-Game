@@ -12,7 +12,7 @@ Referencia: docs/PLAN_MIGRACION_SQLITE.md - Fase 1
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .database_manager import DatabaseManager
 
@@ -91,7 +91,7 @@ class SchemaManager:
             self._logger.error(f"Error creando tablas: {e}")
             return False
 
-    def _get_table_schemas(self) -> Dict[str, str]:
+    def _get_table_schemas(self) -> dict[str, str]:
         """
         Obtiene todos los esquemas de tablas definidos.
 
@@ -178,7 +178,7 @@ class SchemaManager:
             """,
         }
 
-    def validate_schema(self) -> Dict[str, Any]:
+    def validate_schema(self) -> dict[str, Any]:
         """
         Valida la integridad del esquema actual.
 
@@ -289,7 +289,7 @@ class SchemaManager:
 
         return "unknown"
 
-    def get_current_version(self) -> Optional[str]:
+    def get_current_version(self) -> str | None:
         """
         Obtiene la versión actual del esquema.
 
@@ -308,7 +308,7 @@ class SchemaManager:
             self._logger.error(f"Error obteniendo versión: {e}")
             return None
 
-    def create_backup(self, backup_path: Optional[str] = None) -> bool:
+    def create_backup(self, backup_path: str | None = None) -> bool:
         """
         Crea un backup de la base de datos antes de cambios importantes.
 
