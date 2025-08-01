@@ -16,6 +16,7 @@
 - **NUNCA eliminar** `.github/` ni archivos de instrucciones
 - **NUNCA usar emojis/Unicode** en scripts PowerShell (solo ASCII)
 - **NUNCA usar `&&`** en PowerShell (usar `;`)
+- **NUNCA crear archivos temporales en raíz**: Usar `dev-tools/testing/temp/` o directorios específicos
 
 ##  **REGLAS FUNDAMENTALES**
 
@@ -97,6 +98,7 @@ src/assets/		#
 - **Testing**: Crear y ejecutar scripts de testeo para validar la funcionalidad antes de dar por finalizada una tarea.
 - **Documentar cambios** significativos inmediatamente.
 - **Mantener actualizadas** las reglas constantemente.
+- **Organización de archivos**: Scripts temporales/pruebas en `dev-tools/testing/temp/` NUNCA en raíz.
 
 ###  **GESTIÓN DE DOCUMENTACIÓN**
 - **Referencia única**: `docs/README.md` como índice centralizado
