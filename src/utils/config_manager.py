@@ -24,12 +24,12 @@ class ConfigManager:
     Mantiene 100% compatibilidad con API original.
     """
 
-    def __init__(self, config_file: str = "config.json"):
+    def __init__(self, config_file: str = "config/game.json"):
         """
         Inicializa el gestor de configuración modular.
 
         Args:
-            config_file: Ruta al archivo de configuración principal
+            config_file: Ruta al archivo de configuración principal en config/
         """
         self.logger = logging.getLogger(__name__)
         self.config_file = Path(config_file)
