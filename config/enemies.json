@@ -5,6 +5,44 @@
     "rango_seguimiento_extendido": true,
     "mostrar_debug_info": false
   },
+  "tipos": {
+    "zombie_male": {
+      "nombre": "Zombie Masculino",
+      "escala_base": 2.0,
+      "comportamiento": "perseguir_persistente",
+      "stats": {
+        "vida": 50,
+        "velocidad": 120,
+        "daño": 15,
+        "rango_detección": 300,
+        "rango_ataque": 40
+      },
+      "animaciones": {
+        "idle": "zombiemale/idle",
+        "walk": "zombiemale/walk",
+        "attack": "zombiemale/attack",
+        "dead": "zombiemale/dead"
+      }
+    },
+    "zombie_female": {
+      "nombre": "Zombie Femenino",
+      "escala_base": 2.0,
+      "comportamiento": "perseguir_persistente",
+      "stats": {
+        "vida": 40,
+        "velocidad": 140,
+        "daño": 12,
+        "rango_detección": 280,
+        "rango_ataque": 35
+      },
+      "animaciones": {
+        "idle": "zombieguirl/idle",
+        "walk": "zombieguirl/walk",
+        "attack": "zombieguirl/attack",
+        "dead": "zombieguirl/dead"
+      }
+    }
+  },
   "tipos_enemigos": {
     "zombie_male": {
       "nombre": "Zombie Masculino",
@@ -48,27 +86,43 @@
       "multiplicador_vida": 1.0,
       "multiplicador_velocidad": 1.0,
       "multiplicador_daño": 1.0,
-      "color_tinte": [255, 255, 255]
+      "color_tinte": [
+        255,
+        255,
+        255
+      ]
     },
     "raro": {
       "multiplicador_vida": 1.5,
       "multiplicador_velocidad": 1.2,
       "multiplicador_daño": 1.3,
-      "color_tinte": [0, 255, 0],
+      "color_tinte": [
+        0,
+        255,
+        0
+      ],
       "probabilidad_spawn": 0.2
     },
     "élite": {
       "multiplicador_vida": 2.0,
       "multiplicador_velocidad": 1.4,
       "multiplicador_daño": 1.8,
-      "color_tinte": [255, 255, 0],
+      "color_tinte": [
+        255,
+        255,
+        0
+      ],
       "probabilidad_spawn": 0.1
     },
     "legendario": {
       "multiplicador_vida": 3.0,
       "multiplicador_velocidad": 1.6,
       "multiplicador_daño": 2.5,
-      "color_tinte": [255, 0, 255],
+      "color_tinte": [
+        255,
+        0,
+        255
+      ],
       "probabilidad_spawn": 0.05
     }
   },

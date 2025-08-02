@@ -45,25 +45,44 @@ class LoadingSceneLogic:
         self.logger.info("Hilo de carga en segundo plano iniciado")
 
     def _background_loading_task(self):
-        """Tarea de carga en segundo plano."""
+        """Tarea de carga en segundo plano con configuración de progreso."""
         try:
-            total_steps = len(self.core.loading_messages) - 1
+            # Obtener configuración de carga
+            loading_config = self.core.config.get_section("loading_screen")
+            progress_config = loading_config.get("progress", {})
+
+            # Configuración de tiempo
+            total_duration = (
+                progress_config.get("duration", 5000) / 1000.0
+            )  # Convertir a segundos
+            total_steps = progress_config.get("steps", len(self.core.loading_messages))
+            step_duration = total_duration / total_steps if total_steps > 0 else 0.5
+
+            self.logger.info(
+                f"Iniciando carga: {total_duration:.1f}s total, {step_duration:.2f}s por paso"
+            )
 
             for i in range(total_steps):
-                # Simular tiempo de carga
-                time.sleep(0.5)  # 0.5 segundos por paso
+                # Tiempo de carga realista por paso
+                time.sleep(step_duration)
 
                 # Actualizar progreso
                 progress = (i + 1) / total_steps
-                message_index = i + 1
+                message_index = min(i + 1, len(self.core.loading_messages) - 1)
 
                 self.core.update_loading_progress(progress, message_index)
-                self.logger.debug("Progreso de carga: %.1f%%", progress * 100)
+                self.logger.debug(
+                    "Progreso de carga: %.1f%% - %s",
+                    progress * 100,
+                    self.core.loading_messages[message_index]
+                    if message_index < len(self.core.loading_messages)
+                    else "Completando...",
+                )
 
-            # Carga completada
-            time.sleep(0.5)
+            # Carga completada - pausa final para mostrar 100%
+            time.sleep(0.3)
             self.core.update_loading_progress(1.0, len(self.core.loading_messages) - 1)
-            self.logger.info("Carga completada exitosamente")
+            self.logger.info("Carga completada exitosamente en %.1fs", total_duration)
 
         except (RuntimeError, OSError) as e:
             self.logger.error("Error durante la carga: %s", e)

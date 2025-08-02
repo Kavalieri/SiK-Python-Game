@@ -51,16 +51,24 @@ class LoadingSceneCore(Scene):
         # Estado de carga
         self.loading_progress = 0.0
         self.loading_complete = False
-        self.loading_messages = [
-            "Inicializando motor del juego...",
-            "Cargando configuración...",
-            "Preparando recursos gráficos...",
-            "Generando mundo...",
-            "Cargando personajes...",
-            "Preparando enemigos...",
-            "Configurando controles...",
-            "¡Listo para jugar!",
-        ]
+
+        # Cargar configuración de pantalla de carga
+        self.loading_screen_config = self._load_loading_screen_config()
+
+        # Mensajes de carga desde configuración
+        self.loading_messages = self.loading_screen_config.get(
+            "messages",
+            [
+                "Inicializando motor del juego...",
+                "Cargando configuración...",
+                "Preparando recursos gráficos...",
+                "Generando mundo...",
+                "Cargando personajes...",
+                "Preparando enemigos...",
+                "Configurando controles...",
+                "¡Listo para jugar!",
+            ],
+        )
         self.current_message_index = 0
         self.message_timer = 0
         self.message_duration = 1.0
@@ -71,8 +79,6 @@ class LoadingSceneCore(Scene):
         # Control de avance
         self._has_advanced = False
 
-        # Cargar configuración de pantalla de carga
-        self.loading_screen_config = self._load_loading_screen_config()
         self.tips = self.loading_screen_config.get(
             "tips",
             [

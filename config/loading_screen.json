@@ -2,6 +2,49 @@
   "title": "SiK Python Game",
   "subtitle": "Cargando...",
   "version": "v1.0.0",
+  "progress": {
+    "duration": 5000,
+    "steps": 8,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "background_color": [
+      50,
+      50,
+      50
+    ],
+    "width": 600,
+    "height": 30,
+    "position": {
+      "x": "center",
+      "y": 350
+    },
+    "border": {
+      "enabled": true,
+      "color": [
+        255,
+        255,
+        255
+      ],
+      "thickness": 2
+    },
+    "animation": {
+      "glow": true,
+      "pulse": false
+    }
+  },
+  "messages": [
+    "Inicializando sistema de juego...",
+    "Cargando assets de personajes...",
+    "Preparando mundo de juego...",
+    "Configurando sistema de enemigos...",
+    "Cargando animaciones...",
+    "Inicializando sistema de audio...",
+    "Preparando interfaz de usuario...",
+    "¡Listo para jugar!"
+  ],
   "tips": [
     "Rompe las cajas para encontrar valiosas recompensas.",
     "Prioriza la supervivencia: cuanto más avances, más puntos obtienes.",

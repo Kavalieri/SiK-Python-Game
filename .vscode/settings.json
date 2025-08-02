@@ -1,32 +1,56 @@
 {
     "CodeGPT.apiKey": "Ollama",
+    // 🚨 PREVENCIÓN ARCHIVOS FANTASMA - Configuración Universal
     "files.exclude": {
         "**/__pycache__": true,
         "**/*.pyc": true,
+        "**/.env*": true,
         "**/test_*.py": true,
         "**/demo_*.py": true,
         "**/setup_*.py": true,
         "**/migrate_*.py": true,
         "**/preview_*.py": true,
         "**/run_*.py": true,
+        "**/example_*.py": true,
         "**/*_temporal.py": true,
         "**/*_temp.py": true,
+        "**/temp_*": true,
         "**/*.tmp": true,
         "**/*.temp": true,
-        "temp/": true
+        "**/GUIA_*.md": true,
+        "**/README_*.md": true,
+        "**/docs_*.md": true,
+        "temp/": true,
+        "examples/": true,
+        "demos/": true
     },
     "search.exclude": {
+        "**/.env*": true,
         "**/test_[!connections|!sistema_renovado]*.py": true,
+        "**/test_*.py": true,
         "**/*_test.py": true,
         "**/*_tests.py": true,
         "**/temp/": true,
-        "**/*.tmp": true
+        "**/*.tmp": true,
+        "**/GUIA_*": true,
+        "**/example_*": true
     },
     "files.watcherExclude": {
+        "**/.env*": true,
         "**/test_*.py": true,
         "**/demo_*.py": true,
         "**/temp/**": true,
-        "**/*.tmp": true
+        "**/*.tmp": true,
+        "**/example_*": true
+    },
+    // 🔒 CONFIGURACIÓN ANTI-FANTASMA CRÍTICA
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.editor.openPositioning": "last",
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": false,
+        "plaintext": false
     },
     "editor.autoSave": "onFocusChange",
     "editor.formatOnSave": true,
@@ -36,7 +60,5 @@
     ],
     "files.associations": {
         "*.md": "markdown"
-    },
-    "workbench.editor.enablePreview": false,
-    "workbench.editor.enablePreviewFromQuickOpen": false
+    }
 }

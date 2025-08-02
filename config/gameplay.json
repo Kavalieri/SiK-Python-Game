@@ -1,4 +1,29 @@
 {
+  "mundo": {
+    "dimensiones": {
+      "ancho": 5120,
+      "alto": 2880
+    },
+    "tipo": "desierto",
+    "generacion": "procedural_grid"
+  },
+  "bordes": {
+    "habilitados": true,
+    "grosor": 75,
+    "color": [
+      255,
+      100,
+      100
+    ],
+    "color_interior": [
+      200,
+      50,
+      50
+    ],
+    "visibilidad": "alta",
+    "coherencia_visual": true,
+    "patron_textura": "bricks"
+  },
   "niveles": {
     "duración_ronda": 120,
     "tiempo_entre_rondas": 30,
@@ -21,8 +46,16 @@
     },
     "bordes": {
       "grosor": 50,
-      "color": [200, 200, 200],
-      "color_interior": [128, 128, 128],
+      "color": [
+        200,
+        200,
+        200
+      ],
+      "color_interior": [
+        128,
+        128,
+        128
+      ],
       "patron_textura": "bricks",
       "visible": true,
       "colision": true,

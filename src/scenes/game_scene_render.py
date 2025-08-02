@@ -221,26 +221,38 @@ class GameSceneRenderer:
 
     def _render_world_borders(self) -> None:
         """
-        Renderiza los bordes del mundo del escenario de forma más visible.
+        Renderiza los bordes del mundo de forma ultra visible.
         """
         try:
-            if (
-                not hasattr(self.scene, "borders_enabled")
-                or not self.scene.borders_enabled
-            ):
+            # Cargar configuración de bordes desde gameplay.json
+            gameplay_config = self.scene.config.get_config("gameplay")
+            bordes_config = gameplay_config.get("bordes", {}) if gameplay_config else {}
+            mundo_config = gameplay_config.get("mundo", {}) if gameplay_config else {}
+
+            # Verificar si los bordes están habilitados
+            if not bordes_config.get("habilitados", True):
                 return
 
-            # Usar configuración unificada del mundo
-            thickness = getattr(self.scene, "border_thickness", 50)
-            border_color = getattr(self.scene, "border_color", (200, 200, 200))
-            # Calcular color interior como versión más oscura del color principal
-            inner_color = tuple(max(0, c - 70) for c in border_color)
-            warning_color = (255, 255, 0)  # Amarillo para las líneas de advertencia
+            # Configuración de bordes con valores más visibles
+            thickness = bordes_config.get("grosor", 75)
+            border_color = tuple(
+                bordes_config.get("color", [255, 100, 100])
+            )  # Rojo brillante por defecto
+            inner_color = tuple(
+                bordes_config.get("color_interior", [200, 50, 50])
+            )  # Rojo más oscuro
+            warning_color = (255, 255, 0)  # Amarillo para líneas de advertencia
 
-            world_width = getattr(self.scene, "world_width", 5120)
-            world_height = getattr(self.scene, "world_height", 2880)
+            # Dimensiones del mundo
+            dimensiones = mundo_config.get("dimensiones", {})
+            world_width = dimensiones.get("ancho", 5120)
+            world_height = dimensiones.get("alto", 2880)
 
-            # Bordes del mundo (exterior) - Más gruesos y visibles
+            self.logger.debug(
+                f"Renderizando bordes: {thickness}px, color {border_color}, mundo {world_width}x{world_height}"
+            )
+
+            # Bordes del mundo (exterior) - Ultra visibles
             borders = [
                 # Borde superior
                 pygame.Rect(0, 0, world_width, thickness),

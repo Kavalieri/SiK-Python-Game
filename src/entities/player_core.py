@@ -261,9 +261,38 @@ class PlayerCore:
         )  # 20 FPS por defecto
 
     def clamp_position(self):
-        """Mantiene al jugador dentro de los límites del mundo."""
-        self.x = max(0, min(self.x, self.world_width - 100))  # 100 = width
-        self.y = max(0, min(self.y, self.world_height - 100))  # 100 = height
+        """Mantiene al jugador dentro de los límites del mundo con margen apropiado."""
+        # Cargar configuración de mundo desde gameplay.json
+        gameplay_config = self.config.get_config("gameplay")
+        mundo_config = gameplay_config.get("mundo", {}) if gameplay_config else {}
+        bordes_config = gameplay_config.get("bordes", {}) if gameplay_config else {}
+
+        # Dimensiones del mundo
+        dimensiones = mundo_config.get("dimensiones", {})
+        world_width = dimensiones.get("ancho", 5120)
+        world_height = dimensiones.get("alto", 2880)
+
+        # Grosor de bordes para calcular área jugable
+        border_thickness = bordes_config.get("grosor", 75)
+
+        # Margen adicional para que el jugador no se esconda en los bordes
+        margin = border_thickness + 20  # 20px adicionales de separación
+
+        # Área jugable real
+        min_x = margin
+        max_x = world_width - margin - 100  # 100 = player width
+        min_y = margin
+        max_y = world_height - margin - 100  # 100 = player height
+
+        # Aplicar límites con márgenes apropiados
+        self.x = max(min_x, min(self.x, max_x))
+        self.y = max(min_y, min(self.y, max_y))
+
+        # Log solo si está en los límites (debug)
+        if self.x == min_x or self.x == max_x or self.y == min_y or self.y == max_y:
+            self.logger.debug(
+                f"Jugador en límite: ({self.x:.0f}, {self.y:.0f}) - área jugable: {min_x}-{max_x}, {min_y}-{max_y}"
+            )
 
     def get_data(self) -> dict[str, Any]:
         """Obtiene datos básicos del núcleo para guardado."""

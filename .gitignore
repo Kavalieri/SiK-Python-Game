@@ -207,13 +207,20 @@ game.log*
 
 # === CONFIGURACIÓN ESPECÍFICA DEL PROYECTO SiK-Python-Game ===
 
-# Datos y archivos generados automáticamente por el juego
+# DIRECTORIOS LOCALES (NO SINCRONIZAR CON GIT)
+ARCHIVE/
+save/
+.vscode/
+tmp/
+test/
 data/
-saves/
-logs/
 
-# Documentación generada automáticamente
-docs/
+# NOTA: save/ y data/ son directorios que el juego crea durante la ejecución
+# No deben heredarse del proyecto, se generan automáticamente
+
+# Logs específicos del juego
+logs/
+game.log*
 
 # Releases y distribución
 releases/
