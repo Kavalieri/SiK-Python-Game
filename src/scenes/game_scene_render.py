@@ -221,7 +221,7 @@ class GameSceneRenderer:
 
     def _render_world_borders(self) -> None:
         """
-        Renderiza los bordes del mundo del escenario.
+        Renderiza los bordes del mundo del escenario de forma más visible.
         """
         try:
             if (
@@ -231,13 +231,15 @@ class GameSceneRenderer:
                 return
 
             thickness = getattr(self.scene, "border_thickness", 50)
-            color = getattr(self.scene, "border_color", (128, 128, 128))
-            inner_color = getattr(self.scene, "border_inner_color", (64, 64, 64))
+            # Colores más visibles para los bordes
+            border_color = (200, 200, 200)  # Gris claro muy visible
+            inner_color = (128, 128, 128)  # Gris medio para el interior
+            warning_color = (255, 255, 0)  # Amarillo para las líneas de advertencia
 
             world_width = getattr(self.scene, "world_width", 5000)
             world_height = getattr(self.scene, "world_height", 5000)
 
-            # Bordes del mundo (exterior)
+            # Bordes del mundo (exterior) - Más gruesos y visibles
             borders = [
                 # Borde superior
                 pygame.Rect(0, 0, world_width, thickness),
@@ -264,16 +266,29 @@ class GameSceneRenderer:
                     screen_rect = screen_rect.clip(self.screen.get_rect())
 
                     if screen_rect.width > 0 and screen_rect.height > 0:
-                        # Renderizar borde exterior
-                        pygame.draw.rect(self.screen, color, screen_rect)
+                        # Renderizar borde exterior (rojo visible)
+                        pygame.draw.rect(self.screen, border_color, screen_rect)
 
                         # Renderizar borde interior (más oscuro)
-                        inner_thickness = max(1, thickness // 4)
+                        inner_thickness = max(5, thickness // 3)
                         inner_rect = screen_rect.inflate(
                             -inner_thickness * 2, -inner_thickness * 2
                         )
                         if inner_rect.width > 0 and inner_rect.height > 0:
                             pygame.draw.rect(self.screen, inner_color, inner_rect)
+
+                        # Línea de advertencia amarilla en el borde interior
+                        warning_thickness = 2
+                        warning_rect = screen_rect.inflate(
+                            -warning_thickness * 4, -warning_thickness * 4
+                        )
+                        if warning_rect.width > 0 and warning_rect.height > 0:
+                            pygame.draw.rect(
+                                self.screen,
+                                warning_color,
+                                warning_rect,
+                                warning_thickness,
+                            )
 
         except Exception as e:
             self.logger.error("Error renderizando bordes del mundo: %s", e)

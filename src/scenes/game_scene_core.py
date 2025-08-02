@@ -99,16 +99,34 @@ class GameScene(Scene):
 
     def handle_event(self, event):
         """Maneja los eventos de la escena del juego."""
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            if self.is_paused:
-                self.is_paused = False
-            else:
-                self.is_paused = True
-                self.logger.warning("Juego pausado")
+        # Sistema de pausa mejorado con múltiples teclas
+        if event.type == pygame.KEYDOWN:
+            if event.key in [pygame.K_ESCAPE, pygame.K_p]:
+                self._toggle_pause()
 
         # Solo loggear eventos importantes, no movimiento de mouse
         if event.type not in [pygame.MOUSEMOTION]:
             self.logger.debug("[GameScene] Evento recibido: %s", event.type)
+
+    def _toggle_pause(self):
+        """Alterna el estado de pausa del juego."""
+        if not hasattr(self, "scene_manager") or not self.scene_manager:
+            # Fallback: usar game_state si scene_manager no está disponible
+            if hasattr(self.game_state, "scene_manager"):
+                self.scene_manager = self.game_state.scene_manager
+            else:
+                self.logger.error("No se puede acceder al scene_manager para pausar")
+                return
+
+        if self.is_paused:
+            # Reanudar juego
+            self.is_paused = False
+            self.logger.info("Juego reanudado")
+        else:
+            # Pausar juego y cambiar a escena de pausa
+            self.is_paused = True
+            self.logger.info("Juego pausado - cambiando a escena de pausa")
+            self.scene_manager.change_scene("pause")
 
     def update(self):
         current_time = pygame.time.get_ticks()
@@ -175,24 +193,74 @@ class GameScene(Scene):
 
     def _initialize_player(self):
         try:
-            character_key = (
-                getattr(self.game_state, "selected_character", None) or "guerrero"
-            )
+            # Obtener personaje seleccionado (priorizar game_state)
+            character_key = "guerrero"  # Valor por defecto
+
+            if (
+                hasattr(self.game_state, "selected_character")
+                and self.game_state.selected_character
+            ):
+                character_key = self.game_state.selected_character
+                self.logger.info("Personaje desde game_state: %s", character_key)
+            elif (
+                hasattr(self.game_state, "current_character")
+                and self.game_state.current_character
+            ):
+                character_key = self.game_state.current_character
+                self.logger.info("Personaje desde current_character: %s", character_key)
+            else:
+                self.logger.warning(
+                    "No se encontró personaje seleccionado, usando: %s", character_key
+                )
+
+            # Mapeo de fallbacks para personajes alternativos
+            character_fallbacks = {
+                "adventureguirl": ["adventureguirl", "guerrero"],
+                "robot": ["robot", "guerrero"],
+                "guerrero": ["guerrero"],
+            }
+
+            # Si el personaje no está en el mapeo, usar guerrero como fallback
+            if character_key not in character_fallbacks:
+                self.logger.warning(
+                    "Personaje %s no reconocido, usando guerrero", character_key
+                )
+                character_key = "guerrero"
 
             player_x, player_y = 2500, 2500
 
-            sprite_path = f"assets/characters/used/{character_key}/idle"
+            # Verificar múltiples rutas posibles para los sprites
+            sprite_paths = [
+                f"assets/characters/used/{character_key}/idle",
+                f"assets/characters/used/{character_key}/Idle",
+                f"assets/characters/{character_key}/idle",
+                f"assets/characters/{character_key}/Idle",
+            ]
 
-            if not os.path.exists(sprite_path):
-                sprite_path = f"assets/characters/used/{character_key}/Idle"
+            sprite_path = None
+            for path in sprite_paths:
+                if os.path.exists(path):
+                    sprite_path = path
+                    break
 
-            if not os.path.exists(sprite_path):
-                raise FileNotFoundError(f"Sprites no encontrados en {sprite_path}")
+            if not sprite_path:
+                self.logger.error(
+                    "No se encontraron sprites para %s en ninguna ruta", character_key
+                )
+                # Fallback al guerrero si el personaje no existe
+                character_key = "guerrero"
+                sprite_path = "assets/characters/used/guerrero/idle"
+                if not os.path.exists(sprite_path):
+                    sprite_path = "assets/characters/used/guerrero/Idle"
 
             self.player = Player(
                 player_x, player_y, character_key, self.config, self.animation_manager
             )
-            self.logger.info("Jugador inicializado con personaje: %s", character_key)
+            self.logger.info(
+                "✅ Jugador inicializado con personaje: %s (ruta: %s)",
+                character_key,
+                sprite_path,
+            )
 
         except (ImportError, FileNotFoundError) as e:
             self.logger.error("Error al inicializar jugador: %s", e)
@@ -200,26 +268,49 @@ class GameScene(Scene):
     def _enforce_world_boundaries(self):
         """
         Mantiene al jugador dentro de los límites del mundo del escenario.
+        Evita que el jugador salga del área visible y que la cámara se desoriente.
         """
         if not self.player or not self.borders_enabled:
             return
 
         # Definir límites del mundo (considerando el grosor de los bordes)
-        min_x = self.border_thickness
-        min_y = self.border_thickness
-        max_x = self.world_width - self.border_thickness
-        max_y = self.world_height - self.border_thickness
+        # Añadir un margen extra para el tamaño del sprite del jugador
+        player_size = 32  # Tamaño aproximado del sprite del jugador
+        margin = self.border_thickness + player_size // 2
 
-        # Aplicar límites al jugador
+        min_x = margin
+        min_y = margin
+        max_x = self.world_width - margin
+        max_y = self.world_height - margin
+
+        # Aplicar límites al jugador con feedback visual
+        player_moved = False
+
         if self.player.x < min_x:
             self.player.x = min_x
+            player_moved = True
         elif self.player.x > max_x:
             self.player.x = max_x
+            player_moved = True
 
         if self.player.y < min_y:
             self.player.y = min_y
+            player_moved = True
         elif self.player.y > max_y:
             self.player.y = max_y
+            player_moved = True
+
+        # Log para debug cuando el jugador toca los bordes
+        if player_moved:
+            self.logger.debug(
+                "Jugador limitado por bordes del mundo en (%d, %d)",
+                self.player.x,
+                self.player.y,
+            )
+
+        # Asegurar que la cámara también respete los límites
+        if hasattr(self.camera, "clamp_to_world"):
+            self.camera.clamp_to_world()
 
     def _generate_world(self):
         try:

@@ -7,8 +7,9 @@ Test para verificar las mejoras implementadas:
 """
 
 import os
-import pygame
 import sys
+
+import pygame
 
 # Configurar la ruta para importar desde src
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
@@ -19,7 +20,6 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Test de Mejoras del Escenario")
 
 from entities.player import Player
-from entities.player_core import AnimationState
 from utils.animation_manager import IntelligentAnimationManager
 from utils.config_manager import ConfigManager
 

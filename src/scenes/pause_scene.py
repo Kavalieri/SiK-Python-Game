@@ -200,8 +200,8 @@ class PauseScene(Scene):
     def _on_resume_game(self):
         """Callback para reanudar juego."""
         self.logger.info("Reanudando juego")
-        # Aquí se volvería a la escena del juego
-        self.menu_manager.hide_current_menu()
+        # Cambiar de vuelta a la escena del juego
+        self.game_state.scene_manager.change_scene("game")
 
     def _on_save_game(self):
         """Callback para guardar juego."""

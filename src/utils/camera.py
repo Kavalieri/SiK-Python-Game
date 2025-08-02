@@ -163,3 +163,21 @@ class Camera:
         return pygame.Rect(
             int(self.x), int(self.y), int(self.screen_width), int(self.screen_height)
         )
+
+    def clamp_to_world(self):
+        """
+        Limita la posición de la cámara para que no se salga de los límites del mundo.
+        """
+        # Recalcular límites dinámicamente por si el mundo cambió
+        self.min_x = 0
+        self.max_x = max(0, self.world_width - self.screen_width)
+        self.min_y = 0
+        self.max_y = max(0, self.world_height - self.screen_height)
+
+        # Aplicar límites a la posición actual
+        self.x = max(self.min_x, min(self.max_x, self.x))
+        self.y = max(self.min_y, min(self.max_y, self.y))
+
+        # También aplicar límites al objetivo
+        self.target_x = max(self.min_x, min(self.max_x, self.target_x))
+        self.target_y = max(self.min_y, min(self.max_y, self.target_y))
