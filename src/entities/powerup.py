@@ -102,6 +102,17 @@ class Powerup(Entity):
         """Obtiene el efecto del powerup."""
         return self.effects_manager.create_effect(self.powerup_type)
 
+    def get_current_frame(self):
+        """
+        Obtiene el frame actual del sprite del powerup.
+
+        Returns:
+            pygame.Surface: Surface del sprite actual del powerup
+        """
+        # Actualizar sprite a través del renderer
+        self.sprite = self.renderer.get_sprite()
+        return self.sprite
+
     # Métodos de compatibilidad con API original
     def _setup_sprite(self):
         """Delegado al renderer para compatibilidad."""

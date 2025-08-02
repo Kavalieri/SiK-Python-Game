@@ -95,7 +95,7 @@ class GameScene(Scene):
 
         # Solo loggear eventos importantes, no movimiento de mouse
         if event.type not in [pygame.MOUSEMOTION]:
-            self.logger.info("[GameScene] Evento recibido: %s", event.type)
+            self.logger.debug("[GameScene] Evento recibido: %s", event.type)
 
     def update(self):
         current_time = pygame.time.get_ticks()

@@ -123,3 +123,12 @@ class Projectile(Entity):
         """Se llama cuando el proyectil impacta con algo."""
         self.alive = False
         self.logger.debug("Proyectil impactó con objetivo")
+
+    def get_current_frame(self):
+        """
+        Obtiene el frame actual del sprite del proyectil.
+
+        Returns:
+            pygame.Surface: Surface del sprite actual del proyectil
+        """
+        return self.sprite

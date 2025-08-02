@@ -79,6 +79,17 @@ class Player(Entity):
         """Gestor de animaciones."""
         return self.core.animation_manager
 
+    def get_current_frame(self):
+        """
+        Obtiene el frame actual del sprite del jugador.
+
+        Returns:
+            pygame.Surface: Surface del sprite actual del jugador
+        """
+        # Actualizar sprite antes de devolverlo
+        self.core.update_sprite()
+        return self.core.sprite
+
     @property
     def current_animation_state(self):
         """Estado actual de animación."""

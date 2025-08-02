@@ -111,7 +111,9 @@ class MenuManager:
             for event in events:
                 # Solo registrar eventos importantes, no movimiento del ratón
                 if event.type != pygame.MOUSEMOTION:  # pylint: disable=no-member
-                    self.logger.info(f"[MenuManager] Evento procesado en menú: {event}")
+                    self.logger.debug(
+                        "[MenuManager] Evento procesado en menú: %s", event
+                    )
             self.current_menu.update(events)
         else:
             self.logger.warning("MenuManager: No hay menú actual para actualizar")

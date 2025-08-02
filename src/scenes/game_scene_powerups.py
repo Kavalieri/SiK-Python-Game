@@ -91,3 +91,24 @@ class GameScenePowerups:
         return (
             powerup.x < -100 or powerup.x > 5100 or powerup.y < -100 or powerup.y > 5100
         )
+
+    def render(self, screen, camera):
+        """
+        Renderiza todos los powerups visibles en pantalla.
+
+        Args:
+            screen: Superficie de pantalla donde renderizar
+            camera: Cámara para conversión de coordenadas
+        """
+        if hasattr(self.scene, "powerups") and self.scene.powerups:
+            for powerup in self.scene.powerups:
+                # Verificar si está visible
+                if camera.is_visible(
+                    powerup.x, powerup.y, powerup.width, powerup.height
+                ):
+                    # Convertir a coordenadas de pantalla
+                    screen_x, screen_y = camera.world_to_screen(powerup.x, powerup.y)
+                    # Obtener frame del powerup
+                    frame = powerup.get_current_frame()
+                    if frame:
+                        screen.blit(frame, (screen_x, screen_y))

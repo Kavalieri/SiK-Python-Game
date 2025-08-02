@@ -29,16 +29,16 @@ class GameEngineEvents:
     def handle_events(self):
         """Procesa todos los eventos de Pygame."""
         for event in pygame.event.get():
-            # Solo registrar eventos importantes como INFO, movimiento del ratón como DEBUG
-            if event.type != pygame.MOUSEMOTION:  # pylint: disable=no-member
-                self.logger.info("Evento global: %s - %s", event.type, event)
-            # Logging detallado de eventos
-            self._log_event(event)
-
+            # Solo registrar eventos importantes como INFO, el resto como DEBUG
             if event.type == pygame.QUIT:  # pylint: disable=no-member
                 self.logger.info("Evento QUIT detectado - Cerrando juego")
                 self.core.running = False
-            else:
+            elif event.type != pygame.MOUSEMOTION:  # pylint: disable=no-member
+                self.logger.debug("Evento global: %s - %s", event.type, event)
+            # Logging detallado de eventos
+            self._log_event(event)
+
+            if event.type != pygame.QUIT:  # pylint: disable=no-member
                 self.core.scene_manager.handle_event(event)
 
     def _log_event(self, event: pygame.event.Event):
