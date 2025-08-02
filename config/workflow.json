@@ -1,28 +1,49 @@
 {
-	"workflow": {
-		"version_strategy": "semantic",
-		"default_version_bump": "patch",
-		"branch_prefix": "feature/",
-		"commit_format": "conventional",
-		"auto_changelog": true,
-		"auto_release": false
-	},
-	"git": {
-		"main_branch": "main",
-		"remote": "origin",
-		"require_pr": true,
-		"auto_delete_branch": true,
-		"squash_merge": true
-	},
-	"release": {
-		"auto_tag": true,
-		"tag_prefix": "v",
-		"include_assets": false,
-		"changelog_archive": "docs/changelogs"
-	},
-	"quality": {
-		"run_tests": true,
-		"check_linting": true,
-		"verify_build": false
-	}
+    "workflow": {
+        "version_strategy": "semantic",
+        "default_version_bump": "patch",
+        "branch_prefix": "feature/",
+        "commit_format": "conventional",
+        "auto_changelog": true,
+        "auto_release": false,
+        "auto_detect_change_type": true,
+        "smart_branching": true
+    },
+    "activation_rules": {
+        "hotfix_keywords": ["hotfix", "urgente", "critico", "security", "seguridad"],
+        "bugfix_keywords": ["fix", "bug", "error", "corrige", "arregla", "soluciona"],
+        "feature_keywords": ["feature", "caracteristica", "nueva", "implementa", "añade", "agrega"],
+        "docs_only_branch": false,
+        "config_only_branch": true,
+        "dev_tools_only_branch": false
+    },
+    "branch_strategy": {
+        "feature_prefix": "feature/",
+        "bugfix_prefix": "bugfix/",
+        "hotfix_prefix": "hotfix/",
+        "docs_prefix": "docs/",
+        "config_prefix": "config/",
+        "dev_prefix": "dev/",
+        "max_branch_name_length": 30
+    },
+    "git": {
+        "main_branch": "main",
+        "remote": "origin",
+        "require_pr": true,
+        "auto_delete_branch": true,
+        "squash_merge": true,
+        "direct_commit_types": ["docs", "dev-tools"]
+    },
+    "release": {
+        "auto_tag": true,
+        "tag_prefix": "v",
+        "include_assets": false,
+        "changelog_archive": "docs/changelogs",
+        "auto_release_on_merge": true
+    },
+    "quality": {
+        "run_tests": true,
+        "check_linting": true,
+        "verify_build": false
+    }
 }

@@ -106,22 +106,40 @@
 
 ##  **FLUJOS AUTOMATIZADOS OBLIGATORIOS**
 
-###  **COMMITS Y VERSIONADO**
+###  **SISTEMA DE ACTIVADORES AUTOMATICOS**
 ```powershell
-# NUEVO: Sistema de workflow automatizado completo
+# NUEVO: Sistema de activadores inteligentes que evalua contexto automaticamente
 
-# Desarrollo rápido (recomendado para uso diario)
-.\dev-tools\scripts\dev_helper.ps1 start      # Iniciar nueva característica
-.\dev-tools\scripts\dev_helper.ps1 save       # Guardar progreso
-.\dev-tools\scripts\dev_helper.ps1 finish     # Finalizar y crear PR
+# Comando principal (recomendado)
+.\dev-tools\scripts\sik.ps1                    # Auto-evalua y ejecuta workflow
+.\dev-tools\scripts\sik.ps1 -Status           # Ver estado del repositorio
+.\dev-tools\scripts\sik.ps1 -Mensaje "desc"   # Con descripcion de cambios
+.\dev-tools\scripts\sik.ps1 -Forzar          # Sin confirmacion
 
-# Workflow completo (control total)
+# Sistema de deteccion automatica de cambios:
+# - HOTFIX: "hotfix|urgente|critico|security" → nueva rama hotfix/ → directo a main
+# - BUGFIX: "fix|bug|error|corrige" → nueva rama bugfix/ → PR normal  
+# - FEATURE: "feature|nueva|implementa" → nueva rama feature/ → PR normal
+# - DOCS: solo archivos docs/ → commit directo (configurable)
+# - CONFIG: solo archivos config/ → nueva rama config/
+# - DEV-TOOLS: solo dev-tools/ → commit directo (configurable)
+
+# Evaluacion de contexto:
+# - Si estas en main + cambios → Crea nueva rama automaticamente
+# - Si estas en rama + cambios → Completa trabajo en rama actual  
+# - Si estas en rama + sin cambios → Merge y release automatico
+```
+
+###  **WORKFLOW MANUAL (Control total)**
+```powershell
+# Para casos especiales que requieren control manual
 .\dev-tools\scripts\workflow_automation.ps1 -Accion nueva-rama -RamaNombre "feature/nombre" -Mensaje "descripción"
 .\dev-tools\scripts\workflow_automation.ps1 -Accion completar -Mensaje "cambios completados"
 .\dev-tools\scripts\workflow_automation.ps1 -Accion merge -Release -TipoVersion minor -Mensaje "descripción final"
-
-# Estado y verificación
 .\dev-tools\scripts\workflow_automation.ps1 -Accion status
+
+# Desarrollo rapido simplificado (obsoleto - usar sik.ps1)
+.\dev-tools\scripts\dev_helper.ps1 start|save|finish
 ```
 
 ###  **CHANGELOG AUTOMÁTICO**
@@ -169,16 +187,17 @@ src/assets/		#
 - **Consistencia** en nomenclatura y estructura
 - **Documentación automática** de funciones y cambios
 
-###  **FLUJO AUTÓNOMO**
-- **Continuar iterando** hasta puntos de prueba que requieran resolución del usuario a menos que esperemos una respuesta por la terminal.
-- **Resolver errores** de forma autónoma sin consultar constantemente.
-- **Commits preventivos**: Realizar commits antes de cada cambio, borrado o refactorización importante.
-- **Testing**: Crear y ejecutar scripts de testeo para validar la funcionalidad antes de dar por finalizada una tarea.
-- **Documentar cambios** significativos inmediatamente.
-- **Mantener actualizadas** las reglas constantemente.
-- **Organización de archivos**: Scripts temporales/pruebas en `tmp/` NUNCA en raíz.
-- **Registro de cambios**: Documentar bloques significativos en `docs/registro/` con timestamp
-- **Pytest para testing**: Usar directorio `test/` para pruebas automatizadas organizadas
+###  **FLUJO AUTÓNOMO CON ACTIVADORES**
+- **Evaluar contexto SIEMPRE**: Antes de cada cambio, usar `.\dev-tools\scripts\sik.ps1 -Status`
+- **Auto-deteccion de tipo**: El sistema identifica automaticamente si es hotfix/bugfix/feature/docs
+- **Ramas automaticas**: Crea ramas segun el tipo detectado (feature/, bugfix/, hotfix/, etc.)
+- **Commits inteligentes**: Formato convencional automatico segun tipo de cambio
+- **Merge automatico**: Cuando no hay cambios pendientes, ejecuta merge + release
+- **Resolver errores** de forma autónoma sin consultar constantemente
+- **Commits preventivos**: Usar `.\dev-tools\scripts\sik.ps1` antes de cada cambio mayor
+- **Testing**: Validar funcionalidad antes de dar por finalizada una tarea
+- **Documentar cambios** significativos inmediatamente en `docs/registro/`
+- **Organización de archivos**: Scripts temporales/pruebas en `tmp/` NUNCA en raíz
 
 ###  **GESTIÓN DE DOCUMENTACIÓN**
 - **Referencia única**: `docs/README.md` como índice centralizado
