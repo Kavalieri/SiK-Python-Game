@@ -240,10 +240,45 @@ function New-Release {
     git push origin "v$Version"
     Write-Success "Tag v$Version creado y subido"
 	
-    $ReleaseNotes = "## Release v$Version`n`nDescripcion: $Message`n`nCambios Principales:`n- $Message`n`nEstado del Proyecto:`n- Infraestructura: Completa y funcional`n- Sistema de gestion: Workflow automatizado`n- Calidad de codigo: Ruff + MyPy compliant`n- Documentacion: Actualizada automaticamente`n`nEnlaces:`n- Codigo fuente: GitHub Repository`n- Documentacion: docs/README.md`n- Changelog completo: CHANGELOG.md`n`nDesarrollado con GitHub Copilot"
+    # Generar build profesional antes del release
+    Write-StatusHeader "GENERANDO BUILD PROFESIONAL"
+    $BuildScript = Join-Path $ProjectRoot "dev-tools\scripts\build_professional.ps1"
+    if (Test-Path $BuildScript) {
+        try {
+            & $BuildScript -Version $Version -Platform "Windows" -Architecture "x64"
+            Write-Success "Build profesional generado exitosamente"
+        }
+        catch {
+            Write-Error "Error generando build: $($_.Exception.Message)"
+            throw
+        }
+    }
+    else {
+        Write-Info "Build script no encontrado - continuando sin build"
+    }
 	
-    gh release create "v$Version" --title "SiK Python Game v$Version" --notes "$ReleaseNotes"
-    Write-Success "Release v$Version creado exitosamente"
+    $ReleaseNotes = "## Release v$Version`n`nDescripcion: $Message`n`nCambios Principales:`n- $Message`n`nEstado del Proyecto:`n- Infraestructura: Completa y funcional`n- Sistema de gestion: Workflow automatizado`n- Calidad de codigo: Ruff + MyPy compliant`n- Documentacion: Actualizada automaticamente`n- Build profesional: Incluye ejecutable Windows x64`n`nArchivos de Release:`n- Codigo fuente (zip/tar.gz)`n- Ejecutable Windows (SiK-Python-Game-v$Version-Windows-x64.exe)`n- Documentacion completa incluida`n`nEnlaces:`n- Codigo fuente: GitHub Repository`n- Documentacion: docs/README.md`n- Changelog completo: CHANGELOG.md`n`nDesarrollado con GitHub Copilot"
+	
+    # Crear release con archivos del build si existen
+    $BuildDir = Join-Path $ProjectRoot "builds"
+    $ReleaseAssets = @()
+    
+    if (Test-Path $BuildDir) {
+        $AssetFiles = Get-ChildItem $BuildDir -File -Filter "*v$Version*"
+        foreach ($file in $AssetFiles) {
+            $ReleaseAssets += $file.FullName
+        }
+    }
+    
+    if ($ReleaseAssets.Count -gt 0) {
+        $AssetArgs = $ReleaseAssets | ForEach-Object { "--attach-asset", $_ }
+        gh release create "v$Version" --title "SiK Python Game v$Version" --notes "$ReleaseNotes" @AssetArgs
+        Write-Success "Release v$Version creado con $($ReleaseAssets.Count) archivos adjuntos"
+    }
+    else {
+        gh release create "v$Version" --title "SiK Python Game v$Version" --notes "$ReleaseNotes"
+        Write-Success "Release v$Version creado (sin archivos de build)"
+    }
 	
     $ReleaseUrl = "https://github.com/Kavalieri/SiK-Python-Game/releases/tag/v$Version"
     Write-Info "Release URL: $ReleaseUrl"

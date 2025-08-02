@@ -1,111 +1,32 @@
-# 🛠️ Dev-Tools - SiK Python Game
+﻿# SiK Development Tools
+## Herramientas de Desarrollo Limpias y Organizadas
 
-## **Herramientas de Desarrollo Centralizadas**
+### Estructura:
 
-### 📋 **Estructura Actual**
+#### scripts/
+Scripts principales de desarrollo:
+- sik.ps1 - Comando principal de workflow
+- workflow_automation.ps1 - Sistema de workflow completo
+- build_professional.ps1 - Sistema de build profesional
+- build_release.ps1 - Integracion de releases
 
-```
-🛠️ dev-tools/
-├── 📜 scripts/                # Scripts de producción y mantenimiento
-│   ├── robust_commit.ps1      # Sistema de commits robusto
-│   ├── limpieza_anti_fantasma.ps1  # Limpieza de archivos fantasma
-│   └── ...                    # Otros scripts de producción
-├── 🧪 testing/                # Framework de testing
-│   ├── temp/                  # Tests temporales
-│   └── ...                    # Suite de tests automatizados
-├── 📦 packaging/               # Empaquetado y distribución
-│   └── ...                    # Herramientas de distribución
-├── 🔄 migration/               # Scripts de migración
-│   └── ...                    # Scripts de refactorización
-└── 🐛 debugging/               # Herramientas de depuración
-    └── ...                    # Utilidades de debug
-```
+#### testing/
+- active/ - Tests activos y mantenidos
+- fixtures/ - Datos de prueba reutilizables
 
-### 🎯 **Filosofía de dev-tools/**
+#### packaging/
+Scripts y configuracion de empaquetado
 
-#### **✅ Herramientas Activas** (mantenidas en dev-tools/)
-- **Scripts de producción**: Herramientas necesarias para el desarrollo diario
-- **Testing framework**: Tests automatizados y herramientas de verificación
-- **Empaquetado**: Herramientas para distribución del juego
-- **Migración**: Scripts de refactorización y actualización
+#### migration/
+Scripts de migracion de base de datos
 
-#### **📦 Herramientas Archivadas** (movidas a ARCHIVE/)
-- Scripts obsoletos → `ARCHIVE/2025/dev-tools/`
-- Herramientas experimentales no utilizadas
-- Versiones antigas de utilidades
+#### docs/
+Documentacion tecnica de desarrollo
 
-### 🔧 **Herramientas Principales**
+### Archivos Obsoletos
+Los archivos obsoletos han sido archivados en ARCHIVE/2025/dev-tools/
 
-#### **📜 Scripts de Producción**
-- **`robust_commit.ps1`**: Sistema automatizado de commits con verificaciones
-- **`limpieza_anti_fantasma.ps1`**: Limpieza de archivos fantasma de Copilot
-- **Comandos principales**:
-  ```powershell
-  # Commit robusto con verificaciones
-  .\dev-tools\scripts\robust_commit.ps1 "mensaje"
-  
-  # Limpieza anti-fantasma semanal
-  .\dev-tools\scripts\limpieza_anti_fantasma.ps1
-  ```
-
-#### **🧪 Testing Framework**
-- **Suite de tests**: Verificación automatizada del código
-- **Tests temporales**: `testing/temp/` para tests experimentales
-- **Comandos principales**:
-  ```powershell
-  # Ejecutar tests específicos
-  poetry run python dev-tools\testing\test_*.py
-  ```
-
-#### **📦 Packaging y Distribución**
-- **Empaquetado**: Herramientas para crear distribuciones del juego
-- **Distribución**: Scripts para publicación y releases
-
-### 📊 **Estado Actual**
-
-#### **✅ Reorganización Completada**
-- ✅ **Archivados**: Scripts obsoletos movidos a `ARCHIVE/2025/dev-tools/`
-- ✅ **Limpieza**: Solo herramientas necesarias mantenidas
-- ✅ **Organización**: Estructura clara por categorías
-
-#### **📦 Archivos Movidos a ARCHIVE/2025/dev-tools/**
-- `check_db.py`: Script de verificación de DB obsoleto
-- `diagnostico*.py`: Scripts de diagnóstico temporales
-- `fix_database.py`: Script de reparación DB obsoleto
-- `init_database.py`: Script de inicialización DB obsoleto
-- `juego_simple_pygame_gui.py`: Versión obsoleta del juego
-- `normalize_encoding.ps1`: Script de codificación obsoleto
-
-### 🔄 **Mantenimiento Continuo**
-
-#### **Criterios para Herramientas Activas**
-- ✅ **Utilizadas regularmente** en el desarrollo actual
-- ✅ **Necesarias para el flujo de trabajo** estándar
-- ✅ **Actualizadas y funcionales**
-- ✅ **Documentadas y con propósito claro**
-
-#### **Criterios para Archivado**
-- ❌ **No utilizadas** en los últimos 30 días
-- ❌ **Funcionalidad duplicada** por otras herramientas
-- ❌ **Experimentales** que no se adoptaron
-- ❌ **Obsoletas** por cambios en la arquitectura
-
-### 📁 **Gestión de Archivos Temporales**
-
-#### **Ubicaciones para Archivos Temporales**
-- **Scripts temporales**: `dev-tools/testing/temp/`
-- **Tests experimentales**: `dev-tools/testing/temp/`
-- **Herramientas en desarrollo**: Desarrollar en temp/ antes de promover
-
-#### **Protocolo de Limpieza**
-1. **Revisión semanal**: Evaluar herramientas en temp/
-2. **Promover útiles**: Mover a ubicación definitiva
-3. **Archivar obsoletas**: Mover a ARCHIVE/
-4. **Eliminar temporales**: Borrar archivos sin valor
-
----
-
-**📍 Ubicación**: `dev-tools/README.md`  
-**🔄 Última actualización**: 2025-08-02  
-**👤 Mantenido por**: Sistema automatizado GitHub Copilot  
-**📋 Estado**: Activo - Herramientas centralizadas y organizadas
+### Uso
+- Para desarrollo normal: .\dev-tools\scripts\sik.ps1
+- Para builds: .\dev-tools\scripts\build_professional.ps1
+- Para tests: archivos en testing/active/
