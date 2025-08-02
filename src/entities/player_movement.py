@@ -67,7 +67,11 @@ class PlayerMovement:
             self.player_core.facing_right = True
 
         # Aplicar modificadores de velocidad por efectos
-        speed_boost = player_effects.get_effect_value(PowerupType.SPEED)
+        speed_boost = (
+            player_effects.get_effect_value(PowerupType.SPEED)
+            if player_effects
+            else 0.0
+        )
         if speed_boost > 0:
             self.velocity_x *= 1 + speed_boost
             self.velocity_y *= 1 + speed_boost

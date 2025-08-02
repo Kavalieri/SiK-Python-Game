@@ -49,13 +49,13 @@ class Player(Entity):
         self.movement = PlayerMovement(self.core)
         self.integration = PlayerIntegration(self.core, config)
 
-        # Inicializar entidad base usando stats del core
+        # Inicializar entidad base usando stats del core con tamaño aumentado
         super().__init__(
             entity_type=EntityType.PLAYER,
             x=x,
             y=y,
-            width=32,
-            height=32,
+            width=100,
+            height=100,
             stats=self.core.stats,
         )
 

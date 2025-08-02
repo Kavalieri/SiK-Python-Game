@@ -85,13 +85,34 @@ class GameSceneRenderer:
     def _render_world_tiles(self) -> None:
         """Renderiza los tiles del mundo."""
         if hasattr(self.scene, "tiles") and self.scene.tiles:
+            rendered_count = 0
+            total_tiles = len(self.scene.tiles)
+
             for tile in self.scene.tiles:
                 if self.camera.is_visible(tile.x, tile.y, tile.width, tile.height):
                     # Convertir a coordenadas de pantalla
                     screen_x, screen_y = self.camera.world_to_screen(tile.x, tile.y)
-                    # Renderizar tile
-                    if hasattr(tile, "image") and tile.image:
-                        self.screen.blit(tile.image, (screen_x, screen_y))
+                    # Renderizar tile usando sprite (no image)
+                    if hasattr(tile, "sprite") and tile.sprite:
+                        self.screen.blit(tile.sprite, (screen_x, screen_y))
+                        rendered_count += 1
+
+            # Log cada 60 frames (aprox. 1 segundo a 60 FPS)
+            if hasattr(self, "_tile_debug_counter"):
+                self._tile_debug_counter += 1
+            else:
+                self._tile_debug_counter = 1
+
+            if self._tile_debug_counter % 60 == 0:
+                self.logger.debug(f"Tiles renderizados: {rendered_count}/{total_tiles}")
+        else:
+            if hasattr(self, "_no_tiles_logged"):
+                pass  # Ya loggeado
+            else:
+                self._no_tiles_logged = True
+                self.logger.warning(
+                    "No hay tiles para renderizar o scene.tiles no existe"
+                )
 
     def _render_player(self) -> None:
         """Renderiza el jugador."""

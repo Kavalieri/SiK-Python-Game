@@ -170,8 +170,8 @@ class PlayerCore:
 
     def clamp_position(self):
         """Mantiene al jugador dentro de los límites del mundo."""
-        self.x = max(0, min(self.x, self.world_width - 32))  # 32 = width
-        self.y = max(0, min(self.y, self.world_height - 32))  # 32 = height
+        self.x = max(0, min(self.x, self.world_width - 100))  # 100 = width
+        self.y = max(0, min(self.y, self.world_height - 100))  # 100 = height
 
     def get_data(self) -> dict[str, Any]:
         """Obtiene datos básicos del núcleo para guardado."""
