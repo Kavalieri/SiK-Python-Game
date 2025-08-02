@@ -16,13 +16,13 @@ $ProjectRoot = $PWD
 
 # Configuracion
 $BuildConfig = @{
-    ProjectName = "SiK-Python-Game"
-    EntryPoint = "src\main.py"
-    OutputDir = "dist"
-    BuildDir = "build"
-    AssetsDir = "assets"
-    ConfigDir = "config"
-    IconFile = "assets\icon.ico"
+    ProjectName    = "SiK-Python-Game"
+    EntryPoint     = "src\main.py"
+    OutputDir      = "dist"
+    BuildDir       = "build"
+    AssetsDir      = "assets"
+    ConfigDir      = "config"
+    IconFile       = "assets\icon.ico"
     RequiredPython = "3.11"
 }
 
@@ -34,25 +34,66 @@ function Write-BuildHeader {
     Write-Host "====================================================" -ForegroundColor Cyan
 }
 
+function Find-ValidPython {
+    # Buscar instalaciones válidas de Python (evitar Windows Store)
+    $pythonCandidates = @(
+        "python3.11",
+        "python3.12", 
+        "python3.10",
+        "py -3.11",
+        "py -3.12",
+        "py -3.10",
+        "py"
+    )
+    
+    foreach ($candidate in $pythonCandidates) {
+        try {
+            $output = & $candidate.Split(' ') --version 2>&1
+            if ($output -match "Python \d+\.\d+\.\d+" -and $output -notmatch "Microsoft Store") {
+                $fullPath = & $candidate.Split(' ') -c "import sys; print(sys.executable)" 2>&1
+                if ($fullPath -and $fullPath -notmatch "WindowsApps" -and (Test-Path $fullPath)) {
+                    Write-Host "✓ Python válido encontrado: $candidate -> $output" -ForegroundColor Green
+                    return $candidate
+                }
+            }
+        }
+        catch {
+            continue
+        }
+    }
+    
+    Write-Error "No se encontró una instalación válida de Python (no Microsoft Store)"
+    Write-Host "Instala Python desde: https://python.org/downloads" -ForegroundColor Yellow
+    return $null
+}
+
 function Test-BuildEnvironment {
     Write-BuildHeader "VERIFICANDO ENTORNO"
     
+    # Buscar Python válido
+    $script:PythonCmd = Find-ValidPython
+    if (-not $script:PythonCmd) {
+        return $false
+    }
+    
     # Verificar Python
     try {
-        $pythonVersion = python --version 2>&1
+        $pythonVersion = & $script:PythonCmd.Split(' ') --version 2>&1
         Write-Host "Python: $pythonVersion" -ForegroundColor Green
-    } catch {
-        Write-Error "Python no encontrado. Instalar Python $($BuildConfig.RequiredPython)+"
+    }
+    catch {
+        Write-Error "Error verificando Python: $($_.Exception.Message)"
         return $false
     }
     
     # Verificar Nuitka
     try {
-        $nuitkaVersion = python -m nuitka --version 2>&1
+        $nuitkaVersion = & $script:PythonCmd.Split(' ') -m nuitka --version 2>&1
         Write-Host "Nuitka: $nuitkaVersion" -ForegroundColor Green
-    } catch {
+    }
+    catch {
         Write-Host "Nuitka no encontrado. Instalando..." -ForegroundColor Yellow
-        python -m pip install nuitka
+        & $script:PythonCmd.Split(' ') -m pip install nuitka
     }
     
     # Verificar archivos requeridos
@@ -155,7 +196,8 @@ function Invoke-NuitkaBuild {
             "--strip",
             "--assume-yes-for-downloads"
         )
-    } else {
+    }
+    else {
         $nuitkaArgs += @(
             "--debug",
             "--enable-console"
@@ -181,10 +223,10 @@ function Invoke-NuitkaBuild {
     $nuitkaArgs += $BuildConfig.EntryPoint
     
     Write-Host "Ejecutando Nuitka..." -ForegroundColor Yellow
-    Write-Host "Comando: python $($nuitkaArgs -join ' ')" -ForegroundColor Gray
+    Write-Host "Comando: $script:PythonCmd $($nuitkaArgs -join ' ')" -ForegroundColor Gray
     
     try {
-        & python @nuitkaArgs
+        & $script:PythonCmd.Split(' ') @nuitkaArgs
         
         if (Test-Path $outputPath) {
             Write-Host "Build exitoso: $outputPath" -ForegroundColor Green
@@ -194,11 +236,13 @@ function Invoke-NuitkaBuild {
             Write-Host "Tamaño del ejecutable: $([math]::Round($fileSize, 2)) MB" -ForegroundColor Cyan
             
             return $outputPath
-        } else {
+        }
+        else {
             Write-Error "Build fallido: archivo de salida no encontrado"
             return $null
         }
-    } catch {
+    }
+    catch {
         Write-Error "Error durante el build: $($_.Exception.Message)"
         return $null
     }
@@ -231,8 +275,8 @@ Build Information:
 - Platform: $Platform
 - Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
 - Build Type: $(if ($Release) { 'Release' } else { 'Debug' })
-- Python Version: $(python --version)
-- Nuitka Version: $(python -m nuitka --version)
+- Python Version: $(& $script:PythonCmd.Split(' ') --version)
+- Nuitka Version: $(& $script:PythonCmd.Split(' ') -m nuitka --version)
 
 Installation:
 1. Extract all files to a folder
