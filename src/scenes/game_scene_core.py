@@ -19,7 +19,7 @@ from ..utils.simple_desert_background import SimpleDesertBackground
 from ..utils.world_generator import WorldGenerator
 from .game_scene_collisions import GameSceneCollisions
 from .game_scene_powerups import GameScenePowerups
-from .game_scene_render import GameSceneRender
+from .game_scene_render import GameSceneRenderer
 from .game_scene_waves import GameSceneWaves
 
 
@@ -73,40 +73,33 @@ class GameScene(Scene):
         self.waves = GameSceneWaves(self)
         self.powerups_manager = GameScenePowerups(self)
         self.collisions = GameSceneCollisions(self)
-        self.renderer = GameSceneRender(self)
+        self.renderer = GameSceneRenderer(self, screen, self.camera)
         self.logger.info(
             "[GameScene] Submódulos integrados: waves, powerups, collisions, render"
         )
 
-    def handle_event(self, event: pygame.event.Event):
-        """Maneja eventos de entrada del usuario."""
-        self.logger.info("[GameScene] Evento recibido: %s - %s", event.type, event)
-        if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
-            if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:  # pylint: disable=no-member
-                self.logger.info("Juego pausado")
-                if hasattr(self, "scene_manager") and self.scene_manager:
-                    try:
-                        self.scene_manager.change_scene("pause")
-                    except AttributeError as e:
-                        self.logger.error("Error al cambiar de escena: %s", e)
-        if self.player:
-            keys = pygame.key.get_pressed()
-            mouse_pos = pygame.mouse.get_pos()
-            mouse_buttons = pygame.mouse.get_pressed()
-            self.player.handle_input(keys, mouse_pos, mouse_buttons)
-            if mouse_buttons[0]:
-                enemies = getattr(self, "enemies", [])
-                results = self.player.attack(mouse_pos, enemies)
-                for obj in results:
-                    if (
-                        hasattr(obj, "entity_type")
-                        and obj.entity_type.name == "PROJECTILE"
-                    ):
-                        self.projectiles.append(obj)
+    @property
+    def enemies(self):
+        """Delega acceso a la lista de enemigos del enemy_manager."""
+        return self.enemy_manager.enemies
+
+    def handle_event(self, event):
+        """Maneja los eventos de la escena del juego."""
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if self.is_paused:
+                self.is_paused = False
+            else:
+                self.is_paused = True
+                self.logger.warning("Juego pausado")
+
+        # Solo loggear eventos importantes, no movimiento de mouse
+        if event.type not in [pygame.MOUSEMOTION]:
+            self.logger.info("[GameScene] Evento recibido: %s", event.type)
 
     def update(self):
         current_time = pygame.time.get_ticks()
         delta_time = 1.0 / 60.0
+
         if self.background and hasattr(self.background, "update"):
             self.background.update(delta_time)
         elif self.background is None:
@@ -122,6 +115,7 @@ class GameScene(Scene):
         self.enemy_manager.update(delta_time, player_pos)
         self.waves.check_wave_completion()
         for projectile in self.projectiles[:]:
+            projectile.update(delta_time)
             projectile.update(delta_time)
         self.powerups_manager.update_powerups(delta_time)
         if (
@@ -157,44 +151,42 @@ class GameScene(Scene):
             character_key = (
                 getattr(self.game_state, "selected_character", None) or "guerrero"
             )
+
             player_x, player_y = 2500, 2500
+
             sprite_path = f"assets/characters/used/{character_key}/idle"
+
             if not os.path.exists(sprite_path):
                 sprite_path = f"assets/characters/used/{character_key}/Idle"
+
             if not os.path.exists(sprite_path):
                 raise FileNotFoundError(f"Sprites no encontrados en {sprite_path}")
+
             self.player = Player(
                 player_x, player_y, character_key, self.config, self.animation_manager
             )
             self.logger.info("Jugador inicializado con personaje: %s", character_key)
-        except (ImportError, FileNotFoundError):
-            self.logger.error("Error al inicializar jugador")
+
+        except (ImportError, FileNotFoundError) as e:
+            self.logger.error("Error al inicializar jugador: %s", e)
 
     def _generate_world(self):
-        print("--- Iniciando _generate_world ---")
         try:
             world_width, world_height = (
                 self.screen.get_width() * 4,
                 self.screen.get_height() * 4,
             )
-            print(f"Dimensiones del mundo: {world_width}x{world_height}")
             world_generator = WorldGenerator(
                 world_width=world_width,
                 world_height=world_height,
                 screen_width=self.screen.get_width(),
                 screen_height=self.screen.get_height(),
             )
-            print("Generador del mundo creado.")
             self.tiles = world_generator.generate_world()
-            print(f"Generados {len(self.tiles)} tiles base.")
             self.tiles.extend(world_generator.generate_desert_oasis(1000, 1000, 300))
-            print(f"Añadido oasis. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_rock_formation(4000, 1000, 250))
-            print(f"Añadida formación rocosa. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_cactus_field(1000, 4000, 200))
-            print(f"Añadido campo de cactus. Total tiles: {len(self.tiles)}")
             self.tiles.extend(world_generator.generate_ruins(4000, 4000, 280))
-            print(f"Añadidas ruinas. Total tiles: {len(self.tiles)}")
             if self.camera:
                 self.camera.world_width, self.camera.world_height = (
                     world_width,
@@ -206,8 +198,6 @@ class GameScene(Scene):
                 world_width,
                 world_height,
             )
-            print("--- _generate_world completado ---")
         except ImportError:
             self.logger.error("Error al generar mundo")
-            print("!!! Error al generar mundo !!!")
             self.tiles = []

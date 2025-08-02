@@ -168,10 +168,11 @@ class GameEngineScenes:
                 lambda: self.core.scene_manager.change_scene("main_menu")
             )
 
-            # Otros callbacks
-            options_scene.menu_manager.callbacks.on_back_to_main = (
-                lambda: self.core.scene_manager.change_scene("main_menu")
-            )
+            # Otros callbacks - verificar que menu_manager existe
+            if hasattr(options_scene, "menu_manager") and options_scene.menu_manager:
+                options_scene.menu_manager.callbacks.on_back_to_main = (
+                    lambda: self.core.scene_manager.change_scene("main_menu")
+                )
             character_select_scene.menu_manager.callbacks.on_character_selected = (
                 self.events.handle_character_selection
             )

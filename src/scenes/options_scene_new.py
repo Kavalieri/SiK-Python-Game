@@ -118,31 +118,12 @@ class OptionsScene(Scene):
         Mantiene compatibilidad con sistema existente.
         """
         try:
-            self.logger.debug(
-                "[OptionsScene] Intentando crear MenuManager con argumentos: screen=%s, config=%s, game_state=%s, save_manager=%s",
-                type(self.screen),
-                type(self.config),
-                type(self.game_state),
-                type(self.save_manager),
-            )
-            self.menu_manager = MenuManager(
-                self.screen, self.config, self.game_state, self.save_manager
-            )
-            # Usar el sistema existente de menús en lugar de crear uno nuevo
-            self.menu_manager.show_menu("options")
-            self.menu = self.menu_manager.get_current_menu()
-            self.logger.debug(
-                "[OptionsScene] Menú de opciones configurado exitosamente"
-            )
+            menu_manager = MenuManager(self.config)
+            self.menu = menu_manager.crear_menu_opciones()
+            self.logger.debug("[OptionsScene] Menú de opciones creado exitosamente")
         except Exception as e:
             self.logger.error("[OptionsScene] Error creando menú de opciones: %s", e)
-            import traceback
-
-            self.logger.error(
-                "[OptionsScene] Traceback completo: %s", traceback.format_exc()
-            )
             self.menu = None
-            self.menu_manager = None
 
     def handle_event(self, event):
         """

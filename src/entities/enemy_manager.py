@@ -153,8 +153,12 @@ class EnemyManager:
             y = random.randint(0, world_height)
 
         enemy_type = random.choice(["zombiemale", "zombieguirl"])
-        new_enemy = Enemy(x, y, enemy_type, self.animation_manager)
-        self.enemies.append(new_enemy)
+
+        try:
+            new_enemy = Enemy(x, y, enemy_type, self.animation_manager)
+            self.enemies.append(new_enemy)
+        except Exception as e:  # pylint: disable=broad-except
+            self.logger.error("Error creando enemigo %s: %s", enemy_type, e)
 
     def render(self, screen, camera_offset: tuple[float, float] = (0, 0)):
         """Renderiza todos los enemigos."""

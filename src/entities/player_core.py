@@ -13,7 +13,7 @@ from typing import Any
 
 import pygame
 
-from ..entities.character_data import CHARACTER_DATA
+from ..entities.character_data import CharacterDataManager
 from ..utils.animation_manager import IntelligentAnimationManager
 from ..utils.config_manager import ConfigManager
 from .entity import EntityState
@@ -87,29 +87,31 @@ class PlayerCore:
 
     def _get_character_stats(self, character_name: str) -> PlayerStats:
         """Obtiene las estadísticas base del personaje."""
-        if character_name in CHARACTER_DATA:
-            char_data = CHARACTER_DATA[character_name]
-            # Verificar que char_data no sea None antes de usar .get()
-            if char_data is not None and isinstance(char_data, dict):
-                return PlayerStats(
-                    health=char_data.get("health", 100),
-                    max_health=char_data.get("health", 100),
-                    speed=char_data.get("speed", 200),
-                    damage=char_data.get("damage", 25),
-                    shoot_speed=char_data.get("shoot_speed", 0.2),
-                    bullet_speed=char_data.get("bullet_speed", 500),
-                    bullet_damage=char_data.get("bullet_damage", 25),
-                    shield=char_data.get("shield", 0),
-                    max_shield=char_data.get("max_shield", 100),
-                )
-            else:
-                self.logger.warning(
-                    "Datos de personaje '%s' no válidos, usando estadísticas por defecto",
-                    character_name,
-                )
+        char_manager = CharacterDataManager()
+        char_data = char_manager.get_character_data(character_name)
+
+        if char_data is not None and isinstance(char_data, dict):
+            # Datos de ConfigDatabase tienen estructura diferente
+            stats = char_data.get("stats", {})
+            if isinstance(stats, str):
+                import json
+
+                stats = json.loads(stats)
+
+            return PlayerStats(
+                health=stats.get("vida", 100),
+                max_health=stats.get("vida", 100),
+                speed=stats.get("velocidad", 200),
+                damage=stats.get("daño", 25),
+                shoot_speed=stats.get("velocidad_disparo", 0.2),
+                bullet_speed=stats.get("bullet_speed", 500),
+                bullet_damage=stats.get("bullet_damage", 25),
+                shield=stats.get("escudo", 0),
+                max_shield=stats.get("max_shield", 100),
+            )
         else:
             self.logger.warning(
-                "Personaje '%s' no encontrado en CHARACTER_DATA, usando estadísticas por defecto",
+                "Personaje '%s' no encontrado en base de datos, usando estadísticas por defecto",
                 character_name,
             )
 
