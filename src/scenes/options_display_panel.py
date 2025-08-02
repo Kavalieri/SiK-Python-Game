@@ -51,7 +51,11 @@ class OptionsDisplayPanel:
         )
 
         # Botón de pantalla completa
-        fullscreen_text = "Pantalla Completa: ON" if self.config.get_fullscreen() else "Pantalla Completa: OFF"
+        fullscreen_text = (
+            "Pantalla Completa: ON"
+            if self.config.get_fullscreen()
+            else "Pantalla Completa: OFF"
+        )
         self.fullscreen_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((self.screen_width // 2 - 100, 370), (200, 40)),
             text=fullscreen_text,
@@ -76,7 +80,11 @@ class OptionsDisplayPanel:
                 self.config.set_fullscreen(new_fullscreen)
 
                 # Actualizar texto del botón
-                new_text = "Pantalla Completa: ON" if new_fullscreen else "Pantalla Completa: OFF"
+                new_text = (
+                    "Pantalla Completa: ON"
+                    if new_fullscreen
+                    else "Pantalla Completa: OFF"
+                )
                 self.fullscreen_button.set_text(new_text)
 
                 self.logger.info("Pantalla completa cambiada a: %s", new_fullscreen)
