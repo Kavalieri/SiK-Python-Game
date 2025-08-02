@@ -35,6 +35,21 @@ Todos los cambios notables en este proyecto serÃ¡n documentados en este archiv
 - **Tags y Releases**: IntegraciÃ³n completa con GitHub
 - **Limpieza automÃ¡tica**: Ramas eliminadas tras merge
 
+## [0.3.0] - 2025-08-02
+
+### Cambios en Sistema de activadores automáticos con ramas obligatorias implementado
+
+#### Cambios Implementados
+- Sistema de activadores automáticos con ramas obligatorias implementado
+
+#### Estado del Proyecto
+- Infraestructura: Completa y funcional
+- Sistema de gestion: Workflow automatizado
+- Calidad de codigo: Ruff + MyPy compliant
+- Documentacion: Actualizada automaticamente
+
+---
+
 ## [0.2.0] - 2025-08-02
 
 ### Cambios en Sistema de workflow automatizado completo con changelog automático y gestión de releases
@@ -279,4 +294,5 @@ Todos los cambios notables en este proyecto serÃ¡n documentados en este archiv
 #### Archivos Refactorizados:
 - **`src/entities/player.py`** (599 â†’ 341 lÃ­neas, -43%)
   - Dividido en: `player_stats.py`, `
+
 
