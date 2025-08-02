@@ -107,7 +107,7 @@ class Tile(Entity):
             max_health=float("inf"),
             speed=0.0,
             damage=0.0,
-            armor=0.0,
+            defense=0.0,
             attack_speed=0.0,
             attack_range=0.0,
         )

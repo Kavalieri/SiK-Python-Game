@@ -34,10 +34,19 @@ class PlayerMovement:
         self.velocity_x = 0.0
         self.velocity_y = 0.0
 
+        # Sistema de ataque
+        self.attack_timer = 0.0
+        self.attack_duration = 0.4  # Duración de la animación de ataque (400ms)
+        self.is_attacking = False
+
+        # Cache para optimización
+        self._last_mouse_pos = (0, 0)
+        self._last_animation_state = None
+
     def handle_input(
         self,
         keys: pygame.key.ScancodeWrapper,
-        _mouse_pos: tuple[int, int],
+        mouse_pos: tuple[int, int],
         mouse_buttons: tuple[bool, bool, bool],
         player_effects,
     ):
@@ -54,6 +63,9 @@ class PlayerMovement:
         self.velocity_x = 0
         self.velocity_y = 0
 
+        # Determinar dirección del personaje basada en el ratón
+        self._update_facing_direction(mouse_pos)
+
         # Movimiento con WASD
         if keys[119] or keys[273]:  # W or UP
             self.velocity_y = -self.player_core.stats.speed
@@ -61,10 +73,8 @@ class PlayerMovement:
             self.velocity_y = self.player_core.stats.speed
         if keys[97] or keys[276]:  # A or LEFT
             self.velocity_x = -self.player_core.stats.speed
-            self.player_core.facing_right = False
         if keys[100] or keys[275]:  # D or RIGHT
             self.velocity_x = self.player_core.stats.speed
-            self.player_core.facing_right = True
 
         # Aplicar modificadores de velocidad por efectos
         speed_boost = (
@@ -76,11 +86,46 @@ class PlayerMovement:
             self.velocity_x *= 1 + speed_boost
             self.velocity_y *= 1 + speed_boost
 
-        # Disparo con clic izquierdo
-        if mouse_buttons[0]:  # Clic izquierdo
+        # Manejar ataque con clic izquierdo
+        self._handle_attack_input(mouse_buttons[0])
+
+    def _update_facing_direction(self, mouse_pos: tuple[int, int]):
+        """
+        Actualiza la dirección del personaje basada en la posición del ratón.
+
+        Args:
+            mouse_pos: Posición del ratón en la pantalla
+        """
+        # Solo actualizar si la posición del ratón cambió (optimización)
+        if mouse_pos != self._last_mouse_pos:
+            self._last_mouse_pos = mouse_pos
+
+            # Obtener posición del jugador en pantalla
+            # Nota: Esto necesitará ajuste cuando implementemos la cámara
+            player_screen_x = self.player_core.x
+            player_screen_y = self.player_core.y
+
+            # Determinar dirección horizontal
+            if mouse_pos[0] > player_screen_x:
+                self.player_core.facing_right = True
+            elif mouse_pos[0] < player_screen_x:
+                self.player_core.facing_right = False
+            # Si está exactamente en el mismo X, mantener la dirección actual
+
+    def _handle_attack_input(self, mouse_clicked: bool):
+        """
+        Maneja la entrada de ataque.
+
+        Args:
+            mouse_clicked: Si se hizo clic con el botón izquierdo
+        """
+        if mouse_clicked and not self.is_attacking:
+            # Iniciar ataque
+            self.is_attacking = True
+            self.attack_timer = self.attack_duration
             self.player_core.state = EntityState.ATTACKING
-        else:
-            self.player_core.state = EntityState.IDLE
+
+        # No cambiar a IDLE aquí, se maneja en update_animation
 
     def update_movement(self, delta_time: float):
         """
@@ -96,33 +141,50 @@ class PlayerMovement:
         # Mantener dentro de límites
         self.player_core.clamp_position()
 
-    def update_animation(self, _delta_time: float):
+    def update_animation(self, delta_time: float):
         """
         Actualiza las animaciones del jugador.
 
         Args:
             delta_time: Tiempo transcurrido desde el último frame
         """
-        # Determinar estado de animación
+        # Actualizar temporizador de ataque
+        if self.is_attacking:
+            self.attack_timer -= delta_time
+            if self.attack_timer <= 0:
+                self.is_attacking = False
+                self.player_core.state = EntityState.IDLE
+
+        # Determinar estado de animación solo si es necesario (optimización)
         new_animation_state = self._get_animation_state()
 
-        if new_animation_state != self.player_core.current_animation_state:
+        if new_animation_state != self._last_animation_state:
+            self._last_animation_state = new_animation_state
             self.player_core.current_animation_state = new_animation_state
             self.player_core.update_sprite()
 
     def _get_animation_state(self) -> AnimationState:
-        """Determina el estado de animación actual."""
+        """Determina el estado de animación actual basado en el estado del jugador."""
+        # Prioridad 1: Estado de muerte
         if self.player_core.state == EntityState.DEAD:
             return AnimationState.DEAD
-        elif self.player_core.state == EntityState.ATTACKING:
+
+        # Prioridad 2: Estado de ataque (tiene precedencia sobre movimiento)
+        if self.player_core.state == EntityState.ATTACKING:
             return AnimationState.ATTACK
-        elif abs(self.velocity_x) > 0.1 or abs(self.velocity_y) > 0.1:
-            if abs(self.velocity_x) > 50 or abs(self.velocity_y) > 50:
+
+        # Prioridad 3: Estados de movimiento
+        is_moving = abs(self.velocity_x) > 0.1 or abs(self.velocity_y) > 0.1
+        if is_moving:
+            # Determinar si es caminata o carrera basado en velocidad
+            total_speed = (self.velocity_x**2 + self.velocity_y**2) ** 0.5
+            if total_speed > 150:  # Umbral para correr
                 return AnimationState.RUN
             else:
                 return AnimationState.WALK
-        else:
-            return AnimationState.IDLE
+
+        # Por defecto: IDLE
+        return AnimationState.IDLE
 
     def get_velocity(self) -> tuple[float, float]:
         """

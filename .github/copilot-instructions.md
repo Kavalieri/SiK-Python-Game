@@ -52,6 +52,8 @@
 - **Type hints**: Obligatorios en parámetros y retornos
 - **Docstrings**: Español completo con Args/Returns/Raises
 - **Indentación**: SIEMPRE tabuladores, NUNCA espacios
+- **Ejecutar scripts con Poetry**: `poetry run python <script.py>` para scripts y el juego.
+- **Trabajar siempre desde el directorio raíz del proyecto**.
 
 ##  **FLUJOS AUTOMATIZADOS OBLIGATORIOS**
 

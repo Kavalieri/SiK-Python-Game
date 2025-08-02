@@ -223,13 +223,12 @@ class Player(Entity):
 
     def update(self, delta_time: float):
         """Actualiza el jugador."""
-        self.x, self.y, self.state = self.core.x, self.core.y, self.core.state
         # Actualizar sistemas
         self.movement.update_movement(delta_time)
         self.integration.update_effects(delta_time)
         self.movement.update_animation(delta_time)
-        # Sincronizar posición después del movimiento
-        self.core.x, self.core.y = self.x, self.y
+        # Sincronizar posición desde el core (el core es la fuente de verdad)
+        self.x, self.y, self.state = self.core.x, self.core.y, self.core.state
         # Actualizar lógica base
         super().update(delta_time)
 

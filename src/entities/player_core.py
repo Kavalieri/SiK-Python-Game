@@ -116,21 +116,47 @@ class PlayerCore:
                 character_name,
             )
 
-        # Estadísticas por defecto si el personaje no existe o los datos son None
+        # Estadísticas por defecto mejoradas si el personaje no existe
+        if character_name == "guerrero":
+            return PlayerStats(
+                health=200,
+                max_health=200,
+                speed=180,  # Velocidad correcta para guerrero
+                damage=50,
+                shoot_speed=1.0,
+                bullet_speed=500,
+                bullet_damage=50,
+                shield=20,
+                max_shield=100,
+            )
+
+        # Estadísticas por defecto genéricas
         return PlayerStats()
 
     def _create_fallback_sprite(self):
         """Crea un sprite de fallback si no se pueden cargar las animaciones."""
         try:
-            # Crear sprite de fallback
-            self.sprite = pygame.Surface((32, 32))
+            # Crear sprite de fallback con el tamaño correcto
+            self.sprite = pygame.Surface((100, 100))  # Tamaño actual del jugador
             self.sprite.fill((0, 255, 0))  # Verde para el jugador
 
             # Añadir un borde
-            pygame.draw.rect(self.sprite, (0, 200, 0), (0, 0, 32, 32), 2)
+            pygame.draw.rect(self.sprite, (0, 200, 0), (0, 0, 100, 100), 2)
 
-            # Añadir un punto central para indicar dirección
-            pygame.draw.circle(self.sprite, (255, 255, 255), (16, 16), 4)
+            # Añadir un punto central
+            pygame.draw.circle(self.sprite, (255, 255, 255), (50, 50), 8)
+
+            # Añadir indicador de dirección
+            if self.facing_right:
+                # Flecha apuntando a la derecha
+                pygame.draw.polygon(
+                    self.sprite, (255, 255, 255), [(60, 40), (80, 50), (60, 60)]
+                )
+            else:
+                # Flecha apuntando a la izquierda
+                pygame.draw.polygon(
+                    self.sprite, (255, 255, 255), [(40, 40), (20, 50), (40, 60)]
+                )
 
         except (OSError, RuntimeError) as e:
             self.logger.error("Error creando sprite de fallback: %s", e)
@@ -148,7 +174,7 @@ class PlayerCore:
             return AnimationState.IDLE
 
     def update_sprite(self):
-        """Actualiza el sprite del jugador."""
+        """Actualiza el sprite del jugador incluyendo el volteo horizontal."""
         if self.animations and self.current_animation_state.value in self.animations:
             animation_data = self.animations[self.current_animation_state.value]
             if (
@@ -160,7 +186,15 @@ class PlayerCore:
                 frames = animation_data["frames"]
                 if frames:
                     # Por ahora, usar el primer frame. En el futuro se puede implementar animación
-                    self.sprite = frames[0]
+                    base_sprite = frames[0]
+
+                    # Aplicar volteo horizontal si es necesario
+                    if not self.facing_right:
+                        self.sprite = pygame.transform.flip(base_sprite, True, False)
+                    else:
+                        self.sprite = (
+                            base_sprite.copy()
+                        )  # Copia para evitar modificar el original
                 else:
                     self._create_fallback_sprite()
             else:

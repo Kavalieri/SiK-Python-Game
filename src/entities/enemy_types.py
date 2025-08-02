@@ -52,7 +52,7 @@ class EnemyConfig:
     health: int
     speed: int
     damage: int
-    armor: int
+    defense: int
     score_value: int
     color: tuple
     symbol: str
@@ -179,7 +179,7 @@ class EnemyTypesManager:
             health=stats.get("vida", 50),
             speed=stats.get("velocidad", 80),
             damage=stats.get("daño", 15),
-            armor=0,  # No está en el JSON actual
+            defense=0,  # No está en el JSON actual
             score_value=50,  # Por defecto
             color=(200, 100, 100),  # Rojo por defecto
             symbol="Z",  # Zombie por defecto
@@ -199,7 +199,7 @@ class EnemyTypesManager:
                 health=data["health"],
                 speed=data["speed"],
                 damage=data["damage"],
-                armor=data.get("armor", 0),
+                defense=data.get("defense", 0),
                 score_value=data.get("score_value", 50),
                 color=data.get("color", (200, 100, 100)),
                 symbol=data.get("symbol", "Z"),
@@ -238,7 +238,7 @@ class EnemyTypesManager:
             health=50,
             speed=80,
             damage=15,
-            armor=0,
+            defense=0,
             score_value=50,
             color=(200, 100, 100),
             symbol="Z",
