@@ -4,6 +4,7 @@ param(
     [string]$Mensaje = "",
     [string]$Rama = "",
     [string]$Version = "",
+    [int]$Issue = 0,
     [switch]$Push,
     [switch]$Force,
     [switch]$Status
@@ -163,7 +164,7 @@ function Save-Changes {
 }
 
 function New-PullRequest {
-    param([string]$Message)
+    param([string]$Message, [int]$IssueNumber)
     
     Write-Header "CREANDO PULL REQUEST"
     
@@ -186,12 +187,73 @@ function New-PullRequest {
         $prTitle = if ($Message) { $Message } else { "Changes from $($status.Branch)" }
         $prBody = "## Cambios realizados`n`n$Message`n`n## Checklist`n- [ ] Código revisado`n- [ ] Tests ejecutados`n- [ ] Documentación actualizada"
         
-        gh pr create --title "$prTitle" --body "$prBody" --base $MainBranch --head $status.Branch
+        # Agregar referencia a issue si se proporciona
+        if ($IssueNumber -gt 0) {
+            $prBody += "`n`n## Issue relacionada`nCloses #$IssueNumber"
+            Write-Info "Vinculando PR con issue #$IssueNumber"
+        }
+        
+        $ghArgs = @("pr", "create", "--title", "$prTitle", "--body", "$prBody", "--base", $MainBranch, "--head", $status.Branch)
+        
+        gh @ghArgs
         
         Write-Success "Pull Request creado exitosamente"
+        if ($IssueNumber -gt 0) {
+            Write-Info "PR vinculado con issue #$IssueNumber (se cerrará automáticamente al mergear)"
+        }
+        
         return $true
     } catch {
         Write-Error "Error creando PR: $($_.Exception.Message)"
+        return $false
+    }
+}
+
+function Invoke-Merge {
+    param([string]$Message)
+    
+    Write-Header "MERGEANDO PULL REQUEST"
+    
+    $status = Get-GitStatus
+    
+    if ($status.Branch -eq $MainBranch) {
+        Write-Error "Ya estás en la rama main. Primero cambia a la rama de feature."
+        return $false
+    }
+    
+    if ($status.HasChanges) {
+        Write-Error "Hay cambios sin commitear. Guarda los cambios primero."
+        return $false
+    }
+    
+    try {
+        # Verificar si hay PR abierto para esta rama
+        $prInfo = gh pr view --json number,title 2>$null
+        if (-not $prInfo) {
+            Write-Error "No hay PR abierto para esta rama. Crea un PR primero."
+            return $false
+        }
+        
+        $prData = $prInfo | ConvertFrom-Json
+        Write-Info "PR encontrado: #$($prData.number) - $($prData.title)"
+        
+        # Mergear el PR
+        $mergeMessage = if ($Message) { $Message } else { "Merge: $($prData.title)" }
+        gh pr merge --merge --delete-branch
+        
+        Write-Success "PR #$($prData.number) mergeado exitosamente"
+        Write-Info "Rama de feature eliminada automáticamente"
+        
+        # Cambiar a main y actualizar
+        git checkout $MainBranch
+        git pull origin $MainBranch
+        
+        Write-Success "Cambiado a main y actualizado"
+        Write-Info "Listo para crear release si es necesario"
+        
+        return $true
+    } catch {
+        Write-Error "Error en merge: $($_.Exception.Message)"
         return $false
     }
 }
@@ -312,17 +374,38 @@ function Show-Help {
     Write-Host "  .\sik-flow.ps1 status" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 new -Rama feature/login -Mensaje 'Implementar login'" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 save -Mensaje 'Añadir validación' -Push" -ForegroundColor Gray
-    Write-Host "  .\sik-flow.ps1 pr -Mensaje 'Sistema completo'" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 pr -Mensaje 'Sistema completo' -Issue 123" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 merge -Mensaje 'Merge login system'" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 release -Version 1.2.0 -Mensaje 'Nueva versión'" -ForegroundColor Gray
     Write-Host ""
     
     Write-Host "COMANDOS:" -ForegroundColor White
     Write-Host "  status    # Ver estado del repositorio" -ForegroundColor Gray
-    Write-Host "  new       # Crear nueva rama" -ForegroundColor Gray
-    Write-Host "  save      # Commitear cambios" -ForegroundColor Gray
-    Write-Host "  pr        # Crear Pull Request" -ForegroundColor Gray
-    Write-Host "  release   # Crear release" -ForegroundColor Gray
-    Write-Host "  switch    # Cambiar de rama" -ForegroundColor Gray
+    Write-Host "  new       # Crear nueva rama (requiere -Rama)" -ForegroundColor Gray
+    Write-Host "  save      # Commitear cambios (requiere -Mensaje)" -ForegroundColor Gray
+    Write-Host "  pr        # Crear Pull Request (opcional -Issue)" -ForegroundColor Gray
+    Write-Host "  merge     # Mergear PR actual a main" -ForegroundColor Gray
+    Write-Host "  release   # Crear release con build (requiere -Version)" -ForegroundColor Gray
+    Write-Host "  switch    # Cambiar de rama (requiere -Rama)" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "OPCIONES:" -ForegroundColor White
+    Write-Host "  -Rama <nombre>     # Nombre de la rama" -ForegroundColor Gray
+    Write-Host "  -Mensaje <texto>   # Mensaje descriptivo" -ForegroundColor Gray
+    Write-Host "  -Version <x.y.z>   # Versión para release" -ForegroundColor Gray
+    Write-Host "  -Issue <numero>    # Número de issue a vincular con PR" -ForegroundColor Gray
+    Write-Host "  -Push              # Subir cambios automáticamente" -ForegroundColor Gray
+    Write-Host "  -Force             # Forzar operación" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "FLUJO TÍPICO:" -ForegroundColor White
+    Write-Host "  1. .\sik-flow.ps1 new -Rama feature/nueva-func -Mensaje 'Descripción'" -ForegroundColor Gray
+    Write-Host "  2. [hacer cambios]" -ForegroundColor Gray
+    Write-Host "  3. .\sik-flow.ps1 save -Mensaje 'Implementar X' -Push" -ForegroundColor Gray
+    Write-Host "  4. .\sik-flow.ps1 pr -Mensaje 'Feature completa' -Issue 123" -ForegroundColor Gray
+    Write-Host "  5. [review en GitHub]" -ForegroundColor Gray
+    Write-Host "  6. .\sik-flow.ps1 merge -Mensaje 'Merge nueva funcionalidad'" -ForegroundColor Gray
+    Write-Host "  7. .\sik-flow.ps1 release -Version 1.1.0 -Mensaje 'Nueva funcionalidad'" -ForegroundColor Gray
 }
 
 # LÓGICA PRINCIPAL
@@ -353,7 +436,10 @@ switch ($Comando.ToLower()) {
         Save-Changes -Message $Mensaje
     }
     "pr" {
-        New-PullRequest -Message $Mensaje
+        New-PullRequest -Message $Mensaje -IssueNumber $Issue
+    }
+    "merge" {
+        Invoke-Merge -Message $Mensaje
     }
     "release" {
         if (-not $Version -or -not $Mensaje) {

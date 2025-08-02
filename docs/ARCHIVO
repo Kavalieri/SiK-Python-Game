@@ -1,38 +1,49 @@
-# SiK Auto Workflow System - Prompt de Migración para IA
-# ====================================================
+# SiK Simple Workflow System - Documentación de Migración
+# =====================================================
 
 ## RESUMEN EJECUTIVO
 
-**Propósito**: Sistema de activadores automáticos que evalúa el contexto de cambios en un repositorio Git y ejecuta el workflow apropiado sin intervención manual.
+**Propósito**: Sistema simple y robusto de gestión de ramas que SIEMPRE sigue el flujo: Rama → Cambios → PR → Merge → Release.
 
-**Problema que resuelve**: Eliminación de decisiones manuales repetitivas sobre cuándo crear ramas, hacer commits directos, o ejecutar releases.
+**Problema que resuelve**: Control total del flujo de desarrollo sin commits directos a main, asegurando calidad y trazabilidad.
 
-**Valor agregado**: Automatización inteligente del flujo de desarrollo con detección contextual de tipos de cambio.
+**Valor agregado**: Workflow predecible y profesional con builds automáticos en cada release.
 
 ## ARQUITECTURA DEL SISTEMA
 
 ### Componentes Core
 
-1. **auto_workflow.ps1** - Motor de decisión inteligente
-2. **sik.ps1** - Punto de entrada principal
-3. **workflow_automation.ps1** - Executor de acciones Git (heredado)
-4. **config/workflow.json** - Configuración del comportamiento
+1. **sik-flow.ps1** - Sistema unificado de workflow
+2. **build_professional.ps1** - Sistema de build con ejecutables
+3. **workflow_automation.ps1** - Funciones heredadas (respaldo)
 
-### Flujo de Decisión
+### Flujo OBLIGATORIO
 
 ```
-Usuario ejecuta: .\sik.ps1
+1. .\sik-flow.ps1 new -Rama "feature/nombre" -Mensaje "Descripción"
     ↓
-Analizar estado Git (rama actual, archivos modificados)
+2. [Realizar cambios en código]
     ↓
-Detectar tipo de cambio (dev-tools, feature, bugfix, hotfix, docs, config)
+3. .\sik-flow.ps1 save -Mensaje "Descripción cambios" -Push
     ↓
-Evaluar contexto (¿estoy en main? ¿hay commits pendientes?)
+4. [Continuar desarrollando si es necesario]
     ↓
-Decidir acción (nueva rama, commit directo, merge, release)
+5. .\sik-flow.ps1 pr -Mensaje "Descripción final del PR" [-Issue 123]
     ↓
-Ejecutar automáticamente (con confirmación opcional)
+6. [Review y aprobación del PR en GitHub]
+    ↓
+7. .\sik-flow.ps1 merge -Mensaje "Descripción del merge"
+    ↓
+8. .\sik-flow.ps1 release -Version "x.y.z" -Mensaje "Descripción release"
 ```
+
+### Reglas FUNDAMENTALES
+
+- **NUNCA commits directos a main**
+- **SIEMPRE crear rama para cambios**
+- **SIEMPRE PR antes de merge**
+- **SIEMPRE release tras merge importante**
+- **Build automático en cada release**
 
 ### Reglas de Detección Automática
 
