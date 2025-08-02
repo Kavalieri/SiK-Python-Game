@@ -230,14 +230,15 @@ class GameSceneRenderer:
             ):
                 return
 
+            # Usar configuración unificada del mundo
             thickness = getattr(self.scene, "border_thickness", 50)
-            # Colores más visibles para los bordes
-            border_color = (200, 200, 200)  # Gris claro muy visible
-            inner_color = (128, 128, 128)  # Gris medio para el interior
+            border_color = getattr(self.scene, "border_color", (200, 200, 200))
+            # Calcular color interior como versión más oscura del color principal
+            inner_color = tuple(max(0, c - 70) for c in border_color)
             warning_color = (255, 255, 0)  # Amarillo para las líneas de advertencia
 
-            world_width = getattr(self.scene, "world_width", 5000)
-            world_height = getattr(self.scene, "world_height", 5000)
+            world_width = getattr(self.scene, "world_width", 5120)
+            world_height = getattr(self.scene, "world_height", 2880)
 
             # Bordes del mundo (exterior) - Más gruesos y visibles
             borders = [

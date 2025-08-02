@@ -16,24 +16,17 @@
   },
   "escenario": {
     "mundo": {
-      "ancho": 5000,
-      "alto": 5000
+      "ancho": 5120,
+      "alto": 2880
     },
     "bordes": {
       "grosor": 50,
-      "color": [
-        128,
-        128,
-        128
-      ],
-      "color_interior": [
-        64,
-        64,
-        64
-      ],
+      "color": [200, 200, 200],
+      "color_interior": [128, 128, 128],
       "patron_textura": "bricks",
       "visible": true,
-      "colision": true
+      "colision": true,
+      "coherencia_visual": true
     },
     "fondo": {
       "tipo": "procedural_grid",

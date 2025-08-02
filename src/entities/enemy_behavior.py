@@ -31,6 +31,12 @@ class EnemyBehavior:
         self.patrol_timer = 0
         self.patrol_delay = 2000  # milisegundos
 
+        # Seguimiento persistente del jugador
+        self.last_player_position = None
+        self.tracking_timer = 0.0
+        self.max_tracking_time = 10.0  # Segundos sin contacto visual
+        self.is_tracking_player = False
+
     def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """
         Actualiza el comportamiento del enemigo.
@@ -46,21 +52,45 @@ class EnemyBehavior:
         # Actualizar animación
         self.core.update_animation()
 
-        # IA básica
-        if player_pos and self._is_player_in_range(player_pos):
-            self._chase_player(player_pos, dt)
+        # Sistema de seguimiento mejorado
+        self._update_tracking_state(player_pos, dt)
+
+        # IA según estado de seguimiento
+        if self.is_tracking_player and (player_pos or self.last_player_position):
+            target_pos = player_pos if player_pos else self.last_player_position
+            self._chase_player(target_pos, dt)
         else:
             self._patrol(dt)
 
         # Actualizar volteo basado en movimiento
         self.core.update_facing_direction()
 
+    def _update_tracking_state(self, player_pos: tuple[float, float] | None, dt: float):
+        """Actualiza el estado de seguimiento persistente del jugador."""
+        if player_pos and self._is_player_in_range(player_pos):
+            # Jugador detectado - iniciar o continuar seguimiento
+            self.last_player_position = player_pos
+            self.tracking_timer = 0.0
+            self.is_tracking_player = True
+        elif self.is_tracking_player:
+            # Continuar siguiendo hasta que expire el timer
+            self.tracking_timer += dt
+            if self.tracking_timer >= self.max_tracking_time:
+                self.is_tracking_player = False
+                self.last_player_position = None
+
     def _is_player_in_range(self, player_pos: tuple[float, float]) -> bool:
         """Verifica si el jugador está en rango de detección."""
         distance = math.sqrt(
             (player_pos[0] - self.core.x) ** 2 + (player_pos[1] - self.core.y) ** 2
         )
-        return distance < 300  # Rango de detección
+        detection_range = getattr(self.core, "detection_range", 300)
+
+        # Aumentar rango si está en modo de seguimiento persistente
+        if self.is_tracking_player and self.core.persistent_tracking:
+            detection_range *= 2.0
+
+        return distance < detection_range
 
     def _chase_player(self, player_pos: tuple[float, float], dt: float):
         """Persigue al jugador calculando dirección y movimiento."""

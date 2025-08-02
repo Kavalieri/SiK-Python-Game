@@ -81,9 +81,22 @@ class Enemy:
         self.core.reset_attack_state()
 
     def render(self, screen: pygame.Surface, camera_offset: tuple = (0, 0)):
-        """Renderiza el enemigo."""
+        """Renderiza el enemigo con escalado configurable."""
         frame = self.get_current_frame()
-        if frame:
+        if frame and hasattr(self.core, "scale"):
+            # Aplicar escalado si está configurado
+            if self.core.scale != 1.0:
+                new_size = (
+                    int(frame.get_width() * self.core.scale),
+                    int(frame.get_height() * self.core.scale),
+                )
+                frame = pygame.transform.scale(frame, new_size)
+
+            render_x = self.x - camera_offset[0]
+            render_y = self.y - camera_offset[1]
+            screen.blit(frame, (render_x, render_y))
+        elif frame:
+            # Renderizado sin escalado (compatibilidad hacia atrás)
             screen.blit(frame, (self.x - camera_offset[0], self.y - camera_offset[1]))
 
 

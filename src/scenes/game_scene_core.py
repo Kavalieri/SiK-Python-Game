@@ -49,9 +49,7 @@ class GameScene(Scene):
         self.hud = HUD(screen, config, game_state)
 
         # Configuración del mundo desde gameplay.json
-        # Usar valores por defecto ya que la configuración específica no está disponible
-        self.world_width = 5000
-        self.world_height = 5000
+        self._load_world_config()
 
         self.camera = Camera(
             screen_width=screen.get_width(),
@@ -91,6 +89,38 @@ class GameScene(Scene):
         self.logger.info(
             "[GameScene] Submódulos integrados: waves, powerups, collisions, render"
         )
+
+    def _load_world_config(self):
+        """Carga la configuración del mundo desde gameplay.json."""
+        try:
+            gameplay_config = self.config_manager.get_config("gameplay")
+            world_config = gameplay_config.get("escenario", {}).get("mundo", {})
+
+            self.world_width = world_config.get("ancho", 5120)
+            self.world_height = world_config.get("alto", 2880)
+
+            # Configuración de bordes
+            borders_config = gameplay_config.get("escenario", {}).get("bordes", {})
+            self.borders_enabled = borders_config.get("visible", True)
+            self.border_thickness = borders_config.get("grosor", 50)
+            self.border_color = tuple(borders_config.get("color", [200, 200, 200]))
+            self.border_collision = borders_config.get("colision", True)
+
+            self.logger.info(
+                "Configuración del mundo cargada: %dx%d, bordes: %s",
+                self.world_width,
+                self.world_height,
+                "habilitados" if self.borders_enabled else "deshabilitados",
+            )
+        except Exception as e:
+            self.logger.error("Error cargando configuración del mundo: %s", e)
+            # Valores por defecto
+            self.world_width = 5120
+            self.world_height = 2880
+            self.borders_enabled = True
+            self.border_thickness = 50
+            self.border_color = (200, 200, 200)
+            self.border_collision = True
 
     @property
     def enemies(self):

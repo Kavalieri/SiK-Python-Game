@@ -113,6 +113,18 @@ class ConfigManager:
         """
         return self.config.get(section, {})
 
+    def get_config(self, config_name: str) -> dict[str, Any]:
+        """
+        Obtiene una configuración específica por nombre (alias para get_section).
+
+        Args:
+            config_name: Nombre de la configuración (ej. 'enemies', 'gameplay')
+
+        Returns:
+            Configuración completa
+        """
+        return self.get_section(config_name)
+
     def save_config(self):
         """Guarda la configuración actual delegando a ConfigLoader."""
         success = self.loader.save_config_to_file(self.config, self.config_file)

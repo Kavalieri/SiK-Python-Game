@@ -1,15 +1,22 @@
 {
+  "configuracion_desarrollo": {
+    "escala_visual": 2.0,
+    "velocidad_debug": 1.5,
+    "rango_seguimiento_extendido": true,
+    "mostrar_debug_info": false
+  },
   "tipos_enemigos": {
     "zombie_male": {
       "nombre": "Zombie Masculino",
       "stats": {
         "vida": 50,
-        "velocidad": 80,
+        "velocidad": 120,
         "daño": 15,
-        "rango_detección": 200,
-        "rango_ataque": 40
+        "rango_detección": 300,
+        "rango_ataque": 40,
+        "escala": 2.0
       },
-      "comportamiento": "perseguir",
+      "comportamiento": "perseguir_persistente",
       "animaciones": {
         "idle": "zombiemale/idle",
         "walk": "zombiemale/walk",
@@ -21,12 +28,13 @@
       "nombre": "Zombie Femenino",
       "stats": {
         "vida": 40,
-        "velocidad": 90,
+        "velocidad": 140,
         "daño": 12,
-        "rango_detección": 180,
-        "rango_ataque": 35
+        "rango_detección": 280,
+        "rango_ataque": 35,
+        "escala": 2.0
       },
-      "comportamiento": "perseguir",
+      "comportamiento": "perseguir_persistente",
       "animaciones": {
         "idle": "zombieguirl/idle",
         "walk": "zombieguirl/walk",

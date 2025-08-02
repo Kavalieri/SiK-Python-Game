@@ -9,6 +9,8 @@ Descripción: Núcleo base para enemigos con configuración y estado.
 
 import pygame
 
+from utils.config_manager import ConfigManager
+
 
 class EnemyCore:
     """Núcleo base para enemigos con configuración y estado básico."""
@@ -29,16 +31,9 @@ class EnemyCore:
         self.enemy_type = enemy_type
         self.animation_manager = animation_manager
 
-        # Propiedades físicas base
-        self.width = 32
-        self.height = 32
-        self.speed = 80.0
-        self.health = 100
-        self.max_health = 100
-        self.damage = 20
-        self.attack_range = 60
-        self.attack_cooldown = 1000
-        self.last_attack_time = 0
+        # Cargar configuración desde archivos
+        self.config_manager = ConfigManager()
+        self._load_enemy_config()
 
         # Estado del enemigo
         self.facing_right = True
@@ -55,23 +50,41 @@ class EnemyCore:
         # Tracking de movimiento para dirección
         self._last_x = self.x
 
-        # Configuración específica por tipo
-        self._setup_enemy_type()
+    def _load_enemy_config(self):
+        """Carga configuración del enemigo desde archivos JSON."""
+        # Cargar configuración base del tipo de enemigo
+        enemy_config = self.config_manager.get_config("enemies")
+        dev_config = enemy_config.get("configuracion_desarrollo", {})
 
-    def _setup_enemy_type(self):
-        """Configura propiedades específicas según el tipo de enemigo."""
-        if self.enemy_type == "zombiemale":
-            self.health = 120
-            self.max_health = 120
-            self.damage = 25
-            self.speed = 70.0
-            self.attack_range = 50
-        elif self.enemy_type == "zombieguirl":
-            self.health = 100
-            self.max_health = 100
-            self.damage = 20
-            self.speed = 90.0
-            self.attack_range = 45
+        enemy_data = enemy_config.get("tipos_enemigos", {}).get(self.enemy_type, {})
+        stats = enemy_data.get("stats", {})
+
+        # Propiedades físicas configurables
+        base_scale = stats.get("escala", 1.0)
+        dev_scale = dev_config.get("escala_visual", 1.0)
+        self.scale = base_scale * dev_scale
+
+        self.width = int(32 * self.scale)
+        self.height = int(32 * self.scale)
+
+        # Stats configurables
+        self.speed = stats.get("velocidad", 80.0)
+        if dev_config.get("velocidad_debug", False):
+            self.speed *= dev_config.get("velocidad_debug", 1.0)
+
+        self.health = stats.get("vida", 100)
+        self.max_health = self.health
+        self.damage = stats.get("daño", 20)
+        self.attack_range = stats.get("rango_ataque", 60)
+        self.detection_range = stats.get("rango_detección", 200)
+
+        # Configuración de comportamiento
+        self.behavior_type = enemy_data.get("comportamiento", "perseguir")
+        self.persistent_tracking = dev_config.get("rango_seguimiento_extendido", False)
+
+        # Configuración de sistema
+        self.attack_cooldown = 1000
+        self.last_attack_time = 0
 
     def take_damage(self, damage: int):
         """Recibe daño y actualiza estado."""
