@@ -101,6 +101,17 @@ class GameScene(Scene):
         current_time = pygame.time.get_ticks()
         delta_time = 1.0 / 60.0
 
+        # **CRÍTICO: Procesar input del jugador**
+        if self.player:
+            keys = pygame.key.get_pressed()
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_buttons = pygame.mouse.get_pressed()
+            # Player effects desde integration
+            player_effects = getattr(self.player.integration, "player_effects", None)
+            self.player.movement.handle_input(
+                keys, mouse_pos, mouse_buttons, player_effects
+            )
+
         if self.background and hasattr(self.background, "update"):
             self.background.update(delta_time)
         elif self.background is None:

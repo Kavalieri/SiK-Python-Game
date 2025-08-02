@@ -88,9 +88,14 @@ class Player(Entity):
         """
         # Actualizar sprite antes de devolverlo
         self.core.update_sprite()
-        return self.core.sprite
+        sprite = self.core.sprite
 
-    @property
+        # **CRÍTICO: Asegurar tamaño correcto del sprite**
+        if sprite and sprite.get_size() != (self.width, self.height):
+            sprite = pygame.transform.scale(sprite, (self.width, self.height))
+
+        return sprite @ property
+
     def current_animation_state(self):
         """Estado actual de animación."""
         return self.core.current_animation_state
