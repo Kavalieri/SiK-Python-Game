@@ -1,0 +1,28 @@
+{
+	"workflow": {
+		"version_strategy": "semantic",
+		"default_version_bump": "patch",
+		"branch_prefix": "feature/",
+		"commit_format": "conventional",
+		"auto_changelog": true,
+		"auto_release": false
+	},
+	"git": {
+		"main_branch": "main",
+		"remote": "origin",
+		"require_pr": true,
+		"auto_delete_branch": true,
+		"squash_merge": true
+	},
+	"release": {
+		"auto_tag": true,
+		"tag_prefix": "v",
+		"include_assets": false,
+		"changelog_archive": "docs/changelogs"
+	},
+	"quality": {
+		"run_tests": true,
+		"check_linting": true,
+		"verify_build": false
+	}
+}

@@ -108,13 +108,27 @@
 
 ###  **COMMITS Y VERSIONADO**
 ```powershell
-# Método principal para commits cotidianos
-.\dev-tools\scripts\robust_commit.ps1 "mensaje"
+# NUEVO: Sistema de workflow automatizado completo
 
-# Con push automático
-.\dev-tools\scripts\robust_commit.ps1 "mensaje" -Push
+# Desarrollo rápido (recomendado para uso diario)
+.\dev-tools\scripts\dev_helper.ps1 start      # Iniciar nueva característica
+.\dev-tools\scripts\dev_helper.ps1 save       # Guardar progreso
+.\dev-tools\scripts\dev_helper.ps1 finish     # Finalizar y crear PR
 
+# Workflow completo (control total)
+.\dev-tools\scripts\workflow_automation.ps1 -Accion nueva-rama -RamaNombre "feature/nombre" -Mensaje "descripción"
+.\dev-tools\scripts\workflow_automation.ps1 -Accion completar -Mensaje "cambios completados"
+.\dev-tools\scripts\workflow_automation.ps1 -Accion merge -Release -TipoVersion minor -Mensaje "descripción final"
+
+# Estado y verificación
+.\dev-tools\scripts\workflow_automation.ps1 -Accion status
 ```
+
+###  **CHANGELOG AUTOMÁTICO**
+- **Generación automática**: Changelog actualizado en cada release
+- **Archivado**: Versiones en `docs/changelogs/`
+- **Integración GitHub**: Releases automáticos con tags
+- **NUNCA editar CHANGELOG.md manualmente**: Sistema automatizado se encarga
 
 ###  **CONFIGURACIÓN TERMINAL**
 - **NO abrir nuevas consolas innecesariamente**: Usar la terminal activa si es posible.
