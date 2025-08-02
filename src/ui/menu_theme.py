@@ -11,7 +11,7 @@ import pygame
 import pygame_menu
 from pygame_menu import themes  # Import directo de themes para evitar pylint error
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class MenuTheme:

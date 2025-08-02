@@ -18,7 +18,8 @@ from typing import Any
 
 import pygame_menu
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
+
 from .menu_game_config import MenuGameConfig
 from .menu_save_slot_manager import MenuSaveSlotManager
 from .menu_widget_config import MenuWidgetConfig

@@ -9,7 +9,7 @@ Descripción: Sistema de eventos y callbacks del motor del juego.
 
 import pygame
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class GameEngineEvents:

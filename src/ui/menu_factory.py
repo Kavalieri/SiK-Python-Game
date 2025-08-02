@@ -11,9 +11,10 @@ Mantiene 100% compatibilidad con API original.
 import pygame
 import pygame_menu
 
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
-from ..utils.save_manager import SaveManager
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+from utils.save_manager import SaveManager
+
 from .menu_callbacks import MenuCallbacks
 from .menu_configuration import MenuConfiguration
 from .menu_creators import MenuCreators

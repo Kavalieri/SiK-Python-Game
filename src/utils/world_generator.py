@@ -11,7 +11,8 @@ Mantiene API original para compatibilidad con delegación a módulos especializa
 import logging
 import random
 
-from ..entities.tile import Tile, TileType
+from entities.tile import Tile, TileType
+
 from .cluster_generator import ClusterGenerator
 from .world_core import WorldCore
 from .world_validator import WorldValidator

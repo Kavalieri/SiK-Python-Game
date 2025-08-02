@@ -11,7 +11,8 @@ import logging
 import math
 import random
 
-from ..entities.tile import Tile, TileType
+from entities.tile import Tile, TileType
+
 from .world_core import WorldCore
 from .world_validator import WorldValidator
 

@@ -32,6 +32,20 @@
 - **Rutas configurables**: No rutas absolutas hardcodeadas
 - **Valores mágicos**: Siempre usar constantes con nombres descriptivos
 
+###  **GESTIÓN DE RUTAS PARA EMPAQUETADO**
+- **SIEMPRE rutas relativas**: Compatibilidad con empaquetado .exe
+- **✅ Usar `pathlib.Path` y `__file__`**: Referencias dinámicas robustas
+- **Ejecutar desde raíz**: `poetry run python src\main.py` (simula entorno empaquetado)
+- **❌ Evitar rutas absolutas**: No funcionan al distribuir
+- **Patrón recomendado**: `PROJECT_ROOT = Path(__file__).parent.parent`
+
+###  **IMPORTACIONES PARA EMPAQUETADO**
+- **✅ IMPORTACIONES ABSOLUTAS**: `from utils.config_manager import ConfigManager`
+- **❌ IMPORTACIONES RELATIVAS**: `from ..utils.config_manager import ConfigManager`
+- **Dentro del mismo paquete**: `from .game_engine_core import GameEngineCore` (OK)
+- **Entre paquetes diferentes**: `from entities.player import Player` (desde src como raíz)
+- **Razón**: Las importaciones relativas fallan al ejecutar desde raíz en empaquetado
+
 ###  **CONVENCIONES OBLIGATORIAS**
 - **Variables**: `generacion_enemigos`, `velocidad_movimiento` (snake_case español)
 - **Clases**: `GestorEnemigos`, `PersonajeJugador` (PascalCase español)
@@ -52,7 +66,6 @@
 ```
 
 ###  **CONFIGURACIÓN TERMINAL**
-- **PowerShell predeterminado**: `isBackground=false` para comandos interactivos
 - **NO abrir nuevas consolas innecesariamente**: Usar la terminal activa si es posible.
 - **Solo caracteres ASCII** en scripts PowerShell
 - **GitHub CLI prioritario**: `gh` > git tradicional
@@ -92,7 +105,7 @@ src/assets/		#
 - **Documentación automática** de funciones y cambios
 
 ###  **FLUJO AUTÓNOMO**
-- **Continuar iterando** hasta puntos de prueba que requieran resolución del usuario.
+- **Continuar iterando** hasta puntos de prueba que requieran resolución del usuario a menos que esperemos una respuesta por la terminal.
 - **Resolver errores** de forma autónoma sin consultar constantemente.
 - **Commits preventivos**: Realizar commits antes de cada cambio, borrado o refactorización importante.
 - **Testing**: Crear y ejecutar scripts de testeo para validar la funcionalidad antes de dar por finalizada una tarea.

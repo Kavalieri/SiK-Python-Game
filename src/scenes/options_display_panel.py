@@ -15,7 +15,7 @@ Responsabilidades:
 import pygame
 import pygame_gui
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class OptionsDisplayPanel:

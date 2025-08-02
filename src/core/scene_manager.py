@@ -12,8 +12,8 @@ from abc import ABC, abstractmethod
 
 import pygame
 
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
 
 
 class Scene(ABC):

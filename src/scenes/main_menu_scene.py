@@ -14,9 +14,9 @@ import pygame
 import pygame.constants as pg_constants  # pylint: disable=no-member
 import pygame_gui
 
-from ..core.scene_manager import Scene
-from ..ui.menu_manager import MenuManager
-from ..utils.config_manager import ConfigManager
+from core.scene_manager import Scene
+from ui.menu_manager import MenuManager
+from utils.config_manager import ConfigManager
 
 
 class MainMenuScene(Scene):

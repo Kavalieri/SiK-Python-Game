@@ -16,8 +16,8 @@ MIGRACIÓN COMPLETADA:
 import logging
 from typing import Any
 
-from ..utils.config_database import ConfigDatabase
-from ..utils.database_manager import DatabaseManager
+from utils.config_database import ConfigDatabase
+from utils.database_manager import DatabaseManager
 
 
 class CharacterDataManager:

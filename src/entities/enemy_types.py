@@ -19,8 +19,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from ..utils.config_database import ConfigDatabase
-from ..utils.database_manager import DatabaseManager
+from utils.config_database import ConfigDatabase
+from utils.database_manager import DatabaseManager
 
 
 class EnemyRarity(Enum):

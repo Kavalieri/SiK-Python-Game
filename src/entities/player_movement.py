@@ -9,7 +9,8 @@ Descripción: Sistema de movimiento, input handling y animaciones del jugador.
 
 import pygame
 
-from ..entities.powerup import PowerupType
+from entities.powerup import PowerupType
+
 from .entity import EntityState
 from .player_core import AnimationState, PlayerCore
 

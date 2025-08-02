@@ -12,9 +12,9 @@ import math
 
 import pygame
 
-from ..entities.powerup import PowerupType
-from ..entities.projectile import Projectile
-from ..utils.config_manager import ConfigManager
+from entities.powerup import PowerupType
+from entities.projectile import Projectile
+from utils.config_manager import ConfigManager
 
 
 class CombatActions:

@@ -7,14 +7,14 @@ Fecha: 2024
 Descripción: Configuración de escenas del juego y sus transiciones.
 """
 
-from ..scenes.character_select_scene import CharacterSelectScene
-from ..scenes.game_scene_core import GameScene
-from ..scenes.loading_scene import LoadingScene
-from ..scenes.main_menu_scene import MainMenuScene
-from ..scenes.options_scene import OptionsScene
-from ..scenes.pause_scene import PauseScene
-from ..scenes.slot_selection_scene import SlotSelectionScene
-from ..utils.logger import get_logger
+from scenes.character_select_scene import CharacterSelectScene
+from scenes.game_scene_core import GameScene
+from scenes.loading_scene import LoadingScene
+from scenes.main_menu_scene import MainMenuScene
+from scenes.options_scene import OptionsScene
+from scenes.pause_scene import PauseScene
+from scenes.slot_selection_scene import SlotSelectionScene
+from utils.logger import get_logger
 
 
 class GameEngineScenes:

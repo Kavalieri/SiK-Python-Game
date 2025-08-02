@@ -7,7 +7,7 @@ import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.scenes.game_scene_core import GameScene
+    from scenes.game_scene_core import GameScene
 
 
 class GameSceneRenderer:

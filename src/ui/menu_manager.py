@@ -12,10 +12,11 @@ from collections.abc import Callable
 import pygame
 import pygame_menu
 
-from ..core.game_state import GameState
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
-from ..utils.save_manager import SaveManager
+from core.game_state import GameState
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+from utils.save_manager import SaveManager
+
 from .menu_callbacks import MenuCallbacks
 from .menu_factory import MenuFactory
 

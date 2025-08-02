@@ -3,7 +3,8 @@
 import pygame
 import pygame_menu
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
+
 from .menu_configuration import MenuConfiguration
 from .menu_theme import MenuTheme
 

@@ -10,9 +10,9 @@ Descripción: Sistema especializado para la creación y gestión de proyectiles.
 import math
 import time
 
-from src.entities.powerup import PowerupType
-from src.entities.projectile import Projectile
-from src.utils.config_manager import ConfigManager
+from entities.powerup import PowerupType
+from entities.projectile import Projectile
+from utils.config_manager import ConfigManager
 
 
 class ProjectileSystem:

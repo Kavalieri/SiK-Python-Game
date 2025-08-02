@@ -11,7 +11,7 @@ import random
 
 import pygame
 
-from ..entities.enemy_types import EnemyRarity, EnemyTypes
+from entities.enemy_types import EnemyRarity, EnemyTypes
 
 # Constantes descriptivas para tiempos de pausa
 TIEMPO_PAUSA_MEJORAS = 3000

@@ -14,7 +14,8 @@ import pygame
 from .hud_elements import HUDEffectUtils
 
 if TYPE_CHECKING:
-    from ..core.game_state import GameState
+    from core.game_state import GameState
+
     from .hud_elements import HUDConfiguration, HUDElement
 
 

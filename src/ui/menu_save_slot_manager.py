@@ -17,7 +17,7 @@ from collections.abc import Callable
 
 import pygame_menu
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class MenuSaveSlotManager:

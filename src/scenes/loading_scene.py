@@ -11,7 +11,8 @@ from collections.abc import Callable
 
 import pygame
 
-from ..utils.config_manager import ConfigManager
+from utils.config_manager import ConfigManager
+
 from .loading_scene_core import LoadingSceneCore
 from .loading_scene_events import LoadingSceneEvents
 from .loading_scene_logic import LoadingSceneLogic

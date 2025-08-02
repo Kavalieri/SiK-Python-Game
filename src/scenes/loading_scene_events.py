@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from ..utils.logger import get_logger
+from utils.logger import get_logger
 
 if TYPE_CHECKING:
     from .loading_scene_core import LoadingSceneCore

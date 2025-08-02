@@ -12,7 +12,8 @@ import math
 
 import pygame
 
-from ..utils.config_manager import ConfigManager
+from utils.config_manager import ConfigManager
+
 from .entity import Entity, EntityStats, EntityType
 
 

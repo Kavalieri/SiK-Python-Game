@@ -11,8 +11,9 @@ import sys
 
 import pygame
 
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+
 from .game_engine_core import GameEngineCore
 from .game_engine_events import GameEngineEvents
 from .game_engine_scenes import GameEngineScenes

@@ -13,9 +13,10 @@ from typing import Any
 
 import pygame
 
-from ..entities.character_data import CharacterDataManager
-from ..utils.animation_manager import IntelligentAnimationManager
-from ..utils.config_manager import ConfigManager
+from entities.character_data import CharacterDataManager
+from utils.animation_manager import IntelligentAnimationManager
+from utils.config_manager import ConfigManager
+
 from .entity import EntityState
 from .player_stats import PlayerStats
 

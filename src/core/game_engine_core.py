@@ -9,10 +9,11 @@ Descripción: Núcleo del motor con inicialización de componentes y configuraci
 
 import pygame
 
-from ..ui.menu_manager import MenuManager
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
-from ..utils.save_manager import SaveManager
+from ui.menu_manager import MenuManager
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+from utils.save_manager import SaveManager
+
 from .game_state import GameState
 from .scene_manager import SceneManager
 

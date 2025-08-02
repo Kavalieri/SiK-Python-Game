@@ -11,8 +11,9 @@ de combate del jugador, simplificado para compatibilidad inmediata.
 import logging
 from typing import Any
 
-from ..entities.powerup import PowerupType
-from ..utils.config_manager import ConfigManager
+from entities.powerup import PowerupType
+from utils.config_manager import ConfigManager
+
 from .player_effects import PlayerEffects
 from .player_stats import PlayerStats
 from .projectile import Projectile

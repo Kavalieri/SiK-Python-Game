@@ -14,7 +14,8 @@ from typing import Any
 import pygame
 import pygame.mixer
 
-from ..entities.powerup import PowerupEffect
+from entities.powerup import PowerupEffect
+
 from .attack_configuration import AttackConfig
 from .entity import EntityState
 from .player_combat import PlayerCombat

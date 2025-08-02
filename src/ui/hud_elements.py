@@ -9,7 +9,7 @@ Descripción: Elementos UI, configuración y estructuras de datos para el sistem
 
 from dataclasses import dataclass
 
-from ..entities.powerup import PowerupType
+from entities.powerup import PowerupType
 
 
 @dataclass

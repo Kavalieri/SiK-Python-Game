@@ -5,18 +5,19 @@ import random
 
 import pygame
 
-from ..core.scene_manager import Scene
-from ..entities.enemy import EnemyManager
-from ..entities.player import Player
-from ..entities.projectile import Projectile
-from ..ui.hud import HUD
-from ..utils.animation_manager import IntelligentAnimationManager
-from ..utils.asset_manager import AssetManager
-from ..utils.camera import Camera
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
-from ..utils.simple_desert_background import SimpleDesertBackground
-from ..utils.world_generator import WorldGenerator
+from core.scene_manager import Scene
+from entities.enemy import EnemyManager
+from entities.player import Player
+from entities.projectile import Projectile
+from ui.hud import HUD
+from utils.animation_manager import IntelligentAnimationManager
+from utils.asset_manager import AssetManager
+from utils.camera import Camera
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+from utils.simple_desert_background import SimpleDesertBackground
+from utils.world_generator import WorldGenerator
+
 from .game_scene_collisions import GameSceneCollisions
 from .game_scene_powerups import GameScenePowerups
 from .game_scene_render import GameSceneRenderer

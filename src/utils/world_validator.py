@@ -12,7 +12,8 @@ import random
 
 import pygame
 
-from ..entities.tile import Tile, TileType
+from entities.tile import Tile, TileType
+
 from .world_core import WorldCore
 
 

@@ -14,9 +14,9 @@ from typing import Any
 
 import pygame
 
-from ..core.scene_manager import Scene
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
+from core.scene_manager import Scene
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
 
 
 class LoadingSceneCore(Scene):

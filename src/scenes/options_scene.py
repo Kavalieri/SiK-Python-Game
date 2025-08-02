@@ -11,10 +11,11 @@ REFACTORIZADA: Ahora utiliza paneles especializados para mejor organización.
 import pygame
 import pygame_gui
 
-from ..core.scene_manager import Scene
-from ..ui.menu_manager import MenuManager
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
+from core.scene_manager import Scene
+from ui.menu_manager import MenuManager
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
+
 from .options_audio_panel import OptionsAudioPanel
 from .options_display_panel import OptionsDisplayPanel
 

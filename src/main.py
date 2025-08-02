@@ -14,13 +14,13 @@ from pathlib import Path
 
 import pygame
 
-# Añadir el directorio raíz al path para imports
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
+# Añadir el directorio src al path para imports compatibles con empaquetado
+src_root = Path(__file__).parent
+sys.path.insert(0, str(src_root))
 
-from src.core.game_engine import GameEngine
-from src.utils.config_manager import ConfigManager
-from src.utils.logger import setup_logger
+from core.game_engine import GameEngine
+from utils.config_manager import ConfigManager
+from utils.logger import setup_logger
 
 # Inicializar pygame antes de cualquier uso
 pygame.init()  # pylint: disable=no-member

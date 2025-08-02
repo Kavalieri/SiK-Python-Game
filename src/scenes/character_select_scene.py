@@ -3,9 +3,10 @@
 import pygame
 import pygame_gui
 
-from ..core.scene_manager import Scene
-from ..ui.menu_manager import MenuManager
-from ..utils.logger import get_logger
+from core.scene_manager import Scene
+from ui.menu_manager import MenuManager
+from utils.logger import get_logger
+
 from .character_animations import CharacterAnimations
 from .character_data import CharacterData
 from .character_ui import CharacterUI

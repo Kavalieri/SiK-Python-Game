@@ -11,8 +11,9 @@ import logging
 
 import pygame
 
-from ..core.game_state import GameState
-from ..utils.config_manager import ConfigManager
+from core.game_state import GameState
+from utils.config_manager import ConfigManager
+
 from .hud_elements import HUDConfiguration, HUDElement
 from .hud_rendering import HUDRenderer
 

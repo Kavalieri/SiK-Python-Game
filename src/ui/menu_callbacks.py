@@ -6,9 +6,10 @@ Delega a: navigation_callbacks, upgrade_callbacks, options_callbacks, save_callb
 
 from typing import Any
 
-from ..core.game_state import GameState
-from ..utils.logger import get_logger
-from ..utils.save_manager import SaveManager
+from core.game_state import GameState
+from utils.logger import get_logger
+from utils.save_manager import SaveManager
+
 from .navigation_callbacks import NavigationCallbacks
 from .options_callbacks import OptionsCallbacks
 from .save_callbacks import SaveCallbacks

@@ -11,8 +11,9 @@ from typing import Any
 
 import pygame
 
-from ..utils.animation_manager import IntelligentAnimationManager
-from ..utils.config_manager import ConfigManager
+from utils.animation_manager import IntelligentAnimationManager
+from utils.config_manager import ConfigManager
+
 from .entity import Entity, EntityType
 from .player_core import PlayerCore
 from .player_integration import PlayerIntegration

@@ -9,10 +9,10 @@ Descripción: Escena para seleccionar slots de guardado con gestión de slots ac
 
 import pygame
 
-from ..core.scene_manager import Scene
-from ..ui.menu_manager import MenuManager
-from ..utils.config_manager import ConfigManager
-from ..utils.logger import get_logger
+from core.scene_manager import Scene
+from ui.menu_manager import MenuManager
+from utils.config_manager import ConfigManager
+from utils.logger import get_logger
 
 
 class SlotSelectionScene(Scene):

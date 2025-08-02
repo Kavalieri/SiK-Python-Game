@@ -9,7 +9,7 @@ Descripción: Módulo que maneja los efectos activos y powerups del jugador.
 
 import logging
 
-from ..entities.powerup import PowerupEffect, PowerupType
+from entities.powerup import PowerupEffect, PowerupType
 
 
 class PlayerEffects:

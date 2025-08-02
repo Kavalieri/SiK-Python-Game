@@ -8,9 +8,9 @@ from typing import Any, Optional
 
 import pygame
 
-from src.entities.entity_effects import EntityEffectsSystem
-from src.entities.entity_rendering import EntityRenderingSystem
-from src.entities.entity_types import EntityState, EntityStats, EntityType
+from entities.entity_effects import EntityEffectsSystem
+from entities.entity_rendering import EntityRenderingSystem
+from entities.entity_types import EntityState, EntityStats, EntityType
 
 
 class Entity(ABC):

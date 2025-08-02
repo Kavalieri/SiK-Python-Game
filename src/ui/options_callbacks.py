@@ -7,8 +7,8 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.core.game_state import GameState
-    from src.utils.save_manager import SaveManager
+    from core.game_state import GameState
+    from utils.save_manager import SaveManager
 
 logger = logging.getLogger(__name__)
 

@@ -9,7 +9,7 @@ Descripción: Lógica de generación, recogida y efectos de powerups en la escen
 
 import random
 
-from ..entities.powerup import Powerup
+from entities.powerup import Powerup
 
 
 class GameScenePowerups:

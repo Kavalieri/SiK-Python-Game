@@ -11,7 +11,7 @@ import logging
 import os
 import random
 
-from ..entities.tile import TileType
+from entities.tile import TileType
 
 
 class WorldCore:
