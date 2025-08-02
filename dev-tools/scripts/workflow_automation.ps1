@@ -137,6 +137,24 @@ function New-FeatureBranch {
 	
     git checkout -b $BranchName
     Write-Success "Rama '$BranchName' creada y activada"
+    
+    # Detectar tipo de cambio para checklist
+    $tipoCambio = "feature"
+    if ($BranchName -match "^hotfix/") { $tipoCambio = "hotfix" }
+    elseif ($BranchName -match "^bugfix/") { $tipoCambio = "bugfix" }
+    elseif ($BranchName -match "^docs/") { $tipoCambio = "docs" }
+    elseif ($BranchName -match "^dev/") { $tipoCambio = "dev-tools" }
+    elseif ($BranchName -match "^config/") { $tipoCambio = "config" }
+    
+    # Generar checklist automatico
+    Write-Info "Generando checklist de desarrollo..."
+    $checklistScript = Join-Path $ProjectRoot "dev-tools/scripts/generate_checklist.ps1"
+    try {
+        & $checklistScript -TipoCambio $tipoCambio -RamaNombre $BranchName -Descripcion $Message
+    }
+    catch {
+        Write-Info "No se pudo generar checklist automatico: $($_.Exception.Message)"
+    }
 	
     git add .
     if (git diff --cached --quiet) {

@@ -117,15 +117,17 @@
 .\dev-tools\scripts\sik.ps1 -Forzar          # Sin confirmacion
 
 # Sistema de deteccion automatica de cambios:
-# - HOTFIX: "hotfix|urgente|critico|security" → nueva rama hotfix/ → directo a main
+# - HOTFIX: "hotfix|urgente|critico|security" → nueva rama hotfix/ → PR directo a main
 # - BUGFIX: "fix|bug|error|corrige" → nueva rama bugfix/ → PR normal  
 # - FEATURE: "feature|nueva|implementa" → nueva rama feature/ → PR normal
-# - DOCS: solo archivos docs/ → commit directo (configurable)
-# - CONFIG: solo archivos config/ → nueva rama config/
-# - DEV-TOOLS: solo dev-tools/ → commit directo (configurable)
+# - DOCS: solo archivos docs/ → nueva rama docs/ → PR normal
+# - CONFIG: solo archivos config/ → nueva rama config/ → PR normal
+# - DEV-TOOLS: solo dev-tools/ → nueva rama dev/ → PR normal
+
+# REGLA FUNDAMENTAL: TODOS los cambios van por ramas, NUNCA commits directos a main
 
 # Evaluacion de contexto:
-# - Si estas en main + cambios → Crea nueva rama automaticamente
+# - Si estas en main + cambios → Crea nueva rama automaticamente SIEMPRE
 # - Si estas en rama + cambios → Completa trabajo en rama actual  
 # - Si estas en rama + sin cambios → Merge y release automatico
 ```

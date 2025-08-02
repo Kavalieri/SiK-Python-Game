@@ -61,6 +61,5 @@ $params = @()
 
 if ($Mensaje) { $params += "-Descripcion"; $params += $Mensaje }
 if ($Forzar) { $params += "-Forzar" }
-if ($Debug) { $params += "-Debug" }
 
 & $autoScript @params
