@@ -72,6 +72,11 @@ class PlayerCore:
         self.facing_right = True
         self.state = EntityState.IDLE
 
+        # Sistema de animaciones frame-by-frame
+        self.current_frame_index = 0
+        self.animation_timer = 0.0
+        self.frame_duration = 0.05  # 50ms por frame por defecto (20 FPS)
+
         # Inicializar estadísticas
         self.stats = self._get_character_stats(character_name)
 
@@ -185,8 +190,9 @@ class PlayerCore:
                 # Obtener el frame actual de la animación
                 frames = animation_data["frames"]
                 if frames:
-                    # Por ahora, usar el primer frame. En el futuro se puede implementar animación
-                    base_sprite = frames[0]
+                    # Usar el frame actual basado en el índice
+                    current_frame_index = self.current_frame_index % len(frames)
+                    base_sprite = frames[current_frame_index]
 
                     # Aplicar volteo horizontal si es necesario
                     if not self.facing_right:
@@ -201,6 +207,58 @@ class PlayerCore:
                 self._create_fallback_sprite()
         else:
             self._create_fallback_sprite()
+
+    def update_animation_timing(self, delta_time: float):
+        """
+        Actualiza el timing de la animación para avanzar frames.
+
+        Args:
+            delta_time: Tiempo transcurrido desde el último frame
+        """
+        if self.animations and self.current_animation_state.value in self.animations:
+            animation_data = self.animations[self.current_animation_state.value]
+            if (
+                animation_data
+                and "frames" in animation_data
+                and animation_data["frames"]
+            ):
+                frames = animation_data["frames"]
+
+                # Calcular duración del frame basada en el tipo de animación
+                self.frame_duration = self._get_frame_duration_for_animation()
+
+                # Actualizar timer
+                self.animation_timer += delta_time
+
+                # Cambiar frame si es necesario
+                if self.animation_timer >= self.frame_duration:
+                    self.animation_timer = 0.0
+                    self.current_frame_index = (self.current_frame_index + 1) % len(
+                        frames
+                    )
+                    # Actualizar sprite solo cuando cambia el frame (optimización)
+                    self.update_sprite()
+
+    def _get_frame_duration_for_animation(self) -> float:
+        """
+        Calcula la duración de cada frame según el tipo de animación.
+
+        Returns:
+            Duración en segundos de cada frame
+        """
+        # Diferentes velocidades según el tipo de animación
+        animation_speeds = {
+            AnimationState.IDLE: 0.08,  # 12.5 FPS - más lento
+            AnimationState.WALK: 0.06,  # 16.7 FPS - normal
+            AnimationState.RUN: 0.04,  # 25 FPS - más rápido
+            AnimationState.ATTACK: 0.03,  # 33.3 FPS - muy rápido
+            AnimationState.DEAD: 0.10,  # 10 FPS - muy lento
+            AnimationState.SHOOT: 0.035,  # 28.6 FPS - rápido para disparos
+        }
+
+        return animation_speeds.get(
+            self.current_animation_state, 0.05
+        )  # 20 FPS por defecto
 
     def clamp_position(self):
         """Mantiene al jugador dentro de los límites del mundo."""

@@ -10,16 +10,15 @@ Descripción: Diagnóstico completo del sistema de movimiento del jugador.
 import logging
 import sys
 from pathlib import Path
-from typing import Any
 
 # Configurar ruta del proyecto
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import pygame
+
 from entities.player import Player
 from entities.player_core import AnimationState
-from entities.player_movement import PlayerMovement
 from utils.animation_manager import IntelligentAnimationManager
 from utils.config_manager import ConfigManager
 

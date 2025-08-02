@@ -7,7 +7,6 @@ Fecha: 2 de Agosto, 2025
 Descripción: Test y fix para el problema de velocidad del jugador.
 """
 
-import logging
 import sys
 from pathlib import Path
 
@@ -15,6 +14,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import pygame
+
 from entities.player import Player
 from utils.animation_manager import IntelligentAnimationManager
 from utils.config_manager import ConfigManager

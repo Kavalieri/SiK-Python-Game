@@ -124,8 +124,11 @@ class PlayerMovement:
             self.is_attacking = True
             self.attack_timer = self.attack_duration
             self.player_core.state = EntityState.ATTACKING
-
-        # No cambiar a IDLE aquí, se maneja en update_animation
+            # Resetear animación de ataque para que empiece desde el principio
+            self.player_core.current_frame_index = 0
+            self.player_core.animation_timer = (
+                0.0  # No cambiar a IDLE aquí, se maneja en update_animation
+            )
 
     def update_movement(self, delta_time: float):
         """
@@ -161,7 +164,14 @@ class PlayerMovement:
         if new_animation_state != self._last_animation_state:
             self._last_animation_state = new_animation_state
             self.player_core.current_animation_state = new_animation_state
+            # Resetear animación al cambiar de estado
+            self.player_core.current_frame_index = 0
+            self.player_core.animation_timer = 0.0
             self.player_core.update_sprite()
+            # No llamar update_animation_timing aquí para evitar timing inmediato
+        else:
+            # Actualizar timing de la animación solo si no cambió de estado
+            self.player_core.update_animation_timing(delta_time)
 
     def _get_animation_state(self) -> AnimationState:
         """Determina el estado de animación actual basado en el estado del jugador."""

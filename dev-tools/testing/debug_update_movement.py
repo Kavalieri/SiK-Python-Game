@@ -14,6 +14,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import pygame
+
 from entities.player import Player
 from utils.animation_manager import IntelligentAnimationManager
 from utils.config_manager import ConfigManager
@@ -109,19 +110,19 @@ def debug_update_movement():
     final_distance = ((player.x - 100) ** 2 + (player.y - 100) ** 2) ** 0.5
     core_distance = ((player.core.x - 100) ** 2 + (player.core.y - 100) ** 2) ** 0.5
 
-    print(f"\n📏 Distancia final movida:")
+    print("\n📏 Distancia final movida:")
     print(f"   Player: {final_distance:.1f} píxeles")
     print(f"   Core: {core_distance:.1f} píxeles")
 
     # Verificar propiedades del player
-    print(f"\n🔍 INVESTIGANDO PROPIEDADES:")
+    print("\n🔍 INVESTIGANDO PROPIEDADES:")
     print(f"   type(player.x): {type(player.x)}")
     print(f"   type(player.core.x): {type(player.core.x)}")
     print(f"   player tiene __setattr__: {hasattr(player, '__setattr__')}")
     print(f"   player.core tiene __setattr__: {hasattr(player.core, '__setattr__')}")
 
     # Ver si player.x es una propiedad
-    if hasattr(Player, "x") and isinstance(getattr(Player, "x"), property):
+    if hasattr(Player, "x") and isinstance(Player.x, property):
         print("   player.x ES una propiedad - podría estar vinculada a player.core.x")
     else:
         print("   player.x NO es una propiedad")
