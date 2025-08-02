@@ -6,7 +6,8 @@
 
 #### **COLABORACIÓN Y DESARROLLO**
 - **[COLABORACION.md](COLABORACION.md)**: Guías de colaboración y desarrollo en equipo
-- **[SIK_WORKFLOW_GUIA_COMPLETA.md](SIK_WORKFLOW_GUIA_COMPLETA.md)**: **🔥 NUEVO** - Sistema de workflow robusto y simple para desarrollo
+- **[SIK_WORKFLOW_GUIA_COMPLETA.md](SIK_WORKFLOW_GUIA_COMPLETA.md)**: **🔥 SISTEMA PRINCIPAL** - Workflow robusto y simple para desarrollo
+- **[SIK_WORKFLOW_MIGRATION_GUIDE.md](SIK_WORKFLOW_MIGRATION_GUIDE.md)**: **🚀 NUEVO** - Guía para migrar el sistema a otros proyectos
 
 #### **REGISTRO HISTÓRICO**
 - **[registro/](registro/)**: Registro de cambios con timestamps

@@ -2,7 +2,38 @@
 
 ## 📋 Introducción
 
-Esta guía establece las normas y procedimientos para colaborar en el desarrollo de SiK Python Game. Sigue las mejores prácticas de la comunidad Python y asegura la calidad y consistencia del código.
+Esta guía establece las normas y procedimientos para colaborar en el desarrollo de SiK Python Game usando el **Sistema de Workflow SiK**, que garantiza un flujo de desarrollo profesional, seguro y completamente automatizado.
+
+## 🚀 Sistema de Workflow Obligatorio
+
+**FLUJO FUNDAMENTAL**: `Rama → Cambios → PR → Review → Merge → Release`
+
+### **⚡ Quick Start para Colaboradores**
+
+```powershell
+# 1. Clonar y configurar
+git clone https://github.com/Kavalieri/SiK-Python-Game.git
+cd SiK-Python-Game
+
+# 2. Verificar estado
+.\dev-tools\scripts\sik-flow.ps1 status
+
+# 3. Crear nueva funcionalidad
+.\dev-tools\scripts\sik-flow.ps1 new -Rama "feature/mi-funcionalidad" -Mensaje "Implementar nueva funcionalidad"
+
+# 4. Desarrollar y guardar
+.\dev-tools\scripts\sik-flow.ps1 save -Mensaje "Añadir lógica principal" -Push
+
+# 5. Crear PR
+.\dev-tools\scripts\sik-flow.ps1 pr -Mensaje "Nueva funcionalidad completa" -Issue 123
+
+# 6. Después del review, mergear
+.\dev-tools\scripts\sik-flow.ps1 merge -Mensaje "Merge nueva funcionalidad"
+```
+
+### **📖 Documentación Completa**
+- **[SIK_WORKFLOW_GUIA_COMPLETA.md](SIK_WORKFLOW_GUIA_COMPLETA.md)**: Guía completa del sistema
+- **[SIK_WORKFLOW_MIGRATION_GUIDE.md](SIK_WORKFLOW_MIGRATION_GUIDE.md)**: Para migrar a otros proyectos
 
 ## 🎯 Objetivos del Proyecto
 

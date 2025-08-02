@@ -7,7 +7,8 @@ param(
     [int]$Issue = 0,
     [switch]$Push,
     [switch]$Force,
-    [switch]$Status
+    [switch]$Status,
+    [switch]$TakeChanges
 )
 
 $ErrorActionPreference = "Stop"
@@ -42,17 +43,18 @@ function Get-CurrentBranch {
     try {
         $branch = git rev-parse --abbrev-ref HEAD
         return $branch.Trim()
-    } catch {
+    }
+    catch {
         return $null
     }
 }
 
 function Get-GitStatus {
     $status = @{
-        Branch = Get-CurrentBranch
-        HasChanges = $false
+        Branch       = Get-CurrentBranch
+        HasChanges   = $false
         ChangedFiles = @()
-        IsClean = $true
+        IsClean      = $true
     }
     
     try {
@@ -62,7 +64,8 @@ function Get-GitStatus {
             $status.IsClean = $false
             $status.ChangedFiles = $gitStatus
         }
-    } catch {
+    }
+    catch {
         Write-Error "Error verificando estado de Git"
     }
     
@@ -78,7 +81,8 @@ function Show-Status {
     
     if ($status.IsClean) {
         Write-Success "Repositorio limpio - no hay cambios pendientes"
-    } else {
+    }
+    else {
         Write-Info "Archivos modificados: $($status.ChangedFiles.Count)"
         foreach ($file in $status.ChangedFiles | Select-Object -First 10) {
             Write-Host "  $file" -ForegroundColor Gray
@@ -95,15 +99,33 @@ function Show-Status {
 }
 
 function New-Branch {
-    param([string]$BranchName, [string]$Message)
+    param([string]$BranchName, [string]$Message, [switch]$TakeChanges)
     
     Write-Header "CREANDO NUEVA RAMA"
     
     $status = Get-GitStatus
+    $hasChanges = -not $status.IsClean
     
-    if (-not $status.IsClean) {
-        Write-Error "Hay cambios pendientes. Commitea o descarta los cambios antes de crear una rama nueva."
+    # Si tenemos cambios y no estamos en main, necesitamos decisión manual
+    if ($hasChanges -and $status.Branch -ne $MainBranch) {
+        Write-Error "Tienes cambios en la rama '$($status.Branch)'. Primero completa esa tarea o usa 'save' para guardar los cambios."
         return $false
+    }
+    
+    # Si tenemos cambios en main, ofrecer moverlos a la nueva rama
+    if ($hasChanges -and $status.Branch -eq $MainBranch) {
+        if ($TakeChanges) {
+            Write-Info "Moviendo cambios pendientes a la nueva rama '$BranchName'"
+            git stash push -m "Cambios para $BranchName - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+            Write-Success "Cambios guardados temporalmente"
+        } else {
+            Write-Warning "Tienes cambios pendientes en main."
+            Write-Host "Para crear la rama Y mover los cambios: " -NoNewline
+            Write-Host ".\sik-flow.ps1 new -Rama '$BranchName' -Mensaje '$Message' -TakeChanges" -ForegroundColor Yellow
+            Write-Host "Para crear la rama sin cambios: " -NoNewline  
+            Write-Host "git stash; .\sik-flow.ps1 new -Rama '$BranchName' -Mensaje '$Message'" -ForegroundColor Yellow
+            return $false
+        }
     }
     
     if ($status.Branch -ne $MainBranch) {
@@ -118,12 +140,20 @@ function New-Branch {
         git checkout -b $BranchName
         Write-Success "Rama $BranchName creada y activada"
         
+        # Si teníamos cambios guardados, aplicarlos a la nueva rama
+        if ($TakeChanges -and $hasChanges) {
+            git stash pop
+            Write-Success "Cambios aplicados a la nueva rama $BranchName"
+            Write-Info "Los cambios están listos para ser commitados con 'save'"
+        }
+        
         if ($Message) {
             Write-Info "Descripción: $Message"
         }
         
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error creando rama: $($_.Exception.Message)"
         return $false
     }
@@ -157,7 +187,8 @@ function Save-Changes {
         }
         
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error guardando cambios: $($_.Exception.Message)"
         return $false
     }
@@ -203,7 +234,8 @@ function New-PullRequest {
         }
         
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error creando PR: $($_.Exception.Message)"
         return $false
     }
@@ -228,7 +260,7 @@ function Invoke-Merge {
     
     try {
         # Verificar si hay PR abierto para esta rama
-        $prInfo = gh pr view --json number,title 2>$null
+        $prInfo = gh pr view --json number, title 2>$null
         if (-not $prInfo) {
             Write-Error "No hay PR abierto para esta rama. Crea un PR primero."
             return $false
@@ -252,7 +284,8 @@ function Invoke-Merge {
         Write-Info "Listo para crear release si es necesario"
         
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error en merge: $($_.Exception.Message)"
         return $false
     }
@@ -310,10 +343,12 @@ function Invoke-Release {
                 
                 if ($buildAssets.Count -gt 0) {
                     Write-Success "Build generado: $($buildAssets.Count) archivos"
-                } else {
+                }
+                else {
                     Write-Info "Build completado pero no se encontraron archivos"
                 }
-            } catch {
+            }
+            catch {
                 Write-Error "Error en build: $($_.Exception.Message)"
                 Write-Info "Continuando con release sin build..."
             }
@@ -325,7 +360,8 @@ function Invoke-Release {
             $assetArgs = $buildAssets | ForEach-Object { "--attach-asset", $_ }
             gh release create "v$Version" --title "SiK Python Game v$Version" --notes "$releaseNotes" @assetArgs
             Write-Success "Release v$Version creado con $($buildAssets.Count) archivos adjuntos"
-        } else {
+        }
+        else {
             gh release create "v$Version" --title "SiK Python Game v$Version" --notes "$releaseNotes"
             Write-Success "Release v$Version creado"
         }
@@ -334,7 +370,8 @@ function Invoke-Release {
         Write-Info "Release URL: $releaseUrl"
         
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error creando release: $($_.Exception.Message)"
         return $false
     }
@@ -351,7 +388,8 @@ function Switch-Branch {
         if (-not $Force) {
             Write-Error "Hay cambios sin commitear. Usa -Force para descartar o commitea primero."
             return $false
-        } else {
+        }
+        else {
             Write-Info "Descartando cambios locales..."
             git reset --hard
         }
@@ -361,7 +399,8 @@ function Switch-Branch {
         git checkout $BranchName
         Write-Success "Cambiado a rama $BranchName"
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Error cambiando a rama: $($_.Exception.Message)"
         return $false
     }
@@ -373,6 +412,7 @@ function Show-Help {
     Write-Host "USO BÁSICO:" -ForegroundColor White
     Write-Host "  .\sik-flow.ps1 status" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 new -Rama feature/login -Mensaje 'Implementar login'" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 new -Rama feature/export -Mensaje 'Exportar JSON' -TakeChanges" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 save -Mensaje 'Añadir validación' -Push" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 pr -Mensaje 'Sistema completo' -Issue 123" -ForegroundColor Gray
     Write-Host "  .\sik-flow.ps1 merge -Mensaje 'Merge login system'" -ForegroundColor Gray
@@ -381,7 +421,7 @@ function Show-Help {
     
     Write-Host "COMANDOS:" -ForegroundColor White
     Write-Host "  status    # Ver estado del repositorio" -ForegroundColor Gray
-    Write-Host "  new       # Crear nueva rama (requiere -Rama)" -ForegroundColor Gray
+    Write-Host "  new       # Crear nueva rama (requiere -Rama, opcional -TakeChanges)" -ForegroundColor Gray
     Write-Host "  save      # Commitear cambios (requiere -Mensaje)" -ForegroundColor Gray
     Write-Host "  pr        # Crear Pull Request (opcional -Issue)" -ForegroundColor Gray
     Write-Host "  merge     # Mergear PR actual a main" -ForegroundColor Gray
@@ -396,6 +436,7 @@ function Show-Help {
     Write-Host "  -Issue <numero>    # Número de issue a vincular con PR" -ForegroundColor Gray
     Write-Host "  -Push              # Subir cambios automáticamente" -ForegroundColor Gray
     Write-Host "  -Force             # Forzar operación" -ForegroundColor Gray
+    Write-Host "  -TakeChanges       # Mover cambios pendientes a nueva rama" -ForegroundColor Gray
     Write-Host ""
     
     Write-Host "FLUJO TÍPICO:" -ForegroundColor White
@@ -406,6 +447,15 @@ function Show-Help {
     Write-Host "  5. [review en GitHub]" -ForegroundColor Gray
     Write-Host "  6. .\sik-flow.ps1 merge -Mensaje 'Merge nueva funcionalidad'" -ForegroundColor Gray
     Write-Host "  7. .\sik-flow.ps1 release -Version 1.1.0 -Mensaje 'Nueva funcionalidad'" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "GESTIÓN DE MÚLTIPLES TAREAS:" -ForegroundColor White
+    Write-Host "  # Si tienes cambios pendientes y quieres nueva tarea:" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 new -Rama feature/otra-tarea -Mensaje 'Nueva tarea' -TakeChanges" -ForegroundColor Gray
+    Write-Host "  # O guardar primero la tarea actual:" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 save -Mensaje 'WIP: progreso parcial' -Push" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 switch -Rama main" -ForegroundColor Gray
+    Write-Host "  .\sik-flow.ps1 new -Rama feature/otra-tarea -Mensaje 'Nueva tarea'" -ForegroundColor Gray
 }
 
 # LÓGICA PRINCIPAL
@@ -426,7 +476,7 @@ switch ($Comando.ToLower()) {
             Write-Error "El comando new requiere -Rama"
             exit 1
         }
-        New-Branch -BranchName $Rama -Message $Mensaje
+        New-Branch -BranchName $Rama -Message $Mensaje -TakeChanges:$TakeChanges
     }
     "save" {
         if (-not $Mensaje) {
