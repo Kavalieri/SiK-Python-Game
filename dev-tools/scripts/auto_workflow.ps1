@@ -3,6 +3,7 @@
 # Autor: SiK Team (Auto-generado)
 # Fecha: 2025-08-02
 # Descripcion: Sistema que evalua contexto y gestiona workflow automaticamente
+# REGLA FUNDAMENTAL: TODOS los cambios van a traves de ramas, NUNCA commit directo a main
 
 param(
     [string]$Descripcion = "",
@@ -61,8 +62,7 @@ function Get-ChangeType {
     $srcFiles = $ChangedFiles | Where-Object { $_ -match "^src/" }
     $docFiles = $ChangedFiles | Where-Object { $_ -match "^docs/" -or $_ -match "README" }
     $configFiles = $ChangedFiles | Where-Object { $_ -match "^config/" -or $_ -match "\.json$" -or $_ -match "\.yaml$" }
-    $devFiles = $ChangedFiles | Where-Object { $_ -match "^dev-tools/" -or $_ -match "^\.github/" }
-    $githubFiles = $ChangedFiles | Where-Object { $_ -match "^\.github/" }
+    $devFiles = $ChangedFiles | Where-Object { $_ -match "^dev-tools/" -or $_ -match "\.github/" }
     
     # Analisis de descripcion
     $desc = $Description.ToLower()
@@ -90,30 +90,29 @@ function Get-ChangeType {
         }
     }
     
-    # Si solo hay archivos de GitHub/dev-tools y no hay src
-    if (($devFiles.Count -gt 0 -or $githubFiles.Count -gt 0) -and $srcFiles.Count -eq 0) {
-        return @{
-            Tipo = "dev-tools"
-            Prefijo = "dev/"
-            Version = "patch"
-            Razon = "Solo herramientas de desarrollo y GitHub modificadas"
-            RequiereNuevaRama = $false
-            DirectoAMain = $false
-        }
-    }
-    
-    if ($docFiles.Count -gt 0 -and $srcFiles.Count -eq 0 -and $devFiles.Count -eq 0) {
+    if ($docFiles.Count -gt 0 -and $srcFiles.Count -eq 0) {
         return @{
             Tipo = "docs"
             Prefijo = "docs/"
             Version = "patch"
             Razon = "Solo archivos de documentacion modificados"
-            RequiereNuevaRama = $false
+            RequiereNuevaRama = $true
             DirectoAMain = $false
         }
     }
     
-    if ($configFiles.Count -gt 0 -and $srcFiles.Count -eq 0 -and $devFiles.Count -eq 0 -and $githubFiles.Count -eq 0) {
+    if ($devFiles.Count -gt 0 -and $srcFiles.Count -eq 0) {
+        return @{
+            Tipo = "dev-tools"
+            Prefijo = "dev/"
+            Version = "patch"
+            Razon = "Solo herramientas de desarrollo modificadas"
+            RequiereNuevaRama = $true
+            DirectoAMain = $false
+        }
+    }
+    
+    if ($configFiles.Count -gt 0 -and $srcFiles.Count -eq 0) {
         return @{
             Tipo = "config"
             Prefijo = "config/"
@@ -163,69 +162,48 @@ function Get-BranchSuggestion {
 function Get-WorkflowAction {
     param([object]$GitStatus, [object]$ChangeType, [string]$Descripcion)
     
-    $actions = [System.Collections.ArrayList]@()
+    $actions = @()
     
-    Write-Host "DEBUG Get-WorkflowAction: EsMain=$($GitStatus.EsMain), Commits=$($GitStatus.TieneCommitsPendientes), RequiereRama=$($ChangeType.RequiereNuevaRama)" -ForegroundColor Red
-    
-    # Si estamos en main y hay cambios pendientes
+    # REGLA PRINCIPAL: Si estamos en main y hay cambios pendientes, SIEMPRE crear rama
     if ($GitStatus.EsMain -and $GitStatus.TieneCommitsPendientes) {
-        Write-Host "DEBUG: En main con cambios pendientes" -ForegroundColor Red
-        if ($ChangeType.RequiereNuevaRama) {
-            Write-Host "DEBUG: Requiere nueva rama" -ForegroundColor Red
-            $branchName = Get-BranchSuggestion $ChangeType.Tipo $ChangeType.Prefijo $Descripcion
-            $action = @{
-                Comando = "nueva-rama"
-                Parametros = @{
-                    RamaNombre = $branchName
-                    Mensaje = $Descripcion
-                }
-                Razon = "Cambios en main requieren nueva rama"
+        $branchName = Get-BranchSuggestion $ChangeType.Tipo $ChangeType.Prefijo $Descripcion
+        $actions += @{
+            Comando = "nueva-rama"
+            Parametros = @{
+                RamaNombre = $branchName
+                Mensaje = $Descripcion
             }
-            $actions.Add($action) | Out-Null
-        } else {
-            Write-Host "DEBUG: Commit directo" -ForegroundColor Red
-            $action = @{
-                Comando = "commit-directo"
-                Parametros = @{
-                    Mensaje = "[$($ChangeType.Tipo)] $Descripcion"
-                }
-                Razon = "Cambio menor, commit directo en main"
-            }
-            $actions.Add($action) | Out-Null
+            Razon = "Cambios en main requieren nueva rama (REGLA OBLIGATORIA)"
         }
     }
-    # Si estamos en una rama feature
+    # Si estamos en una rama feature con cambios
     elseif (-not $GitStatus.EsMain -and $GitStatus.TieneCommitsPendientes) {
-        $action = @{
+        $actions += @{
             Comando = "completar"
             Parametros = @{
                 Mensaje = $Descripcion
             }
             Razon = "Continuar trabajo en rama actual"
         }
-        $actions.Add($action) | Out-Null
     }
-    # Si no hay cambios pendientes
-    elseif (-not $GitStatus.TieneCommitsPendientes) {
-        if (-not $GitStatus.EsMain) {
-            $action = @{
-                Comando = "merge"
-                Parametros = @{
-                    Release = $true
-                    TipoVersion = $ChangeType.Version
-                    Mensaje = $Descripcion
-                }
-                Razon = "Rama lista para merge y release"
+    # Si no hay cambios pendientes y estamos en rama feature
+    elseif (-not $GitStatus.TieneCommitsPendientes -and -not $GitStatus.EsMain) {
+        $actions += @{
+            Comando = "merge"
+            Parametros = @{
+                Release = $true
+                TipoVersion = $ChangeType.Version
+                Mensaje = $Descripcion
             }
-            $actions.Add($action) | Out-Null
-        } else {
-            Write-Host "Sin cambios pendientes en main. Estado limpio." -ForegroundColor Green
-            return @()
+            Razon = "Rama lista para merge y release"
         }
     }
+    else {
+        Write-Host "Sin cambios pendientes en main. Estado limpio." -ForegroundColor Green
+        return @()
+    }
     
-    Write-Host "DEBUG: Antes del return, actions.Count = $($actions.Count)" -ForegroundColor Red
-    return $actions.ToArray()
+    return $actions
 }
 
 function Invoke-WorkflowAction {
@@ -248,12 +226,6 @@ function Invoke-WorkflowAction {
             if ($params.Release) { $cmdArgs += "-Release" }
             if ($params.TipoVersion) { $cmdArgs += "-TipoVersion"; $cmdArgs += $params.TipoVersion }
             & $scriptPath @cmdArgs
-        }
-        "commit-directo" {
-            $params = $Action.Parametros
-            git add .
-            git commit -m $params.Mensaje
-            git push origin main
         }
     }
 }
@@ -285,26 +257,15 @@ if ($gitStatus.TieneCommitsPendientes) {
     
     Write-Decision $changeType.Tipo $changeType.Razon "Auto-determinando workflow"
     
-    if ($Debug) {
-        Write-Host ""
-        Write-Host "DEBUG - Estado Git:" -ForegroundColor Magenta
-        Write-Host "  EsMain: $($gitStatus.EsMain)" -ForegroundColor Gray
-        Write-Host "  TieneCommitsPendientes: $($gitStatus.TieneCommitsPendientes)" -ForegroundColor Gray
-        Write-Host "DEBUG - Tipo Cambio:" -ForegroundColor Magenta
-        Write-Host "  RequiereNuevaRama: $($changeType.RequiereNuevaRama)" -ForegroundColor Gray
-    }
-    
     # Decidir acciones
     $actions = Get-WorkflowAction $gitStatus $changeType $Descripcion
     
     if ($Debug) {
         Write-Host ""
         Write-Host "DEBUG - Acciones devueltas: $($actions.Count)" -ForegroundColor Magenta
-        for ($i = 0; $i -lt $actions.Count; $i++) {
-            $action = $actions[$i]
-            Write-Host "  [$i] Comando: '$($action.Comando)'" -ForegroundColor Gray
-            Write-Host "  [$i] Razon: '$($action.Razon)'" -ForegroundColor Gray
-            Write-Host "  [$i] Tipo: $($action.GetType().Name)" -ForegroundColor Gray
+        foreach ($action in $actions) {
+            Write-Host "  Comando: $($action.Comando)" -ForegroundColor Gray
+            Write-Host "  Razon: $($action.Razon)" -ForegroundColor Gray
         }
     }
     
@@ -316,11 +277,8 @@ if ($gitStatus.TieneCommitsPendientes) {
     # Mostrar plan de ejecucion
     Write-Host ""
     Write-Host "PLAN DE EJECUCION:" -ForegroundColor Yellow
-    Write-Host "DEBUG: actions es de tipo $($actions.GetType().Name) con Count $($actions.Count)" -ForegroundColor Red
-    
     for ($i = 0; $i -lt $actions.Count; $i++) {
         $action = $actions[$i]
-        Write-Host "DEBUG: action[$i] es de tipo $($action.GetType().Name)" -ForegroundColor Red
         Write-Host "  $($i+1). $($action.Comando) - $($action.Razon)" -ForegroundColor Cyan
         if ($Debug) {
             Write-Host "      Parametros: $($action.Parametros | ConvertTo-Json -Compress)" -ForegroundColor Gray

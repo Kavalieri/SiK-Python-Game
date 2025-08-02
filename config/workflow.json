@@ -10,12 +10,32 @@
         "smart_branching": true
     },
     "activation_rules": {
-        "hotfix_keywords": ["hotfix", "urgente", "critico", "security", "seguridad"],
-        "bugfix_keywords": ["fix", "bug", "error", "corrige", "arregla", "soluciona"],
-        "feature_keywords": ["feature", "caracteristica", "nueva", "implementa", "añade", "agrega"],
-        "docs_only_branch": false,
-        "config_only_branch": true,
-        "dev_tools_only_branch": false
+        "hotfix_keywords": [
+            "hotfix",
+            "urgente",
+            "critico",
+            "security",
+            "seguridad"
+        ],
+        "bugfix_keywords": [
+            "fix",
+            "bug",
+            "error",
+            "corrige",
+            "arregla",
+            "soluciona"
+        ],
+        "feature_keywords": [
+            "feature",
+            "caracteristica",
+            "nueva",
+            "implementa",
+            "añade",
+            "agrega"
+        ],
+        "always_use_branches": true,
+        "no_direct_commits_to_main": true,
+        "require_pr_for_all_changes": true
     },
     "branch_strategy": {
         "feature_prefix": "feature/",
@@ -32,7 +52,8 @@
         "require_pr": true,
         "auto_delete_branch": true,
         "squash_merge": true,
-        "direct_commit_types": ["docs", "dev-tools"]
+        "direct_commit_types": [],
+        "protect_main_branch": true
     },
     "release": {
         "auto_tag": true,

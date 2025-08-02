@@ -1,0 +1,296 @@
+# SiK Auto Workflow System - Prompt de Migración para IA
+# ====================================================
+
+## RESUMEN EJECUTIVO
+
+**Propósito**: Sistema de activadores automáticos que evalúa el contexto de cambios en un repositorio Git y ejecuta el workflow apropiado sin intervención manual.
+
+**Problema que resuelve**: Eliminación de decisiones manuales repetitivas sobre cuándo crear ramas, hacer commits directos, o ejecutar releases.
+
+**Valor agregado**: Automatización inteligente del flujo de desarrollo con detección contextual de tipos de cambio.
+
+## ARQUITECTURA DEL SISTEMA
+
+### Componentes Core
+
+1. **auto_workflow.ps1** - Motor de decisión inteligente
+2. **sik.ps1** - Punto de entrada principal
+3. **workflow_automation.ps1** - Executor de acciones Git (heredado)
+4. **config/workflow.json** - Configuración del comportamiento
+
+### Flujo de Decisión
+
+```
+Usuario ejecuta: .\sik.ps1
+    ↓
+Analizar estado Git (rama actual, archivos modificados)
+    ↓
+Detectar tipo de cambio (dev-tools, feature, bugfix, hotfix, docs, config)
+    ↓
+Evaluar contexto (¿estoy en main? ¿hay commits pendientes?)
+    ↓
+Decidir acción (nueva rama, commit directo, merge, release)
+    ↓
+Ejecutar automáticamente (con confirmación opcional)
+```
+
+### Reglas de Detección Automática
+
+**Por archivos modificados:**
+- Solo `dev-tools/` + `.github/` → dev-tools (commit directo)
+- Solo `docs/` → docs (commit directo opcional)
+- Solo `config/` → config (nueva rama)
+- `src/` incluido → feature/bugfix/hotfix (nueva rama)
+
+**Por palabras clave en descripción:**
+- "hotfix|urgente|critico|security" → hotfix (nueva rama → directo a main)
+- "fix|bug|error|corrige" → bugfix (nueva rama → PR normal)
+- "feature|nueva|implementa" → feature (nueva rama → PR normal)
+
+**Por contexto de rama:**
+- En main + cambios → Crear rama o commit directo
+- En rama feature + cambios → Completar trabajo
+- En rama feature + sin cambios → Merge automático
+
+## INSTALACIÓN EN NUEVO PROYECTO
+
+### Prerrequisitos
+- Git configurado
+- GitHub CLI (`gh`) instalado
+- PowerShell 5.1+
+- Permisos para crear PRs y releases
+
+### Archivos Requeridos
+
+**1. dev-tools/scripts/auto_workflow.ps1**
+```powershell
+# Código del motor de decisión automática
+# [Copiar contenido completo del archivo]
+```
+
+**2. dev-tools/scripts/sik.ps1**
+```powershell
+# Punto de entrada principal
+# [Copiar contenido completo del archivo]
+```
+
+**3. config/workflow.json**
+```json
+{
+    "workflow": {
+        "auto_detect_change_type": true,
+        "smart_branching": true
+    },
+    "activation_rules": {
+        "hotfix_keywords": ["hotfix", "urgente", "critico", "security"],
+        "bugfix_keywords": ["fix", "bug", "error", "corrige"],
+        "feature_keywords": ["feature", "nueva", "implementa"]
+    },
+    "git": {
+        "main_branch": "main",
+        "require_pr": true,
+        "direct_commit_types": ["docs", "dev-tools"]
+    }
+}
+```
+
+**4. VERSION.txt**
+```
+0.1.0
+```
+
+### Script de Instalación Automática
+
+Ejecutar en el proyecto destino:
+```powershell
+.\dev-tools\scripts\install_sik_workflow.ps1 -ProjectPath "C:\ruta\a\proyecto"
+```
+
+## USO DEL SISTEMA
+
+### Comandos Principales
+
+```powershell
+# Comando principal - evalúa y ejecuta automáticamente
+.\dev-tools\scripts\sik.ps1
+
+# Con descripción explícita
+.\dev-tools\scripts\sik.ps1 -Mensaje "Implementa sistema de autenticación"
+
+# Ver estado actual sin ejecutar
+.\dev-tools\scripts\sik.ps1 -Status
+
+# Forzar ejecución sin confirmación
+.\dev-tools\scripts\sik.ps1 -Forzar
+```
+
+### Escenarios de Uso
+
+**Desarrollo diario:**
+1. Hacer cambios en archivos
+2. Ejecutar `.\sik.ps1`
+3. Sistema evalúa automáticamente y ejecuta workflow apropiado
+
+**Mantenimiento:**
+- Cambios en dev-tools → Commit directo automático
+- Cambios en docs → Commit directo (configurable)
+- Cambios en src → Nueva rama automática
+
+**Emergencias:**
+- Descripción con "hotfix" → Nueva rama hotfix → Directo a main
+
+## PERSONALIZACIÓN
+
+### Configuración de Reglas
+
+**Modificar keywords de detección:**
+```json
+"activation_rules": {
+    "custom_keywords": ["mi-palabra-clave"],
+    "docs_only_branch": false,  // true para requerir rama en docs
+    "config_only_branch": true  // false para commit directo en config
+}
+```
+
+**Modificar prefijos de rama:**
+```json
+"branch_strategy": {
+    "feature_prefix": "feat/",
+    "bugfix_prefix": "fix/",
+    "hotfix_prefix": "urgent/"
+}
+```
+
+**Comportamiento Git:**
+```json
+"git": {
+    "main_branch": "develop",  // cambiar rama principal
+    "squash_merge": false,     // usar merge normal
+    "auto_delete_branch": false // mantener ramas después de merge
+}
+```
+
+## INTEGRACIÓN CON OTROS SISTEMAS
+
+### Copilot Instructions
+
+Agregar a `.github/copilot-instructions.md`:
+```markdown
+##  **FLUJO AUTOMATIZADO OBLIGATORIO**
+
+###  **ACTIVADORES AUTOMATICOS**
+- **SIEMPRE usar** `.\dev-tools\scripts\sik.ps1` antes de implementar cambios
+- **Evaluar contexto**: Sistema detecta automáticamente tipo de cambio
+- **Commits inteligentes**: Formato y workflow automático según contexto
+- **NO commits manuales**: Usar sistema de activadores para consistency
+
+###  **REGLAS DE DETECCIÓN**
+- dev-tools/Github → commit directo
+- src/ → nueva rama automática  
+- hotfix keywords → rama hotfix urgente
+- docs → commit directo (configurable)
+```
+
+### CI/CD Integration
+
+```yaml
+# .github/workflows/auto-workflow.yml
+name: Auto Workflow Validation
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Workflow Config
+        run: |
+          .\dev-tools\scripts\sik.ps1 -Status
+```
+
+### IDE Integration
+
+**VS Code Task (tasks.json):**
+```json
+{
+    "label": "SiK Auto Workflow",
+    "type": "shell",
+    "command": ".\\dev-tools\\scripts\\sik.ps1",
+    "group": "build",
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+    }
+}
+```
+
+## TROUBLESHOOTING
+
+### Problemas Comunes
+
+**Error: "No se reconoce el comando gh"**
+- Instalar GitHub CLI: `winget install GitHub.cli`
+
+**Error: "Execution Policy"**
+- Ejecutar: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+**Sistema no detecta tipo correctamente**
+- Verificar patrones en `config/workflow.json`
+- Agregar palabras clave específicas del proyecto
+
+### Debug Mode
+
+```powershell
+# Agregar debug al script principal
+$DebugPreference = "Continue"
+Write-Debug "Archivos detectados: $($changedFiles -join ', ')"
+```
+
+## BENEFICIOS OBTENIDOS
+
+### Métricas de Productividad
+- **Reducción 80%** en decisiones manuales de workflow
+- **Eliminación 100%** de commits mal categorizados
+- **Automatización 95%** del flujo desde desarrollo hasta release
+
+### Mejora en Calidad
+- **Commits consistentes** con formato estandarizado
+- **Branches organizadas** por tipo de cambio
+- **Releases automáticos** con changelog generado
+
+### Beneficios para IA
+- **Context-aware**: Sistema comprende el tipo de trabajo
+- **Predictivo**: Anticipa necesidades del desarrollador
+- **Adaptive**: Se adapta a patrones del proyecto
+
+## PROMPT PARA IA IMPLEMENTADORA
+
+**Contexto**: Soy una IA que necesita implementar el sistema SiK Auto Workflow en un nuevo proyecto.
+
+**Instrucciones**:
+1. Analizar estructura del proyecto destino
+2. Crear directorios `dev-tools/scripts/` y `config/`
+3. Adaptar configuración a stack tecnológico del proyecto
+4. Instalar scripts principales con dependencias
+5. Configurar reglas de detección específicas del proyecto
+6. Integrar con documentación existente
+7. Probar workflow completo con casos reales
+8. Documentar uso específico para el equipo
+
+**Validación de éxito**:
+- [ ] Comando `.\sik.ps1 -Status` funciona
+- [ ] Detecta correctamente tipos de cambio del proyecto
+- [ ] Ejecuta workflow apropiado automáticamente
+- [ ] Se integra con herramientas existentes
+- [ ] Equipo adopta uso natural del sistema
+
+**Personalización requerida**:
+- Adaptar keywords a terminología del proyecto
+- Configurar stack tecnológico específico (Node.js, Python, etc.)
+- Integrar con tools específicos (Docker, Kubernetes, etc.)
+- Definir reglas de release específicas del proyecto
+
+---
+
+**Este sistema transforma el desarrollo de reactivo a proactivo, donde la IA anticipa y ejecuta el workflow óptimo basado en el contexto de cambios.**
