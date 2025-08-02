@@ -1,10 +1,11 @@
 """
-Options Scene - Escena de Opciones
-=================================
+Options Scene - Escena de Opciones (Refactorizada)
+==================================================
 
 Autor: SiK Team
-Fecha: 2024-12-19
+Fecha: 2 Agosto 2025
 Descripción: Escena para configurar opciones del juego.
+REFACTORIZADA: Ahora utiliza paneles especializados para mejor organización.
 """
 
 import pygame
@@ -14,11 +15,14 @@ from ..core.scene_manager import Scene
 from ..ui.menu_manager import MenuManager
 from ..utils.config_manager import ConfigManager
 from ..utils.logger import get_logger
+from .options_audio_panel import OptionsAudioPanel
+from .options_display_panel import OptionsDisplayPanel
 
 
 class OptionsScene(Scene):
     """
     Escena de opciones del juego.
+    Utiliza paneles especializados para mejor organización.
     """
 
     def __init__(
@@ -44,308 +48,205 @@ class OptionsScene(Scene):
             theme_path="assets/ui/theme.json",
         )
 
-        self._inicializar_menu()
-        self._setup_pygame_gui_elements()
-        self.logger.info("[OptionsScene] Escena de opciones inicializada")
+        # Inicializar paneles especializados
+        self.audio_panel = OptionsAudioPanel(
+            self.ui_manager,
+            self.config,
+            self.screen.get_width(),
+            self.screen.get_height(),
+        )
 
-    def _setup_pygame_gui_elements(self):
-        """
-        Configura los elementos de pygame-gui para las opciones.
-        """
-        screen_width, screen_height = self.screen.get_size()
+        self.display_panel = OptionsDisplayPanel(
+            self.ui_manager,
+            self.config,
+            self.screen.get_width(),
+            self.screen.get_height(),
+        )
+
+        self._inicializar_menu()
+        self._setup_common_elements()
+        self.logger.info(
+            "[OptionsScene] Escena de opciones inicializada con paneles especializados"
+        )
+
+    def _setup_common_elements(self):
+        """Configura elementos comunes de la UI (título, botones de acción)."""
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
 
         # Panel central de opciones
-        panel_width, panel_height = 500, 600
-        panel_x = (screen_width - panel_width) // 2
-        panel_y = (screen_height - panel_height) // 2
+        self.panel_opciones = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(50, 50, screen_width - 100, screen_height - 100),
+            manager=self.ui_manager,
+        )
 
         # Título
         self.titulo_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(
-                (panel_x + panel_width // 2 - 75, panel_y + 20), (150, 50)
-            ),
+            relative_rect=pygame.Rect((screen_width // 2 - 100, 80), (200, 50)),
             text="OPCIONES",
             manager=self.ui_manager,
         )
 
-        # Sliders de volumen
-        self.volumen_maestro_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 100), (200, 30)),
-            text="Volumen Maestro:",
-            manager=self.ui_manager,
-        )
-
-        self.volumen_maestro_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 140), (300, 30)),
-            start_value=int(self.config.get("audio", "master_volume", 0.8) * 100),
-            value_range=(0, 100),
-            manager=self.ui_manager,
-        )
-
-        self.volumen_sfx_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 200), (200, 30)),
-            text="Volumen SFX:",
-            manager=self.ui_manager,
-        )
-
-        self.volumen_sfx_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 240), (300, 30)),
-            start_value=int(self.config.get("audio", "sfx_volume", 0.7) * 100),
-            value_range=(0, 100),
-            manager=self.ui_manager,
-        )
-
-        # Botón de pantalla completa
-        fullscreen_state = (
-            "ON" if self.config.get("display", "fullscreen", False) else "OFF"
-        )
-        self.fullscreen_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 320), (300, 50)),
-            text=f"Pantalla Completa: {fullscreen_state}",
-            manager=self.ui_manager,
-        )
-
         # Botones de acción
-        self.aplicar_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((panel_x + 20, panel_y + 450), (120, 50)),
-            text="Aplicar",
+        self.guardar_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (screen_width // 2 - 150, screen_height - 150), (100, 40)
+            ),
+            text="Guardar",
             manager=self.ui_manager,
         )
 
-        self.restaurar_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((panel_x + 160, panel_y + 450), (120, 50)),
-            text="Restaurar",
+        self.cancelar_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (screen_width // 2 - 40, screen_height - 150), (100, 40)
+            ),
+            text="Cancelar",
             manager=self.ui_manager,
         )
 
         self.volver_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((panel_x + 300, panel_y + 450), (120, 50)),
+            relative_rect=pygame.Rect(
+                (screen_width // 2 + 70, screen_height - 150), (100, 40)
+            ),
             text="Volver",
             manager=self.ui_manager,
         )
 
     def _inicializar_menu(self):
         """
-        Inicializa el menú de opciones.
+        Inicializa el menú de opciones usando MenuManager.
+        Mantiene compatibilidad con sistema existente.
         """
         try:
-            self.menu_manager = MenuManager(
-                self.screen, self.config, self.game_state, self.save_manager
-            )
+            menu_manager = MenuManager(self.config)
+            self.menu = menu_manager.crear_menu_opciones()
+            self.logger.debug("[OptionsScene] Menú de opciones creado exitosamente")
         except Exception as e:
-            self.logger.error("Error al inicializar el menú de opciones: %s", e)
-            raise
+            self.logger.error("[OptionsScene] Error creando menú de opciones: %s", e)
+            self.menu = None
 
-    def _setup_pygame_gui_elements(self):
+    def handle_event(self, event):
         """
-        Configura los elementos de pygame-gui para la escena de opciones.
-        """
-        screen_width, screen_height = self.screen.get_size()
-
-        # Título de la pantalla de opciones
-        self.titulo_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((screen_width // 2 - 100, 50), (200, 50)),
-            text="OPCIONES",
-            manager=self.ui_manager,
-        )
-
-        # Sección de audio
-        self.audio_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((screen_width // 2 - 80, 150), (160, 30)),
-            text="AUDIO",
-            manager=self.ui_manager,
-        )
-
-        # Slider de volumen maestro
-        self.volumen_maestro_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((screen_width // 2 - 200, 200), (150, 30)),
-            text="Volumen Maestro:",
-            manager=self.ui_manager,
-        )
-
-        self.volumen_maestro_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((screen_width // 2 - 40, 200), (200, 30)),
-            start_value=int(self.config.get("audio", "master_volume", 0.8) * 100),
-            value_range=(0, 100),
-            manager=self.ui_manager,
-        )
-
-        # Slider de efectos de sonido
-        self.volumen_sfx_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((screen_width // 2 - 200, 250), (150, 30)),
-            text="Efectos de Sonido:",
-            manager=self.ui_manager,
-        )
-
-        self.volumen_sfx_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((screen_width // 2 - 40, 250), (200, 30)),
-            start_value=int(self.config.get("audio", "sfx_volume", 0.7) * 100),
-            value_range=(0, 100),
-            manager=self.ui_manager,
-        )
-
-        # Sección de video
-        self.video_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((screen_width // 2 - 80, 320), (160, 30)),
-            text="VIDEO",
-            manager=self.ui_manager,
-        )
-
-        # Botón de pantalla completa
-        self.fullscreen_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((screen_width // 2 - 100, 370), (200, 40)),
-            text="Pantalla Completa: OFF",
-            manager=self.ui_manager,
-        )
-
-        # Botones de navegación
-        self.aplicar_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (screen_width // 2 - 220, screen_height - 80), (100, 40)
-            ),
-            text="Aplicar",
-            manager=self.ui_manager,
-        )
-
-        self.restaurar_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (screen_width // 2 - 110, screen_height - 80), (100, 40)
-            ),
-            text="Restaurar",
-            manager=self.ui_manager,
-        )
-
-        self.volver_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(
-                (screen_width // 2 + 120, screen_height - 80), (100, 40)
-            ),
-            text="Volver",
-            manager=self.ui_manager,
-        )
-
-    def enter(self):
-        super().enter()
-        self.menu_manager.show_menu("options")
-        self.logger.info("[OptionsScene] Entrando en escena de opciones")
-
-    def exit(self):
-        super().exit()
-        self.menu_manager.hide_current_menu()
-        self.logger.info("[OptionsScene] Saliendo de escena de opciones")
-
-    def handle_event(self, event: pygame.event.Event) -> bool:
-        """
-        Maneja eventos de la escena de opciones.
+        Maneja eventos de la escena.
 
         Args:
-            event: Evento de Pygame a procesar.
+            event: Evento de pygame
 
         Returns:
-            bool: True si el evento fue manejado, False en caso contrario.
+            str: Nombre de la próxima escena o None
         """
-        # Procesar eventos de pygame-gui primero
+        # Delegar eventos a paneles especializados
+        self.audio_panel.handle_event(event)
+        display_action = self.display_panel.handle_event(event)
+
+        # Manejar acciones de paneles
+        if display_action == "toggle_fullscreen":
+            self._handle_fullscreen_toggle()
+
+        # Manejar eventos de botones principales
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == self.guardar_button:
+                return self._handle_save_options()
+            elif event.ui_element == self.cancelar_button:
+                return self._handle_cancel_options()
+            elif event.ui_element == self.volver_button:
+                return "main_menu"
+
+        # Procesar eventos con pygame_gui
         self.ui_manager.process_events(event)
 
-        # Eventos específicos de pygame-gui
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == self.aplicar_button:
-                self._aplicar_configuraciones()
-                return True
-            elif event.ui_element == self.restaurar_button:
-                self._restaurar_configuraciones()
-                return True
-            elif event.ui_element == self.volver_button:
-                self.game_state.scene_manager.change_scene("main_menu")
-                return True
-            elif event.ui_element == self.fullscreen_button:
-                self._toggle_fullscreen()
-                return True
-
-        # Eventos de sliders
-        if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
-            if event.ui_element == self.volumen_maestro_slider:
-                self._actualizar_volumen_maestro(event.value)
-                return True
-            elif event.ui_element == self.volumen_sfx_slider:
-                self._actualizar_volumen_sfx(event.value)
-                return True
-
-        # Procesar eventos del menú original
-        self.menu_manager.update([event])
-
-        if event.type == pygame.constants.KEYDOWN:  # pylint: disable=c-extension-no-member
-            if event.key == pygame.constants.K_ESCAPE:  # pylint: disable=c-extension-no-member
-                self.logger.info(
-                    "[OptionsScene] ESC presionado - volviendo al menú principal"
+        # Procesar eventos con menu si existe
+        if self.menu:
+            try:
+                if self.menu.is_enabled():
+                    self.menu.update([event])
+            except (AttributeError, TypeError) as e:
+                self.logger.warning(
+                    "[OptionsScene] Error procesando evento en menú: %s", e
                 )
-                self.game_state.scene_manager.change_scene("main_menu")
-                return True
-        return False
 
-    def update(self):
+        return None
+
+    def _handle_fullscreen_toggle(self):
+        """Maneja el cambio de pantalla completa."""
+        try:
+            # Aplicar cambio de pantalla completa
+            if self.config.get_fullscreen():
+                pygame.display.set_mode(
+                    (self.config.get_width(), self.config.get_height()),
+                    pygame.FULLSCREEN,
+                )
+            else:
+                pygame.display.set_mode(
+                    (self.config.get_width(), self.config.get_height())
+                )
+
+            self.logger.info("Modo de pantalla actualizado")
+        except Exception as e:
+            self.logger.error("Error cambiando modo de pantalla: %s", e)
+
+    def _handle_save_options(self) -> str:
         """
-        Actualiza la lógica de la escena de opciones.
+        Guarda las opciones configuradas.
+
+        Returns:
+            str: Próxima escena
         """
-        time_delta = pygame.time.Clock().tick(60) / 1000.0
-        self.ui_manager.update(time_delta)
-        self.menu_manager.update([])
+        try:
+            self.config.save_config()
+            self.logger.info("[OptionsScene] Opciones guardadas exitosamente")
+            return "main_menu"
+        except Exception as e:
+            self.logger.error("[OptionsScene] Error guardando opciones: %s", e)
+            return None
+
+    def _handle_cancel_options(self) -> str:
+        """
+        Cancela los cambios y vuelve al menú principal.
+
+        Returns:
+            str: Próxima escena
+        """
+        try:
+            self.config.reload_config()
+            self.logger.info(
+                "[OptionsScene] Cambios cancelados, configuración recargada"
+            )
+            return "main_menu"
+        except Exception as e:
+            self.logger.error("[OptionsScene] Error cancelando opciones: %s", e)
+            return "main_menu"
+
+    def update(self, dt):
+        """
+        Actualiza la escena.
+
+        Args:
+            dt: Delta time desde la última actualización
+        """
+        # Actualizar pygame_gui
+        self.ui_manager.update(dt)
+
+        # Actualizar menú si existe
+        if self.menu:
+            try:
+                if self.menu.is_enabled():
+                    self.menu.update([])
+            except (AttributeError, TypeError) as e:
+                self.logger.warning("[OptionsScene] Error actualizando menú: %s", e)
 
     def render(self):
-        """
-        Renderiza la escena de opciones.
-        """
-        self.screen.fill((0, 0, 0))
-        # Comentar el menú original para evitar superposición
-        # self.menu_manager.render()
+        """Renderiza la escena."""
+        # Limpiar pantalla
+        self.screen.fill((50, 50, 50))
 
-        # Solo renderizar UI de pygame-gui
+        # Renderizar pygame_gui
         self.ui_manager.draw_ui(self.screen)
 
-    def _aplicar_configuraciones(self):
-        """
-        Aplica las configuraciones actuales.
-        """
-        # Aquí se aplicarían las configuraciones
-        self.logger.info("[OptionsScene] Configuraciones aplicadas")
-
-    def _restaurar_configuraciones(self):
-        """
-        Restaura las configuraciones por defecto.
-        """
-        # Restaurar valores por defecto
-        self.volumen_maestro_slider.set_current_value(80)
-        self.volumen_sfx_slider.set_current_value(70)
-        self.fullscreen_button.set_text("Pantalla Completa: OFF")
-        self.logger.info("[OptionsScene] Configuraciones restauradas")
-
-    def _toggle_fullscreen(self):
-        """
-        Alterna entre pantalla completa y ventana.
-        """
-        # Aquí se implementaría el toggle de pantalla completa
-        current_text = self.fullscreen_button.text
-        if "OFF" in current_text:
-            self.fullscreen_button.set_text("Pantalla Completa: ON")
-        else:
-            self.fullscreen_button.set_text("Pantalla Completa: OFF")
-        self.logger.info("[OptionsScene] Pantalla completa alternada")
-
-    def _actualizar_volumen_maestro(self, valor):
-        """
-        Actualiza el volumen maestro.
-
-        Args:
-            valor: Nuevo valor del volumen (0-100)
-        """
-        # Aquí se actualizaría el volumen maestro
-        self.logger.debug(f"[OptionsScene] Volumen maestro: {valor}")
-
-    def _actualizar_volumen_sfx(self, valor):
-        """
-        Actualiza el volumen de efectos de sonido.
-
-        Args:
-            valor: Nuevo valor del volumen (0-100)
-        """
-        # Aquí se actualizaría el volumen de SFX
-        self.logger.debug(f"[OptionsScene] Volumen SFX: {valor}")
+        # Renderizar menú si existe
+        if self.menu:
+            try:
+                if self.menu.is_enabled():
+                    self.menu.draw(self.screen)
+            except (AttributeError, TypeError) as e:
+                self.logger.warning("[OptionsScene] Error renderizando menú: %s", e)
