@@ -94,23 +94,28 @@ class PlayerMovement:
         Actualiza la dirección del personaje basada en la posición del ratón.
 
         Args:
-            mouse_pos: Posición del ratón en la pantalla
+            mouse_pos: Posición del ratón en la pantalla (coordenadas de pantalla)
         """
-        # Solo actualizar si la posición del ratón cambió (optimización)
-        if mouse_pos != self._last_mouse_pos:
-            self._last_mouse_pos = mouse_pos
+        # Solo actualizar si la posición del ratón cambió significativamente (optimización)
+        if abs(mouse_pos[0] - getattr(self, "_last_mouse_x", 0)) > 5:
+            self._last_mouse_x = mouse_pos[0]
 
-            # Obtener posición del jugador en pantalla
-            # Nota: Esto necesitará ajuste cuando implementemos la cámara
-            player_screen_x = self.player_core.x
-            player_screen_y = self.player_core.y
+            # Obtener centro de la pantalla para calcular dirección relativa
+            # El mouse_pos ya viene en coordenadas de pantalla
+            screen_center_x = 640  # Mitad de 1280px (pantalla)
 
-            # Determinar dirección horizontal
-            if mouse_pos[0] > player_screen_x:
-                self.player_core.facing_right = True
-            elif mouse_pos[0] < player_screen_x:
-                self.player_core.facing_right = False
-            # Si está exactamente en el mismo X, mantener la dirección actual
+            # Determinar dirección horizontal basada en la mitad de la pantalla
+            if mouse_pos[0] > screen_center_x:
+                new_facing = True  # Mirando a la derecha
+            elif mouse_pos[0] < screen_center_x:
+                new_facing = False  # Mirando a la izquierda
+            else:
+                return  # Mantener dirección actual si está en el centro exacto
+
+            # Solo actualizar si cambió la dirección (evitar updates innecesarios)
+            if self.player_core.facing_right != new_facing:
+                self.player_core.facing_right = new_facing
+                self.player_core.update_sprite()  # Actualizar sprite inmediatamente
 
     def _handle_attack_input(self, mouse_clicked: bool):
         """

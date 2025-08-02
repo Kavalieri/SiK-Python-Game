@@ -14,6 +14,45 @@
       "máximo_enemigos": 50
     }
   },
+  "escenario": {
+    "mundo": {
+      "ancho": 5000,
+      "alto": 5000
+    },
+    "bordes": {
+      "grosor": 50,
+      "color": [
+        128,
+        128,
+        128
+      ],
+      "color_interior": [
+        64,
+        64,
+        64
+      ],
+      "patron_textura": "bricks",
+      "visible": true,
+      "colision": true
+    },
+    "fondo": {
+      "tipo": "procedural_grid",
+      "color_base": [
+        32,
+        48,
+        32
+      ],
+      "color_lineas": [
+        48,
+        64,
+        48
+      ],
+      "tamaño_celda": 100,
+      "grosor_lineas": 2,
+      "patron_aleatorio": true,
+      "densidad_detalles": 0.1
+    }
+  },
   "combate": {
     "daño_colisión_enemigo": 20,
     "tiempo_invulnerabilidad": 1.5,

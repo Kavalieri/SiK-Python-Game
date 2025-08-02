@@ -47,12 +47,24 @@ class GameScene(Scene):
         self.powerups = []
         self.tiles = []
         self.hud = HUD(screen, config, game_state)
+
+        # Configuración del mundo desde gameplay.json
+        # Usar valores por defecto ya que la configuración específica no está disponible
+        self.world_width = 5000
+        self.world_height = 5000
+
         self.camera = Camera(
             screen_width=screen.get_width(),
             screen_height=screen.get_height(),
-            world_width=5000,
-            world_height=5000,
+            world_width=self.world_width,
+            world_height=self.world_height,
         )
+
+        # Configuración de bordes del escenario
+        self.border_thickness = 50
+        self.border_color = (128, 128, 128)
+        self.border_inner_color = (64, 64, 64)
+        self.borders_enabled = True
 
         # Variables de gameplay
         self.enemy_spawn_timer = 0
@@ -124,6 +136,8 @@ class GameScene(Scene):
         self.camera.update(delta_time)
         if self.player:
             self.player.update(delta_time)
+            # Aplicar colisiones con bordes del escenario
+            self._enforce_world_boundaries()
         player_pos = (self.player.x, self.player.y) if self.player else None
         self.enemy_manager.update(delta_time, player_pos)
         self.waves.check_wave_completion()
@@ -182,6 +196,30 @@ class GameScene(Scene):
 
         except (ImportError, FileNotFoundError) as e:
             self.logger.error("Error al inicializar jugador: %s", e)
+
+    def _enforce_world_boundaries(self):
+        """
+        Mantiene al jugador dentro de los límites del mundo del escenario.
+        """
+        if not self.player or not self.borders_enabled:
+            return
+
+        # Definir límites del mundo (considerando el grosor de los bordes)
+        min_x = self.border_thickness
+        min_y = self.border_thickness
+        max_x = self.world_width - self.border_thickness
+        max_y = self.world_height - self.border_thickness
+
+        # Aplicar límites al jugador
+        if self.player.x < min_x:
+            self.player.x = min_x
+        elif self.player.x > max_x:
+            self.player.x = max_x
+
+        if self.player.y < min_y:
+            self.player.y = min_y
+        elif self.player.y > max_y:
+            self.player.y = max_y
 
     def _generate_world(self):
         try:

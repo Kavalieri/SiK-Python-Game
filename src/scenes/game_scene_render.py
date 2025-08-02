@@ -6,6 +6,8 @@ Maneja el renderizado de todos los elementos del juego.
 import logging
 from typing import TYPE_CHECKING
 
+import pygame
+
 if TYPE_CHECKING:
     from scenes.game_scene_core import GameScene
 
@@ -30,7 +32,11 @@ class GameSceneRenderer:
     def render_scene(self) -> None:
         """Renderiza todos los elementos de la escena."""
         try:
-            # Renderizar fondo
+            # Renderizar fondo procedural y bordes
+            self._render_procedural_background()
+            self._render_world_borders()
+
+            # Renderizar fondo de escena (si existe)
             self._render_background()
 
             # Renderizar enemigos
@@ -162,3 +168,112 @@ class GameSceneRenderer:
         """Renderiza la interfaz de usuario."""
         if hasattr(self.scene, "hud") and self.scene.hud:
             self.scene.hud.render(self.screen)
+
+    def _render_procedural_background(self) -> None:
+        """
+        Renderiza un fondo procedural con grid y detalles aleatorios.
+        """
+        try:
+            # Usar valores por defecto para el fondo
+            base_color = (32, 48, 32)
+            line_color = (48, 64, 48)
+            cell_size = 100
+            line_thickness = 2
+
+            # Llenar fondo base
+            self.screen.fill(base_color)
+
+            # Obtener área visible de la cámara
+            camera_rect = self.camera.get_visible_rect()
+
+            # Calcular grid visible
+            start_x = int(camera_rect.x // cell_size) * cell_size
+            end_x = start_x + camera_rect.width + cell_size
+            start_y = int(camera_rect.y // cell_size) * cell_size
+            end_y = start_y + camera_rect.height + cell_size
+
+            # Dibujar líneas verticales
+            for x in range(start_x, end_x, cell_size):
+                screen_x, screen_y = self.camera.world_to_screen(x, camera_rect.y)
+                if 0 <= screen_x <= self.screen.get_width():
+                    pygame.draw.line(
+                        self.screen,
+                        line_color,
+                        (screen_x, 0),
+                        (screen_x, self.screen.get_height()),
+                        line_thickness,
+                    )
+
+            # Dibujar líneas horizontales
+            for y in range(start_y, end_y, cell_size):
+                screen_x, screen_y = self.camera.world_to_screen(camera_rect.x, y)
+                if 0 <= screen_y <= self.screen.get_height():
+                    pygame.draw.line(
+                        self.screen,
+                        line_color,
+                        (0, screen_y),
+                        (self.screen.get_width(), screen_y),
+                        line_thickness,
+                    )
+
+        except Exception as e:
+            self.logger.error("Error renderizando fondo procedural: %s", e)
+
+    def _render_world_borders(self) -> None:
+        """
+        Renderiza los bordes del mundo del escenario.
+        """
+        try:
+            if (
+                not hasattr(self.scene, "borders_enabled")
+                or not self.scene.borders_enabled
+            ):
+                return
+
+            thickness = getattr(self.scene, "border_thickness", 50)
+            color = getattr(self.scene, "border_color", (128, 128, 128))
+            inner_color = getattr(self.scene, "border_inner_color", (64, 64, 64))
+
+            world_width = getattr(self.scene, "world_width", 5000)
+            world_height = getattr(self.scene, "world_height", 5000)
+
+            # Bordes del mundo (exterior)
+            borders = [
+                # Borde superior
+                pygame.Rect(0, 0, world_width, thickness),
+                # Borde inferior
+                pygame.Rect(0, world_height - thickness, world_width, thickness),
+                # Borde izquierdo
+                pygame.Rect(0, 0, thickness, world_height),
+                # Borde derecho
+                pygame.Rect(world_width - thickness, 0, thickness, world_height),
+            ]
+
+            for border in borders:
+                # Verificar si el borde está visible
+                if self.camera.is_visible(
+                    border.x, border.y, border.width, border.height
+                ):
+                    # Convertir a coordenadas de pantalla
+                    screen_x, screen_y = self.camera.world_to_screen(border.x, border.y)
+                    screen_rect = pygame.Rect(
+                        screen_x, screen_y, border.width, border.height
+                    )
+
+                    # Recortar a la pantalla
+                    screen_rect = screen_rect.clip(self.screen.get_rect())
+
+                    if screen_rect.width > 0 and screen_rect.height > 0:
+                        # Renderizar borde exterior
+                        pygame.draw.rect(self.screen, color, screen_rect)
+
+                        # Renderizar borde interior (más oscuro)
+                        inner_thickness = max(1, thickness // 4)
+                        inner_rect = screen_rect.inflate(
+                            -inner_thickness * 2, -inner_thickness * 2
+                        )
+                        if inner_rect.width > 0 and inner_rect.height > 0:
+                            pygame.draw.rect(self.screen, inner_color, inner_rect)
+
+        except Exception as e:
+            self.logger.error("Error renderizando bordes del mundo: %s", e)

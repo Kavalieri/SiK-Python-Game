@@ -9,6 +9,8 @@ Descripción: Sistema de cámara que sigue al jugador y muestra la porción visi
 
 import logging
 
+import pygame
+
 
 class Camera:
     """
@@ -150,3 +152,14 @@ class Camera:
                 Tupla con posición (x, y) de la cámara
         """
         return self.x, self.y
+
+    def get_visible_rect(self) -> pygame.Rect:
+        """
+        Obtiene el rectángulo visible del mundo como pygame.Rect.
+
+        Returns:
+            pygame.Rect con el área visible del mundo
+        """
+        return pygame.Rect(
+            int(self.x), int(self.y), int(self.screen_width), int(self.screen_height)
+        )

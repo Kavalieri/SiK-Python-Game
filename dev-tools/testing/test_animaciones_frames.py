@@ -8,19 +8,20 @@ Fecha: 2025-08-02
 Descripción: Script para probar el sistema de animaciones con ciclos frame-by-frame.
 """
 
-import pygame
 import sys
 from pathlib import Path
+
+import pygame
 
 # Añadir src al path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from utils.config_manager import ConfigManager
-from utils.animation_manager import IntelligentAnimationManager
-from entities.player import Player
 from entities.entity_types import EntityState
+from entities.player import Player
 from entities.player_core import AnimationState
+from utils.animation_manager import IntelligentAnimationManager
+from utils.config_manager import ConfigManager
 
 
 def main():
@@ -45,7 +46,7 @@ def main():
         animation_manager=animation_manager,
     )
 
-    print(f"✅ Jugador creado")
+    print("✅ Jugador creado")
     print(f"📊 Frame inicial: {player.core.current_frame_index}")
     print(f"⏱️ Timer inicial: {player.core.animation_timer:.3f}")
 

@@ -5,8 +5,9 @@ Verifica que todas las funcionalidades trabajen en conjunto
 """
 
 import os
-import pygame
 import sys
+
+import pygame
 
 # Configurar la ruta para importar desde src
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
@@ -16,10 +17,10 @@ os.environ["SDL_VIDEODRIVER"] = "dummy"
 pygame.init()
 screen = pygame.display.set_mode((1, 1))
 
-from utils.config_manager import ConfigManager
 from entities.player import Player
 from entities.player_core import AnimationState
 from utils.animation_manager import IntelligentAnimationManager
+from utils.config_manager import ConfigManager
 
 
 def test_integracion_completa():
@@ -45,9 +46,9 @@ def test_integracion_completa():
 
         # Test 1: Estado inicial
         print("\n📊 TEST 1: Estado inicial")
-        assert hasattr(player.core, "current_animation_state"), (
-            "Falta estado de animación"
-        )
+        assert hasattr(
+            player.core, "current_animation_state"
+        ), "Falta estado de animación"
         assert hasattr(player.core, "current_frame_index"), "Falta índice de frame"
         assert hasattr(player.core, "animation_timer"), "Falta timer de animación"
         print("✅ Estado inicial correcto")
@@ -84,9 +85,9 @@ def test_integracion_completa():
         run_state = player.core.current_animation_state
         print(f"   Con movimiento: {run_state.name}")
 
-        assert idle_state == AnimationState.IDLE, (
-            f"Estado idle incorrecto: {idle_state}"
-        )
+        assert (
+            idle_state == AnimationState.IDLE
+        ), f"Estado idle incorrecto: {idle_state}"
         assert run_state == AnimationState.RUN, f"Estado run incorrecto: {run_state}"
         print("✅ Estados de movimiento correctos")
 
@@ -115,9 +116,9 @@ def test_integracion_completa():
         final_state = player.core.current_animation_state
         print(f"   Estado tras ataque: {final_state.name}")
 
-        assert attack_state == AnimationState.ATTACK, (
-            f"Estado ataque incorrecto: {attack_state}"
-        )
+        assert (
+            attack_state == AnimationState.ATTACK
+        ), f"Estado ataque incorrecto: {attack_state}"
         print("✅ Sistema de ataque funcionando")
 
         # Test 5: Progresión de frames
