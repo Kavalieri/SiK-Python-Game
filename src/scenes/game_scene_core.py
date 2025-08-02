@@ -34,6 +34,7 @@ class GameScene(Scene):
         self.game_state = game_state
         self.save_manager = save_manager
         self.scene_manager = None  # Definición explícita del atributo
+        self.is_paused = False  # Estado de pausa
         self.logger = get_logger("SiK_Game")
         self.logger.info("[GameScene] Escena de nivel inicializada (núcleo)")
         # Inicialización de entidades y managers

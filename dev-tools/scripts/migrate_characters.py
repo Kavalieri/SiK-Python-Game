@@ -29,24 +29,24 @@ except ImportError as e:
 def migrate_character_data():
     """Migra datos de characters.json a SQLite."""
     print("🔄 Iniciando migración de datos de personajes...")
-    
+
     # Cargar datos del JSON
     characters_file = project_root / "config" / "characters.json"
     if not characters_file.exists():
         print(f"❌ No se encuentra {characters_file}")
         return False
-        
+
     try:
         with open(characters_file, encoding="utf-8") as f:
             data = json.load(f)
-        
+
         characters = data.get("characters", {})
         print(f"📚 Encontrados {len(characters)} personajes en JSON")
-        
+
         # Inicializar base de datos
         db_manager = DatabaseManager("data/game.db")
         config_db = ConfigDatabase(db_manager)
-        
+
         # Migrar cada personaje
         migrated = 0
         for char_name, char_data in characters.items():
@@ -61,24 +61,26 @@ def migrate_character_data():
                     "ataques": char_data.get("ataques", []),
                     "sprite_config": {
                         "escala_sprite": char_data.get("escala_sprite", 1.0),
-                        "color_placeholder": char_data.get("color_placeholder", [255, 255, 255]),
-                        "símbolo": char_data.get("símbolo", "?")
+                        "color_placeholder": char_data.get(
+                            "color_placeholder", [255, 255, 255]
+                        ),
+                        "símbolo": char_data.get("símbolo", "?"),
                     },
-                    "activo": True
+                    "activo": True,
                 }
-                
+
                 success = config_db.save_character_data(character_record)
                 if success:
                     print(f"✅ {char_name} migrado exitosamente")
                     migrated += 1
                 else:
                     print(f"❌ Error migrando {char_name}")
-                    
+
             except Exception as e:
                 print(f"❌ Error procesando {char_name}: {e}")
-        
+
         print(f"\n🎯 Migración completada: {migrated}/{len(characters)} personajes")
-        
+
         # Verificar migración
         print("\n🔍 Verificando migración...")
         for char_name in characters.keys():
@@ -87,9 +89,9 @@ def migrate_character_data():
                 print(f"✅ {char_name} verificado en base de datos")
             else:
                 print(f"❌ {char_name} NO encontrado en base de datos")
-        
+
         return migrated > 0
-        
+
     except Exception as e:
         print(f"💥 Error en migración: {e}")
         return False

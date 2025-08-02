@@ -67,7 +67,18 @@ class GameSceneRenderer:
                 and self.scene.enemy_manager.enemies
             ):
                 for enemy in self.scene.enemy_manager.enemies:
-                    self.camera.render_entity(self.screen, enemy)
+                    # Verificar si está visible
+                    if self.camera.is_visible(
+                        enemy.x, enemy.y, enemy.width, enemy.height
+                    ):
+                        # Convertir a coordenadas de pantalla
+                        screen_x, screen_y = self.camera.world_to_screen(
+                            enemy.x, enemy.y
+                        )
+                        # Obtener frame actual del enemigo
+                        frame = enemy.get_current_frame()
+                        if frame:
+                            self.screen.blit(frame, (screen_x, screen_y))
         except Exception as e:
             self.logger.error("Error renderizando enemigos: %s", e)
 
@@ -75,14 +86,32 @@ class GameSceneRenderer:
         """Renderiza los tiles del mundo."""
         if hasattr(self.scene, "tiles") and self.scene.tiles:
             for tile in self.scene.tiles:
-                if self.camera.is_in_view(tile.x, tile.y, tile.width, tile.height):
-                    self.camera.render_entity(self.screen, tile)
+                if self.camera.is_visible(tile.x, tile.y, tile.width, tile.height):
+                    # Convertir a coordenadas de pantalla
+                    screen_x, screen_y = self.camera.world_to_screen(tile.x, tile.y)
+                    # Renderizar tile
+                    if hasattr(tile, "image") and tile.image:
+                        self.screen.blit(tile.image, (screen_x, screen_y))
 
     def _render_player(self) -> None:
         """Renderiza el jugador."""
         try:
             if self.scene.player:
-                self.camera.render_entity(self.screen, self.scene.player)
+                # Verificar si está visible
+                if self.camera.is_visible(
+                    self.scene.player.x,
+                    self.scene.player.y,
+                    self.scene.player.width,
+                    self.scene.player.height,
+                ):
+                    # Convertir a coordenadas de pantalla
+                    screen_x, screen_y = self.camera.world_to_screen(
+                        self.scene.player.x, self.scene.player.y
+                    )
+                    # Obtener frame actual del jugador
+                    frame = self.scene.player.get_current_frame()
+                    if frame:
+                        self.screen.blit(frame, (screen_x, screen_y))
         except Exception as e:
             self.logger.error("Error renderizando jugador: %s", e)
 
@@ -90,7 +119,18 @@ class GameSceneRenderer:
         """Renderiza los proyectiles."""
         if hasattr(self.scene, "projectiles") and self.scene.projectiles:
             for projectile in self.scene.projectiles:
-                self.camera.render_entity(self.screen, projectile)
+                # Verificar si está visible
+                if self.camera.is_visible(
+                    projectile.x, projectile.y, projectile.width, projectile.height
+                ):
+                    # Convertir a coordenadas de pantalla
+                    screen_x, screen_y = self.camera.world_to_screen(
+                        projectile.x, projectile.y
+                    )
+                    # Obtener frame del proyectil
+                    frame = projectile.get_current_frame()
+                    if frame:
+                        self.screen.blit(frame, (screen_x, screen_y))
 
     def _render_powerups(self) -> None:
         """Renderiza los powerups."""

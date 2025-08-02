@@ -7,6 +7,7 @@ Fecha: 2024
 Descripción: Gestión y spawning de múltiples enemigos en el juego.
 """
 
+import logging
 import math
 import random
 
@@ -101,6 +102,7 @@ class EnemyManager:
         self.spawn_timer = 0
         self.spawn_delay = 1500  # milisegundos
         self.max_enemies = 8
+        self.logger = logging.getLogger("enemy")
 
     def update(self, dt: float, player_pos: tuple[float, float] | None = None):
         """

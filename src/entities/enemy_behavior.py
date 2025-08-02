@@ -83,12 +83,6 @@ class EnemyBehavior:
                 self.core.current_animation = "Attack"
             else:
                 self.core.current_animation = "Walk"
-
-            # Debug opcional
-            if distance < 100:
-                print(
-                    f"Enemigo {self.core.enemy_type} a {distance:.1f} píxeles del jugador"
-                )
         else:
             self.core.current_animation = "Idle"
 

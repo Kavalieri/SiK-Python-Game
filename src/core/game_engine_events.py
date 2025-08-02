@@ -156,5 +156,4 @@ class GameEngineEvents:
         self.logger.info(
             "Botón Salir pulsado - Cierre solicitado por el usuario desde el menú"
         )
-        print("[DEBUG] Botón Salir presionado - Cerrando juego")  # Debug inmediato
         self.core.running = False
