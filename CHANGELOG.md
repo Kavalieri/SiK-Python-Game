@@ -2,6 +2,39 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [Unreleased] - 2025-08-02
+### 🚀 SISTEMA DE WORKFLOW AUTOMATIZADO Y GESTIÓN DE CHANGELOG
+
+#### ✅ Workflow Automático Completo Implementado
+- **Script principal**: `dev-tools/scripts/workflow_automation.ps1` con gestión completa de desarrollo
+- **Script simplificado**: `dev-tools/scripts/dev_helper.ps1` para uso cotidiano
+- **Configuración workflow**: `config/workflow.json` con parámetros personalizables
+- **Flujo Git automatizado**: Ramas → PR → Merge → Release → Tags automáticos
+
+#### ✅ Sistema de Changelog Automático
+- **Generación automática**: Changelog actualizado automáticamente en cada release
+- **Archivado organizado**: `docs/changelogs/` con versiones individuales archivadas
+- **Integración GitHub**: Releases automáticos con `gh release create`
+- **Formato consistente**: Estructura estandarizada con emojis y secciones claras
+
+#### ✅ Reorganización Estructural Completada
+- **Directorios locales**: ARCHIVE/, save/, data/, tmp/, test/ (NO Git)
+- **Gestión Git**: Solo elementos necesarios sincronizados
+- **Documentación centralizada**: docs/README.md como índice único
+- **Registro histórico**: docs/registro/ con timestamps automáticos
+
+#### 🔧 Flujo de Trabajo Implementado
+1. **Nueva rama**: `dev_helper.ps1 start` - Crear rama de desarrollo
+2. **Guardar progreso**: `dev_helper.ps1 save` - Commits incrementales
+3. **Finalizar**: `dev_helper.ps1 finish` - Crear PR automático
+4. **Merge y Release**: `workflow_automation.ps1 merge -Release` - Completar ciclo
+
+#### 📋 Herramientas de Desarrollo
+- **Versionado semántico**: Automático con patch/minor/major
+- **Pull Requests**: Creación automática con templates
+- **Tags y Releases**: Integración completa con GitHub
+- **Limpieza automática**: Ramas eliminadas tras merge
+
 ## [Unreleased] - 2025-01-20
 ### 🗄️ MODERNIZACIÓN CON SQLITE Y REFACTORIZACIÓN INTEGRAL
 
